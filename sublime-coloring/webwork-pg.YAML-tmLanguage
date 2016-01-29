@@ -1,0 +1,87 @@
+fileTypes: [pg]
+name: WeBWorK PG
+patterns:
+- match: (TEXT|DOCUMENT|ENDDOCUMENT|Real|random|context|uprob|tprob|ucfirst|ans_rule|Context|C|RadioButtons|with|join)(\()
+  captures:
+    '1': {name: support.function.pg}
+    '2': {name: source.pg}
+
+- match: (\$|\@)([A-Za-z][A-Za-z0-9_]+)
+  name: variable.other.pg
+
+- match: ( = )
+  name: storage.pg
+
+- begin: (\")
+  end: (\")
+  name: string.quoted.double.pg
+  patterns:
+  - match: (\\[A-Za-z]+)
+    name: support.function.pg
+
+  - match: (\$|\@)([A-Za-z][A-Za-z0-9_]+)
+    name: variable.other.pg
+
+- begin: (BEGIN_TEXT)
+  beginCaptures:
+    '1': {name: support.constant.pg}
+  end: (END_TEXT)
+  endCaptures:
+    '1': {name: support.constant.pg}
+  name: markup.quote.pg
+  patterns:
+
+  - begin: (\\)([A-Za-z][A-Za-z0-9_]+)({)([A-Za-z][A-Za-z0-9_]+)
+    beginCaptures:
+      '1': {name: support.function.pg}
+      '2': {name: support.function.pg}
+      '3': {name: source.pg}
+      '4': {name: variable.parameter.function.pg}
+    end: (})
+    endCaptures:
+      '1': {name: source.pg}
+
+  - match: (ans_rule|ucfirst|row|buttons|BeginList|EndList|join)(\()
+    captures:
+      '1': {name: support.function.pg}
+      '2': {name: source.pg}
+
+  - match: (\$PAR|\$BR|\$ITEM)
+    name: support.variable.pg
+
+  - match: (\$|\@)([A-Za-z][A-Za-z0-9_]+)
+    name: variable.other.pg
+
+- begin: (BEGIN_HINT)
+  beginCaptures:
+    '1': {name: support.constant.pg}
+  end: (END_HINT)
+  endCaptures:
+    '1': {name: support.constant.pg}
+  name: markup.quote.pg
+  patterns:
+
+  - begin: (\\)([A-Za-z][A-Za-z0-9_]+)({)([A-Za-z][A-Za-z0-9_]+)
+    beginCaptures:
+      '1': {name: support.function.pg}
+      '2': {name: support.function.pg}
+      '3': {name: source.pg}
+      '4': {name: variable.parameter.function.pg}
+    end: (})
+    endCaptures:
+      '1': {name: source.pg}
+
+  - match: (ans_rule|ucfirst|row|buttons|BeginList|EndList|join)(\()
+    captures:
+      '1': {name: support.function.pg}
+      '2': {name: source.pg}
+
+  - match: (\$PAR|\$BR|\$ITEM)
+    name: support.variable.pg
+
+  - match: (\$|\@)([A-Za-z][A-Za-z0-9_]+)
+    name: variable.other.pg
+
+- include: source.perl
+scopeName: source.pg
+uuid: dc7bd15d-2ecb-4dff-8855-c733b9e6f186
