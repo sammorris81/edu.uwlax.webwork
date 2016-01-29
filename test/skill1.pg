@@ -1,0 +1,142 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Classifying data)
+## KEYWORDS('data')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('1')
+## Section1('1.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+@vartype = ( # choices
+  ' a. Quantitative',
+  ' b. Categorical'
+);
+
+$exercisea = 'People in a city are asked if they support a new recycling law.';
+$correcta = ' b. Categorical';
+
+$exerciseb = 'Record the percentage change in the price of a stock for 100 stocks '.
+             'publicly traded on Wall Street.';
+$correctb = ' a. Quantitative';
+
+$exercisec = 'Collect data from a sample of teenagers with a question that asks '.
+             '"Do you eat at least five servings a day of fruits and vegetables?"';
+$correctc = ' b. Categorical';
+
+$exercised = 'Measure the shelf life of bunches of bananas (the number of days until '.
+             'the bananas go bad) for a large sample.';
+$correctd = ' a. Quantitative';
+
+$exercisee = 'Estimate the bending strength of beams by bending 10 beams until they '.
+             'break and recording the force at which the beams broke.';
+$correcte = ' a. Quantitative';
+
+$exercisef = 'Record whether or not the literacy rate is over 75'.$PERCENT.' for '.
+             'each country in the world.';
+$correctf = ' b. Categorical';
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 6, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $right1 = $correcta;
+  $text2 = $exercised;
+  $right2 = $correctd;
+} elsif ($random == 2) {
+  $text1 = $exerciseb;
+  $right1 = $correctb;
+  $text2 = $exercisee;
+  $right2 = $correcte;
+} elsif ($random == 3) {
+  $text1 = $exercisec;
+  $right1 = $correctc;
+  $text2 = $exercisef;
+  $right2 = $correctf;
+} elsif ($random == 4) {
+  $text1 = $exercised;
+  $right1 = $correctd;
+  $text2 = $exercisec;
+  $right2 = $correctc;
+} elsif ($random == 5) {
+  $text1 = $exercisef;
+  $right1 = $correctf;
+  $text2 = $exercisee;
+  $right2 = $correcte;
+} else {
+  $text1 = $exerciseb;
+  $right1 = $correctb;
+  $text2 = $exercisea;
+  $right2 = $correcta;
+}
+
+$mc1 = RadioButtons(
+ [@vartype],
+ $right1,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+$mc2 = RadioButtons(
+ [@vartype],
+ $right2,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following situations, identify if the variable of interest would be quantitative
+or categorical.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ $mc1->buttons( separator => "") \}
+  $ITEM $text2 $BR
+  \{ $mc2->buttons( separator => "") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
