@@ -1,0 +1,143 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection()
+## KEYWORDS('Probability Distributions','Mean','Variance')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.2')
+## Problem1('E20')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = random( .07, .13, .01);
+$a2 = random( .37, .43, .01);
+$a3 = random( .20, .26, .01);
+$a4 = random( .11, .17, .01);
+$a5 = Real(" 1-( $a1 + $a2 + $a3 + $a4) ")->reduce;
+
+$amount = random( 19, 27, 1);
+
+
+
+
+$mean = Real(" $amount*5*$a2 + $amount*10*$a3 + $amount*15*$a4 + $amount*20*$a5 ")->reduce;
+$sd = Real(" sqrt( ($amount*0-$mean)^2*$a1 + ($amount*5-$mean)^2*$a2 + ($amount*10-$mean)^2*$a3 + ($amount*15-$mean)^2*$a4 +($amount*20-$mean)^2*$a5 ) ")->reduce;
+
+$mean2 = Real(" $mean + 150 ")->reduce;
+
+$mean3 = Real(" $mean2*.7 ")->reduce;
+$sd3 = Real(" $sd*.7 ")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Working as a part-time salesperson in the large-screen television department of
+an electronics store, you get a commission of $$amount for each large-screen
+television you sell. The probability distribution of the number of televisions
+you sell in a week is given below.
+$PAR
+\(
+\begin{tabular}{cc}
+Numbers Sold & Probability \\ \hline
+0 & $a1 \\
+5 & $a2 \\
+10 & $a3 \\
+15 & $a4 \\
+20 & $a5 \\
+\end{tabular}
+\)
+
+$PAR
+${BBOLD} 1. $EBOLD
+What are your expected total weekly commission?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD
+Now suppose you get a base salary of $150 a week, in addition to your commission.
+$PAR
+What are your total expected weekly earnings?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 3. $EBOLD
+In addition, suppose that each week your employer withholds 30$PERCENT of your
+total earnings for taxes.
+$PAR
+What are your expected total weekly take-home earnings?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $mean->with(tolerance=>.005)->cmp );
+ANS( $sd->with(tolerance=>.005)->cmp );
+ANS( $mean2->with(tolerance=>.005)->cmp );
+ANS( $sd->with(tolerance=>.005)->cmp );
+ANS( $mean3->with(tolerance=>.005)->cmp );
+ANS( $sd3->with(tolerance=>.005)->cmp );
+
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

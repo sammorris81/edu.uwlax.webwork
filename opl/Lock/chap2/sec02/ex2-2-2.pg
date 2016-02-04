@@ -1,0 +1,97 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('2.57')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "";
+} else {
+  $anssep = $BR;
+}
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+@x_1 = (43, 59, 22, 25, 36, 47, 19);
+@x_2 = (43, 159, 22, 25, 36, 47, 19);
+$n_1 = scalar(@x_1);
+$n_2 = scalar(@x_2);
+
+$xr_1 = QuantitativeUWL::disp_r(@x_1);
+$xr_2 = QuantitativeUWL::disp_r(@x_2);
+
+($mean_1) = rserve_eval('mean(' . $xr_1 .')');
+($med_1)  = rserve_eval('median(' . $xr_1 .')');
+($mean_2) = rserve_eval('mean(' . $xr_2 .')');
+($med_2)  = rserve_eval('median(' . $xr_2 .')');
+
+$mean_1 = Real($mean_1);
+$med_1  = Real($med_1);
+$mean_2 = Real($mean_2);
+$med_2  = Real($med_2);
+
+$mc = PopUp(
+    ["?", "Mean", "Median"],
+    "Mean"
+);
+
+
+
+BEGIN_TEXT
+The number of ants climbing on a piece of a peanut butter sandwich left on the
+ground near an anthill for a few minutes was measured $n_1 different times, and the
+results are: \{ join(", ", @x_1) \}.
+$PAR
+Give your answers to 4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Calculate the mean number of ants. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Calculate the median number of ants. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Suppose one of the sandwich bits was extremely appealing to the ants,
+  and instead of $x_1[1], the number of ants for that bit was actually $x_2[1],
+  giving the $n_2 values as: \{join(", ", @x_2)\}. Compute the mean and median
+  for this new dataset. $BR
+  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+  $PAR
+  $ITEM Which of the summary statistics does the outlier impact the most? \{ $mc->menu() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS($mean_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($med_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mean_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($med_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mc->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

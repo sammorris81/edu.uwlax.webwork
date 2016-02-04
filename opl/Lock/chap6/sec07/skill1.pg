@@ -1,0 +1,170 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('inference for means and proportions', 'distribution of differences in proportions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.7')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$p1a = random(0.05, 0.35, 0.02);
+do {$p1b= random(0.05, 0.35, 0.02);} until ($p1b != $p1a);
+$p2a = random(0.65, 0.95, 0.02);
+do {$p2b= random(0.65, 0.95, 0.02);} until ($p2b != $p2a);
+$p3a = random(0.25, 0.75, 0.02);
+do {$p3b= random(0.25, 0.75, 0.02);} until ($p3b != $p3a);
+
+$n1a = random(10, 100, 10);
+$n1b = random(10, 100, 10);
+$n2a = random(500, 2000, 500);
+$n2b = random(500, 2000, 500);
+$n3a = random(10, 50, 5);
+$n3b = random(10, 50, 5);
+
+$m1 = Real($p1a - $p1b);
+$m2 = Real($p2a - $p2b);
+$m3 = Real($p3a - $p3b);
+
+$se1 = Real(sqrt($p1a * (1 - $p1a) / $n1a + $p1b * (1 - $p1b) / $n1b));
+$se2 = Real(sqrt($p2a * (1 - $p2a) / $n2a + $p2b * (1 - $p2b) / $n2b));
+$se3 = Real(sqrt($p3a * (1 - $p3a) / $n3a + $p3b * (1 - $p3b) / $n3b));
+
+@options = (
+  ' i. Yes',
+  ' ii. No',
+);
+
+if (($n1a * $p1a >= 10) && ($n1a * (1 - $p1a) >= 10) && ($n1b * $p1b >= 10) && ($n1b * (1 - $p1b) >= 10)) {
+  $correct1 = ' i. Yes';
+} else {
+  $correct1 = ' ii. No';
+}
+
+if (($n2a * $p2a >= 10) && ($n2a * (1 - $p2a) >= 10) && ($n2b * $p2b >= 10) && ($n2b * (1 - $p2b) >= 10)) {
+  $correct2 = ' i. Yes';
+} else {
+  $correct2 = ' ii. No';
+}
+
+if (($n3a * $p3a >= 10) && ($n3a * (1 - $p3a) >= 10) && ($n3b * $p3b >= 10) && ($n3b * (1 - $p3b) >= 10)) {
+  $correct3 = ' i. Yes';
+} else {
+  $correct3 = ' ii. No';
+}
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, random samples of the given size are drawn from the
+populations with the given proportions. For each question, a) find the mean and standard
+error of the distribution of differences in sample proportions
+\(\widehat{p}_a - \widehat{p}_b\),
+b) indicate if the sample sizes is large enough for the Central Limit Theorem to
+apply. Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Samples of size $n1a from population A with proportion $p1a and samples
+  of size $n1b from population B with proportion $p1b.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n2a from population A with proportion $p2a and samples
+  of size $n2b from population B with proportion $p2b.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
+    \{ $mc2->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n3a from population A with proportion $p3a and samples
+  of size $n3b from population B with proportion $p3b.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
+    \{ $mc3->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+ANS($m2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ANS($m3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

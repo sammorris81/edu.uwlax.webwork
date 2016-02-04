@@ -1,0 +1,123 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'bootstrap confidence intervals using percentiles')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.4')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$random = random(1, 2, 1);
+
+if ($random == 1) {
+  $text1 = "Using the data to find a 99$PERCENT confidence interval";
+  $correct1 = 'Interval A';
+
+  $text2 = "Using an original sample of size \( n = 16 \)";
+  $correct2 = 'Interval A';
+
+  $bssamps = random(1000, 3000, 1000);
+  $text3 = "Using $bssamps bootstrap samples for the distribution";
+  $correct3 = 'Interval B';
+} else {
+  $text1 = "Using the data to find a 90$PERCENT confidence interval";
+  $correct1 = 'Interval C';
+
+  $text2 = "Using an original sample of size \( n = 45 \)";
+  $correct2 = 'Interval C';
+
+  $bssamps = random(7000, 10000, 1000);
+  $text3 = "Using $bssamps bootstrap samples for the distribution";
+  $correct3 = 'Interval B';
+}
+
+@options = (
+  '?',
+  'Interval A',
+  'Interval B',
+  'Interval C',
+  'None of the above',
+);
+
+$mc1 = PopUp(
+  [@options],
+  $correct1,
+);
+
+$mc2 = PopUp(
+  [@options],
+  $correct2,
+);
+
+$mc3 = PopUp(
+  [@options],
+  $correct3,
+);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In estimating the mean score on a fitness exam, we use an original sample of size
+\( n = 30 \) and a bootstrap distribution containing 5000 bootstrap samples to
+obtain a 95$PERCENT confidence interval of 67 to 73. If all else stays the same, which of
+the following confidence intervals (A, B, or C) is the most likely result after
+the change:
+$PAR
+$BCENTER
+  A. 66 to 74 $tab $tab B. 67 to 73 $tab $tab C. 67.5 to 72.5
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 \{ $mc1->menu() \}
+  $ITEM $text2 \{ $mc2->menu() \}
+  $ITEM $text3 \{ $mc3->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+ANS($mc3->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

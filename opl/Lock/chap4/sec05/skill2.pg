@@ -1,0 +1,153 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'confidence intervals and hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.5')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$random1 = random(0, 1, 1);
+$random2 = random(0, 1, 1);
+
+if ($random1 == 0) {
+  $lower1 = random(0.40, 0.50, 0.01);
+  $upper1 = $lower1 + random(0.02, 0.10, 0.01);
+  $param1 = "p";
+
+  do {
+    $nullval1a = random(0.35, 0.60, 0.02);
+  } until ($nullval1a != $lower1 && $nullval1a != $upper1);
+  do {
+    $nullval1b = random(0.35, 0.60, 0.02);
+  } until ($nullval1b != $lower1 && $nullval1b != $upper1 && $nullval1b != $null1a);
+
+  if ($nullval1a > $lower1 && $nullval1a < $upper1) {
+    $correct1a = " ii. Do not reject \( H_0 \)";
+  } else {
+    $correct1a = " i. Reject \( H_0 \)";
+  }
+  if ($nullval1b > $lower1 && $nullval1b < $upper1) {
+    $correct1b = " ii. Do not reject \( H_0 \)";
+  } else {
+    $correct1b = " i. Reject \( H_0 \)";
+  }
+
+} else {
+  $lower1 = random(130, 140, 1);
+  $upper1 = $lower1 + random(10, 20, 2);
+  $param1 = "\mu";
+
+  do {
+    $nullval1a = random(135, 145, 1);
+  } until ($nullval1a != $lower1 && $nullval1a != $upper1);
+  do {
+    $nullval1b = random(135, 145, 1);
+  } until ($nullval1b != $lower1 && $nullval1b != $upper1 && $nullval1b != $nullval1a);
+
+  if ($nullval1a > $lower1 && $nullval1a < $upper1) {
+    $correct1a = " ii. Do not reject \( H_0 \)";
+  } else {
+    $correct1a = " i. Reject \( H_0 \)";
+  }
+  if ($nullval1b > $lower1 && $nullval1b < $upper1) {
+    $correct1b = " ii. Do not reject \( H_0 \)";
+  } else {
+    $correct1b = " i. Reject \( H_0 \)";
+  }
+}
+
+$null1a = "\( H_0: $param1 = $nullval1a \)";
+$alt1a = "\( H_a: $param1 \neq $nullval1a \)";
+$null1b = "\( H_0: $param1 = $nullval1b \)";
+$alt1b = "\( H_a: $param1 \neq $nullval1b \)";
+
+@conflevels = (90, 95, 99);
+$conflevel1 = $conflevels[random(0, 2, 1)];
+
+$sig1 = Real(1 - $conflevel1 / 100);
+
+@options = (
+  " i. Reject \( H_0 \)",
+  " ii. Do not reject \( H_0 \)",
+);
+
+$mc1a = RadioButtons(
+  [@options],
+  $correct1a,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc1b = RadioButtons(
+  [@options],
+  $correct1b,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following question, a confidence interval is given, followed by two
+possible hypothesis tests. In each case, use the confidence interval to state a
+conclusion of the test for that sample and give the significance level used.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $conflevel1$PERCENT confidence interval for \($param1\): $lower1 to $upper1 $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM $null1a vs $alt1a $BR
+    Conclusion: \{ $mc1a->buttons() \} $BR
+    Significance level: \(\alpha =\) \{ ans_rule(10) \} $BR
+    $ITEM $null1b vs $alt1b $BR
+    Conclusion: \{ $mc1b->buttons() \} $BR
+    Significance level: \(\alpha =\) \{ ans_rule(10) \}
+  \{ EndList("OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1a->cmp());
+ANS($sig1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1b->cmp());
+ANS($sig1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

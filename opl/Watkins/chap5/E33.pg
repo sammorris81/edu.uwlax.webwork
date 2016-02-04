@@ -1,0 +1,84 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Conditional probability -- direct)
+## KEYWORDS('Probability','Conditional','Multiplication Rule')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.3')
+## Problem1('E15')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = Real("3/5")->reduce;
+$a2 = Real("2/5")->reduce;
+$a3 = Real("1/2")->reduce;
+$a4 = Real("1/2")->reduce;
+$a5 = Real("3/4")->reduce;
+$a6 = Real("1/4")->reduce;
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Suppose you draw two marbles at random, without replacement, from a bucket containing
+three red and two blue marbles. Compute the following probabilities. Give your answers to
+four decimal places.
+\{BeginList("OL", type=>"a")\}
+$ITEM P(Red on 1st draw) \{ans_rule(10)\}
+$ITEM P(Blue on 1st draw) \{ans_rule(10)\}
+$ITEM P(Red on 2nd draw \( \mid \) Red on 1st draw) \{ans_rule(10)\}
+$ITEM P(Blue on 2nd draw \( \mid \) Red on 1st draw) \{ans_rule(10)\}
+$ITEM P(Red on 2nd draw \( \mid \) Blue on 1st draw) \{ans_rule(10)\}
+$ITEM P(Blue on 2nd draw \( \mid \) Blue on 1st draw) \{ans_rule(10)\}
+\{EndList("OL")\}
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $a2->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $a3->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $a4->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $a5->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $a6->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

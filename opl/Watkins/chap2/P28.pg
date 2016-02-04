@@ -1,0 +1,147 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('mean','median','IQR','standard deviation')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.3')
+## Problem1('P28')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$n = random( 12, 18, 1 );
+$mean = random( 45, 50, 1 );
+$median = random( 44, 46, 1 );
+$sd = random( 2.0, 2.5, .1 );
+$IQR = random( 2, 4, 1 );
+
+$mean1 = Real(" $mean/12 ")->reduce;
+$sd1 = Real(" $sd/12 ")->reduce;
+$median1 = Real(" $median/12 ")->reduce;
+$IQR1 = Real(" $IQR/12 ")->reduce;
+
+$mean2 = Real(" $mean+2 ")->reduce;
+$sd2 = Real(" $sd ")->reduce;
+$median2 = Real(" $median+2 ")->reduce;
+$IQR2 = Real(" $IQR ")->reduce;
+
+$mean3 = Real(" ($mean+4)/12 ")->reduce;
+$sd3 = Real(" $sd/12 ")->reduce;
+$median3 = Real(" ($median+4)/12 ")->reduce;
+$IQR3 = Real(" $IQR/12 ")->reduce;
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+The mean height of a class of $n children is $mean in., the median is $median in., the standard deviation is $sd in., and the interquartile range is $IQR in. Find the mean, standard deviation, median, and interquartile range if:
+
+$PAR
+${BBOLD} 1. $EBOLD
+you convert each height to feet.
+$PAR
+\{ begintable(2) \}
+\{ row( "mean", ans_rule(5) ) \}
+\{ row( "standard deviation", ans_rule(5) ) \}
+\{ row( "median", ans_rule(5) ) \}
+\{ row( "IQR", ans_rule(5) ) \}
+\{ endtable() \}
+
+$PAR
+${BBOLD} 2. $EBOLD
+each child grows 2 in.
+$PAR
+\{ begintable(2) \}
+\{ row( "mean", ans_rule(5) ) \}
+\{ row( "standard deviation", ans_rule(5) ) \}
+\{ row( "median", ans_rule(5) ) \}
+\{ row( "IQR", ans_rule(5) ) \}
+\{ endtable() \}
+
+$PAR
+${BBOLD} 3. $EBOLD
+each child grows 4 in. and you convert the heights to feet.
+$PAR
+\{ begintable(2) \}
+\{ row( "mean", ans_rule(5) ) \}
+\{ row( "standard deviation", ans_rule(5) ) \}
+\{ row( "median", ans_rule(5) ) \}
+\{ row( "IQR", ans_rule(5) ) \}
+\{ endtable() \}
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $mean1->with(tolerance=>.005)->cmp );
+ANS( $sd1->with(tolerance=>.005)->cmp );
+ANS( $median1->with(tolerance=>.005)->cmp );
+ANS( $IQR1->with(tolerance=>.005)->cmp );
+
+ANS( $mean2->with(tolerance=>.005)->cmp );
+ANS( $sd2->with(tolerance=>.005)->cmp );
+ANS( $median2->with(tolerance=>.005)->cmp );
+ANS( $IQR2->with(tolerance=>.005)->cmp );
+
+ANS( $mean3->with(tolerance=>.005)->cmp );
+ANS( $sd3->with(tolerance=>.005)->cmp );
+ANS( $median3->with(tolerance=>.005)->cmp );
+ANS( $IQR3->with(tolerance=>.005)->cmp );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

@@ -1,0 +1,97 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('2.57')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "";
+} else {
+  $anssep = $BR;
+}
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+rserve_eval('x1 <- sample(1:30, 6)
+  x2 <- sample(1:30, 6)
+  x3 <- sample(20:40, 6)
+  x4 <- sample(20:40, 6)
+');
+@x_1 = rserve_eval('x1');
+($n_1) = rserve_eval('length(x1)');
+@x_2 = rserve_eval('x2');
+@x_3 = rserve_eval('x3');
+@x_4 = rserve_eval('x4');
+($mean_1) = rserve_eval('mean(x1)');
+($mean_2) = rserve_eval('mean(x2)');
+($mean_3) = rserve_eval('mean(x3)');
+($mean_4) = rserve_eval('mean(x4)');
+
+$mean_1 = Real($mean_1);
+$mean_1_round = sprintf("%.4f", $mean_1);
+$mean_2 = Real($mean_2);
+$mean_3 = Real($mean_3);
+$mean_4 = Real($mean_4);
+
+
+BEGIN_TEXT
+${BBOLD}Finding an average:${EBOLD}$BR
+In statistics, we represent the center of a dataset often with one of two
+measures. One of these is the mean or average. To find the average, we add
+up all the observations in the dataset and divide by the number of observations.
+Consider the dataset:
+$PAR
+$BCENTER
+\{join(", ", @x_1) \}
+$ECENTER
+$PAR
+To find the average of this dataset, we take
+\[
+  \displaystyle \frac{ \{join("+", @x_1)\}}{$n_1} = $mean_1_round
+\]
+$PAR
+Find the mean of the following datasets. Give your answers to 4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM \{join(", ", @x_2)\} \{ ans_rule(10) \}
+  $PAR
+  $ITEM \{join(", ", @x_3)\} \{ ans_rule(10) \}
+  $PAR
+  $ITEM \{join(", ", @x_4)\} \{ ans_rule(10) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS($mean_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mean_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mean_4->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

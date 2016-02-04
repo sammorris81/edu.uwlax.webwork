@@ -1,0 +1,140 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample mean - t)
+## KEYWORDS('Confidence intervals', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.1')
+## Problem1('E50')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$a1 = random( 1, 3, 1 );
+$a2 = random( 1, 3, 1 );
+
+$b1 = Real(18887);
+$b2 = Real(14716);
+$b3 = Real(12832);
+$b4 = Real(14734);
+$b5 = Real(12848);
+$b6 = Real(19438);
+$b7 = Real(17848);
+$b8 = Real(13344);
+$b9 = Real(15841);
+$b10 = Real(20401);
+
+$c1 = Real(18037);
+$c2 = Real(16350);
+$c3 = Real(19967);
+$c4 = Real(21436);
+$c5 = Real(18618);
+$c6 = Real(20658);
+$c7 = Real(18958);
+$c8 = Real(15280);
+$c9 = Real(16096);
+$c10 = Real(13383);
+
+
+
+$m1 = Real( ($b1+$b2+$b3+$b4+$b5+$b6+$b7+$b8+$b9+$b10)/10 );
+$n1 = Real( 10 );
+$sd1 = Real(sqrt( (($b1-$m1)**2+($b2-$m1)**2+($b3-$m1)**2+($b4-$m1)**2+($b5-$m1)**2+($b6-$m1)**2+($b7-$m1)**2+($b8-$m1)**2+($b9-$m1)**2+($b10-$m1)**2)/($n1-1)) );
+
+$m2 = Real( ($c1+$c2+$c3+$c4+$c5+$c6+$c7+$c8+$c9+$c10)/10 );
+$sd2 = Real( sqrt((($c1-$m2)**2+($c2-$m2)**2+($c3-$m2)**2+($c4-$m2)**2+($c5-$m2)**2+($c6-$m2)**2+($c7-$m2)**2+($c8-$m2)**2+($c9-$m2)**2+($c10-$m2)**2)/($n1-1)) );
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+if( $a2==1){
+$z2 = Real( 1.645),
+$s2 = Real( 90 );}
+elsif( $a2==2){
+$z2 = Real( 1.96),
+$s2 = Real( 95 );}
+elsif( $a2==3){
+$z2 = Real( 2.575),
+$s2 = Real( 99 );}
+
+
+$t1=tdistr($n1-1,(1-$s/100)/2);
+$t2=tdistr($n1-1,(1-$s2/100)/2);
+
+$lower1 = Real(" $m1-$t1*$sd1/sqrt($n1) ")->reduce;
+
+$upper1 = Real(" $m1+$t1*$sd1/sqrt($n1)  ")->reduce;
+
+$lower2 = Real(" $m2-$t2*$sd2/sqrt($n1) ")->reduce;
+
+$upper2 = Real(" $m2+$t2*$sd2/sqrt($n1)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+Where are the best college values and what are the costs? According to a recent Kiplinger report, there are many good values for your education dollar at public colleges and universities. The data is shown in the table below for typical costs for an in-state student and typical debt at graduation for a random sample of ten out of the 100 best buys, according to Kiplinger.
+\{ begintable() \}
+\{ row( "College", "In-State Costs", "Debt at Graduation" ) \}
+\{ row( "University of Colorado", "$b1", "$c1" ) \}
+\{ row( "SUNY Oneonta", "$b2", "$c2" ) \}
+\{ row( "University of North Caronlina at Wilmington", "$b3", "$c3" ) \}
+\{ row( "Georgia Institute of Technology", "$b4", "$c4" ) \}
+\{ row( "Georgia Southern University", "$b5", "$c5" ) \}
+\{ row( "University of Connecticut", "$b6", "$c6" ) \}
+\{ row( "University of Maryland, College Park", "$b7", "$c7" ) \}
+\{ row( "Western Washington University", "$b8", "$c8" ) \}
+\{ row( "Stony Brook University", "$b9", "$c9" ) \}
+\{ row( "University of California, Irvine", "$b10", "$c10" ) \}
+\{ endtable() \}
+Construct a $s$PERCENT confidence interval for the population mean in-state cost for the 100 best-buy colleges.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+$PAR
+Construct a $s$PERCENT confidence interval for the population mean debt at graduation for the 100 best-buy colleges.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+
+END_TEXT
+
+ANS($lower1->with(tolerance=>.0001)->cmp);
+ANS($upper1->with(tolerance=>.0001)->cmp);
+
+ANS($lower2->with(tolerance=>.0001)->cmp);
+ANS($upper2->with(tolerance=>.0001)->cmp);
+
+
+
+ENDDOCUMENT();

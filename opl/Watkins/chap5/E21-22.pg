@@ -1,0 +1,88 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Probability: direct computation, inclusion/exclusion)
+## KEYWORDS('Probability','Addition Rule','Disjoint Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.2')
+## Problem1('E21,22')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+## To find the answer we will add the first two percentages and subtract the second.
+## Since this sum cannot be greater than 100, my random numbers will have limitations( at most the sum will be 95).
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = random( 65, 80, 1 );
+$a2 = random( 60, 70, 1 );
+$mina3 = $a1 + $a2 - 95;
+$maxa3 = min(($mina3 + 10), 58);
+$a3 = random( $mina3, $maxa3, 1 );
+$answera = Real("($a1 + $a2 - $a3)/100")->reduce;
+
+## Set up variables and functions for problem.
+$b1 = random( 53, 62, 1 );
+$b2 = random( 45, 55, 1 );
+$minb3 = max($b1, $b2);
+$maxb3 = min(($minb3 + 10), 97);
+$b3 = random( $minb3, $maxb3, 1 );
+$answerb = Real("($b1 + $b2 - $b3)/100")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL", type=>"1") \}
+  $ITEM Suppose that $a1$PERCENT of the population of laboratory rats have genetic mutation A,
+  $a2$PERCENT have genetic mutation B, and $a3$PERCENT have both mutations. What
+  percentage (in decimal form) of the rats have mutation A or mutation B? Give your
+  answer in decimal form to four decimal places. $BR
+  \{ ans_rule(10) \}
+  $PAR
+  $ITEM After diagnosis with a life-threatening illness, $b1$PERCENT of patients were
+  abandoned by their spouses. Of all the patients, $b2$PERCENT were women and $b3$PERCENT
+  were abandoned or a woman.  Find the probability that a patient is a woman and
+  abandoned. Give your answer in decimal form to four decimal places.  $BR
+  \{ ans_rule(10) \}
+\{ EndList("OL") \}
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answera->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $answerb->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

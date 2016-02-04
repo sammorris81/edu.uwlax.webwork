@@ -1,0 +1,78 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample mean - t)
+## KEYWORDS('Confidence interval', 'Mean')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.1')
+## Problem1('E4')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$a1 = random( 1, 3, 1 );
+
+$m1 = random( 851, 853, .1 );
+$sd1 = random( 78, 80, .1 );
+$n1 = Real( 100 );
+
+
+
+if( $a1==1){
+$z = Real( 1.664),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.990),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.639),
+$s = Real( 99 );}
+
+
+$lower1 = Real(" $m1-$z*$sd1/sqrt($n1) ")->reduce;
+
+$upper1 = Real(" $m1+$z*$sd1/sqrt($n1)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+In 1879, A. A. Michelson made 100 determinations of the velocity of light in air.
+The 100 measurements have a mean of $m1 and standard deviation of $sd1. What are
+the plausible values of the true mean velocity of light? Estimate them
+in a $s$PERCENT confidence interval.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+
+END_TEXT
+
+ANS($lower1->with(tolerance=>.001)->cmp);
+ANS($upper1->with(tolerance=>.001)->cmp);
+
+
+
+ENDDOCUMENT();

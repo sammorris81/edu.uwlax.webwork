@@ -1,0 +1,106 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('Hypothesis tests','Proportion', 'Concepts')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.2')
+## Problem1('E77')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$radio = new_multiple_choice();
+$radio2 = new_multiple_choice();
+$radio3 = new_multiple_choice();
+$radio4 = new_multiple_choice();
+
+$radio->qa( 'Always look at the data before writing the null and alternative hypothesis', 'False');
+$radio->makeLast( 'True', 'False' );
+
+$radio2->qa( 'All else being equal, using a one-sided test will result in a larger P-value than using a two-sided test.', 'False');
+$radio2->makeLast( 'True', 'False' );
+
+$radio3->qa( 'The P-value is the probability that the null hypothesis is true.', 'False');
+$radio3->makeLast( 'True', 'False' );
+
+$radio4->qa( 'A statistically significant result means the P-value is small.', 'True');
+$radio4->makeLast( 'True', 'False' );
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Determine whether each statement is true of false.
+$PAR
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+$PAR
+\{ $radio2->print_q() \}
+\{ $radio2->print_a() \}
+
+$PAR
+\{ $radio3->print_q() \}
+\{ $radio3->print_a() \}
+
+$PAR
+\{ $radio4->print_q() \}
+\{ $radio4->print_a() \}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( radio_cmp( $radio2->correct_ans() ) );
+ANS( radio_cmp( $radio3->correct_ans() ) );
+ANS( radio_cmp( $radio4->correct_ans() ) );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

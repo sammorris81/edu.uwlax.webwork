@@ -1,0 +1,209 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'determining statistical significance')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.3')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+do {
+  $pval1 = random(0.0001, 0.9999, 0.0001);
+} until (
+  $pval1 != 0.10 || $pval1 != 0.05 || $pval1 != 0.01
+);
+
+do {
+  $pval2 = random(0.0001, 0.9999, 0.0001);
+} until (
+  (main::abs($pval1 - $pval2) > 0.025) &&
+  ($pval2 != 0.10 || $pval2 != 0.05 || $pval2 != 0.01)
+);
+
+if (($pval1 < 0.05) && ($pval2 < 0.05)) {
+  do {
+    $pval3 = random(0.0501, 0.9999, 0.0001);
+  } until (
+    (main::abs($pval3 - $pval1) > 0.025) &&
+    (main::abs($pval3 - $pval2) > 0.025) &&
+    ($pval3 != 0.10)
+  );
+} else {
+  do {
+    $pval3 = random(0.0001, 0.0499, 0.0001);
+  } until (
+    (main::abs($pval3 - $pval1) > 0.025) &&
+    (main::abs($pval3 - $pval2) > 0.025) &&
+    ($pval3 != 0.01)
+  );
+}
+
+$pval1 = sprintf("%.4f", $pval1);
+$pval2 = sprintf("%.4f", $pval2);
+$pval3 = sprintf("%.4f", $pval3);
+
+@options = (
+  " i. Reject \( H_0 \)",
+  " ii. Do not reject \( H_0 \)",
+);
+
+$correct1a = ($pval1 < 0.10) ? $options[0] : $options[1];
+$correct1b = ($pval1 < 0.05) ? $options[0] : $options[1];
+$correct1c = ($pval1 < 0.01) ? $options[0] : $options[1];
+
+$correct2a = ($pval2 < 0.10) ? $options[0] : $options[1];
+$correct2b = ($pval2 < 0.05) ? $options[0] : $options[1];
+$correct2c = ($pval2 < 0.01) ? $options[0] : $options[1];
+
+$correct3a = ($pval3 < 0.10) ? $options[0] : $options[1];
+$correct3b = ($pval3 < 0.05) ? $options[0] : $options[1];
+$correct3c = ($pval3 < 0.01) ? $options[0] : $options[1];
+
+$mc1a = RadioButtons(
+  [@options],
+  $correct1a,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc1b = RadioButtons(
+  [@options],
+  $correct1b,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc1c = RadioButtons(
+  [@options],
+  $correct1c,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2a = RadioButtons(
+  [@options],
+  $correct2a,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2b = RadioButtons(
+  [@options],
+  $correct2b,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2c = RadioButtons(
+  [@options],
+  $correct2c,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3a = RadioButtons(
+  [@options],
+  $correct3a,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3b = RadioButtons(
+  [@options],
+  $correct3b,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3c = RadioButtons(
+  [@options],
+  $correct3c,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, select the appropriate conclusion of the test based
+on the p-value if we use at the stated significance level.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM p-value = $pval1
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Significance level: 10$PERCENT \{ $mc1a->buttons() \}
+    $ITEM Significance level: 5$PERCENT \{ $mc1b->buttons() \}
+    $ITEM Significance level: 1$PERCENT \{ $mc1c->buttons() \}
+  \{ EndList( "OL") \}
+  $ITEM p-value = $pval2
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Significance level: 10$PERCENT \{ $mc2a->buttons() \}
+    $ITEM Significance level: 5$PERCENT \{ $mc2b->buttons() \}
+    $ITEM Significance level: 1$PERCENT \{ $mc2c->buttons() \}
+  \{ EndList( "OL") \}
+  $ITEM p-value = $pval3
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Significance level: 10$PERCENT \{ $mc3a->buttons() \}
+    $ITEM Significance level: 5$PERCENT \{ $mc3b->buttons() \}
+    $ITEM Significance level: 1$PERCENT \{ $mc3c->buttons() \}
+  \{ EndList( "OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1a->cmp());
+ANS($mc1b->cmp());
+ANS($mc1c->cmp());
+ANS($mc2a->cmp());
+ANS($mc2b->cmp());
+ANS($mc2c->cmp());
+ANS($mc3a->cmp());
+ANS($mc3b->cmp());
+ANS($mc3c->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

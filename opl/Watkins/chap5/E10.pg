@@ -1,0 +1,102 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Probability: direct computation, inclusion/exclusion)
+## KEYWORDS('Probability','Random Behavior')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('E10')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+## Simple probability with randomized factors.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$answer1 = Real("24")->reduce;
+$answer2 = Real("2/6")->reduce;
+$answer3 = Real("1/4")->reduce;
+$answer4 = Real("(1/4)*(2/6)")->reduce;
+$answer5 = Real("(1/4)+(2/6)-$answer4")->reduce;
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+A company that produces clothing for travelers plans to promote a washable, nonwrinkle travel wardrobe. It will recommend that travelers buy six shirts (blue, green, red, yellow, and two white- one long-sleeved, one short-sleeved) and four coordinating pairs of pants (brown, black, blue, gray).
+$PAR
+${BBOLD} 1. $EBOLD Find the number of different outfits that can be worn.
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD If a traveler selects a shirt and a pair of pants at random, determine the probability that he or she will wear
+$PAR
+${BBOLD} a. $EBOLD a white shirt \{ans_rule(15)\}
+$PAR
+${BBOLD} b. $EBOLD the gray pants \{ans_rule(15)\}
+$PAR
+${BBOLD} c. $EBOLD a white shirt and the gray pants \{ans_rule(15)\}
+$PAR
+${BBOLD} d. $EBOLD a white shirt or the gray pants \{ans_rule(15)\}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.005)->cmp );
+ANS( $answer2->with(tolerance=>.005)->cmp );
+ANS( $answer3->with(tolerance=>.005)->cmp );
+ANS( $answer4->with(tolerance=>.005)->cmp );
+ANS( $answer5->with(tolerance=>.005)->cmp );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

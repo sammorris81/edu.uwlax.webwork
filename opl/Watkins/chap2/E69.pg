@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('E69')
+## Author(Melissa Bingham)
+## Institution(University of Wisconsin-La Crosse)
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(18,23,1);
+$s=random(3,6,1);
+$l1=$m-$s;
+$u1=$m+$s;
+$l2=$m-2*$s;
+$u2=$m+2*$s;
+
+$an1 = Real(68);
+$an2 = Real(95);
+$an3 = Real(50);
+$an4 = Real(16);
+
+
+
+BEGIN_TEXT
+
+ACT scores are normally distributed with mean $m and standard deviation $s.  Using the $BBOLD Empirical Rule $EBOLD, what percentage of scores fall in the following ranges?
+
+$PAR
+Between $l1 and $u1: \{ans_rule(2)\}$PERCENT
+$PAR
+Between $l2 and $u2: \{ans_rule(2)\}$PERCENT
+$PAR
+Above $m: \{ans_rule(2)\}$PERCENT
+$PAR
+Below $m: \{ans_rule(2)\}$PERCENT
+$PAR
+Below $l1: \{ans_rule(2)\}$PERCENT
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.000)->cmp);
+ANS($an2->with(tolerance=>.000)->cmp);
+ANS($an3->with(tolerance=>.000)->cmp);
+ANS($an3->with(tolerance=>.000)->cmp);
+ANS($an4->with(tolerance=>.000)->cmp);
+
+
+ENDDOCUMENT();

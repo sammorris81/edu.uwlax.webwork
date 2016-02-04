@@ -1,0 +1,224 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sample survey methods)
+## DBsection(Concepts)
+## KEYWORDS('sampling design')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('12')
+## Section1('12.1')
+## Problem1('1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$rand1 = random(1, 4);
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+
+if( $rand1==1)
+{
+BEGIN_TEXT
+A local corporation was interested in the purchasing habits of La Crosse County residents.
+Specifically one of the things they were interested in was the proportion of residents
+that did a major home improvement project in the last year. The corporation used
+a list of all households to take a simple random sample of 100 households. The
+researcher then visited each of the sampled households and found that 21 of them
+had completed a major home improvement project in the last year.
+$PAR
+Which of the following are true?
+$PAR
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'The population of interest is', 'all La Crosse County residents.');
+$mult1->extra(
+  'the 100 households sampled.',
+  'the proportion of the the 100 households sampled that had completed a major '.
+  'home improvement project in the last year.',
+  "the proportion of all La Crosse County residents who had completed a major home ".
+  "improvement project in the last year (21$PERCENT)."
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The parameter of interest is', 'the proportion of all La Crosse County residents who had completed a major home improvement project in the last year.');
+$mult2->extra(
+  'all La Crosse County residents.',
+  'the 100 households sampled.',
+  "the proportion of the the 100 households sampled that had completed a major ".
+  "home improvement project in the last year (21$PERCENT)."
+);
+
+}
+elsif($rand1==2)
+{
+
+BEGIN_TEXT
+A market research company is interested in whether or not households in Franklin
+County, Ohio have cable television. Using the county auditor's list of households
+the researcher randomly selected 100 homes and contacted the residents. Of the
+100 homes it was found that 62 had cable television.
+$PAR
+Which of the following are true?
+$PAR
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'The population of interest is', 'all households in Franklin County, Ohio.');
+$mult1->extra(
+  'the proportion of all homes in Franklin County, Ohio, that have cable television.',
+  'the proportion of the 100 households sampled that have cable television (62$PERCENT).',
+  'the 100 households sampled.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The parameter of interest is', 'the proportion of all homes in Franklin County, Ohio, that have cable television.');
+$mult2->extra(
+  'the proportion of the 100 households sampled that have cable television (62$PERCENT).',
+  'the 100 households sampled.',
+  'all households in Franklin County, Ohio.'
+);
+
+}
+elsif($rand1==3)
+{
+
+BEGIN_TEXT
+The student government at the University of Missouri conducted a survey of the
+university's students. Three hundred (300) of the 26,000 students were contacted
+and asked if there was a need for an additional parking garage on campus. Of the
+300 students contacted 23$PERCENT said an additional garage was needed.
+$PAR
+Which of the following are true?
+$PAR
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'The population of interest is', 'all students at the University of Missouri.');
+$mult1->extra(
+  'the proportion of all 26000 students at the University of Missouri who believe an additional garage is needed.',
+  'the 300 students contacted.',
+  "the proportion of the 300 students sampled who believe an additional garage is needed (23$PERCENT)."
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The parameter of interest is', 'the proportion of all 26000 students '.
+  'at the University of Missouri who believe an additional garage is needed.');
+$mult2->extra(
+  'all students at the University of Missouri.',
+  'the 300 students contacted.',
+  "the proportion of the 300 students sampled who believe an additional garage is needed (23$PERCENT)."
+);
+
+}
+else
+{
+
+BEGIN_TEXT
+A researcher was interested in utilities provided by city governments in the U.S.
+The researcher randomly selected 20 counties from a list of all counties in the
+U.S. From each of these counties the researcher then contacted each city in those
+counties (a total of 192) and found that 12 (6.25$PERCENT) of them provided
+electricity to their residents.
+$PAR
+Which of the following are true?
+$PAR
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'The population of interest is', 'all city governments in the U.S.');
+$mult1->extra(
+  'the proportion of city governments in the U.S. that provide electricity to their residents.',
+  'the 192 cities contacted.',
+  'the proportion of the 192 city governments contacted that provide electricity to their residents (6.25$PERCENT).'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The parameter of interest is', 'the proportion of city governments '.
+  'in the U.S. that provide electricity to their residents.');
+$mult2->extra(
+  'all city governments in the U.S.',
+  'the 192 cities contacted.',
+  'the proportion of the 192 city governments contacted that provide electricity '.
+  'to their residents (6.25$PERCENT).'
+);
+
+}
+
+BEGIN_TEXT
+
+$PAR
+${BBOLD} a.$EBOLD
+\{ $mult1->print_q() \}
+\{ $mult1->print_a() \}
+
+$PAR
+${BBOLD} b.$EBOLD
+\{ $mult2->print_q() \}
+\{ $mult2->print_a() \}
+
+END_TEXT
+
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+ANS( radio_cmp( $mult1->correct_ans() ) );
+ANS( radio_cmp( $mult2->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

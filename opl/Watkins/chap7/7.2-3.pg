@@ -1,0 +1,71 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('3')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(110,135,.01);
+$s=random(85,115,1);
+$mw=random(115,130,1);
+$n1=random(85,115,1);
+
+
+$x1=sprintf("%0.2f",($mw-$m)/($s/sqrt($n1)));
+$x2=sprintf("%0.2f",(0-$m)/($s/sqrt($n1)));
+
+
+$an1 = Real(sprintf("%0.4f",uprob($x1)));
+$an2 = Real(1-sprintf("%0.4f",uprob($x2)));
+
+
+BEGIN_TEXT
+Illinois has nine riverboat casinos and the mean casino win (customer loss) per person admitted on the riverboats is $m dollars.  Assume the standard deviation of casino win is $s dollars.
+
+
+$PAR
+If you randomly select $n1 people who were admitted on the riverboats, what is the probability that the mean win for the casino was over $mw dollars? \{ans_rule(8)\}
+$PAR
+If you randomly select $n1 people who were admitted on the riverboats, what is the probability that the mean win for the casino was less than 0 dollars (i.e., the casino lost money)? \{ans_rule(8)\}
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+
+
+
+ENDDOCUMENT();

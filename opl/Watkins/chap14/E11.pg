@@ -1,0 +1,253 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## KEYWORDS('ANOVA')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('14')
+## Section1('14.2')
+## Problem1('E11')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+
+$a1 = random( 9, 10, .25);
+$a2 = random( 9, 10, .25);
+$a3 = random( 9, 10, .25);
+$a4 = random( 9, 10, .25);
+$a5 = random( 9, 12, .25);
+$a6 = random( 12, 13, .25);
+
+$b1 = random( 10, 11, .25);
+$b2 = random( 10, 11, .25);
+$b3 = random( 10, 11, .25);
+$b4 = random( 10, 11, .25);
+$b5 = random( 14, 15, .25);
+$b6 = random( 10, 11, 1);
+
+$c1 = random( 11, 13, .25 );
+$c2 = random( 11, 13, .25 );
+$c3 = random( 9, 10, .25 );
+$c4 = random( 11, 13, .25 );
+$c5 = random( 11, 13, .25 );
+$c6 = random( 11, 13, .25 );
+
+$d1 = random( 11.5, 13.5, .25 );
+$d2 = random( 11.5, 13.5, .25 );
+$d3 = random( 11.5, 13.5, .25 );
+$d4 = random( 11.5, 13.5, .25 );
+$d5 = random( 11.5, 13.5, .25 );
+$d6 = random( 11.5, 13.5, .25 );
+
+$k = Real( 4 );
+$n = Real( 24 );
+$nsamp = Real( 6 );
+
+$xbar1 = Real( ($a1+$a2+$a3+$a4+$a5+$a6)/ $nsamp );
+$xbar2 = Real( ($b1+$b2+$b3+$b4+$b5+$b6)/ $nsamp );
+$xbar3 = Real( ($c1+$c2+$c3+$c4+$c5+$c6)/ $nsamp );
+$xbar4 = Real( ($d1+$d2+$d3+$d4+$d5+$d6)/ $nsamp );
+$xbartot = Real( ($nsamp*$xbar1 + $nsamp*$xbar2 + $nsamp*$xbar3 + $nsamp*$xbar4)/ $n );
+
+
+$sum1 = Real( $xbar1*$nsamp );
+$sum12=$a1**2+$a2**2+$a3**2+$a4**2+$a5**2+$a6**2;
+$s1=sqrt(($sum12-($sum1**2)/$nsamp)/($nsamp-1));
+
+$sum2 = Real( $xbar2*$nsamp );
+$sum22=$b1**2+$b2**2+$b3**2+$b4**2+$b5**2+$b6**2;
+$s2=sqrt(($sum22-($sum2**2)/$nsamp)/($nsamp-1));
+
+$sum3 = Real( $xbar3*$nsamp );
+$sum32=$c1**2+$c2**2+$c3**2+$c4**2+$c5**2+$c6**2;
+$s3=sqrt(($sum32-($sum3**2)/$nsamp)/($nsamp-1));
+
+$sum4 = Real( $xbar4*$nsamp );
+$sum42=$d1**2+$d2**2+$d3**2+$d4**2+$d5**2+$d6**2;
+$s4=sqrt(($sum42-($sum4**2)/$nsamp)/($nsamp-1));
+
+
+$df1 = Real( $k-1 );
+$df2 = Real( $n-$k );
+$dft = Real( $df1 + $df2 );
+
+$SST = Real( $nsamp*( ($xbar1-$xbartot)**2 + ($xbar2-$xbartot)**2 + ($xbar3-$xbartot)**2 + ($xbar4-$xbartot)**2 ) );
+$SSE = Real( ($nsamp-1)*($s1**2+$s2**2+$s3**2+$s4**2) );
+$SS = Real( $SST+$SSE );
+
+$MST = Real( $SST/$df1 );
+$MSE = Real( $SSE/$df2 );
+
+$F = Real( $MST/$MSE );
+
+$pval=Real( fprob($df1,$df2,abs($F)) );
+
+
+
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.1){
+$answer = " \(P\)-value > .1";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.01){
+$answer = ".01 < \(P\)-value < .025";}
+elsif($pval<=.01 && $pval>.001){
+$answer = ".001 < \(P\)-value < .01";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a difference in population mean first step age for the various treatments.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a difference in population mean first step age for the various treatments.";
+}
+
+
+
+
+## Link the question and its answer
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast(' \(P\)-value > .1',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.01 < \(P\)-value < .025',
+'.001 < \(P\)-value < .01',
+' \(P\)-value < .001' );
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence of a difference in population mean first step age for the various treatments.", "Fail to reject \(H_0\).  We do not have significant evidence of a difference in population mean first step age for the various treatments.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEGIN_TEXT
+
+An experiment was conducted on the age at which first steps occur for babies assigned to four different treatments. The data is given below. Fill in the ANOVA table and conduct a hypothesis to determine if the four methods result in a difference of mean ages for first steps.
+$PAR
+
+\(
+\begin{tabular}{cccc}
+Special Exercise & Exercise Control & Weekly Report & Final Report \\ \hline
+$a1 & $b1 & $c1  & $d1  \\
+$a2 & $b2 & $c2 & $d2 \\
+$a3 & $b3 & $c3 & $d3 \\
+$a4 & $b4 & $c4 & $d4 \\
+$a5 & $b5 & $c5 & $d5 \\
+$a6 & $b6 & $c6 & $d6 \\
+\end{tabular}
+\)
+$PAR
+
+\{ begintable(5) \}
+\{ row( "Source", "df", "SS", "MS", "F" ) \}
+\{ row( "Between/Treatment", ans_rule(5), ans_rule(5), ans_rule(5), ans_rule(5), ) \}
+\{ row( "Within/Error", ans_rule(5), ans_rule(5), ans_rule(5), "", ) \}
+\{ row( "Total", ans_rule(5), ans_rule(5), "", "", ) \}
+
+\{ endtable() \}
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+
+
+
+END_TEXT
+
+ANS($df1->with(tolerance=>.00)->cmp);
+ANS($SST->with(tolerance=>.07)->cmp);
+ANS($MST->with(tolerance=>.07)->cmp);
+ANS($F->with(tolerance=>.07)->cmp);
+ANS($df2->with(tolerance=>.00)->cmp);
+ANS($SSE->with(tolerance=>.07)->cmp);
+ANS($MSE->with(tolerance=>.07)->cmp);
+ANS($dft->with(tolerance=>.00)->cmp);
+ANS($SS->with(tolerance=>.07)->cmp);
+
+
+
+
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

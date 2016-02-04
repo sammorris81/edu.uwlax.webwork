@@ -1,0 +1,205 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Paired samples)
+## KEYWORDS('Hypothesis test', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.3')
+## Problem1('E23')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$x1= random( 3.7, 3.9, .1 );
+$x2= random( 4.7, 4.9, .1 );
+$x3= random( 4.7, 5, .1 );
+$x4= random( 5, 5.5, .1 );
+$x5= random( 5.8, 6.3, .1 );
+$x6= random( 6.6, 7.5, .1 );
+
+$y1= random( 3.1, 3.3, .1 );
+$y2= random( 3.7, 3.9, .1 );
+$y3= random( 3.9, 4.2, .1 );
+$y4= random( 4.2, 4.5, .1 );
+$y5= random( 4.5, 5, .1 );
+$y6= random( 5.2, 5.7, .1 );
+
+$n = Real(6);
+
+$z1 = Real( $x1-$y1 );
+$z2 = Real( $x2-$y2 );
+$z3 = Real( $x3-$y3 );
+$z4 = Real( $x4-$y4 );
+$z5 = Real( $x5-$y5 );
+$z6 = Real( $x6-$y6 );
+
+$sumz = ($z1)+($z2)+($z3)+($z4)+($z5)+($z6);
+$sumz2= $z1**2+$z2**2+$z3**2+$z4**2+$z5**2+$z6**2;
+$s= sqrt(($sumz2-($sumz**2)/$n)/($n-1));
+$zbar= $sumz/$n;
+
+
+$ts=Real( $zbar / ($s/sqrt($n)) );
+$pval=Real(tprob($n-1,abs($ts)));
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(>\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+elsif($pval<=.001 && $pval>.0005){
+$answer = ".0005 < \(P\)-value < .001";}
+else{
+$answer = " \(P\)-value < .0005";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the mean difference is greater than 0.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the mean difference is greater than 0.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'.0005 < \(P\)-value < .001',
+' \(P\)-value < .0005');
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence that the mean difference is greater than 0.", "Fail to reject \(H_0\).  We do not have significant evidence that the mean difference is greater than 0.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Suppose the aldrin data actually had been collected so that the data were paired, that is, if the bottom and mid-depth measurements in the same row were taken at the same time and in the same place. Test whether the mean difference in the aldrin concentrations, bottom - mid-depth, is greater than 0.
+$PAR
+
+\{ begintable(2) \}
+\{ row( "Bottom", "Mid-Depth" ) \}
+\{ row( "$x1", "$y1" ) \}
+\{ row( "$x2", "$y2" ) \}
+\{ row( "$x3", "$y3" ) \}
+\{ row( "$x4", "$y4" ) \}
+\{ row( "$x5", "$y5" ) \}
+\{ row( "$x6", "$y6" ) \}
+\{ endtable() \}
+$PAR
+
+\(H_0:\mu_d = 0 \)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.05)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

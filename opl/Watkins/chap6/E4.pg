@@ -1,0 +1,113 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection(Expectation)
+## KEYWORDS('Probability distributions', 'Expected value')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.1')
+## Problem1('E4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = Real(" .004096 ");
+$a2 = Real(" .0645 ");
+$a3 = Real(" .3387 ");
+$a4 = Real(" .5927 ");
+
+$radio = new_multiple_choice();
+$radio->qa( 'If none of the drivers was wearing a seatbelt, the police officer would be likely to believe the 84$PERCENT estimate.', 'False');
+$radio->extra( 'True' );
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+84$PERCENT of drivers now use seatbelts regularly. Suppose a police officer at a road check randomly stops three vehicles to check for seatbelt use.
+
+$PAR
+${BBOLD} 1. $EBOLD
+Fill in the probability distribution of the number of drivers using seatbelts.
+$PAR
+
+\{ begintable(2) \}
+\{ row( "Drivers using seatbelts", "Probability" ) \}
+\{ row( "0", ans_rule(5) ) \}
+\{ row( "1", ans_rule(5) ) \}
+\{ row( "2", ans_rule(5) ) \}
+\{ row( "3", ans_rule(5) ) \}
+\{ endtable() \}
+
+$PAR
+${BBOLD} 2. $EBOLD
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a2->with(tolerance=>.005)->cmp );
+ANS( $a3->with(tolerance=>.005)->cmp );
+ANS( $a4->with(tolerance=>.005)->cmp );
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

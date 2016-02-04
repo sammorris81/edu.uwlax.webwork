@@ -1,0 +1,175 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Prediction)
+## KEYWORDS('inference for regression', 'confidence and prediction intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('9')
+## Section1('9.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n1 = Real(random(25, 40, 1));
+do {$n2 = Real(random(25, 40, 1));} until ($n1 != $n2);
+
+$int1 = Real(random(5, 10, 0.1));
+do {$int2 = Real(random(5, 10, 0.1));} until ($int1 != $int2);
+
+$slope1 = Real(random(10, 15, 0.1));
+do {$slope2 = Real(random(10, 15, 0.1));} until ($slope1 != $slope2);
+
+$xbar1 = Real(random(10, 15, 0.1));
+do {$xbar2 = Real(random(10, 15, 0.1));} until ($xbar1 != $xbar2);
+
+$sx1 = Real(random(3, 5, 0.1));
+do {$sx2 = Real(random(3, 5, 0.1));} until ($sx1 != $sx2);
+
+$sr1 = Real(random(3, 5, 0.1));
+do {$sr2 = Real(random(3, 5, 0.1));} until ($sr1 != $sr2);
+
+$x1 = Real(sprintf("%.2f", usefulstatUWL::rnorm($xbar1, $sx1)));
+$x2 = Real(sprintf("%.2f", usefulstatUWL::rnorm($xbar2, $sx2)));
+
+$yhat1 = Real($int1 + $slope1 * $x1);
+$yhat2 = Real($int2 + $slope2 * $x2);
+
+$tstar1 = sprintf("%.3f", tdistr(($n1 - 2), 0.025));
+$tstar2 = sprintf("%.3f", tdistr(($n2 - 2), 0.025));
+
+$cime1 = $tstar1 * $sr1 * sqrt(1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2));
+$cime2 = $tstar2 * $sr2 * sqrt(1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2));
+
+$pime1 = $tstar1 * $sr1 * sqrt(1 + 1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2));
+$pime2 = $tstar2 * $sr2 * sqrt(1 + 1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2));
+
+$cilower1 = Real($yhat1 - $cime1);
+$ciupper1 = Real($yhat1 + $cime1);
+$pilower1 = Real($yhat1 - $pime1);
+$piupper1 = Real($yhat1 + $pime1);
+
+$cilower2 = Real($yhat2 - $cime2);
+$ciupper2 = Real($yhat2 + $cime2);
+$pilower2 = Real($yhat2 - $pime2);
+$piupper2 = Real($yhat2 + $pime2);
+
+@options = (' a. Confidence Interval', ' b. Prediction Interval');
+$correct1 = $options[1];
+$correct2 = $options[1];
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+The formulas for the confidence intervals and predictions are given on p. 553
+of the text book.
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+For each of the following questions, use the given summary information from a simple
+linear regression to find a confidence interval and prediction interval when the
+predictor is \(x^*\)
+Give your answers to 3 decimal places.
+
+\{BeginList("OL", type=>"1") \}
+  $ITEM We performed a linear regression using $n1 observations. From the regression
+  output we find that \(b_0 = $int1\), \(b_1 = $slope1\), \(\overline{x} = $xbar1\),
+  \(s_x = $sx1\) and \(s_\epsilon = $sr1\).
+  \{BeginList("OL", type=>"a") \}
+    $ITEM From the least squares line, what is the predicted response when \(x^* = $x1\)?$BR
+    \(\widehat{y} =\) \{ans_rule(10)\}
+    $ITEM What is the 95$PERCENT confidence interval for the mean response when
+    \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the 95$PERCENT prediction interval for an individual response when
+    \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM Which interval is wider? The confidence interval or the prediction interval? $BR
+    \{$mc1->buttons()\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM We performed a linear regression using $n2 observations. From the regression
+  output we find that \(b_0 = $int2\), \(b_1 = $slope2\), \(\overline{x} = $xbar2\),
+  \(s_x = $sx2\) and \(s_\epsilon = $sr2\).
+  \{BeginList("OL", type=>"a") \}
+    $ITEM From the least squares line, what is the predicted response when \(x^* = $x2\)?$BR
+    \(\widehat{y} =\) \{ans_rule(10)\}
+    $ITEM What is the 95$PERCENT confidence interval for the mean response when
+    \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the 95$PERCENT prediction interval for an individual response when
+    \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM Which interval is wider? The confidence interval or the prediction interval? $BR
+    \{$mc2->buttons()\}
+  \{EndList("OL")\}
+\{EndList("OL")\}
+
+END_TEXT
+###########################
+## Answer Section
+###########################
+ANS($yhat1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($cilower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($ciupper1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($pilower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($piupper1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+ANS($yhat2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($cilower2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($ciupper2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($pilower2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($piupper2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

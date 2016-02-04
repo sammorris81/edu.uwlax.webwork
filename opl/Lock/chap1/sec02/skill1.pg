@@ -1,0 +1,126 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sample survey methods)
+## DBsection(Concepts)
+## KEYWORDS('data')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('1')
+## Section1('1.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+@vartype = ( # choices
+  ' a. Population',
+  ' b. Sample'
+);
+
+$exercisea = 'To estimate size of trout in a lake, an angler records the weight '.
+             'of 12 trout he catches over a weekend.';
+$correcta = ' b. Sample';
+
+$exerciseb = 'A subscription-based music website tracks its total number of active '.
+             'users.';
+$correctb = ' a. Population';
+
+$exercisec = 'The US Department of Transportation announces that of the 250 million '.
+             'registered passenger vehicles in the US, 2.1'.$PERCENT.' are electro-gas '.
+             'hybrids.';
+$correctc = ' a. Population';
+
+$exercised = 'A questionnaire to understand athletic participation on a college '.
+             'campus is emailed to 50 college students, and all of them respond.';
+$correctd = ' b. Sample';
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $correct1 = $correcta;
+  $text2 = $exerciseb;
+  $correct2 = $correctb;
+} elsif ($random == 2) {
+  $text1 = $exercisec;
+  $correct1 = $correctc;
+  $text2 = $exercised;
+  $correct2 = $correctd;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  $correct1 = $correctd;
+  $text2 = $exercisea;
+  $correct2 = $correcta;
+} else {
+  $text1 = $exerciseb;
+  $correct1 = $correctb;
+  $text2 = $exercisec;
+  $correct2 = $correctc;
+}
+
+$mc1 = RadioButtons(
+ [@vartype],
+ $correct1,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+$mc2 = RadioButtons(
+ [@vartype],
+ $correct2,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following situations, identify whether the data are best described as a
+population or a sample.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ $mc1->buttons( separator => "") \}
+  $ITEM $text2 $BR
+  \{ $mc2->buttons( separator => "") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

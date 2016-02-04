@@ -1,0 +1,247 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Hypothesis tests)
+## KEYWORDS('Regression', 'Correlation', 'Hypothesis tests')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('13')
+## Section1('13.2')
+## Problem1('E23')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$x1= random( 3, 4, 1 );
+$x2= random( 4, 5, 1 );
+$x3= random( 9, 10, 1 );
+$x4= random( 16, 18, 1 );
+$x5= random( 28, 30, 1 );
+$x6= random( 30, 32, 1 );
+$x7= random( 38, 40, 1 );
+
+
+$y1= random( .501, .510, .001 );
+$y2= random( .501, .510, .001  );
+$y3= random( 7, 9 , .001 );
+$y4= random( 15.5, 16, .001 );
+$y5= random( 25, 28, .001 );
+$y6= random( 30, 40, .001 );
+$y7= random( 35, 41, .001 );
+
+$pred = random( 35, 68, 1 );
+
+
+$n = Real(7);
+
+
+$sumx = Real( $x1 + $x2 + $x3 + $x4 + $x5 + $x6+ $x7  );
+$sumy = Real( $y1 + $y2 + $y3 + $y4 + $y5 + $y6+ $y7  );
+$sumxy = Real( $x1*$y1 + $x2*$y2 + $x3*$y3 + $x4*$y4 + $x5*$y5+ $x6*$y6+ $x7*$y7  );
+$sumx2 = Real( $x1**2 + $x2**2 + $x3**2 + $x4**2 + $x5**2 + $x6**2 + $x7**2 );
+$sumy2 = Real( $y1**2 + $y2**2 + $y3**2 + $y4**2 + $y5**2 + $y6**2 + $y7**2 );
+
+$meanx = Real( $sumx/$n );
+$meany = Real( $sumy/$n );
+
+$sx = Real( sqrt( (($x1-$meanx)**2 +($x2-$meanx)**2 +($x3-$meanx)**2 +($x4-$meanx)**2 +($x5-$meanx)**2 +($x6-$meanx)**2+($x7-$meanx)**2)/($n-1) ) );
+$sy = Real( sqrt( (($y1-$meany)**2 +($y2-$meany)**2 +($y3-$meany)**2 +($y4-$meany)**2 +($y5-$meany)**2 +($y6-$meany)**2+($y7-$meany)**2)/($n-1) ) );
+
+$SSxx = Real( ($n-1)*($sx**2) );
+$SSyy = Real( ($n-1)*($sy**2) );
+$SSxy = Real( $sumxy - $sumx*$sumy/$n );
+
+$b1 = Real( $SSxy/ $SSxx );
+$b0 = Real($meany-$b1*$meanx);
+
+$yhat1=Real($b0+$b1*$x1);
+$yhat2=Real($b0+$b1*$x2);
+$yhat3=Real($b0+$b1*$x3);
+$yhat4=Real($b0+$b1*$x4);
+$yhat5=Real($b0+$b1*$x5);
+$yhat6=Real($b0+$b1*$x6);
+$yhat7=Real($b0+$b1*$x7);
+
+
+$s = Real( sqrt( (($y1-$yhat1)**2 +($y2-$yhat2)**2 +($y3-$yhat3)**2 +($y4-$yhat4)**2 +($y5-$yhat5)**2 +($y6-$yhat6)**2+($y7-$yhat7)**2)/($n-2) ) );
+
+
+
+$s = Real( sqrt( (($y1-$meany)**2 +($y2-$meany)**2 +($y3-$meany)**2 +($y4-$meany)**2 +($y5-$meany)**2 +($y6-$meany)**2)/($n-2) ) );
+
+
+$r = Real( $SSxy/sqrt($SSxx*$SSyy));
+
+
+$ts=Real( $r*sqrt($n-2)/sqrt(1-$r**2) );
+$pval=Real(2*tprob($n-2,abs($ts)));
+
+
+
+
+
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(\neq\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.5){
+$answer = "\(P\)-value > .5";}
+elsif($pval<=.50 && $pval>.40){
+$answer = ".40 < \(P\)-value < .50";}
+elsif($pval<=.40 && $pval>.30){
+$answer = ".30 < \(P\)-value < .40";}
+elsif($pval<=.30 && $pval>.20){
+$answer = ".20 < \(P\)-value < .30";}
+elsif($pval<=.20 && $pval>.10){
+$answer = ".10 < \(P\)-value < .20";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.04){
+$answer = ".04 < \(P\)-value < .05";}
+elsif($pval<=.04 && $pval>.02){
+$answer = ".02 < \(P\)-value < .04";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.002){
+$answer = ".002 < \(P\)-value < .005";}
+elsif($pval<=.002 && $pval>.001){
+$answer = ".001 < \(P\)-value < .002";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of some correlation between age and tree cross-sectional area.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of some correlation between age and tree cross-sectional area.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .5','.40 < \(P\)-value < .50',
+'.30 < \(P\)-value < .40',
+'.20 < \(P\)-value < .30',
+'.10 < \(P\)-value < .20',
+'.05 < \(P\)-value < .10',
+'.04 < \(P\)-value < .05',
+'.02 < \(P\)-value < .04',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.002 < \(P\)-value < .005',
+'.001 < \(P\)-value < .002',
+' \(P\)-value < .001');
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence of some correlation between age and tree cross-sectional area.", "Fail to reject \(H_0\).  We do not have significant evidence of some correlation between age and tree cross-sectional area.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Oak trees continue to grow in girth until they die. They are said to add the same amount of cross-sectional area each year. Below shows the cross-sectional areas of a sample of oak trees, along with the ages of the trees.
+
+The least squares line for this data is \(\hat{y}=$b0+$b1 x\), and the sums are \(\sum{x}=$sumx\), \(\sum{y}=$sumy\), \(\sum{x^2}=$sumx2\), \(\sum{y^2}=$sumy2\), and \(\sum{xy}=$sumxy\).  Test to determine if there is some correlation between age and tree cross-sectional area.
+$PAR
+
+\{ begintable(3) \}
+\{ row( "Tree", "Age", "Area" ) \}
+\{ row( "1", "$x1", "$y1" ) \}
+\{ row( "2", "$x2", "$y2" ) \}
+\{ row( "3", "$x3", "$y3" ) \}
+\{ row( "4", "$x4", "$y4" ) \}
+\{ row( "5", "$x5", "$y5" ) \}
+\{ row( "6", "$x6", "$y6" ) \}
+\{ row( "7", "$x7", "$y7" ) \}
+
+\{ endtable() \}
+$PAR
+
+\(H_0:\rho = 0 \)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+
+
+
+END_TEXT
+
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+
+ENDDOCUMENT();

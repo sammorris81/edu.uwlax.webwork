@@ -1,0 +1,132 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'constructing bootstrap confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.3')
+## Problem1('3.78')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = random(5, 8, 1);
+
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n,
+  mean => 605,
+  sd => 160,
+  round => 0,
+);
+
+$N = 1000;
+$bsmeans = new DataGenUWL(
+  datatype => 'bs_one_mean',
+  data => $quant1,
+  N => $N,
+  name => "",
+);
+
+$round = 3;
+$mean1 = $quant1->{mean};
+$bootsd = sprintf("%.".$round."f", $bsmeans->{sd});
+$moe = Real(2 * $bootsd);
+
+$lower1 = Real(sprintf("%.".$round."f", $mean1 - $moe));
+$upper1 = Real(sprintf("%.".$round."f", $mean1 + $moe));
+
+$table1 = QuantitativeUWL::percentile_table(data=>$bsmeans);
+
+@clevels = (80, 90, 95, 98, 99);
+$random2 = random(0, 4, 1);
+do {$random3 = random(0, 4, 1); } until ($random3 != $random2);
+do {$random4 = random(0, 4, 1); } until (($random4 != $random2) && ($random4 != $random3));
+
+$p2l = (100 - $clevels[$random2]) / 200;
+$p2u = 1 - $p2l;
+$p3l = (100 - $clevels[$random3]) / 200;
+$p3u = 1 - $p3l;
+$p4l = (100 - $clevels[$random4]) / 200;
+$p4u = 1 - $p4l;
+
+$lower2 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p2l)));
+$upper2 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p2u)));
+$lower3 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p3l)));
+$upper3 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p3u)));
+$lower4 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p4l)));
+$upper4 = Real(sprintf("%.".$round."f", QuantitativeUWL::percentile(data=>$bsmeans, p=>$p4u)));
+
+Context()->texStrings;
+BEGIN_TEXT
+Saab, a Swedish car manufacturer, is interested in estimating average monthly sales
+in the US, using the following sales figures from a sample of $n months:
+$PAR
+$BCENTER
+\{ join(", ", @{$quant1->{x}}) \}
+$ECENTER
+$PAR
+Using this sample, $N bootstrap samples were generated, and for each bootstrap sample the
+average was recorded to create the bootstrap distribution. The standard deviation of
+the bootstrap distribution is \{ $bootsd \}, and the table below gives selected
+percentiles from the bootstrap distribution.
+$PAR
+$BCENTER
+\{ $table1 \}
+$ECENTER
+$PAR
+Use the information about the bootstrap distribution to find the following confidence
+intervals. Give your answers to 3 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+    $ITEM Using the $BITALIC standard error$EITALIC method, what is a 95$PERCENT confidence interval
+    for the average monthly sales? (\{ ans_rule(10)\}, \{ ans_rule(10) \})
+    $anssep
+    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random2]\}$PERCENT
+    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    $anssep
+    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random3]\}$PERCENT
+    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    $anssep
+    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random4]\}$PERCENT
+    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+\{ EndList("OL") \}
+
+
+END_TEXT
+ANS( $lower1 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $upper1 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $lower2 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $upper2 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $lower3 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $upper3 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $lower4 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
+ANS( $upper4 -> with(tolerance=>0.001, tolType=>"Absolute") -> cmp);
+ENDDOCUMENT();

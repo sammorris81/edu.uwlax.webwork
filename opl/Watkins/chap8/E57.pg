@@ -1,0 +1,92 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Type I/type II errors and power)
+## KEYWORDS('Hypothesis tests','Proportion', 'Error')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.4')
+## Problem1('E57')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$radio = new_multiple_choice();
+$radio2 = new_multiple_choice();
+
+
+$radio->qa( 'It is possible for Jeffrey or Taline to make a Type I error.', 'False');
+$radio->makeLast( 'True', 'False' );
+
+$radio2->qa( 'It is possible for Jeffrey or Taline to make a Type II error.', 'True');
+$radio2->makeLast( 'True', 'False' );
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Jeffrey and Taline each want to test whether the proportion of adults in their neighborhood who have graduated from high school is .94, as claimed in the newspaper. Jeffrey takes a random sample of 200 adults and uses a significance level of .05. Taline takes a random sample of 500 adults and uses a significance level of .05. Suppose the newspapers percentage is actually wrong.
+
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+\{ $radio2->print_q() \}
+\{ $radio2->print_a() \}
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( radio_cmp( $radio2->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

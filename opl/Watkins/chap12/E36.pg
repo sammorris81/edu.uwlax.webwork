@@ -1,0 +1,215 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Independence')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.3')
+## Problem1('E36')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$a1 = random( 11, 13, 1 );
+$a2 = random( 39, 41, 1 );
+$a3 = random( 9, 11, 1 );
+$a4 = random( 1, 2, 1 );
+$a5 = random( 11, 13, 1 );
+$a6 = random( 43, 45, 1 );
+$a7 = random( 15, 17, 1 );
+$a8 = random( 7, 9, 1 );
+$a9 = random( 9, 10, 1 );
+$a10 = random( 42, 44, 1 );
+$a11 = random( 10, 12, 1 );
+$a12 = random( 10, 12, 1 );
+$a13 = random( 9, 11, 1 );
+$a14 = random( 48, 50, 1 );
+$a15 = random( 17, 19, 1 );
+$a16 = random( 5, 7, 1 );
+
+$c1 = Real( $a1+$a2+$a3+$a4 );
+$c2 = Real( $a5+$a6+$a7+$a8 );
+$c3 = Real( $a9+$a10+$a11+$a12 );
+$c4 = Real( $a13+$a14+$a15+$a16 );
+$c5 = Real( $a1+$a5+$a9+$a13 );
+$c6 = Real( $a2+$a6+$a10+$a14 );
+$c7 = Real( $a3+$a7+$a11+$a15 );
+$c8 = Real( $a4+$a8+$a12+$a16 );
+$c9 = Real( $c1+$c2+$c3+$c4 );
+
+$b1 = Real($c1*$c5/$c9);
+$b2 = Real($c1*$c6/$c9);
+$b3 = Real($c1*$c7/$c9);
+$b4 = Real($c1*$c8/$c9);
+$b5 = Real($c2*$c5/$c9);
+$b6 = Real($c2*$c6/$c9);
+$b7 = Real($c2*$c7/$c9);
+$b8 = Real($c2*$c8/$c9);
+$b9 = Real($c3*$c5/$c9);
+$b10 = Real($c3*$c6/$c9);
+$b11 = Real($c3*$c7/$c9);
+$b12 = Real($c3*$c8/$c9);
+$b13 = Real($c4*$c5/$c9);
+$b14 = Real($c4*$c6/$c9);
+$b15 = Real($c4*$c7/$c9);
+$b16 = Real($c4*$c8/$c9);
+
+$ts = Real(" ($a1 - $b1)^2/$b1 + ($a2 - $b2)^2/$b2 + ($a3 - $b3)^2/$b3 + ($a4 - $b4)^2/$b4 + ($a5 - $b5)^2/$b5 + ($a6 - $b6)^2/$b6 + ($a7 - $b7)^2/$b7 + ($a8 - $b8)^2/$b8 + ($a9 - $b9)^2/$b9 + ($a10 - $b10)^2/$b10 + ($a11 - $b11)^2/$b11 + ($a12 - $b12)^2/$b12 + ($a13 - $b13)^2/$b13 + ($a14 - $b14)^2/$b14 + ($a15 - $b15)^2/$b15 + ($a16 - $b16)^2/$b16 ")->reduce;
+
+
+$pval=Real(chisqrprob(9,$ts))->reduce;
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+else{
+$answer = "\(P\)-value < .001";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that class year and team sports are not independent.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that class year and team sports are not independent.";
+}
+
+
+
+
+## Link the question and its answer
+
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'\(P\)-value < .001');
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that class year and team sports are not independent.','Fail to reject \(H_0\).  We do not have significant evidence that class year and team sports are not independent.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+A student surveyed a random sample of $c9 students in her large college and collected the data in the table below, on the variables class year and favorite team sport. Perform a chi-square test to determine if the variables class year and favorite team sport are independent.
+
+$PAR
+\{ begintable(6) \}
+\{ row( "", "Basketball", "Soccer", "Baseball/Softball", "Other", "Total" ) \}
+\{ row( "Freshman", "$a1", "$a2", "$a3", "$a4", "$c1" ) \}
+\{ row( "Sophomore", "$a5", "$a6", "$a7", "$a8", "$c2" ) \}
+\{ row( "Junior", "$a9", "$a10", "$a11", "$a12", "$c3" ) \}
+\{ row( "Senior", "$a13", "$a14", "$a15", "$a16", "$c4" ) \}
+\{ row( "Total", "$c5", "$c6", "$c7", "$c8", "$c9" ) \}
+\{ endtable() \}
+$PAR
+
+
+
+What is the test statistic for the chi-squared test?
+\{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();
+
+

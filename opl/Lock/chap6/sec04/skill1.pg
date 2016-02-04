@@ -1,0 +1,160 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('inference for means and proportions', 'distribution of a sample mean')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.4')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$m1 = Real(random(15, 30, 1));
+$m2 = Real(random(25, 40, 1));
+$m3 = Real(random(35, 50, 1));
+
+$n1 = random(10, 100, 10);
+$n2 = random(500, 2000, 500);
+$n3 = random(10, 50, 5);
+
+$sd1 = random(1, 3, 0.5);
+$sd2 = random(1, 3, 0.5);
+$sd3 = random(1, 3, 0.5);
+
+$se1 = Real($sd1 / sqrt($n1));
+$se2 = Real($sd2 / sqrt($n2));
+$se3 = Real($sd3 / sqrt($n3));
+
+@options = (
+  ' i. Yes',
+  ' ii. No',
+);
+
+if ($n1 >= 30) {
+  $correct1 = ' i. Yes';
+} else {
+  $correct1 = ' ii. No';
+}
+
+if ($n2 >= 30) {
+  $correct2 = ' i. Yes';
+} else {
+  $correct2 = ' ii. No';
+}
+
+if ($n3 >= 30) {
+  $correct3 = ' i. Yes';
+} else {
+  $correct3 = ' ii. No';
+}
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, random samples of the given size are drawn from a
+population with the given mean and standard deviation. For each question, a) find
+the mean and standard error of the distribution of sample means, b) indicate
+if the sample size is large enough for the Central Limit Theorem to apply. Give
+your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Samples of size $n1 from a population with mean $m1 and standard deviation $sd1.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n2 from a population with mean $m2 and standard deviation $sd2.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+    \{ $mc2->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n3 from a population with mean $m3 and standard deviation $sd3.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+    \{ $mc3->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+ANS($m2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ANS($m3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($se3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

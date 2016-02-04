@@ -1,0 +1,125 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection(Expectation)
+## KEYWORDS('Probability distributions', 'Expected value')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.1')
+## Problem1('E1')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = Real(" 1/10 ");
+$a2 = Real(" 2/10 ");
+$a3 = Real(" 8/10 ");
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Beethoven composed five piano convertos, which are all on your iPod.
+The length of time each concerto takes to play is given in the following table.
+You use the shuffle feature of your iPod to select two different concertos at random.
+$PAR
+\(
+\begin{tabular}{cc}
+Concerto & Number of Minutes \\ \hline
+1 & 38 \\
+2 & 30 \\
+3 & 35 \\
+4 & 33 \\
+5 & 40 \\
+\end{tabular}
+\)
+
+$PAR
+${BBOLD} 1. $EBOLD
+Fill in the probability distribution of the total number of minutes the two
+randomly selected concertos will take to play.
+$PAR
+
+\{ begintable(2) \}
+\{ row( "Total Minutes", "Probability" ) \}
+\{ row( "63", ans_rule(5) ) \}
+\{ row( "65", ans_rule(5) ) \}
+\{ row( "68", ans_rule(5) ) \}
+\{ row( "70", ans_rule(5) ) \}
+\{ row( "71", ans_rule(5) ) \}
+\{ row( "73", ans_rule(5) ) \}
+\{ row( "75", ans_rule(5) ) \}
+\{ row( "78", ans_rule(5) ) \}
+\{ endtable() \}
+
+
+$PAR
+${BBOLD} 2. $EBOLD
+You have 74 minutes before you have to leave for class. What is the probability
+that you have finished listening to both concertos before you have to leave?
+\{ans_rule(15)\}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a2->with(tolerance=>.005)->cmp );
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a2->with(tolerance=>.005)->cmp );
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a1->with(tolerance=>.005)->cmp );
+
+ANS( $a3->with(tolerance=>.005)->cmp );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

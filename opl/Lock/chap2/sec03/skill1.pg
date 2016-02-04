@@ -1,0 +1,123 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'spread')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 11,
+  mean => random(10, 20, 2),
+  sd => 4,
+  skew => 0,
+  name => "A",
+  round => 0,
+);
+
+$mean1 = Real($quant1->{mean});
+$sd1 = Real($quant1->{sd});
+$min1 = Real($quant1->{min});
+$q11 = Real($quant1->{q1});
+$med1 = Real($quant1->{med});
+$q31 = Real($quant1->{q3});
+$max1 = Real($quant1->{max});
+
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 15,
+  mean => random(10, 20, 2),
+  sd => 5,
+  skew => 0,
+  name => "B",
+  round => 0,
+);
+
+$mean2 = Real($quant2->{mean});
+$sd2 = Real($quant2->{sd});
+$min2 = Real($quant2->{min});
+$q12 = Real($quant2->{q1});
+$med2 = Real($quant2->{med});
+$q32 = Real($quant2->{q3});
+$max2 = Real($quant2->{max});
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following samples, use technology to find the mean, standard deviation,
+and five-number summary. Give your answers to 4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM \{ join(", ", @{$quant1->{x}}) \} $PAR
+  \{
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+    AlignedRow(["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    AlignedRow([ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    EndTable();
+  \}
+  $ITEM \{ join(", ", @{$quant2->{x}}) \} $PAR
+  \{
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+    AlignedRow(["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    AlignedRow([ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    EndTable();
+  \}
+
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mean1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($sd1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($min1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q11->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($med1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q31->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($max1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ANS($mean2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($sd2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($min2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q12->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($med2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q32->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($max2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,121 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('Confidence Interval', 'Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('P11')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "";
+} else {
+  $anssep = $BR;
+}
+
+@options = (
+    " a. width increases",
+    " b. width decreases",
+    " c. no effect"
+);
+@labels = ("a.", "b.", "c.");
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+    $ss = "an increase";
+    $cl = "an increase";
+    $correct1 = " b. width decreases";
+    $correct2 = " a. width increases";
+} elsif ($random == 2) {
+    $ss = "an increase";
+    $cl = "a decrease";
+    $correct1 = " b. width decreases";
+    $correct2 = " b. width decreases";
+} elsif ($random == 3) {
+    $ss = "a decrease";
+    $cl = "a decrease";
+    $correct1 = " a. width increases";
+    $correct2 = " b. width decreases";
+} else {
+    $ss = "a decrease";
+    $cl = "an increase";
+    $correct1 = " a. width increases";
+    $correct2 = " a. width increases";
+}
+
+$mult1 = RadioButtons(
+   [@options],
+   $correct1,
+   order => [@options],
+   labels => [@labels],
+);
+
+$mult2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => [@labels],
+);
+
+BEGIN_TEXT
+
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM What is the effect of $ss in the sample size on the width of a
+  confidence interval for a single proportion? $BR
+  \{ $mult1 -> buttons( separator => "" ) \}
+  $ITEM What is the effect of $cl in the confidence level on the width of a
+  confidence interval for a single proportion? $BR
+  \{ $mult2 -> buttons( separator => "" ) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+ANS( $mult1->cmp() );
+ANS( $mult2->cmp() );
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

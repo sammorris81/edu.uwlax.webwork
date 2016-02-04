@@ -1,0 +1,162 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Outcomes & events)
+## KEYWORDS('probability','Addition Rule','Disjoint Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.2')
+## Problem1('E15')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+Context("Numeric");
+$rand1 = random(1, 2, 1);
+$rand2 = random(1, 2, 1);
+$rand3 = random(1, 2, 1);
+
+@options = (" a. Disjoint", " b. Not Disjoint");
+
+if ($rand1 == 1) {
+  $A1 = "You get five heads";
+  $B1 = "You get four heads and one tail";
+  $correct1 = " a. Disjoint";
+} else {
+  $A1 = "The first flip is heads";
+  $B1 = "The second flip is heads";
+  $correct1 = " b. Not Disjoint";
+}
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+if ($rand2 == 1) {
+  $A2 = "You get five heads";
+  $B2 = "The second flip is tails";
+  $correct2 = " a. Disjoint";
+} else {
+  $A2 = "You get three heads and two tails";
+  $B2 = "The second flip is tails";
+  $correct2 = " b. Not Disjoint";
+}
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+if ($rand3 == 1) {
+  $A3 = "The first four flips are heads";
+  $B3 = "The first three flips are heads";
+  $correct3 = " b. Not Disjoint";
+} else {
+  $A3 = "Heads first occurs on the third flip";
+  $B3 = "The fourth flip is heads";
+  $correct3 = " b. Not Disjoint";
+}
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$A4 = "Heads first occurs on the third flip";
+$B4 = "Three of the flips are heads";
+$correct4 = " b. Not Disjoint";
+
+$mc4 = RadioButtons(
+  [@options],
+  $correct4,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+###########################
+## Problem Section
+###########################
+BEGIN_TEXT
+
+Suppose you flip a fair coin five times. Are the following pairs of events disjoint?
+\{ BeginList("OL", type=>"1") \}
+$ITEM Event A: $A1 $BR
+      Event B: $B1 $BR
+\{ $mc1->buttons() \}
+$PAR
+$ITEM Event A: $A2 $BR
+      Event B: $B2 $BR
+\{ $mc2->buttons() \}
+$PAR
+$ITEM Event A: $A3 $BR
+      Event B: $B3 $BR
+\{ $mc3->buttons() \}
+$PAR
+$ITEM Event A: $A4 $BR
+      Event B: $B4 $BR
+\{ $mc4->buttons() \}
+
+\{ EndList("OL") \}
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS( $mc1->cmp() );
+ANS( $mc2->cmp() );
+ANS( $mc3->cmp() );
+ANS( $mc4->cmp() );
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

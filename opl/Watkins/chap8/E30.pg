@@ -1,0 +1,145 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample proportion)
+## KEYWORDS('Hypothesis test', 'Single proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.2')
+## Problem1('E30')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+Context("Numeric");
+
+$nullval=Real(.5);
+$p = random( .53, .58, .01 );
+$n = random( 550, 650, 1 );
+$count = sprintf("%.0f", $n * $p);
+$p = $count / $n;
+
+@hyps = ( # choices
+  ' a. \( = \)',
+  ' b. \( < \)',
+  ' c. \( > \)',
+  ' d. \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' c. \( > \)',
+    order => [@hyps],
+    labels => ['a.', 'b.', 'c.', 'd.'],
+);
+
+$se = sqrt($nullval * (1 - $nullval) / $n);
+
+$ts = Real( sprintf("%.4f", ($p - $nullval) / $se) );
+
+$pval = Real(uprob($ts));
+$pvalans = Real( sprintf("%0.4f",$pval) );
+
+
+$rejinterp = "We have significant evidence that a majority of black youths in ".
+             "the country think that black youths receive a poorer education than ".
+             "do white youths.";
+
+$f2rinterp = "We do not have significant evidence that a majority of black youths in ".
+             "the country think that black youths receive a poorer education than ".
+             "do white youths.";
+
+$accinterp = "We have significant evidence that exactly 50$PERCENT of black youths in ".
+             "the country think that black youths receive a poorer education than ".
+             "do white youths.";
+
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pvalans < $alpha) {
+  $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+  $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+
+##ANSWER FOR CONCLUSION
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+BEGIN_TEXT
+
+You wonder whether a majority of black youths in the country think that black
+youths receive a poorer education than do white youths. You discover that the Black
+Youth Project has collected data on a random sample of $n black youths. One of
+the reported results is that $count respondents believe that black youth receive
+a poorer education, than do white youth.
+$PAR
+Conduct a hypothesis test to determine whether a majority of black youths in the
+country think that black youths receive a poorer education than do white youths.
+$PAR
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+$ITEM What is the correct null hypothesis for this test? $BR
+\(H_0: p = \)\{ ans_rule(10) \}
+$ITEM What sign should appear in the alternative hypothesis? $BR
+\{ $alt -> buttons( separator => "" ) \}
+$ITEM The test statistic for this test is \( z = \) \{ ans_rule(10) \}.
+$ITEM The p-value for this test statistic is \{ ans_rule(10) \}.
+$ITEM Select the appropriate conclusion for this test statistic at a
+significance level of \( \alpha = $alpha \). $BR
+\{ $conclusion -> buttons() \}
+
+
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($nullval->with(tolerance=>0, tolType=>"Absolute")->cmp);
+ANS( $alt->cmp() );
+ANS($ts->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS( $pvalans->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS( $conclusion->cmp() );
+
+ENDDOCUMENT();

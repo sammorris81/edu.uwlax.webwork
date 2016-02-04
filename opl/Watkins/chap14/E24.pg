@@ -1,0 +1,241 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## KEYWORDS('ANOVA')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('14')
+## Section1('14.2')
+## Problem1('E24')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+
+$a1 = random( 25, 400, 1);
+$a2 = random( 25, 400, 1);
+$a3 = random( 25, 800, 1);
+$a4 = random( 25, 400, 1);
+
+
+$b1 = random( 100, 700, 1);
+$b2 = random( 100, 900, 1);
+$b3 = random( 100, 700, 1);
+$b4 = random( 20, 1800, 1);
+$b5 = random( 100, 700, 1);
+
+
+$c1 = random( 24, 3800, 1 );
+$c2 = random( 700, 1500, 1 );
+$c3 = random( 70, 3000, 1 );
+
+
+
+$k = Real( 3 );
+$n = Real( 12 );
+
+$xbar1 = Real( ($a1+$a2+$a3+$a4)/ 4 );
+$xbar2 = Real( ($b1+$b2+$b3+$b4+$b5)/ 5);
+$xbar3 = Real( ($c1+$c2+$c3)/ 3 );
+
+$xbartot = Real( (4*$xbar1 + 5*$xbar2 + 3*$xbar3 )/ $n );
+
+
+$sum1 = Real( $xbar1*4 );
+$sum12=$a1**2+$a2**2+$a3**2+$a4**2;
+$s1=sqrt(($sum12-($sum1**2)/4)/(4-1));
+
+$sum2 = Real( $xbar2*5 );
+$sum22=$b1**2+$b2**2+$b3**2+$b4**2+$b5**2;
+$s2=sqrt(($sum22-($sum2**2)/5)/(5-1));
+
+$sum3 = Real( $xbar3*3 );
+$sum32=$c1**2+$c2**2+$c3**2;
+$s3=sqrt(($sum32-($sum3**2)/3)/(3-1));
+
+
+
+$df1 = Real( $k-1 );
+$df2 = Real( $n-$k );
+$dft = Real( $df1 + $df2 );
+
+$SST = Real(  4*($xbar1-$xbartot)**2 + 5*($xbar2-$xbartot)**2 + 3*($xbar3-$xbartot)**2   );
+$SSE = Real( 3*$s1**2+4*$s2**2+2*$s3**2 );
+$SS = Real( $SST+$SSE );
+
+$MST = Real( $SST/$df1 );
+$MSE = Real( $SSE/$df2 );
+
+$F = Real( $MST/$MSE );
+
+$pval=Real( fprob($df1,$df2,abs($F)) );
+
+
+
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.1){
+$answer = " \(P\)-value > .1";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.01){
+$answer = ".01 < \(P\)-value < .025";}
+elsif($pval<=.01 && $pval>.001){
+$answer = ".001 < \(P\)-value < .01";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a difference in population mean survival time for the various types of cancer.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a difference in mean survival time for the various types of cancer.";
+}
+
+
+
+
+## Link the question and its answer
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast(' \(P\)-value > .1',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.01 < \(P\)-value < .025',
+'.001 < \(P\)-value < .01',
+' \(P\)-value < .001' );
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence of a difference in mean survival time for the various types of cancer.", "Fail to reject \(H_0\).  We do not have significant evidence of a difference in mean survival time for the various types of cancer.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEGIN_TEXT
+
+Whether large doses of vitamin C help cancer patients survive longer still has not been established. In one early study, patients with terminal cancer of the stomach, colon, and breast were treated with vitamin C. The number of days the patients survived is given below. Perform an analysis of variance to determine if the population mean survival time differs for the various types of cancer.
+
+
+$PAR
+
+\(
+\begin{tabular}{ccc}
+Stomach & Colon & Breast \\ \hline
+$a1 & $b1 & $c1  \\
+$a2 & $b2 & $c2  \\
+$a3 & $b3 & $c3  \\
+$a4 & $b4 &  \\
+  & $b5 &  \\
+\end{tabular}
+\)
+$PAR
+
+\{ begintable(5) \}
+\{ row( "Source", "df", "SS", "MS", "F" ) \}
+\{ row( "Between/Treatment", ans_rule(5), ans_rule(5), ans_rule(5), ans_rule(5), ) \}
+\{ row( "Within/Error", ans_rule(5), ans_rule(5), ans_rule(5), "", ) \}
+\{ row( "Total", ans_rule(5), ans_rule(5), "", "", ) \}
+
+\{ endtable() \}
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+
+
+
+END_TEXT
+
+ANS($df1->with(tolerance=>.00)->cmp);
+ANS($SST->with(tolerance=>.07)->cmp);
+ANS($MST->with(tolerance=>.07)->cmp);
+ANS($F->with(tolerance=>.07)->cmp);
+ANS($df2->with(tolerance=>.00)->cmp);
+ANS($SSE->with(tolerance=>.07)->cmp);
+ANS($MSE->with(tolerance=>.07)->cmp);
+ANS($dft->with(tolerance=>.00)->cmp);
+ANS($SS->with(tolerance=>.07)->cmp);
+
+
+
+
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

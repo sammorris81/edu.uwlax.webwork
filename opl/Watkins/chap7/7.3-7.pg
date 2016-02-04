@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('Sample Proportion', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.3')
+## Problem1('7')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$p=random(.58,.78,.01);
+$p1=$p*100;
+$n=random(180,220,1);
+
+
+$x1=sprintf("%0.2f",(.75-$p)/sqrt($p*(1-$p)/$n));
+$x2=sprintf("%0.2f",(.60-$p)/sqrt($p*(1-$p)/$n));
+$x3=sprintf("%0.2f",(.70-$p)/sqrt($p*(1-$p)/$n));
+$x4=sprintf("%0.2f",(130/$n-$p)/sqrt($p*(1-$p)/$n));
+
+$an1 = Real(sprintf("%0.4f",uprob($x1)));
+$an2 = Real(1-sprintf("%0.4f",uprob($x4)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x2)));
+
+
+
+
+BEGIN_TEXT
+About $p1$PERCENT of the people in China live in rural areas.  Suppose a random sample of $n Chinese people is taken.
+$PAR
+What is the probability that 75$PERCENT or more live in rural areas? \{ans_rule(8)\}
+$PAR
+What is the probability that between 60$PERCENT and 70$PERCENT live in rural areas? \{ans_rule(8)\}
+$PAR
+What is the probability that less than 130 of the people live in rural areas? \{ans_rule(8)\}
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

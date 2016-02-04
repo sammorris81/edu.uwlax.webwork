@@ -1,0 +1,312 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'constructing bootstrap confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.3')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n1 = 400;
+@nlevels1 = (2);
+@probs1 = (0.70, 0.30);
+$cat1 = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n1,
+  nlevels => [@nlevels1],
+  probs => [@probs1],
+  random => "T",
+);
+
+@probs1 = @{$cat1->{probs}};
+$prop1 = Real(sprintf("%.4f", $probs1[0]));
+
+$bsprops = new DataGenUWL(
+  datatype => 'bs_one_cat',
+  data => $cat1,
+  N => 1000,
+  name => "A",
+);
+
+$se1 = Real(sprintf("%.4f", $bsprops->{sd}));
+$lower1 = Real($prop1 - 2 * $se1);
+$upper1 = Real($prop1 + 2 * $se1);
+
+$hist = rserve_start_plot('png', $width, $height);
+$data1 = QuantitativeUWL::disp_r(@{$bsprops->{x}});
+
+rserve_eval('data1 <- ' . $data1 .'
+  xmax <- max(data1) + diff(range(data1)) * 0.4
+  xmin <- min(data1)
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  data1.mean <- round(mean(data1), 4)
+  data1.sd   <- round(sd(data1), 4)
+  data1.n    <- length(data1)
+  hist(data1, main = "Histogram A", xlim = c(xmin, xmax), xlab = "")
+  legend("topright", legend = c(paste("mean =", data1.mean),
+                              paste("sd =", data1.sd),
+                              paste("n = ", data1.n)),
+       bty = "n")');
+$hist1 = rserve_finish_plot($hist);
+
+$n2 = 40;
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n2,
+  mean => 60,
+  sd => 20,
+  round => 0,
+  name => "B"
+);
+
+$mean2 = sprintf("%.4f", $quant2->{mean});
+
+$bsmeans = new DataGenUWL(
+    datatype => 'bs_one_mean',
+    data => $quant2,
+    N => 1000,
+    name => "B",
+);
+
+$se2 = Real(sprintf("%.4f", $bsmeans->{sd}));
+$lower2 = Real($mean2 - 2 * $se2);
+$upper2 = Real($mean2 + 2 * $se2);
+
+$hist = rserve_start_plot('png', $width, $height);
+$data2 = QuantitativeUWL::disp_r(@{$bsmeans->{x}});
+
+rserve_eval('data2 <- ' . $data2 .'
+  xmax <- max(data2) + diff(range(data2)) * 0.4
+  xmin <- min(data2)
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  data2.mean <- round(mean(data2), 4)
+  data2.sd   <- round(sd(data2), 4)
+  data2.n    <- length(data2)
+  hist(data2, main = "Histogram B", xlim = c(xmin, xmax), xlab = "")
+  legend("topright", legend = c(paste("mean =", data2.mean),
+                              paste("sd =", data2.sd),
+                              paste("n = ", data2.n)),
+       bty = "n")');
+$hist2 = rserve_finish_plot($hist);
+
+@notation = ( # choices
+  " \( p \)",
+  " \( \widehat{p} \)",
+  " \( \mu \)",
+  " \( \overline{x} \)",
+);
+
+$mc1 = RadioButtons(
+  [@notation],
+  " \( p \)",
+  order => [@notation],
+  labels => ['i', 'ii', 'iii', 'iv'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@notation],
+  " \( \mu \)",
+  order => [@notation],
+  labels => ['i', 'ii', 'iii', 'iv'],
+  separator => $tab,
+);
+###########################
+## Initialization
+###########################
+
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use these histograms to answer the following questions.
+$PAR
+$BCENTER
+  \{ image($hist1, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist2, width=>300, height=>300, tex_size=>300) \}
+$ECENTER
+\{ BeginList("OL", type=>"1") \}
+  $ITEM Histogram A is a bootstrap distribution of 1000 bootstrap samples generated
+  from a sample where the sample proportion is \( \widehat{p} = $prop1 \). Give
+  your answers to 4 decimal places.
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM Using the summary information given in the histogram, provide an estimate
+    of the standard error of \( \widehat{p} \). \{ ans_rule(10) \}
+    $ITEM Give a 95$PERCENT confidence interval for the parameter of interest.
+    ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+    $ITEM What is the correct notation for the parameter of interest? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM Histogram B is a bootstrap distribution of 1000 bootstrap samples generated
+  from a sample where the sample average is \( \overline{x} = $mean2 \). Give your
+  answers to 4 decimal places.
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM Using the summary information given in the histogram, provide an estimate
+    of the standard error of \( \overline{x} \). \{ ans_rule(10) \}
+    $ITEM Give a 95$PERCENT confidence interval for the parameter of interest.
+    ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+    $ITEM What is the correct notation for the parameter of interest? $BR
+    \{ $mc2->buttons() \}
+  \{ EndList("OL") \}
+\{ EndList("OL") \}
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+# ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower1->cmp(
+  checker=>sub {
+    my ($correct, $student, $self) = @_;
+
+    if (($student eq '' || $submission eq 'Preview Answers')) {
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $wrong = $bsprops->{mean} - 2 * $se1;
+    my $tol = 0.001;
+    my $compans = abs($student - $correct);
+
+    if ($compans <= $tol) {
+      # $self->{ans_message} = ('This is correct.');
+      return 1;
+    } elsif (abs($student - $wrong) <= $tol) {
+      Value->Error("Make sure to use the statistic from the sample not the ".
+                   "bootstrap distribution");
+      return 0.5;
+    } else {
+      Value->Error('This is incorrect.');
+    }
+  }
+  )
+);
+
+# ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper1->cmp(
+  checker=>sub {
+    my ($correct, $student, $self) = @_;
+
+    if (($student eq '' || $submission eq 'Preview Answers')) {
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $wrong = $bsprops->{mean} + 2 * $se1;
+    my $tol = 0.001;
+    my $compans = abs($student - $correct);
+
+    if ($compans <= $tol) {
+      # $self->{ans_message} = ('This is correct.');
+      return 1;
+    } elsif (abs($student - $wrong) <= $tol) {
+      Value->Error("Make sure to use the statistic from the sample not the ".
+                   "bootstrap distribution");
+      return 0.5;
+    } else {
+      Value->Error('This is incorrect.');
+    }
+  }
+  )
+);
+
+ANS($mc1->cmp());
+
+ANS($se2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+# ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower2->cmp(
+  checker=>sub {
+    my ($correct, $student, $self) = @_;
+
+    if (($student eq '' || $submission eq 'Preview Answers')) {
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $wrong = $bsmeans->{mean} - 2 * $se2;
+    my $tol = 0.001;
+    my $compans = abs($student - $correct);
+
+    if ($compans <= $tol) {
+      # $self->{ans_message} = ('This is correct.');
+      return 1;
+    } elsif (abs($student - $wrong) <= $tol) {
+      Value->Error("Make sure to use the statistic from the sample not the ".
+                   "bootstrap distribution");
+      return 0.5;
+    } else {
+      Value->Error('This is incorrect.');
+    }
+  }
+  )
+);
+
+# ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->cmp(
+  checker=>sub {
+    my ($correct, $student, $self) = @_;
+
+    if (($student eq '' || $submission eq 'Preview Answers')) {
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $wrong = $bsmeans->{mean} + 2 * $se2;
+    my $tol = 0.001;
+    my $compans = abs($student - $correct);
+
+    if ($compans <= $tol) {
+      # $self->{ans_message} = ('This is correct.');
+      return 1;
+    } elsif (abs($student - $wrong) <= $tol) {
+      Value->Error("Make sure to use the statistic from the sample not the ".
+                   "bootstrap distribution");
+      return 0.5;
+    } else {
+      Value->Error('This is incorrect.');
+    }
+  }
+  )
+);
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

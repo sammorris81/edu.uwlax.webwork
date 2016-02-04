@@ -1,0 +1,150 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Prediction)
+## KEYWORDS('describing data', 'two quantitative variables', 'linear regression')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.6')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+###########################
+## Initialization
+###########################
+$b0a = random(24, 26, 0.01);
+$b1a = random(2.5, 3, 0.01);
+$xa = random(10, 15, 1);
+$yhata = Real($b0a + $b1a * $xa);
+$resa = sprintf("%.2f", usefulstatUWL::rnorm(0, 1));
+$obsa = sprintf("%.1f", $yhata + $resa);
+$resa = Real($obsa - $yhata);
+
+$b0b = random(-0.04, -0.0001, 0.0001);
+$b1b = random(0.01, 0.02, 0.001);
+$xb = random(1, 5, 1);
+$yhatb = Real($b0b + $b1b * $xb);
+$resb = sprintf("%.4f", usefulstatUWL::rnorm(0, .01));
+$obsb = sprintf("%.2f", $yhatb + $resb);
+$resb = Real($obsb - $yhatb);
+
+$b0c = random(90, 100, 1);
+$b1c = random(10, 13, 0.1);
+$xc = random(1, 5, 1);
+$yhatc = Real($b0c + $b1c * $xc);
+$resc = sprintf("%.1f", usefulstatUWL::rnorm(0, 5));
+$obsc = sprintf("%.0f", $yhatc + $resc);
+$resc = Real($obsc - $yhatc);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+At the beginning of section 2.6, the textbook introduces a dataset that has data
+about the bills and tips from a bistro in New York. Two of the variables in the
+dataset are bill amount and tip amount. In this example, the purpose is to use
+bill amount to predict the tip amount.
+$PAR
+$BBOLD Finding a predicted value: $EBOLD $BR
+To find the predicted value you should use the regression equation. In the
+restaurant tips example, the equation of the line is given by
+$PAR
+$BCENTER
+\(\widehat{Tip} = -0.292 + 0.182 * (Bill)\).
+$ECENTER
+$PAR
+To predict the tip amount for a bill that is \{DOLLAR()\}50.00, you can use
+$PAR
+$BCENTER
+\(\widehat{Tip} = -0.292 + 0.182 * (50) = 8.808\).
+$ECENTER
+$PAR
+So, the predicted tip amount is \{DOLLAR()\}8.808. For more example of predictions using
+regression equations for this dataset in example 2.41 on p. 121 in your
+textbook.
+$PAR
+$BBOLD Finding a residual: $EBOLD $BR
+To find the residual, take the observed value and subtract the predicted value.
+So, in this restaurant dataset, if we had a bill that was \{DOLLAR()\}50.00 with a tip of
+\{DOLLAR()\}10.00, then the residual for the observation would be
+\{DOLLAR()\}10.00 - \{DOLLAR()\}8.808 = \{DOLLAR()\}1.192.
+For more examples of finding a residual, see example 2.42 on p. 123 in your
+textbook.
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In each of the following questions, two variables are defined, a regression equation
+is given, and one data point is given. For each question, find the predicted value
+for the data point and compute the residual. Give your answers to 4 decimal places.
+\{ BeginList("OL", type=>"1") \}
+  $ITEM $BITALIC Hgt$EITALIC = height in inches,$BITALIC Age$EITALIC = age in
+  years of a child$PAR
+  \(\widehat{Hgt} = $b0a + $b1a * (Age)\); data point is a child $xa years old and $obsa inches tall
+  \{BeginList("OL", type=>"a")\}
+    $ITEM Predicted value: \{ans_rule(10)\}
+    $ITEM Residual: \{ans_rule(10)\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM $BITALIC BAC$EITALIC = blood alcohol content ($PERCENT of alcohol in the blood),
+  $BITALIC Drinks$EITALIC = number of alcoholic drinks $PAR
+  \(\widehat{BAC} = $b0b + $b1b * (Drinks)\); data point is an individual who consumed
+  $xb drinks and had a$BITALIC BAC$EITALIC of $obsb
+  \{BeginList("OL", type=>"a")\}
+    $ITEM Predicted value: \{ans_rule(10)\}
+    $ITEM Residual: \{ans_rule(10)\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM $BITALIC Weight$EITALIC = maximum weight capable of bench pressing (pounds),
+  $BITALIC Training$EITALIC = number of hours spent lifting weights a week$PAR
+  \(\widehat{Weight} = $b0c + $b1c * (Training)\); data point is an individual who
+  trains $xc hours a week and can bench $obsc pounds
+  \{BeginList("OL", type=>"a")\}
+    $ITEM Predicted value: \{ans_rule(10)\}
+    $ITEM Residual: \{ans_rule(10)\}
+  \{EndList("OL")\}
+\{ EndList("OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+ANS($yhata->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($resa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($yhatb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($resb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($yhatc->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($resc->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

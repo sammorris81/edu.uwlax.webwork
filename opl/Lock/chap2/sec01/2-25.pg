@@ -1,0 +1,108 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.25')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = random(660, 700, 1);
+@nlevels = (2, 2);
+@labels = ("Pregnant", "Not pregnant", "Smoker", "Non-smoker");
+@probs = (0.056, 0.304, 0.143, 0.497);
+
+$cat1 = new DataGenUWL(
+  datatype => 'two_cat',
+  n => $n,
+  nlevels => [@nlevels],
+  probs => [@probs],
+  labels => [@labels],
+  random => "T",
+);
+
+$freqsuccess = CategoricalUWL::margintotal(
+  data=>$cat1,
+  level=>1,
+  index=>1
+);
+$propsuccess = Real($freqsuccess / $n);
+
+$succ_giv_smoker = CategoricalUWL::marginalprop(
+  data=>$cat1,
+  row=>1,
+  col=>1,
+  index=>2
+);
+
+$succ_giv_nonsmoker = CategoricalUWL::marginalprop(
+  data=>$cat1,
+  row=>1,
+  col=>2,
+  index=>2
+);
+$propdiff = Real($succ_giv_nonsmoker - $succ_giv_smoker);
+
+Context()->texStrings;
+BEGIN_TEXT
+Studies have concluded that smoking while pregnant can have negative consequences,
+but could smoking also negatively affect the ability to become pregnant? A study
+collected data on $n women who had gone off birth control with the intention of
+becoming pregnant (Baird, D. and Wilcox A., "Cigarette Smoking Associated with
+Delayed Conception,"$BITALIC Journal of the American Medical Association$EITALIC,
+June 2011; 305(23): 2379 - 2484). Smokers were defined as those who smoked at least
+one cigarette a day prior to pregnancy. We are interested in the pregnancy rate
+during the first cycle off birth control. The results are summarized in the following table:
+$PAR
+\{ CategoricalUWL::freqtable(data=>$cat1) \}
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What is the proportion of women successfully pregnant after their first
+  cycle \( \left( \widehat{p} \right) \)? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What is the difference in proportion of success between non-smokers and
+  smokers \( \left( \widehat{p}_{ns} - \widehat{p}_{s} \right) \) ? \{ ans_rule(10) \}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+##############################################################
+#
+#  Answers
+#
+#
+
+
+ANS($propsuccess->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($propdiff->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

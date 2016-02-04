@@ -1,0 +1,119 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection()
+## KEYWORDS('Probability Distributions','Mean','Variance')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.2')
+## Problem1('E18')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a0 = Real(".012");
+$a1 = random( .270, .275, .001);
+$a2 = random( .355, .362, .001);
+$a3 = random( .215, .220, .001);
+$a4 = random( .09, .1, .001);
+$a5 = Real(" 1-( $a0 + $a1 + $a2 + $a3 + $a4 )")->reduce;
+
+$mean = Real(" 1*$a1 + 2*$a2 + 3*$a3 + 4*$a4 + 5*$a5 ")->reduce;
+$sd = Real(" sqrt( (0-$mean)^2*$a0 + (1-$mean)^2*$a1 + (2-$mean)^2*$a2 + (3-$mean)^2*$a3 + (4-$mean)^2*$a4 + (5-$mean)^2*$a5) ")->reduce;
+
+$mean2 = Real(" 30*$mean ")->reduce;
+$sd2 = Real( "sqrt(30)*$sd ")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+The table below gives the probability that a randomly selected family in the United States will have the given number of color televisions.
+$PAR
+\(
+\begin{tabular}{cc}
+Number of Color TVs & Probability \\ \hline
+0 & $a0 \\
+1 & $a1 \\
+2 & $a2 \\
+3 & $a3  \\
+4 & $a4 \\
+5 & $a5 \\
+\end{tabular}
+\)
+
+$PAR
+${BBOLD} 1. $EBOLD
+Compute the expected value and standard deviation of this distribution.
+$PAR
+Expected Value = \{ans_rule(15)\}
+$PAR
+Std Dev = \{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD
+Suppose you take a random sample of 30 households. Compute the expected number of color televisions in the 30 households and the standard deviation of the number of color televisions.
+$PAR
+Expected Number of televisions = \{ans_rule(15)\}
+$PAR
+Std Dev = \{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $mean->with(tolerance=>.005)->cmp );
+ANS( $sd->with(tolerance=>.005)->cmp );
+ANS( $mean2->with(tolerance=>.005)->cmp );
+ANS( $sd2->with(tolerance=>.005)->cmp );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

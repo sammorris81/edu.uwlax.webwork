@@ -1,0 +1,132 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## KEYWORDS('approximating with a distribution', 'normal distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('Skill Builder 5')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+$z1a = non_zero_random(-3, 3, 0.01);
+do {$z1b = non_zero_random(-3, 3, 0.01);} until ($z1b != $z1a);
+$z1cl = non_zero_random(-3, 1, 0.01);
+$z1cu = $z1cl + random(0.1, 2, 0.01);
+
+$m1a = random(5, 20, 5);
+$m1b = random(10, 25, 5);
+$m1c = random(15, 30, 5);
+
+$s1a = random(5, 10, 0.5);
+$s1b = random(5, 10, 0.5);
+$s1c = random(5, 10, 0.5);
+
+$x1a = sprintf("%.1f", $z1a * $s1a + $m1a);
+$x1b = sprintf("%.1f", $z1b * $s1b + $m1b);
+$x1cl = sprintf("%.1f", $z1cl * $s1c + $m1c);
+$x1cu = sprintf("%.1f", $z1cu * $s1c + $m1c);
+
+$z1a = ($x1a - $m1a) / $s1a;
+$z1b = ($x1b - $m1b) / $s1b;
+$z1cl = ($x1cl - $m1c) / $s1c;
+$z1cu = ($x1cu - $m1c) / $s1c;
+
+$p1a = Real(1 - uprob($z1a));
+$p1b = Real(uprob($z1b));
+$p1c = Real(uprob($z1cl) - uprob($z1cu));
+
+
+$z2a = non_zero_random(-3, 3, 0.01);
+do {$z2b = non_zero_random(-3, 3, 0.01);} until ($z2b != $z2a);
+$z2cl = non_zero_random(-3, 1, 0.01);
+$z2cu = $z2cl + random(0.1, 2, 0.01);
+
+$m2a = random(5, 20, 5);
+$m2b = random(10, 25, 5);
+$m2c = random(15, 30, 5);
+
+$s2a = random(5, 10, 0.5);
+$s2b = random(5, 10, 0.5);
+$s2c = random(5, 10, 0.5);
+
+$x2a = sprintf("%.1f", $z2a * $s2a + $m2a);
+$x2b = sprintf("%.1f", $z2b * $s2b + $m2b);
+$x2cl = sprintf("%.1f", $z2cl * $s2c + $m2c);
+$x2cu = sprintf("%.1f", $z2cu * $s2c + $m2c);
+
+$z2a = ($x2a - $m2a) / $s2a;
+$z2b = ($x2b - $m2b) / $s2b;
+$z2cl = ($x2cl - $m2c) / $s2c;
+$z2cu = ($x2cu - $m2c) / $s2c;
+
+$p2a = Real(1 - uprob($z2a));
+$p2b = Real(uprob($z2b));
+$p2c = Real(uprob($z2cl) - uprob($z2cu));
+
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, find the specified areas for the given density.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM The area below \(x = $x1a\) in a N($m1a, $s1a) distribution. \{ ans_rule(10) \}
+  $ITEM The area below \(x = $x2a\) in a N($m2a, $s2a) distribution. \{ ans_rule(10) \}
+  $ITEM The area above \(x = $x1b\) in a N($m1b, $s1b) distribution. \{ ans_rule(10) \}
+  $ITEM The area above \(x = $x2b\) in a N($m2b, $s2b) distribution. \{ ans_rule(10) \}
+  $ITEM The area between \(x = $x1cl\) and \(x = $x1cu\) in a N($m1c, $s1c)
+  distribution. \{ ans_rule(10) \}
+  $ITEM The area between \(x = $x2cl\) and \(x = $x2cu\) in a N($m2c, $s2c)
+  distribution. \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p1b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p1c->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2c->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

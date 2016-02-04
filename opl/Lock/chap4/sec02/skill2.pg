@@ -1,0 +1,120 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'measuring evidence with p-values')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.2')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = 1000;
+$mean = random(40, 60, 5);
+$sd = 8;
+$quant = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n,
+  mean => $mean,
+  sd => $sd,
+  skew => 0,
+  name => "sample means",
+  randomsummary => "F",
+);
+
+$hist = StatGraphicsUWL::histogram(
+  data => $quant,
+);
+
+$ts1 = $mean + 0.5 * $sd;
+$pval1 = QuantitativeUWL::random_pvalue(
+  data => $quant,
+  test_stat => $ts1,
+  alternative => 'GT'
+);
+$pval1 = Real($pval1);
+$count1 = $pval1 * $n;
+
+$ts2 = $mean + $sd;
+$pval2 = QuantitativeUWL::random_pvalue(
+  data => $quant,
+  test_stat => $ts2,
+  alternative => 'GT'
+);
+$pval2 = Real($pval2);
+$count2 = $pval2 * $n;
+
+$ts3 = $mean + 1.5 * $sd;
+$pval3 = QuantitativeUWL::random_pvalue(
+  data => $quant,
+  test_stat => $ts3,
+  alternative => 'GT'
+);
+$pval3 = Real($pval3);
+$count3 = $pval3 * $n;
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$BCENTER
+  \{ image(insertGraph($hist), width=>300, height=>300, tex_size=>450) \}
+$ECENTER
+$PAR
+The histogram above shows a randomization distribution based on $n simulated
+samples for testing \(H_0\): \(\mu = $mean\) vs \(H_a\): \(\mu > $mean\).
+Use the distribution to determine the p-value for the following observed sample mean.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM In $count1 randomizations, the randomization distribution resulted in
+  sample averages as large as or larger than $ts1. What is the p-value for
+  \(\overline{x} = $ts1\)? \{ ans_rule(10) \}
+  $ITEM In $count2 randomizations, the randomization distribution resulted in
+  sample averages as large as or larger than $ts2. What is the p-value for
+  \(\overline{x} = $ts2\)? \{ ans_rule(10) \}
+  $ITEM In $count3 randomizations, the randomization distribution resulted in
+  sample averages as large as or larger than $ts3. What is the p-value for
+  \(\overline{x} = $ts3\)? \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pval1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pval2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pval3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

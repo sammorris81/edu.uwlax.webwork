@@ -1,0 +1,102 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('Confidence Interval','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E10')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+$a2 = random( 1, 3, 1 );
+$n = Real( 4675 );
+$p = random( .45, .50, .01 );
+$p2 = random( .38, .42, .01 );
+$pval = Real( $p*100);
+$pval2 = Real( $p2*100);
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+if( $a2==1){
+$z2 = Real( 1.645),
+$s2 = Real( 90 );}
+elsif( $a2==2){
+$z2 = Real( 1.96),
+$s2 = Real( 95 );}
+elsif( $a2==3){
+$z2 = Real( 2.575),
+$s2 = Real( 99 );}
+
+
+
+
+$lower = Real(" $p - $z*sqrt( $p*(1-$p)/$n) ")->reduce;
+
+$upper = Real(" $p + $z*sqrt( $p*(1-$p)/$n) ")->reduce;
+
+$lower2 = Real(" $p2 - $z2*sqrt( $p2*(1-$p2)/$n) ")->reduce;
+
+$upper2 = Real(" $p2 + $z2*sqrt( $p2*(1-$p2)/$n) ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+To study the effect of a cash incentive on the response rates to a mail survey, a group of 4675 Medicaid enrollees received $2 in cash along with the survey. Another group the same size received the same survey, but no money. The initial response rates were $pval$PERCENT and $pval2$PERCENT, respectively. You may consider each group a random sample of Medicaid enrollees.
+$PAR
+Compute a $s$PERCENT confidence interval for the percentage of all Medicaid enrollees who would return the survey if they receive $2.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+$PAR
+Compute a $s2$PERCENT confidence interval for the percentage of all Medicaid enrollees who would return the survey if they receive no cash incentive.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+ANS($lower2->with(tolerance=>.07)->cmp);
+ANS($upper2->with(tolerance=>.07)->cmp);
+
+
+
+
+ENDDOCUMENT();

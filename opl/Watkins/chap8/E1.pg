@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('Confidence Interval','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E1')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+$n = random( 900, 1100, 100 );
+$p = Real( .19 );
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+
+
+
+$lower = Real(" .19 - $z*sqrt( $p*(1-$p)/$n) ")->reduce;
+
+$upper = Real(" .19 + $z*sqrt( $p*(1-$p)/$n) ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+The major polling organizations sponsored by news media periodically take surveys to determine how well Americans think the president is performing. The lowest approval rating ever given to a president since the polls began in the 1930's was 19$PERCENT. This rating was for George W. Bush, in an American Research Group poll taken in September 2008, during a financial crisis and wars in Iraq and Afghanistan. The sample size was $n randomly selected American adults.
+$PAR
+Find a $s$PERCENT confidence interval for the proportion (in decimal form) of all American adults who approved of the job President Bush was doing.
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

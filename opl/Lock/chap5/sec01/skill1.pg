@@ -1,0 +1,92 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## KEYWORDS('approximating with a distribution', 'normal distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+$z1a = sprintf("%.2f", non_zero_random(-3, 3, 0.01));
+do {$z1b = sprintf("%.2f", non_zero_random(-3, 3, 0.01));} until ($z1b != $z1a);
+$z1cl = sprintf("%.2f", non_zero_random(-3, 1, 0.01));
+$z1cu = sprintf("%.2f", $z1cl + random(0.1, 2, 0.01));
+
+$p1a = Real(1 - uprob($z1a));
+$p1b = Real(uprob($z1b));
+$p1c = Real(uprob($z1cl) - uprob($z1cu));
+
+$z2a = sprintf("%.2f", non_zero_random(-3, 3, 0.01));
+do {$z2b = sprintf("%.2f", non_zero_random(-3, 3, 0.01));} until ($z2b != $z2a);
+$z2cl = sprintf("%.2f", non_zero_random(-3, 1, 0.01));
+$z2cu = sprintf("%.2f", $z2cl + random(0.1, 2, 0.01));
+
+$p2a = Real(1 - uprob($z2a));
+$p2b = Real(uprob($z2b));
+$p2c = Real(uprob($z2cl) - uprob($z2cu));
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, find the specified areas for a N(0, 1) density.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM The area below \(z = $z1a\) \{ ans_rule(10) \}
+  $ITEM The area below \(z = $z2a\) \{ ans_rule(10) \}
+  $ITEM The area above \(z = $z1b\) \{ ans_rule(10) \}
+  $ITEM The area above \(z = $z2b\) \{ ans_rule(10) \}
+  $ITEM The area between \(z = $z1cl\) and \(z = $z1cu\) \{ ans_rule(10) \}
+  $ITEM The area between \(z = $z2cl\) and \(z = $z2cu\) \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p1b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p1c->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p2c->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,126 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'spread')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.3')
+## Problem1('Skill Builder 5')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$skew1 = random(-20, 20, 20);
+
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 400,
+  mean => 10,
+  sd => 1,
+  skew => $skew1,
+  name => "A",
+  round => 1,
+);
+
+if ($skew1 < 0) {
+  $correctskew1 = "Left-skewed";
+  $skew2 = 0;
+} elsif ($skew1 == 0) {
+  $correctskew1 = "Approximately symmetric";
+  $skew2 = random(-20, 20, 40);
+} else {
+  $correctskew1 = "Right-skewed";
+  $skew2 = 0;
+}
+
+$skewdesc1 = PopUp(
+  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
+  $correctskew1,
+);
+
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 400,
+  mean => random(10, 20, 2),
+  sd => 1,
+  skew => $skew2,
+  name => "B",
+  round => 1,
+);
+
+if ($skew2 < 0) {
+  $correctskew2 = "Left-skewed";
+} elsif ($skew2 == 0) {
+  $correctskew2 = "Approximately symmetric";
+} else {
+  $correctskew2 = "Right-skewed";
+}
+
+$skewdesc2 = PopUp(
+  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
+  $correctskew2,
+);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+$showHint = 3;
+BEGIN_HINT
+${BBOLD}Determining the shape of a distribution from a five-number summary${EBOLD} $BR
+Remember that the quantiles and median of a dataset are used to divide the
+sorted list of observations into 4 groups of equal size. We can use this fact,
+along with the minimum and maximum of the dataset, to help determine the shape
+of the distribution.
+\{BeginList("UL")\}
+  $ITEM ${BITALIC}Symmetric distributions${EITALIC} wi
+\{EndList("OL")\}
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For these questions, indicate whether the five-number summary corresponds most
+likely to a distribution that is skewed to the left, approximately symmetric, or
+skewed to the right.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant1) \}) \{ $skewdesc1->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant2) \}) \{ $skewdesc2->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($skewdesc1->cmp());
+ANS($skewdesc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

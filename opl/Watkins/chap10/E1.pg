@@ -1,0 +1,189 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample mean - t)
+## KEYWORDS('Confidence interval', 'Mean')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.1')
+## Problem1('E1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$a1 = random( 1, 3, 1 );
+
+$m1 = random( 325, 335, 1 );
+$sd1 = random( 110, 112, 1 );
+$n1 = Real( 1000 );
+
+
+$m2 = random( 305, 315, 1 );
+$sd2 = random( 78, 80, 1 );
+$n2 = Real( 800 );
+
+$n3 = 7;
+$quant3 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n3,
+    skew => 0,
+    mean => 11,
+    sd => 2,
+    round => 0,
+    randomsummary => 'F',
+);
+$m3 = $quant3->{mean};
+$sd3 = $quant3->{sd};
+@x3 = @{$quant3->{x}};
+
+$n4 = 6;
+$quant4 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n4,
+    skew => 0,
+    mean => 67,
+    sd => 2.5,
+    round => 1,
+    randomsummary => 'F',
+);
+$m4 = $quant4->{mean};
+$sd4 = $quant4->{sd};
+@x4 = @{$quant4->{x}};
+
+if( $a1==1){
+  $s1 = Real(0.90);
+  $s2 = Real(0.95);
+  $s3 = Real(0.99);
+  $s4 = Real(0.95);
+}
+elsif( $a1==2){
+  $s1 = Real(0.95);
+  $s2 = Real(0.90);
+  $s3 = Real(0.99);
+  $s4 = Real(0.90);
+}
+elsif( $a1==3){
+  $s1 = Real(0.90);
+  $s2 = Real(0.99);
+  $s3 = Real(0.95);
+  $s4 = Real(0.99);
+}
+
+$t1 = sprintf("%.3f", tdistr(($n1 - 1), (1-$s1)/2));
+$t2 = sprintf("%.3f", tdistr(($n2 - 1), (1-$s2)/2));
+$t3 = sprintf("%.3f", tdistr(($n3 - 1), (1-$s3)/2));
+$t4 = sprintf("%.3f", tdistr(($n4 - 1), (1-$s4)/2));
+
+$se1 = $sd1 / sqrt($n1);
+$se2 = $sd2 / sqrt($n2);
+$se3 = $sd3 / sqrt($n3);
+$se4 = $sd4 / sqrt($n4);
+
+$lower1 = Real(sprintf("%.4f", $m1 - $t1 * $se1));
+$upper1 = Real(sprintf("%.4f", $m1 + $t1 * $se1));
+
+$lower2 = Real(sprintf("%.4f", $m2 - $t2 * $se2));
+$upper2 = Real(sprintf("%.4f", $m2 + $t2 * $se2));
+
+$lower3 = Real(sprintf("%.4f", $m3 - $t3 * $se3));
+$upper3 = Real(sprintf("%.4f", $m3 + $t3 * $se3));
+
+$lower4 = Real(sprintf("%.4f", $m4 - $t4 * $se4));
+$upper4 = Real(sprintf("%.4f", $m4 + $t4 * $se4));
+
+
+BEGIN_TEXT
+\{BeginList( "OL", type=>"a" ) \}
+$ITEM The National Survey of American College Students examines the literacy of U.S.
+college students. In a sample of $n1 students from four-year colleges, the
+mean score on quantitative literacy (QL) questions was $m1 with a standard
+deviation of $sd1. Find a \{ $s1 * 100 \}$PERCENT confidence interval for the mean QL score of
+all four-year college students. Give your answers to two decimal places.
+$anssep
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+$anssep
+$ITEM The National Survey of American College Students examines the literacy of U.S.
+college students. In a sample of $n2 students from two-year colleges,
+the mean score on quantitative literacy (QL) questions was $m2 with a standard
+deviation of $sd2. Find a \{ $s2 * 100 \}$PERCENT confidence interval for the mean
+QL score of all two-year college students. Give your answers to two decimal places.
+$anssep
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+$anssep
+$ITEM A page was randomly selected from each of 7 brochures for cancer patients
+published by the American Cancer Society and the National Cancer Institute. The
+pages were judged for readability, using standard readability tests. The reading
+grade levels are given below.
+$extrasep
+$BCENTER
+\{ join(", ", @x3) \}
+$ECENTER
+$extrasep
+Construct a \{$s3 * 100\}$PERCENT confidence interval for the population mean
+readability level. Give your answers to two decimal places.
+$anssep
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+$anssep
+$ITEM A statistics class at the University of Wisconsin-La Crosse decided to
+estimate the average mass of a small bag of french fries sold at Burger King.
+They bought $n4 bags during two different time periods on two consecutive days
+at the same Burger King and weighed the fries. The results are shown below.
+$extrasep
+$BCENTER
+\{ join(", ", @x4) \}
+$ECENTER
+$extrasep
+Find a \{ $s4 * 100 \}$PERCENT confidence interval for the population mean
+mass of a small bag of Burger King french fries. Give your answers to two decimal
+places.
+$anssep
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+\{ EndList( "OL" ) \}
+END_TEXT
+
+$showPartialCorrectAnswers = 0;
+
+ANS($lower1->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($upper1->with(tolerance=>.1, tolType=>"absolute")->cmp);
+
+ANS($lower2->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($upper2->with(tolerance=>.1, tolType=>"absolute")->cmp);
+
+ANS($lower3->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($upper3->with(tolerance=>.1, tolType=>"absolute")->cmp);
+
+ANS($lower4->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($upper4->with(tolerance=>.1, tolType=>"absolute")->cmp);
+
+ENDDOCUMENT();

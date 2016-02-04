@@ -1,0 +1,108 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.20')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "niceTables.pl"
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+$showPartialCorrectAnswers = 1;
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = Real(2000);
+$every_day = Real(302);
+$once_a_week = Real(277);
+$occasionally = Real(526);
+$rarely = Real(475);
+$never = Real(420);
+
+$rel_every_day = Real($every_day / $n);
+$rel_every_day_round = sprintf("%.4f", $rel_every_day);
+$rel_once_a_week = Real($once_a_week / $n);
+$rel_once_a_week_round = sprintf("%.4f", $rel_once_a_week);
+$rel_occasionally = Real($occasionally / $n);
+$rel_occasionally_round = sprintf("%.4f", $rel_occasionally);
+$rel_rarely = Real($rarely / $n);
+$rel_rarely_round = sprintf("%.4f", $rel_rarely);
+$rel_never = Real($never / $n);
+$rel_never_round = sprintf("%.4f", $rel_never);
+
+$once_min = Real($rel_once_a_week_round + $rel_occasionally_round +
+                 $rel_rarely_round + $rel_never_round);
+
+$once_plus = Real($rel_once_a_week + $rel_every_day);
+$rare_min  = Real($rel_rarely + $rel_never);
+
+Context()->texStrings;
+BEGIN_TEXT
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Talking about sports${EITALIC} $BR
+A survey in November 2012 asked a random sample of 2,000 US adults ${LQ}How
+often do you talk about sports with family and friend?${RQ}. The results are
+summarized in the following table:
+$PAR
+$BCENTER
+\{ DataTable(
+  [
+    [['Response', headerrow => 1, midrule => 1], 'Frequency', 'Rel. Frequency'],
+    ['Every day or nearly every day', '$every_day', $rel_every_day_round],
+    ['About once a week', '$once_a_week', $rel_once_a_week_round],
+    ['Occasionally', '$occasionally', $rel_occasionally_round],
+    ['Rarely', '$rarely', $rel_rarely_round],
+    [['Never', midrule => 1], '$never', $rel_never_round],
+    [['Total', headerrow => 1, midrule =>1], '$n', '']
+  ],
+  caption => 'Survey results',
+  align => 'l c c'
+);\}
+$ECENTER
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+$PAR
+To find the proportion of people that are accounted for by more than one group,
+add up all the people in each of the groups and divide by the total. For example,
+the percent of people in the sample who talk about sports about once a week or
+less is given by
+\[
+  \displaystyle \frac{$once_a_week + $occasionally + $rarely + $never}{$n} =
+  $once_min
+\]
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What proportion rarely or never talk about sports? \{ans_rule(10)\}
+  $ITEM What percent of people in the sample talk about sports about once a week
+  or more? \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($rare_min->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($once_plus->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

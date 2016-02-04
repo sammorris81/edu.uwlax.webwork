@@ -1,0 +1,112 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## Level(2)
+## KEYWORDS('IQR','median','quartiles','five number summary')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('fivenum1')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = random( 1, 2, 1 );
+$a2 = random( 3, 4, 1 );
+$a3 = random( 5, 6, 1 );
+$a4 = random( 7, 8, 1 );
+$a5 = random( 9, 10, 1 );
+$a6 = random( 11, 12, 1 );
+$a7 = random( 13, 14, 1 );
+
+$median = Real(" $a4 ");
+$Q1 = Real(" $a2 ");
+$Q3 = Real(" $a6 ");
+$IQR = Real(" $Q3-$Q1 ");
+$min = Real(" $a1 ");
+$max = Real(" $a7 ");
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Consider the following sample: $a1, $a2, $a3, $a4, $a5, $a6, $a7;
+$PAR
+${BBOLD} 1. $EBOLD
+Fill in the following table of the five number summary.
+$PAR
+\{ begintable(2) \}
+\{ row( "Min", ans_rule(5) ) \}
+\{ row( "Q1", ans_rule(5) ) \}
+\{ row( "Median", ans_rule(5) ) \}
+\{ row( "Q3", ans_rule(5) ) \}
+\{ row( "Max", ans_rule(5) ) \}
+\{ endtable() \}
+
+$PAR
+${BBOLD} 2. $EBOLD
+What is the IQR?
+\{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $min->cmp );
+ANS( $Q1->cmp );
+ANS( $median->cmp );
+ANS( $Q3->cmp );
+ANS( $max->cmp );
+ANS( $IQR->cmp );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

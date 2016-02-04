@@ -1,0 +1,185 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'sampling distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.1')
+## Problem1('P2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+Context("Numeric");
+
+$N = 500;
+
+@ns = (40, 80, 120);
+$random1 = random(0, 2, 1);
+do {$random2 = random(0, 2, 1);} until ($random2 != $random1);
+do {$random3 = random(0, 2, 1);} until (($random3 != $random2) && ($random3 != $random1));
+
+$n1 = $ns[$random1];
+$mean1 = random(0.30, 0.50, 0.05);
+$sd1 =  sqrt($mean1 * (1-$mean1) / $n1);
+
+rserve_eval('z <- rnorm(' . $N .')
+  z <- (z - mean(z)) / sd(z)
+  data1 <- z * ' . $sd1 . ' + ' . $mean1);
+
+($se) = rserve_eval('sd(data1)');
+$sd = $se * sqrt($n1);
+($mean1) = rserve_eval('mean(data1)');
+
+$n2 = $ns[$random2];
+$mean2 = $mean1;
+$sd2 =  $sd / sqrt($n2);
+
+rserve_eval('data2 <- z * ' . $sd2 . ' + ' . $mean2);
+
+$n3 = $ns[$random3];
+$mean3 = $mean1;
+$sd3 =  $sd / sqrt($n3);
+
+rserve_eval('data3 <- z * ' . $sd3 . ' + ' . $mean3);
+
+($xmin, $xmax) = rserve_eval('range(c(data1, data2, data3))');
+$range = $xmax - $xmin;
+$nudge = $range * 0.1;
+$xmin = $xmin - $nudge;
+$xmax = $xmax + $nudge;
+
+$hist = rserve_start_plot('png', $width, $height);
+
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data1, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")');
+$hist1 = rserve_finish_plot($hist);
+
+$hist = rserve_start_plot('png', $width, $height);
+
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data2, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")');
+$hist2 = rserve_finish_plot($hist);
+
+$hist = rserve_start_plot('png', $width, $height);
+
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data3, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")');
+$hist3 = rserve_finish_plot($hist);
+
+@labels = ("?", "$n1", "$n2", "$n3");
+$order = random(1, 4, 1);
+if ($order == 1){
+  $disp1 = $hist1;
+  $disp2 = $hist2;
+  $disp3 = $hist3;
+  $correct1 = "$n1";
+  $correct2 = "$n2";
+  $correct3 = "$n3";
+} elsif ($order == 2){
+  $disp1 = $hist3;
+  $disp2 = $hist2;
+  $disp3 = $hist1;
+  $correct1 = "$n3";
+  $correct2 = "$n2";
+  $correct3 = "$n1";
+} elsif ($order == 3){
+  $disp1 = $hist2;
+  $disp2 = $hist3;
+  $disp3 = $hist1;
+  $correct1 = "$n2";
+  $correct2 = "$n3";
+  $correct3 = "$n1";
+} elsif ($order == 4){
+  $disp1 = $hist1;
+  $disp2 = $hist3;
+  $disp3 = $hist2;
+  $correct1 = "$n1";
+  $correct2 = "$n3";
+  $correct3 = "$n2";
+}
+
+$size1 = PopUp(
+  [@labels],
+  $correct1
+);
+
+$size2 = PopUp(
+  [@labels],
+  $correct2
+);
+
+$size3 = PopUp(
+  [@labels],
+  $correct3
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+$BBOLD Sampling distribution for proportions: $EBOLD
+$BR
+Each of the following sampling distributions represent $N sample proportions from the same
+population, but have differing sample sizes. Match the sampling distribution to
+the most appropriate sample size \{ join(", ", @ns) \}. Each answer is used only once.
+$PAR
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+AlignedRow([
+      image( $disp1, width=>300, height=>300, tex_size=>"400" ),
+      "a. ".$size1 -> menu()
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+AlignedRow([
+      image( $disp2, width=>300, height=>300, tex_size=>"400" ),
+      "b. ".$size2 -> menu()
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+AlignedRow([
+      image( $disp3, width=>300, height=>300, tex_size=>"400" ),
+      "c. ".$size3 -> menu()
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+EndTable()
+\}
+
+END_TEXT
+
+ANS( $size1 -> cmp() );
+ANS( $size2 -> cmp() );
+ANS( $size3 -> cmp() );
+ENDDOCUMENT();
+

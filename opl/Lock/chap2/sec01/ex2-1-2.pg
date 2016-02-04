@@ -1,0 +1,99 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.20')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+$showPartialCorrectAnswers = 1;
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = Real(169);
+@nlevels = (3, 2);
+@labels = ("In a relationship", "It's complicated", "Single", "Female", "Male");
+@freqs = (32, 10, 12, 7, 63, 45);
+
+$cat1 = new DataGenUWL(
+  datatype => 'two_cat',
+  n => $n,
+  nlevels => [@nlevels],
+  freqs => [@freqs],
+  labels => [@labels],
+  random => "F",
+);
+
+$p_rel = CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>1);
+$p_rel = Real($p_rel / $n);
+$p_male_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>2, index=>2);
+$p_male_rel = Real($p_male_rel);
+$p_female_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>2);
+$p_female_rel = Real($p_female_rel);
+
+$p_diff = Real($p_female_rel - $p_male_rel);
+$p_rel_female = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>1);
+$p_rel_female = Real($p_rel_female);
+
+$female_and_rel = CategoricalUWL::jointprop(data=>$cat1, row=>1, col=>1);
+$female_and_rel = Real($female_and_rel);
+
+Context()->texStrings;
+BEGIN_TEXT
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Relationship status and Gender${EITALIC} $BR
+$n college students were asked about relationship status and gender. The results
+are summarized in the following table:
+$PAR
+$BCENTER
+\{ CategoricalUWL::freqtable(data=>$cat1) \}
+$ECENTER
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What proportion of students in this sample are in a relationship \{ans_rule(10)\}
+  $ITEM What proportion of males in this sample are in a relationship? \{ans_rule(10)\}
+  $ITEM What proportion of females in this sample are in a relationship? \{ans_rule(10)\}
+  $ITEM Find the difference in the proportion of females in a relationship
+  and the proportion of males in a relationship. \{ans_rule(10)\}
+  $ITEM What proportion of the people who are in a relationship in this sample
+  are female? \{ans_rule(10)\}
+  $ITEM What proportion of the people in this sample are female and in a
+  relationship? \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($p_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_male_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_female_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_diff->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_rel_female->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($female_and_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

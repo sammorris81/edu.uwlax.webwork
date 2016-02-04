@@ -1,0 +1,137 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Two sample proportion)
+## KEYWORDS('Hypothesis tests','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E21')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+
+$p1 = random( .4, .5, .01 );
+$n1 = Real( 1000 );
+$p1quest = Real( $p1*100 );
+
+$p2 = random( .5, .6, .01 );
+$n2 = Real( 1010 );
+$p2quest = Real( $p2*100 );
+
+$p = Real( ($p1*$n1+$p2*$n2)/($n1+$n2) );
+
+
+$ts = Real(" ($p1 - $p2)/sqrt($p*(1-$p)*(1/$n1+1/$n2)) ")->reduce;
+
+$pval = Real(1-uprob(sprintf("%0.2f",$ts)))->reduce;
+$pvalans = Real( sprintf("%0.4f",$pval) );
+
+
+$fmc = new_multiple_choice();
+
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$fquestion = "What sign should appear in the alternative hypothesis?";
+
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = '\(<\)';
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that NASA was being looked upon more favorable by the American public in 2007 than in 1999.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that NASA was being looked upon more favorable by the American public in 2007 than in 1999.";
+}
+
+
+
+
+## Link the question and its answer
+
+$fmc->qa($fquestion, $fanswer);
+
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that NASA was being looked upon more favorable by the American public in 2007 than in 1999.','Fail to reject \(H_0\).  We do not have significant evidence that NASA was being looked upon more favorable by the American public in 2007 than in 1999.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+In 1990, the Gallup poll began to periodically ask adult Americans, "How would you rate the job being done by NASA-the U.S. space agency? Would you say it is doing an excellent, good, only fair, or poor job?" In the first poll in 1999, $p1quest$PERCENT of about 1000 randomly selected adult Americans gave NASA an excellent or good rating. In 2007, the poll asked 1010 randomly selected adult Americans, and $p2quest$PERCENT gave NASA a good to excellent rating. Was NASA being looked upon more favorable by the American public in 2007 than in 1999?  (Let group 1 represent the 1999 data.)
+$PAR
+\(H_0: p1-p2 = 0\)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( $pvalans->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

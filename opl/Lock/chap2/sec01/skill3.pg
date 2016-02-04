@@ -1,0 +1,114 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$random = random(1, 2, 1);
+if ($random == 1) {
+  $n = random(355, 370, 1);
+  @nlevels = (3);
+  @labels = ('None', 'One or two', 'More than 2');
+  @freqs = (188, 82, 91);
+
+  $cat = new DataGenUWL(
+    datatype => 'one_cat',
+    n => $n,
+    nlevels => [@nlevels],
+    freqs => [@freqs],
+    random => "T",
+    labels => [@labels],
+  );
+
+  $text = "students were asked about the number of piercings they had in their ".
+          "body: None, one or two, or more than two";
+
+} else {
+  $n = random(355, 370, 1);
+  @nlevels = (3);
+  @labels = ('Academy Award', 'Nobel Prize', 'Olympic gold');
+  @freqs = (31, 149, 182);
+
+  $cat = new DataGenUWL(
+    datatype => 'one_cat',
+    n => $n,
+    nlevels => [@nlevels],
+    freqs => [@freqs],
+    random => "T",
+    labels => [@labels],
+  );
+
+  $text = "students were asked which award they would prefer: an Academy Award, ".
+          "a Nobel Prize, or an Olympic gold medal";
+}
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In a recent survey, $text. The results are given in the following table:
+\{ CategoricalUWL::freqtable(data=>$cat) \}
+$PAR
+Fill in the following table with the relative frequencies for each response. Give
+your answer to 4 decimal places.
+\{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+  AlignedRow(["", "Relative Freq"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["$cat->{labels}[0]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+  AlignedRow(["$cat->{labels}[1]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+  AlignedRow(["$cat->{labels}[2]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+  EndTable()
+\}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+$ans1 = Real($cat->{probs}[0]);
+$ans2 = Real($cat->{probs}[1]);
+$ans3 = Real($cat->{probs}[2]);
+
+ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

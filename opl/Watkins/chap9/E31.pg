@@ -1,0 +1,84 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Two sample proportion)
+## KEYWORDS('Hypothesis tests','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.2')
+## Problem1('E31')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+
+$radio = new_multiple_choice();
+
+$radio->qa( "You feed Diet A to a random sample of cows and Diet B to another random sample. Your null hypothesis is that the two diets produce the same proportion of contented cows. Your two-sided test has a P-value of .36. Select the one best interpretation of this P-value", "You can't conclude that the diets make a difference because it's fairly likely to get a big difference in the proportion of contented cows produced by the two diets as you did even if there is no difference at all in the overall proportion of contented cows that each diet produces.");
+
+$radio->extra( "If the null hypothesis that there is no difference in the proportion of contented cows produced by the two diets is true, the probability is .36 that the proportion of contented cows produced by each diet won't be very different.", "The probability is .36 that the two diets differ in the proportion of contented cows that they produce. Because this probability is so high, you can reject the null hypothesis", "If the null is true, then the probability is .36 that the two diets differ in the proportion of contented cows.", "You can't reject the null hypothesis because if, in fact, the null hypothesis is true, the probability is .36 that the difference in the true proportions is the same as in your experiment." );
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

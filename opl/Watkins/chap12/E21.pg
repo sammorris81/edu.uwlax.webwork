@@ -1,0 +1,189 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Goodness of fit', 'Homogeneity')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.2')
+## Problem1('E21')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$a1 = Real(34);
+$a2 = Real(6);
+$a3 = Real(19);
+$a4 = Real(16);
+
+$c1 = Real( $a1+$a2)->reduce;
+$c2 = Real( $a3+$a4)->reduce;
+
+$c4 = Real( $a1+$a3)->reduce;
+$c5 = Real( $a2+$a4)->reduce;
+$c6 = Real( $a1+$a2+$a3+$a4)->reduce;
+
+
+$b1 = Real($c1*$c4/$c6);
+$b2 = Real($c1*$c5/$c6);
+$b3 = Real($c2*$c4/$c6);
+$b4 = Real($c2*$c5/$c6);
+
+
+$ts = Real(" ($a1 - $b1)^2/$b1 + ($a2 - $b2)^2/$b2 + ($a3 - $b3)^2/$b3 + ($a4 - $b4)^2/$b4 ")->reduce;
+
+
+$pval=Real(chisqrprob(1,$ts))->reduce;
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+else{
+$answer = "\(P\)-value < .001";
+}
+
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a difference in success rate of using carbolic acid to disinfect operating rooms.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a difference in success rate of using carbolic acid to disinfect operating rooms.";
+}
+
+
+
+
+## Link the question and its answer
+
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'\(P\)-value < .001');
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence of a difference in success rate of using carbolic acid to disinfect operating rooms.','Fail to reject \(H_0\).  We do not have significant evidence of a difference in success rate of using carbolic acid to disinfect operating rooms.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Joseph Lister, a surgeon at the Glasgow Royal Infirmary, was one of the first to believe in Pasteur's germ theory of infection. He experimented with using carbolic acid to disinfect operating rooms during amputations. Of 40 patients operated on using carbolic acid, 34 lived. Of 35 patients operated on without using carbolic acid, 19 lived. Perform a chi-square test of homogeneity.
+
+$PAR
+\{ begintable(4) \}
+\{ row( "", "Lived", "Passed Away", "Total" ) \}
+\{ row( "Used Carbolic Acid", "$a1", "$a2", "$c1" ) \}
+\{ row( "Didn't Use Carbolic Acid", "$a3", "$a4", "$c2" ) \}
+\{ row( "Total", "$c4", "$c5", "$c6" ) \}
+\{ endtable() \}
+$PAR
+
+
+
+What is the test statistic for the chi-squared test?
+\{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();
+
+

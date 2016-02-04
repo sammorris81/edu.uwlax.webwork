@@ -1,0 +1,176 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'spread')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.3')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$random = random(1, 6, 1);
+if ($random == 1) {
+  $sd1 = 1; $sd2 = 3; $sd3 = 5;
+  $correct1 = "Histogram A";
+  $correct2 = "Histogram B";
+  $correct3 = "Histogram C";
+} elsif ($random == 2) {
+  $sd1 = 1; $sd2 = 5; $sd3 = 3;
+  $correct1 = "Histogram A";
+  $correct2 = "Histogram C";
+  $correct3 = "Histogram B";
+} elsif ($random == 3) {
+  $sd1 = 3; $sd2 = 1; $sd3 = 5;
+  $correct1 = "Histogram B";
+  $correct2 = "Histogram A";
+  $correct3 = "Histogram C";
+} elsif ($random == 4) {
+  $sd1 = 3; $sd2 = 5; $sd3 = 1;
+  $correct1 = "Histogram C";
+  $correct2 = "Histogram A";
+  $correct3 = "Histogram B";
+} elsif ($random == 5) {
+  $sd1 = 5; $sd2 = 1; $sd3 = 3;
+  $correct1 = "Histogram B";
+  $correct2 = "Histogram C";
+  $correct3 = "Histogram A";
+} else {
+  $sd1 = 5; $sd2 = 3; $sd3 = 1;
+  $correct1 = "Histogram C";
+  $correct2 = "Histogram B";
+  $correct3 = "Histogram A";
+}
+
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 400,
+  mean => 10,
+  sd => $sd1,
+  skew => 0,
+  name => "A",
+  randomsummary => "F",
+);
+
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 400,
+  mean => 10,
+  sd => $sd2,
+  skew => 0,
+  name => "B",
+  randomsummary => "F",
+);
+
+$quant3 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 400,
+  mean => 10,
+  sd => $sd3,
+  skew => 0,
+  name => "C",
+  randomsummary => "F",
+);
+
+$xmin = -5;
+$xmax = 25;
+
+$hist1 = StatGraphicsUWL::histogram(
+  data => $quant1,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => 5,
+);
+
+$hist2 = StatGraphicsUWL::histogram(
+  data => $quant2,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => 5
+);
+
+$hist3 = StatGraphicsUWL::histogram(
+  data => $quant3,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => 5,
+);
+
+@options = (
+  '?',
+  'Histogram A',
+  'Histogram B',
+  'Histogram C',
+);
+
+$q1 = PopUp(
+  [@options],
+  $correct1,
+);
+
+$q2 = PopUp(
+  [@options],
+  $correct2,
+);
+
+$q3 = PopUp(
+  [@options],
+  $correct3,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use these histograms to answer the following questions.
+$PAR
+$BCENTER
+  \{ image(insertGraph($hist1), width=>300, height=>300, tex_size=>300) \}
+  \{ image(insertGraph($hist2), width=>300, height=>300, tex_size=>300) \}
+  \{ image(insertGraph($hist3), width=>300, height=>300, tex_size=>300) \}
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Which histogram has a standard deviation closest to 1? \{ $q1->menu() \}
+  $ITEM Which histogram has a standard deviation closest to 3? \{ $q2->menu() \}
+  $ITEM Which histogram has a standard deviation closest to 5? \{ $q3->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($q1->cmp());
+ANS($q2->cmp());
+ANS($q3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

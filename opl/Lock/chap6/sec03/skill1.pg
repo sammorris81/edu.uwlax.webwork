@@ -1,0 +1,309 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample proportion)
+## KEYWORDS('inference for means and proportions', 'test for a single proportion')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@inequality = (
+  "<",
+  ">",
+  "\neq",
+);
+
+$p1 = random(0.05, 0.35, 0.02);
+$p2 = random(0.65, 0.95, 0.02);
+$p3 = random(0.25, 0.75, 0.02);
+$p4 = random(0.25, 0.75, 0.02);
+
+$n1 = random(200, 500, 50);
+$n2 = random(200, 500, 50);
+$n3 = random(200, 500, 50);
+$n4 = random(200, 500, 50);
+
+$se1 = Real(sqrt($p1 * (1 - $p1) / $n1));
+$se2 = Real(sqrt($p2 * (1 - $p2) / $n2));
+$se3 = Real(sqrt($p3 * (1 - $p3) / $n3));
+$se4 = Real(sqrt($p4 * (1 - $p4) / $n4));
+
+$random1 = random(0, 2, 1);
+$random2 = random(0, 2, 1);
+$random3 = random(0, 2, 1);
+if ($random1 == 2 && $random2 == 2 && $random3 == 2) {
+  $random4 = random(0, 1, 1);
+} elsif (($random1 == 0 || $random1 == 1) && ($random2 == 0 || $random2 == 1) && ($random3 == 0 || $random3 == 1)) {
+  $random4 = 2;
+} else {
+  $random4 = random(0, 2, 1);
+}
+
+do { $mult1 = random(0.3, 4, 0.01); } until ($mult1 != 1.96);
+do { $mult2 = random(0.3, 4, 0.01); } until ($mult2 != 1.96);
+do { $mult3 = random(0.3, 4, 0.01); } until ($mult3 != 1.96);
+if (($mult1 + $mult2 + $mult3) > (3 * 1.96)) {
+  do { $mult4 = random(0.3, 4, 0.01); } until ($mult4 != 1.96);
+} else {
+  $mult4 = random(1.98, 4, 0.01);
+}
+
+if ($random1 == 0) {
+  $zsign1 = 1;
+} elsif ($random1 == 1) {
+  $zsign1 = -1;
+} else {
+  $zsign1 = random(-1, 1, 2);
+}
+
+if ($random2 == 0) {
+  $zsign2 = 1;
+} elsif ($random2 == 1) {
+  $zsign2 = -1;
+} else {
+  $zsign2 = random(-1, 1, 2);
+}
+
+if ($random3 == 0) {
+  $zsign3 = 1;
+} elsif ($random3 == 1) {
+  $zsign3 = -1;
+} else {
+  $zsign3 = random(-1, 1, 2);
+}
+
+if ($random4 == 0) {
+  $zsign4 = 1;
+} elsif ($random4 == 1) {
+  $zsign4 = -1;
+} else {
+  $zsign4 = random(-1, 1, 2);
+}
+
+$nullp1 = sprintf("%.2f", $p1 + $zsign1 * $mult1 * $se1);
+$nullp2 = sprintf("%.2f", $p2 + $zsign2 * $mult2 * $se2);
+$nullp3 = sprintf("%.2f", $p3 + $zsign3 * $mult3 * $se3);
+$nullp4 = sprintf("%.2f", $p4 + $zsign4 * $mult4 * $se4);
+
+# actual answers if calculated with the statistic
+$z1 = Real(($p1 - $nullp1) / sqrt($nullp1 * (1 - $nullp1) / $n1));
+$z2 = Real(($p2 - $nullp2) / sqrt($nullp2 * (1 - $nullp2) / $n2));
+$z3 = Real(($p3 - $nullp3) / sqrt($nullp3 * (1 - $nullp3) / $n3));
+$z4 = Real(($p4 - $nullp4) / sqrt($nullp4 * (1 - $nullp4) / $n4));
+
+# deal with tolerances for calculator usage
+$count1l = Real(floor($p1 * $n1));
+$count1u = Real(ceil($p1 * $n1));
+$count2l = Real(floor($p2 * $n2));
+$count2u = Real(ceil($p2 * $n2));
+$count3l = Real(floor($p3 * $n3));
+$count3u = Real(ceil($p3 * $n3));
+$count4l = Real(floor($p4 * $n4));
+$count4u = Real(ceil($p4 * $n4));
+
+$p1l = $count1l / $n1;
+$p1u = $count1u / $n1;
+$p2l = $count2l / $n2;
+$p2u = $count2u / $n2;
+$p3l = $count3l / $n3;
+$p3u = $count3u / $n3;
+$p4l = $count4l / $n4;
+$p4u = $count4u / $n4;
+
+$z1l = Real(($p1l - $nullp1) / sqrt($nullp1 * (1 - $nullp1) / $n1));
+$z1u = Real(($p1u - $nullp1) / sqrt($nullp1 * (1 - $nullp1) / $n1));
+$z2l = Real(($p2l - $nullp2) / sqrt($nullp2 * (1 - $nullp2) / $n2));
+$z2u = Real(($p2u - $nullp2) / sqrt($nullp2 * (1 - $nullp2) / $n2));
+$z3l = Real(($p3l - $nullp3) / sqrt($nullp3 * (1 - $nullp3) / $n3));
+$z3u = Real(($p3u - $nullp3) / sqrt($nullp3 * (1 - $nullp3) / $n3));
+$z4l = Real(($p4l - $nullp4) / sqrt($nullp4 * (1 - $nullp4) / $n4));
+$z4u = Real(($p4u - $nullp4) / sqrt($nullp4 * (1 - $nullp4) / $n4));
+
+$tol1 = max(abs($z1 - $z1l), abs($z1 - $z1u)) + 0.001;
+$tol2 = max(abs($z2 - $z2l), abs($z2 - $z2u)) + 0.001;
+$tol3 = max(abs($z3 - $z3l), abs($z3 - $z3u)) + 0.001;
+$tol4 = max(abs($z4 - $z4l), abs($z4 - $z4u)) + 0.001;
+
+$pval1 = ($random1 == 2) ? 2 * uprob(abs($z1)) : uprob(abs($z1));
+$pval2 = ($random2 == 2) ? 2 * uprob(abs($z2)) : uprob(abs($z2));
+$pval3 = ($random3 == 2) ? 2 * uprob(abs($z3)) : uprob(abs($z3));
+$pval4 = ($random4 == 2) ? 2 * uprob(abs($z4)) : uprob(abs($z4));
+
+if ($pval1 < 0.0001) {
+  $pval1 = "\( < 0.0001 \)";
+  $correct1 = " a. Reject \(H_0\)";
+} elsif ($pval1 < 0.05) {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " a. Reject \(H_0\)";
+} else {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval2 < 0.0001) {
+  $pval2 = "\( < 0.0001 \)";
+  $correct2 = " a. Reject \(H_0\)";
+} elsif ($pval2 < 0.05) {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " a. Reject \(H_0\)";
+} else {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval3 < 0.0001) {
+  $pval3 = "\( < 0.0001 \)";
+  $correct3 = " a. Reject \(H_0\)";
+} elsif ($pval3 < 0.05) {
+  $pval3 = sprintf("%.4f", $pval3);
+  $correct3 = " a. Reject \(H_0\)";
+} else {
+  $pval3 = sprintf("%.4f", $pval3);
+  $correct3 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval4 < 0.0001) {
+  $pval4 = "\( < 0.0001 \)";
+  $correct4 = " a. Reject \(H_0\)";
+} elsif ($pval4 < 0.05) {
+  $pval4 = sprintf("%.4f", $pval4);
+  $correct4 = " a. Reject \(H_0\)";
+} else {
+  $pval4 = sprintf("%.4f", $pval4);
+  $correct4 = " b. Fail to reject \(H_0\)";
+}
+
+@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc4 = RadioButtons(
+  [@options],
+  $correct4,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, find the test statistic and give the appropriate
+conclusion for the hypothesis test.
+You may assume that any necessary conditions hold for the hypothesis test.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Test \(H_0: p = $nullp1\) vs \(H_a: p $inequality[$random1] $nullp1\) using
+  the sample results \( \widehat{p}=$p1 \) with \(n=$n1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
+    Use \(\alpha = 0.05\).$BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: p = $nullp2\) vs \(H_a: p $inequality[$random2] $nullp2\) using
+  the sample results \( \widehat{p}=$p2 \) with \(n=$n2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+    Use \(\alpha = 0.05\).$BR
+    \{ $mc2->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: p = $nullp3\) vs \(H_a: p $inequality[$random3] $nullp3\) using
+  the sample results \( \widehat{p}=$p3 \) with \(n=$n3\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval3. What is the appropriate conclusion?
+    Use \(\alpha = 0.05\). $BR
+    \{ $mc3->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: p = $nullp4\) vs \(H_a: p $inequality[$random4] $nullp4\) using
+  the sample results \( \widehat{p}=$p4 \) with \(n=$n4\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval4. What is the appropriate conclusion?
+    Use \(\alpha = 0.05\). $BR
+    \{ $mc4->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($z1->with(tolerance=>$tol1, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+ANS($z2->with(tolerance=>$tol2, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+ANS($z3->with(tolerance=>$tol3, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+ANS($z4->with(tolerance=>$tol4, tolType=>"Absolute")->cmp());
+ANS($mc4->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

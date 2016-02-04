@@ -1,0 +1,177 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample mean - t)
+## KEYWORDS('Hypothesis tests', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.3')
+## Problem1('E38')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+
+$nullval=Real(120);
+$n = random(11,13,1);
+$sumx=$x1+$x2+$x3+$x4+$x5+$x6+$x7+$x8+$x9;
+$sumx2=$x1**2+$x2**2+$x3**2+$x4**2+$x5**2+$x6**2+$x7**2+$x8**2+$x9**2;
+$s= random( 1.20, 1.26, .01);
+$xbar= random( 116.5, 117.5, .1);
+
+$ts=Real(($xbar-$nullval)/($s/sqrt($n)));
+$pval=Real(tprob($n-1,abs($ts)));
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(<\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+elsif($pval<=.001 && $pval>.0005){
+$answer = ".0005 < \(P\)-value < .001";}
+else{
+$answer = " \(P\)-value < .0005";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the plates are inferior with regard to mean thickness.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the plates are inferior with regard to mean thickness.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'.0005 < \(P\)-value < .001',
+' \(P\)-value < .0005');
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence that the plates are inferior with regard to mean thickness.", "Fail to reject \(H_0\).  We do not have significant evidence that the plates are inferior with regard to mean thickness.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Another key feature of golf cart batteries is the thickness of the lead plates inside the battery. The advertised standard for the thickness of plates in these batteries was 120 thousandths of an inch. A sample of $n plate thickness measurements from one battery had a mean of $xbar and standard deviation of $s. Should the supplier conclude that the plates are inferior with regard to mean thickness?
+$PAR
+
+
+Fill in the blank with the test value.
+$PAR
+\(H_0:\mu= \)\{ ans_rule(4) \}
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+ANS($nullval->with(tolerance=>.0)->cmp);
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.01)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

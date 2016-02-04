@@ -1,0 +1,201 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@options = (
+  '?',
+  'Sample A',
+  'Sample B',
+  'Sample C',
+);
+
+$mean1t = 25;
+$mean1bigneg = 22;
+$mean1bigpos = 28;
+$sd1 = 1;
+$n1 = 40;
+
+$quant1a = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n1,
+  mean => $mean1bigneg,
+  sd => $sd1,
+  name => "Sample A"
+);
+
+$quant1b = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n1,
+  mean => $mean1t,
+  sd => $sd1,
+  name => "Sample B"
+);
+
+$quant1c = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n1,
+  mean => $mean1bigpos,
+  sd => $sd1,
+  name => "Sample C"
+);
+
+$dota = StatGraphicsUWL::dotplot(
+  data => $quant1a,
+  xmin => 20,
+  xmax => 32,
+);
+
+$dotb = StatGraphicsUWL::dotplot(
+  data => $quant1b,
+  xmin => 20,
+  xmax => 32,
+);
+
+$dotc = StatGraphicsUWL::dotplot(
+  data => $quant1c,
+  xmin => 20,
+  xmax => 32,
+);
+
+$prop2t = 0.75;
+$prop2bigneg = 0.70;
+$prop2bigpos = 0.80;
+$n2 = 40;
+
+@nlevels = (2);
+
+@probs2a = (0.70, 0.30);
+$cat2a = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n2,
+  nlevels => [@nlevels],
+  probs => [@probs2a],
+  random => "T",
+);
+$successes2a = @{$cat2a->{freqs}}[0];
+
+@probs2b = (0.75, 0.25);
+$cat2b = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n2,
+  nlevels => [@nlevels],
+  probs => [@probs2b],
+  random => "T",
+);
+$successes2b = @{$cat2b->{freqs}}[0];
+
+@probs2c = (0.80, 0.20);
+$cat2c = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n2,
+  nlevels => [@nlevels],
+  probs => [@probs2c],
+  random => "T",
+);
+$successes2c = @{$cat2c->{freqs}}[0];
+
+$random1 = random(1, 2, 1);
+if ($random1 == 1) {
+  $comparison1 = "greater than";
+  $right1 = "Sample C";
+} else {
+  $comparison1 = "less than";
+  $right1 = "Sample A";
+}
+
+if ($random1 == 1) {
+  $comparison2 = "less than";
+  $right2 = "Sample A";
+} else {
+  $comparison2 = "greater than";
+  $right2 = "Sample C";
+}
+
+
+###########################
+## Initialization
+###########################
+
+$mc1 = PopUp(
+ [@options],
+ $right1,
+);
+
+$mc2 = PopUp(
+ [@options],
+ $right2,
+);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, a situation is described for a statistical test and
+some hypothetical sample results are given. In each case, select the sample that
+gives the most signficant evidence for the claim.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Testing to see if there is evidence that the population mean for mathematics
+  placement exam scores is $comparison1 25. $BR
+  $BCENTER
+   \{ image( insertGraph($dota), width=>300, height=>300, tex_size=>300) \}
+   \{ image( insertGraph($dotb), width=>300, height=>300, tex_size=>300) \}
+   \{ image( insertGraph($dotc), width=>300, height=>300, tex_size=>300) \}
+  $ECENTER
+  \{ $mc1->menu() \}
+  $PAR
+  $ITEM Testing to see if there is evidence that the proportion of US citizens
+  who can name the capital city of Canada is $comparison2 0.75 $PAR
+  $tab Sample A: $successes2a out of $n2 $BR
+  $tab Sample B: $successes2b out of $n2 $BR
+  $tab Sample C: $successes2c out of $n2 $PAR
+  \{ $mc2->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

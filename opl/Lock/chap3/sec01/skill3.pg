@@ -1,0 +1,320 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'sampling distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.1')
+## Problem1('Skill Builder 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$histran = random(1, 4, 1);
+
+if ($histran == 1) {  #ab
+  $meana = 0.30;
+  $sda = sqrt(0.3 * 0.7 / 40);
+  $rounda = 2;
+  $stata = "proportions";
+  $notatea = "\( \widehat{p} \)";
+
+  $meanb = 85;
+  $sdb = 20;
+  $roundb = 0;
+  $statb = "averages";
+  $notateb = "\( \overline{x} \)";
+
+} elsif ($histran == 2) {  #cd
+  $meana = 300;
+  $sda = 5;
+  $rounda = 0;
+  $stata = "averages";
+  $notatea = "\( \overline{x} \)";
+
+  $meanb = 0.80;
+  $sdb = sqrt(0.80 * 0.20 / 180);
+  $roundb = 2;
+  $statb = "proportions";
+  $notateb = "\( \widehat{p} \)";
+
+} elsif ($histran == 3) {  #da
+  $meana = 0.80;
+  $sda = sqrt(0.80 * 0.20 / 180);
+  $rounda = 2;
+  $stata = "proportions";
+  $notatea = "\( \widehat{p} \)";
+
+  $meanb = 0.30;
+  $sdb = sqrt(0.3 * 0.7 / 40);
+  $roundb = 2;
+  $statb = "proportions";
+  $notateb = "\( \widehat{p} \)";
+} else {  #bc
+  $meana = 85;
+  $sda = 20;
+  $rounda = 0;
+  $stata = "averages";
+  $notatea = "\( \overline{x} \)";
+
+  $meanb = 300;
+  $sdb = 5;
+  $roundb = 0;
+  $statb = "averages";
+  $notateb = "\( \overline{x} \)";
+}
+
+rserve_eval('z <- rnorm(400)
+  z <- (z - mean(z)) / sd(z)
+  data.a <- z * ' . $sda . ' + ' . $meana);
+
+($sda) = rserve_eval('sd(data.a)');
+($meana) = rserve_eval('mean(data.a)');
+
+rserve_eval('data.b <- z * ' . $sdb . ' + ' . $meanb);
+
+($sdb) = rserve_eval('sd(data.b)');
+($meanb) = rserve_eval('mean(data.b)');
+
+$xmina = $meana - 3.5 * $sda;
+$xmaxa = $meana + 3.5 * $sda;
+$xminb = $meanb - 3.5 * $sdb;
+$xmaxb = $meanb + 3.5 * $sdb;
+
+$hist = rserve_start_plot('png', $width, $height);
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data.a, main = "Histogram A", xlab = "")');
+$dispa = rserve_finish_plot($hist);
+
+$hist = rserve_start_plot('png', $width, $height);
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data.b, main = "Histogram B", xlab = "")');
+$dispb = rserve_finish_plot($hist);
+
+@likely = ( # choices
+  "?",
+  "reasonably likely",
+  "unlikely but might occur",
+  "extremely unlikely",
+);
+
+$random = random(1, 6, 1);
+if ($random == 1) {
+  $mult1a = random(0.5, 1.0, 0.1);  # a
+  $correct1a = "reasonably likely";
+  $mult2a = random(1.9, 2.2, 0.1);  # b
+  $correct2a = "unlikely but might occur";
+  $mult3a = random(3.0, 3.3, 0.1);  # c
+  $correct3a = "extremely unlikely";
+
+  $mult1b = random(1.9, 2.2, 0.1);  # b
+  $correct1b = "unlikely but might occur";
+  $mult2b = random(3.0, 3.3, 0.1);  # c
+  $correct2b = "extremely unlikely";
+  $mult3b = random(0.5, 1.0, 0.1);  # a
+  $correct3b = "reasonably likely";
+
+} elsif ($random == 2) {
+  $mult1a = random(0.5, 1.0, 0.1);  # a
+  $correct1a = "reasonably likely";
+  $mult2a = random(3.0, 3.3, 0.1);  # c
+  $correct2a = "extremely unlikely";
+  $mult3a = random(1.9, 2.2, 0.1);  # b
+  $correct3a = "unlikely but might occur";
+
+  $mult1b = random(1.9, 2.2, 0.1);  # b
+  $correct1b = "unlikely but might occur";
+  $mult2b = random(0.5, 1.0, 0.1);  # a
+  $correct2b = "reasonably likely";
+  $mult3b = random(3.0, 3.3, 0.1);  # c
+  $correct3b = "extremely unlikely";
+
+} elsif ($random == 3) {
+  $mult1a = random(1.9, 2.2, 0.1);  # b
+  $correct1a = "unlikely but might occur";
+  $mult2a = random(0.5, 1.0, 0.1);  # a
+  $correct2a = "reasonably likely";
+  $mult3a = random(3.0, 3.3, 0.1);  # c
+  $correct3a = "extremely unlikely";
+
+  $mult1b = random(3.0, 3.3, 0.1);  # c
+  $correct1b = "extremely unlikely";
+  $mult2b = random(1.9, 2.2, 0.1);  # b
+  $correct2b = "unlikely but might occur";
+  $mult3b = random(0.5, 1.0, 0.1);  # a
+  $correct3b = "reasonably likely";
+} elsif ($random == 4) {
+  $mult1a = random(1.9, 2.2, 0.1);  # b
+  $correct1a = "unlikely but might occur";
+  $mult2a = random(3.0, 3.3, 0.1);  # c
+  $correct2a = "extremely unlikely";
+  $mult3a = random(0.5, 1.0, 0.1);  # a
+  $correct3a = "reasonably likely";
+
+  $mult1b = random(3.0, 3.3, 0.1);  # c
+  $correct1b = "extremely unlikely";
+  $mult2b = random(0.5, 1.0, 0.1);  # a
+  $correct2b = "reasonably likely";
+  $mult3b = random(1.9, 2.2, 0.1);  # b
+  $correct3b = "unlikely but might occur";
+
+} elsif ($random == 5) {
+  $mult1a = random(3.0, 3.3, 0.1);  # c
+  $correct1a = "extremely unlikely";
+  $mult2a = random(1.9, 2.2, 0.1);  # b
+  $correct2a = "unlikely but might occur";
+  $mult3a = random(0.5, 1.0, 0.1);  # a
+  $correct3a = "reasonably likely";
+
+  $mult1b = random(0.5, 1.0, 0.1);  # a
+  $correct1b = "reasonably likely";
+  $mult2b = random(3.0, 3.3, 0.1);  # c
+  $correct2b = "extremely unlikely";
+  $mult3b = random(1.9, 2.2, 0.1);  # b
+  $correct3b = "unlikely but might occur";
+} else {
+  $mult1a = random(3.0, 3.3, 0.1);  # c
+  $correct1a = "extremely unlikely";
+  $mult2a = random(0.5, 1.0, 0.1);  # a
+  $correct2a = "reasonably likely";
+  $mult3a = random(1.9, 2.2, 0.1);  # b
+  $correct3a = "unlikely but might occur";
+
+  $mult1b = random(0.5, 1.0, 0.1);  # a
+  $correct1b = "reasonably likely";
+  $mult2b = random(1.9, 2.2, 0.1);  # b
+  $correct2b = "unlikely but might occur";
+  $mult3b = random(3.0, 3.3, 0.1);  # c
+  $correct3b = "extremely unlikely";
+}
+
+$randomadd = random(-1, 1, 2);
+$option1a = sprintf("%.".$rounda."f", $meana + $randomadd * $mult1a * $sda);
+$option2a = sprintf("%.".$rounda."f", $meana - $randomadd * $mult2a * $sda);
+$option3a = sprintf("%.".$rounda."f", $meana + $randomadd * $mult3a * $sda);
+
+$option1b = sprintf("%.".$roundb."f", $meanb - $randomadd * $mult1b * $sdb);
+$option2b = sprintf("%.".$roundb."f", $meanb + $randomadd * $mult2b * $sdb);
+$option3b = sprintf("%.".$roundb."f", $meanb - $randomadd * $mult3b * $sdb);
+
+$q1a = PopUp(
+  [@likely],
+  $correct1a,
+);
+
+$q2a = PopUp(
+  [@likely],
+  $correct2a,
+);
+
+$q3a = PopUp(
+  [@likely],
+  $correct3a,
+);
+
+$q1b = PopUp(
+  [@likely],
+  $correct1b,
+);
+
+$q2b = PopUp(
+  [@likely],
+  $correct2b,
+);
+
+$q3b = PopUp(
+  [@likely],
+  $correct3b,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+$showHint = 3;
+BEGIN_HINT
+${BBOLD}Using a histogram to determine how likely a statistic is:${EBOLD}$BR
+If you want to determine how likely a statistic is by looking at a histogram
+of the sampling distribution, look at the height of the histogram. The higher
+the histogram is at a certain point, the more likely that quantity is to
+occur.
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Histograms A and B represent two different sampling distributions. Several possible
+values are given for a sample statistic. In each case, rank the sample statistics by
+whether they are (i) reasonably likely, (ii) unlikely but might occur, (iii) extremely
+unlikely. $BITALIC Each answer will only be used once per sampling distribution $EITALIC
+$PAR
+$BCENTER
+  \{ image($dispa, width=>300, height=>300, tex_size=>300) \}
+  \{ image($dispb, width=>300, height=>300, tex_size=>300) \}
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Using the sampling distribution shown in Histogram A, how likely are
+  these sample $stata. $BITALIC Each answer will only be used once per sampling
+  distribution $EITALIC$BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM $notatea = $option1a \{ $q1a->menu() \} $BR
+    $ITEM $notatea = $option2a \{ $q2a->menu() \} $BR
+    $ITEM $notatea = $option3a \{ $q3a->menu() \} $BR
+  \{ EndList( "OL") \}
+  $BR
+  $ITEM Using the sampling distribution shown in Histogram B, how likely are
+  these sample $statb. $BITALIC Each answer will only be used once per sampling
+  distribution $EITALIC$BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM $notateb = $option1b \{ $q1b->menu() \} $BR
+    $ITEM $notateb = $option2b \{ $q2b->menu() \} $BR
+    $ITEM $notateb = $option3b \{ $q3b->menu() \} $BR
+  \{ EndList( "OL") \}
+\{ EndList("OL") \}
+\{ localtime \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($q1a->cmp());
+ANS($q2a->cmp());
+ANS($q3a->cmp());
+ANS($q1b->cmp());
+ANS($q2b->cmp());
+ANS($q3b->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

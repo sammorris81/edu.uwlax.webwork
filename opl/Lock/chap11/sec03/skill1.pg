@@ -1,0 +1,101 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection()
+## KEYWORDS('probability basics', 'random variables and probability functions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+
+$p2 = Real(random(0.15, 0.25, 0.05));
+$p3 = Real(random(0.15, 0.20, 0.05));
+$p4 = Real(random(0.10, 0.15, 0.05));
+$p1 = Real(1 - ($p2 + $p3 + $p4));
+
+$random1 = random(0, 1, 1);
+
+if ($random1 == 0) {
+  $q1 = "P(X = 3 or X = 4)";
+  $a1 = Real($p3 + $p4);
+  $q2 = "P(X \(<\) 3)";
+  $a2 = Real($p1 + $p2);
+  $q3 = "P(X is an odd number)";
+  $a3 = Real($p1 + $p3);
+} else {
+  $q1 = "P(X = 1 or X = 2)";
+  $a1 = Real($p1 + $p2);
+  $q2 = "P(X \(>\)1)";
+  $a2 = Real($p2 + $p3 + $p4);
+  $q3 = "P(X is an even number)";
+  $a3 = Real($p2 + $p4);
+}
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, use the probability function in the table below for a
+random variable \(X\) that takes on the values 1, 2, 3, 4.
+Give your answers to 4 decimal places. $PAR
+$BCENTER
+\{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+  AlignedRow(["\(x\)", "1", "2", "3", "4"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["\(p(x)\)", "$p1", "$p2", "$p3", "$p4"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  EndTable()
+\}
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM What is $q1? \{ ans_rule(10) \}
+  $ITEM What is $q2? \{ ans_rule(10) \}
+  $ITEM What is $q3? \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($a1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($a2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($a3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

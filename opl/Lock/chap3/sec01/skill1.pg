@@ -1,0 +1,198 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'sampling distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@vartype = ( # choices
+  ' Parameter',
+  ' Statistic'
+);
+
+@notation = ( # choices
+  " \( p \)",
+  " \( \widehat{p} \)",
+  " \( \mu \)",
+  " \( \overline{x} \)",
+);
+
+$exercisea = 'Average household income for all houses in the US, using data from '.
+             'the US Census.';
+$correcta = ' Parameter';
+$nota = " \( \mu \)";
+
+$exerciseb = 'Proportion of people who use an electric toothbrush, using data '.
+             'from a sample of 100 adults';
+$correctb = ' Statistic';
+$notb = " \( \widehat{p} \)";
+
+$exercisec = 'Proportion of registered voters in a county who voted in the last '.
+             'election, using data from the county voting records';
+$correctc = ' Parameter';
+$notc = " \( p \)";
+
+$exercised = 'Average number of television sets per household in North Carolina, '.
+             'using data from a sample of 1000 households.';
+$correctd = ' Statistic';
+$notd = " \( \overline{x} \)";
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $right1 = $correcta;
+  $not1 = $nota;
+  $text2 = $exercisec;
+  $right2 = $correctc;
+  $not2 = $notc;
+} elsif ($random == 2) {
+  $text1 = $exerciseb;
+  $right1 = $correctb;
+  $not1 = $notb;
+  $text2 = $exercised;
+  $right2 = $correctd;
+  $not2 = $notd;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  $right1 = $correctd;
+  $not1 = $notd;
+  $text2 = $exercisea;
+  $right2 = $correcta;
+  $not2 = $nota;
+} else {
+  $text1 = $exercisec;
+  $right1 = $correctc;
+  $not1 = $notc;
+  $text2 = $exerciseb;
+  $right2 = $correctb;
+  $not2 = $notb;
+}
+
+$mc1 = RadioButtons(
+ [@vartype],
+ $right1,
+ order => [@vartype],
+ labels => ['i', 'ii'],
+);
+
+$notate1 = RadioButtons(
+  [@notation],
+  $not1,
+  order => [@notation],
+  labels => ['i', 'ii', 'iii', 'iv'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+ [@vartype],
+ $right2,
+ order => [@vartype],
+ labels => ['i', 'ii'],
+);
+
+$notate2 = RadioButtons(
+  [@notation],
+  $not2,
+  order => [@notation],
+  labels => ['i', 'ii', 'iii', 'iv'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Determining whether something is a parameter or statistic:$EBOLD $BR
+As your book mentions on p. 162, a quantity can only be a
+${BITALIC}parameter${EITALIC} if we include all cases in the population. If we are
+working with a subset of the population (or a sample), then the quantity is
+a ${BITALIC}statisitc${EITALIC}.
+$PAR
+$BBOLD Deciding on notation:$EBOLD $BR
+Notation is important to make sure that you are clearly representing the quantity
+to a reader. Generally speaking, ${BITALIC}statistics${EITALIC} have some kind of
+${LQ}decoration${RQ} like a hat or a line, whereas ${BITALIC}parameters${EITALIC} do
+not. For example
+\{BeginList("UL")\}
+  $ITEM When we have a proportion that is a parameter, we use \(p\) to represent
+  it, but when the proportion is a statistic, we use \(\widehat{p}\).
+  $ITEM When we have an average that is a parameter, we use \(\mu\) to represent
+  it, but when the average is a statistic, we use \(\overline{x}\).
+\{EndList("UL")\}
+See Table 3.1 (p. 162) for more examples.
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+For the following questions, state whether the quantity described is a parameter
+or a statistic and give the correct notation.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Is the quantity described a parameter or a statistic? $BR
+    \{ $mc1->buttons( ) \} $BR
+    $ITEM What is the proper notation for the quantity described? $BR
+    \{ $notate1->buttons( ) \}
+  \{ EndList( "OL") \}
+  $BR
+  $ITEM $text2 $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Is the quantity described a parameter or a statistic? $BR
+    \{ $mc2->buttons( ) \} $BR
+    $ITEM What is the proper notation for the quantity described? $BR
+    \{ $notate2->buttons( ) \}
+  \{ EndList( "OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($notate1->cmp());
+ANS($mc2->cmp());
+ANS($notate2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

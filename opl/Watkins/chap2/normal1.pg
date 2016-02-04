@@ -1,0 +1,70 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('normal1')
+## Author(Melissa Bingham)
+## Institution(University of Wisconsin-La Crosse)
+
+DOCUMENT();
+
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(5,8,.1);
+$s=random(1,3,.1);
+$l1=random(4,6,1);
+$u1=random(7,10,1);
+$p=random(30,70,1);
+
+$x1=sprintf("%0.2f",($l1-$m)/$s);
+$x2=sprintf("%0.2f",($u1-$m)/$s);
+$an1 = Real(-sprintf("%0.4f",uprob($x2))+sprintf("%0.4f",uprob($x1)));
+
+$v=sprintf("%0.2f",-udistr($p/100));
+$an2=Real($v*$s+$m);
+
+
+
+
+BEGIN_TEXT
+
+The ages of dogs at the pound are normally distributed with mean $m years and standard deviation $s years.
+
+$PAR
+If a dog in the pound is selected at random, what is the probability it is between $l1 and $u1 years old? \{ans_rule(8)\}
+$PAR
+What age is such that $p$PERCENT of all dogs in the pound are less than that age? \{ans_rule(8)\}
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.005)->cmp);
+
+
+ENDDOCUMENT();

@@ -1,0 +1,202 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Goodness of fit', 'Homogeneity')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.2')
+## Problem1('E20')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$a1 = random( 185, 195, 1);
+$a2 = random( 85, 95, 1);
+$a3 = random( 195, 205, 1);
+$a4 = random( 685, 695, 1);
+$a5 = random( 85, 95, 1);
+$a6 = random( 85, 95, 1);
+$a7 = random( 515, 525, 1);
+$a8 = random( 125, 135, 1);
+
+$c1 = Real( $a1+$a2)->reduce;
+$c2 = Real( $a3+$a4)->reduce;
+$c3 = Real( $a5+$a6)->reduce;
+$c4 = Real( $a1+$a3+$a5+$a7)->reduce;
+$c5 = Real( $a2+$a4+$a6+$a8)->reduce;
+$c6 = Real( $a1+$a2+$a3+$a4+$a5+$a6+$a7+$a8)->reduce;
+$c7 = Real( $a7+$a8)->reduce;
+
+
+$b1 = Real($c1*$c4/$c6);
+$b2 = Real($c1*$c5/$c6);
+$b3 = Real($c2*$c4/$c6);
+$b4 = Real($c2*$c5/$c6);
+$b5 = Real($c3*$c4/$c6);
+$b6 = Real($c3*$c5/$c6);
+
+$b7 = Real($c7*$c4/$c6);
+$b8 = Real($c7*$c5/$c6);
+
+$ts = Real(" ($a1 - $b1)^2/$b1 + ($a2 - $b2)^2/$b2 + ($a3 - $b3)^2/$b3 + ($a4 - $b4)^2/$b4 + ($a5 - $b5)^2/$b5 + ($a6 - $b6)^2/$b6 + ($a7 - $b7)^2/$b7 + ($a8 - $b8)^2/$b8 ")->reduce;
+
+
+$pval=Real(chisqrprob(3,$ts))->reduce;
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+
+
+###FOR SELECTION OF THE P-VALUE
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+else{
+$answer = "\(P\)-value < .001";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a change in the distribution of results from 2003 to 2009.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a change in the distribution of results from 2003 to 2009.";
+}
+
+
+
+
+## Link the question and its answer
+
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'\(P\)-value < .001');
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence of a change in the distribution of results from 2003 to 2009.','Fail to reject \(H_0\).  We do not have significant evidence of a change in the distribution of results from 2003 to 2009.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+A Gallup poll asked the same question it has asked every year for many years: "What do you think is the most important problem facing this country today?" The table below shows the percentage responses for three major concerns in 2003 and 2009. About 1000 people were surveyed each year in what you may consider is a random sample of U.S. adults. You will test whether there was a statistically significant change in the distribution of results from 2003 to 2009.
+
+$PAR
+\{ begintable(4) \}
+\{ row( "", "2003", "2009", "Total" ) \}
+\{ row( "War", "$a1", "$a2", "$c1" ) \}
+\{ row( "Economy", "$a3", "$a4", "$c2" ) \}
+\{ row( "Health Care", "$a5", "$a6", "$c3" ) \}
+\{ row( "Other", "$a7", "$a8", "$c7" ) \}
+\{ row( "Total", "$c4", "$c5", "$c6" ) \}
+\{ endtable() \}
+$PAR
+
+
+
+What is the test statistic for the chi-squared test?
+\{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();
+
+

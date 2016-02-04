@@ -1,0 +1,104 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection()
+## KEYWORDS('probability basics', 'random variables and probability functions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.3')
+## Problem1('11.88')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+
+$p1 = Real(random(0.15, 0.25, 0.01));
+$p2 = Real(random(0.15, 0.20, 0.01));
+$p3 = Real(random(0.10, 0.15, 0.01));
+$p4 = Real(random(0.05, 0.10, 0.05));
+$p0 = Real(1 - ($p1 + $p2 + $p3 + $p4));
+
+$m = Real(1 * $p1 + 2 * $p2 + 3 * $p3 + 4 * $p4);
+$sd = Real(sqrt((0 - $m)**2 * $p0 + (1 - $m)**2 * $p1 + (2 - $m)**2 * $p2 + (3 - $m)**2 * $p3 + (4 - $m)**2 * $p4));
+
+$random1 = random(0, 1, 1);
+
+if ($random1 == 0) {
+  $comp = "less than";
+  $pcomp2 = Real($p0 + $p1);
+} else {
+  $comp = "more than";
+  $pcomp2 = Real($p3 + $p4);
+}
+
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+A used car dealership uses past data to estimate the probability distribution for the
+number of cars they sell in a day, \(X\). The probability distribution of \(X\) is
+given in the table below.
+$PAR
+$BCENTER
+\{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+  AlignedRow(["\(x\)", "0", "1", "2", "3", "4"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["\(p(x)\)", "$p0", "$p1", "$p2", "$p3", "?"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  EndTable()
+\}
+$ECENTER
+$BR
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is \(P(X = 4)\)? \{ ans_rule(10) \}
+  $ITEM What is the probability that the dealership sells $comp two cars during a day? \{ ans_rule(10) \}
+  $ITEM What is the expected number (mean) of cars sold in a day? \{ ans_rule(10) \}
+  $ITEM What is the standard deviation of cars sold in a day? \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p4->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($pcomp2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($m->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($sd->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,292 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample mean - t)
+## KEYWORDS('inference for means and proportions', 'test for a single mean')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.6')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@inequality = (
+  "<",
+  ">",
+  "\neq",
+);
+
+$m1 = random(10, 100, 0.01);
+$m2 = random(10, 100, 0.01);
+$m3 = random(10, 100, 0.01);
+$m4 = random(10, 100, 0.01);
+
+$sd1 = random(1, 3, 0.2);
+$sd2 = random(1, 3, 0.2);
+$sd3 = random(1, 3, 0.2);
+$sd4 = random(1, 3, 0.2);
+
+$n1 = random(10, 100, 2);
+$n2 = random(10, 100, 2);
+$n3 = random(10, 100, 2);
+$n4 = random(10, 100, 2);
+
+$df1 = $n1 - 1;
+$df2 = $n2 - 1;
+$df3 = $n3 - 1;
+$df4 = $n4 - 1;
+
+$se1 = Real($sd1 / sqrt($n1));
+$se2 = Real($sd2 / sqrt($n2));
+$se3 = Real($sd3 / sqrt($n3));
+$se4 = Real($sd4 / sqrt($n4));
+
+$random1 = random(0, 2, 1);
+$random2 = random(0, 2, 1);
+$random3 = random(0, 2, 1);
+if ($random1 == 2 && $random2 == 2 && $random3 == 2) {
+  $random4 = random(0, 1, 1);
+} elsif (($random1 == 0 || $random1 == 1) && ($random2 == 0 || $random2 == 1) && ($random3 == 0 || $random3 == 1)) {
+  $random4 = 2;
+} else {
+  $random4 = random(0, 2, 1);
+}
+
+$tcrit1 = ($random1 == 2) ? tdistr($df1, 0.025) : tdistr($df1, 0.05);
+$tcrit2 = ($random2 == 2) ? tdistr($df2, 0.025) : tdistr($df2, 0.05);
+$tcrit3 = ($random3 == 2) ? tdistr($df3, 0.025) : tdistr($df3, 0.05);
+$tcrit4 = ($random4 == 2) ? tdistr($df4, 0.025) : tdistr($df4, 0.05);
+
+do { $mult1 = random(0.3, 4.5, 0.01); } until ($mult1 != $tcrit1);
+do { $mult2 = random(0.3, 4.5, 0.01); } until ($mult2 != $tcrit2);
+do { $mult3 = random(0.3, 4.5, 0.01); } until ($mult3 != $tcrit3);
+if (($mult1 > $tcrit1) || ($mult2 > $tcrit2) || ($mult3 > $tcrit3)) {
+  do { $mult4 = random(0.3, 4, 0.01); } until ($mult4 != 1.96);
+} else {
+  $mult4 = random(($tcrit4 + 0.02), ($tcrit4 + 1.5), 0.01);
+}
+
+if ($random1 == 0) {
+  $tsign1 = 1;
+} elsif ($random1 == 1) {
+  $tsign1 = -1;
+} else {
+  $tsign1 = random(-1, 1, 2);
+}
+
+if ($random2 == 0) {
+  $tsign2 = 1;
+} elsif ($random2 == 1) {
+  $tsign2 = -1;
+} else {
+  $tsign2 = random(-1, 1, 2);
+}
+
+if ($random3 == 0) {
+  $tsign3 = 1;
+} elsif ($random3 == 1) {
+  $tsign3 = -1;
+} else {
+  $tsign3 = random(-1, 1, 2);
+}
+
+if ($random4 == 0) {
+  $tsign4 = 1;
+} elsif ($random4 == 1) {
+  $tsign4 = -1;
+} else {
+  $tsign4 = random(-1, 1, 2);
+}
+
+
+$nullmu1 = sprintf("%.0f", $m1 + $tsign1 * $mult1 * $se1);
+$nullmu2 = sprintf("%.0f", $m2 + $tsign2 * $mult2 * $se2);
+$nullmu3 = sprintf("%.0f", $m3 + $tsign3 * $mult3 * $se3);
+$nullmu4 = sprintf("%.0f", $m4 + $tsign4 * $mult4 * $se4);
+
+$t1 = Real(($m1 - $nullmu1) / $se1);
+$t2 = Real(($m2 - $nullmu2) / $se2);
+$t3 = Real(($m3 - $nullmu3) / $se3);
+$t4 = Real(($m4 - $nullmu4) / $se4);
+
+$pval1 = ($random1 == 2) ? 2 * tprob($df1, abs($t1)) : tprob($df1, abs($t1));
+$pval2 = ($random2 == 2) ? 2 * tprob($df2, abs($t2)) : tprob($df2, abs($t2));
+$pval3 = ($random3 == 2) ? 2 * tprob($df3, abs($t3)) : tprob($df3, abs($t3));
+$pval4 = ($random4 == 2) ? 2 * tprob($df4, abs($t4)) : tprob($df4, abs($t4));
+
+if ($pval1 < 0.0001) {
+  $pval1 = "\( < 0.0001 \)";
+  $correct1 = " a. Reject \(H_0\)";
+} elsif ($pval1 < 0.05) {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " a. Reject \(H_0\)";
+} else {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval2 < 0.0001) {
+  $pval2 = "\( < 0.0001 \)";
+  $correct2 = " a. Reject \(H_0\)";
+} elsif ($pval2 < 0.05) {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " a. Reject \(H_0\)";
+} else {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval3 < 0.0001) {
+  $pval3 = "\( < 0.0001 \)";
+  $correct3 = " a. Reject \(H_0\)";
+} elsif ($pval3 < 0.05) {
+  $pval3 = sprintf("%.4f", $pval3);
+  $correct3 = " a. Reject \(H_0\)";
+} else {
+  $pval3 = sprintf("%.4f", $pval3);
+  $correct3 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval4 < 0.0001) {
+  $pval4 = "\( < 0.0001 \)";
+  $correct4 = " a. Reject \(H_0\)";
+} elsif ($pval4 < 0.05) {
+  $pval4 = sprintf("%.4f", $pval4);
+  $correct4 = " a. Reject \(H_0\)";
+} else {
+  $pval4 = sprintf("%.4f", $pval4);
+  $correct4 = " b. Fail to reject \(H_0\)";
+}
+
+@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc4 = RadioButtons(
+  [@options],
+  $correct4,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, find the test statistic and give the appropriate
+conclusion for the hypothesis test.
+Assume the results come from a random sample, and if the sample size is small, assume
+the underlying distribution is relatively normal.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Test \(H_0: \mu = $nullmu1\) vs \(H_a: \mu $inequality[$random1] $nullmu1\) using
+  the sample results \( \overline{x}=$m1 \), \(s = $sd1\), with \(n=$n1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu = $nullmu2\) vs \(H_a: \mu $inequality[$random2] $nullmu2\) using
+  the sample results \( \overline{x}=$m2 \), \(s = $sd2\), with \(n=$n2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu = $nullmu3\) vs \(H_a: \mu $inequality[$random3] $nullmu3\) using
+  the sample results \( \overline{x}=$m3 \), \(s = $sd3\), with \(n=$n3\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval3. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu = $nullmu4\) vs \(H_a: \mu $inequality[$random4] $nullmu4\) using
+  the sample results \( \overline{x}=$m4 \), \(s = $sd4\), with \(n=$n4\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval4. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($t1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+ANS($t2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+ANS($t3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+ANS($t4->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc4->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

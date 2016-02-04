@@ -1,0 +1,101 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection(Expectation)
+## KEYWORDS('Probability Distributions','Expected Value')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.1')
+## Problem1('E13')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = random( 1, 2, 1 );
+$a2 = random( 40000, 60000, 10000 );
+$a3 = random( 8, 10, 1 );
+$a4 = random( 4000, 6000, 1000 );
+$a5 = random( 80, 100, 10 );
+$a6 = random( 400, 600, 100 );
+$a7 = random( 800, 1000, 100 );
+$a8 = random( 40, 60, 10 );
+$answer1 = Real("($a1*$a2+$a3*$a4+$a5*$a6+$a7*$a8)/1000000")->reduce;
+$answer2 = Real("500000-($a1*$a2+$a3*$a4+$a5*$a6+$a7*$a8)")->reduce;
+$answer3 = Real("($a1*$a2+$a3*$a4+$a5*$a6+$a7*$a8)/500000")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+For each million tickets sold, the original New York Lottery awarded $a1 $$a2 prize, $a3 $$a4 prizes, $a5 $$a6 prizes, and $a7 $$a8 prizes.
+$PAR
+${BBOLD} 1. $EBOLD
+What was the expected value of a ticket?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD
+The tickets sold for $.50 each. How much could the state of New York expect to earn for every million tickets sold?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 3. $EBOLD
+What percentage of the income from the lottery was returned in prizes? Enter your answer as a decimal.
+\{ans_rule(15)\}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.005)->cmp );
+ANS( $answer2->with(tolerance=>.005)->cmp );
+ANS( $answer3->with(tolerance=>.005)->cmp );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

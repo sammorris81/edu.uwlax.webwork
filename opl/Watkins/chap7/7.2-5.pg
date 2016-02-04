@@ -1,0 +1,76 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('5')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(485,520,1);
+$s=random(100,140,1);
+$n1=random(30,50,1);
+$n2=random(30,50,1);
+$n3=random(30,50,1);
+
+$x1=sprintf("%0.2f",(500-$m)/($s/sqrt($n1)));
+$x2=sprintf("%0.2f",(492-$m)/($s/sqrt($n2)));
+$x3=sprintf("%0.2f",(505-$m)/($s/sqrt($n3)));
+$x4=sprintf("%0.2f",(485-$m)/($s/sqrt($n3)));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(sprintf("%0.4f",uprob($x2)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+BEGIN_TEXT
+SAT critical reading scores are normally distributed with mean $m and standard deviation $s.
+
+$PAR
+If you select $n1 scores at random, what is the probability that their average is less than 500? \{ans_rule(8)\}
+$PAR
+If you select $n2 scores at random, what is the probability that their average is over 492? \{ans_rule(8)\}
+$PAR
+If you select $n3 scores at random, what is the probability that their average is between 485 and 505? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

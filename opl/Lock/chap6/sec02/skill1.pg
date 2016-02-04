@@ -1,0 +1,177 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('inference for means and proportions', 'confidence interval for a single proportion')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$p1 = Real(random(0.05, 0.35, 0.02));
+$p2 = Real(random(0.65, 0.95, 0.02));
+$p3 = Real(random(0.25, 0.75, 0.02));
+
+$n1 = random(200, 500, 50);
+$n2 = random(500, 2000, 500);
+$n3 = random(200, 500, 50);
+
+$se1 = Real(sqrt($p1 * (1 - $p1) / $n1));
+$se2 = Real(sqrt($p2 * (1 - $p2) / $n2));
+$se3 = Real(sqrt($p3 * (1 - $p3) / $n3));
+
+@zstars = (1.282, 1.645, 1.960, 2.326, 2.576);
+@confidences = (80, 90, 95, 98, 99);
+
+$random1 = random(0, 4, 1);
+$random2 = random(0, 4, 1);
+$random3 = random(0, 4, 1);
+
+$me1 = Real($zstars[$random1] * $se1);
+$me2 = Real($zstars[$random2] * $se2);
+$me3 = Real($zstars[$random3] * $se3);
+
+$lower1 = Real($p1 - $me1);
+$upper1 = Real($p1 + $me1);
+
+$lower2 = Real($p2 - $me2);
+$upper2 = Real($p2 + $me2);
+
+$lower3 = Real($p3 - $me3);
+$upper3 = Real($p3 + $me3);
+
+# deal with tolerances for calculator usage
+# $n2 skips by 500, so no matter the sample size assigned, count should be an
+#   integer
+$count1l = floor($p1 * $n1);
+$count1u = ceil($p1 * $n1);
+$count3l = floor($p3 * $n3);
+$count3u = ceil($p3 * $n3);
+
+$p1l = $count1l / $n1;
+$p1u = $count1u / $n1;
+$p3l = $count3l / $n3;
+$p3u = $count3u / $n3;
+
+$se1l = Real(sqrt($p1l * (1 - $p1l) / $n1));
+$se1u = Real(sqrt($p1u * (1 - $p1u) / $n1));
+$se3l = Real(sqrt($p3l * (1 - $p3l) / $n3));
+$se3u = Real(sqrt($p3u * (1 - $p3u) / $n3));
+
+$me1l = Real($zstars[$random1] * $se1l);
+$me1u = Real($zstars[$random1] * $se1u);
+$me3l = Real($zstars[$random3] * $se3l);
+$me3u = Real($zstars[$random3] * $se3u);
+
+$lower1l = Real($p1l - $me1l);
+$lower1u = Real($p1u - $me1u);
+$upper1l = Real($p1l + $me1l);
+$upper1u = Real($p1u + $me1u);
+
+$lower3l = Real($p3l - $me3l);
+$lower3u = Real($p3u - $me3u);
+$upper3l = Real($p3l + $me3l);
+$upper3u = Real($p3u + $me3u);
+
+$tolme1 = max(abs($me1 - $me1l), abs($me1 - $me1u)) + 0.0001;
+$tolme3 = max(abs($me3 - $me3l), abs($me3 - $me3u)) + 0.0001;
+$tollower1 = max(abs($lower1 - $lower1l), abs($lower1 - $lower1u)) + 0.0001;
+$tolupper1 = max(abs($upper1 - $upper1l), abs($upper1 - $upper1u)) + 0.0001;
+$tollower3 = max(abs($lower3 - $lower3l), abs($lower3 - $lower3u)) + 0.0001;
+$tolupper3 = max(abs($upper3 - $upper3l), abs($upper3 - $upper3u)) + 0.0001;
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, use the normal distribution to find a confidence interval
+for a proportion \( p \) given the relevant sample results. Give the best point
+estimate for \(p\), the margin of error, and the confidence interval. Assume the
+results come from a random sample.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(p\) using the sample results
+  \(\widehat{p} = $p1\) and \(n=$n1\).
+  Use \(z^* = $zstars[$random1]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(p\) using the sample results
+  \(\widehat{p} = $p2\) and \(n=$n2\).
+  Use \(z^* = $zstars[$random2]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(p\) using the sample results
+  \(\widehat{p} = $p3\) and \(n=$n3\). Use \(z^* = $zstars[$random3]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($me1->with(tolerance=>$tolme1, tolType=>"Absolute")->cmp());
+ANS($lower1->with(tolerance=>$tollower1, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>$tolupper1, tolType=>"Absolute")->cmp());
+
+ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($me2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ANS($p3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($me3->with(tolerance=>$tolme3, tolType=>"Absolute")->cmp());
+ANS($lower3->with(tolerance=>$tollower3, tolType=>"Absolute")->cmp());
+ANS($upper3->with(tolerance=>$tolupper3, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

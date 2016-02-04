@@ -1,0 +1,76 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('6')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(67,71,.1);
+$s=random(2,3.4,.01);
+$n1=random(30,50,1);
+$n2=random(30,50,1);
+$n3=random(30,50,1);
+
+$x1=sprintf("%0.2f",(70-$m)/($s/sqrt($n1)));
+$x2=sprintf("%0.2f",(68-$m)/($s/sqrt($n2)));
+$x3=sprintf("%0.2f",(71-$m)/($s/sqrt($n3)));
+$x4=sprintf("%0.2f",(67-$m)/($s/sqrt($n3)));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(sprintf("%0.4f",uprob($x2)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+BEGIN_TEXT
+The heights of males in a population are normally distributed with mean $m inches and standard deviation $s inches.
+
+$PAR
+If you select $n1 males at random, what is the probability that their average height is less than 70 inches? \{ans_rule(8)\}
+$PAR
+If you select $n2 males at random, what is the probability that their average height is over 68 inches? \{ans_rule(8)\}
+$PAR
+If you select $n3 males at random, what is the probability that their average height is between 67 and 71 inches? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('Confidence intervals','Concepts')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E71')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$radio = new_multiple_choice();
+$radio->qa( 'What is the best explanation of the use of the term 95$PERCENT confidence', 'In the long run, the population proportion will fall in 95$PERCENT of the confidence intervals we construct');
+
+$radio->extra( 'We can never be 100$PERCENT confident in statistics, we can only be 95$PERCENT confidenct', 'The sample proportion will fall in 95$PERCENT of the confidence intervals we construct', 'We are 95$PERCENT confident that the confidence interval contains the sample proportion', 'We are 95$PERCENT confident that we have made a correct decision when we reject the null hypothesis');
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

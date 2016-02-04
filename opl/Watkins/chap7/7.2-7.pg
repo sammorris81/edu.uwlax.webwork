@@ -1,0 +1,75 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('7')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(53,59,1);
+$s=random(5,7,.1);
+$n1=random(40,60,1);
+$n2=random(40,60,1);
+$n3=random(40,60,1);
+
+$x1=sprintf("%0.2f",(58-$m)/($s/sqrt($n1)));
+$x2=sprintf("%0.2f",(56-$m)/($s/sqrt($n2)));
+$x3=sprintf("%0.2f",(60-$m)/($s/sqrt($n3)));
+$x4=sprintf("%0.2f",(55-$m)/($s/sqrt($n3)));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(sprintf("%0.4f",uprob($x2)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+BEGIN_TEXT
+Forbes magazine found that the mean age of the cheif executive officers (CEOs) of America's 500 largest companies is $m years with standard deviation $s years.
+
+$PAR
+If you select $n1 CEOs at random, what is the probability that their average age is less than 58 years? \{ans_rule(8)\}
+$PAR
+If you select $n2 CEOs at random, what is the probability that their average age is over 56 years? \{ans_rule(8)\}
+$PAR
+If you select $n3 CEOs at random, what is the probability that their average age is between 55 and 60 years? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

@@ -1,0 +1,125 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Independence)
+## KEYWORDS('Probability','Independent Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.4')
+## Problem1('E48')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = Real("870/1725")->reduce;
+$a2 = Real("220/483")->reduce;
+$a3 = Real("650/1242")->reduce;
+
+@options = ("True", "False");
+$mcind = RadioButtons(
+  [@options],
+  "False",
+  order => [@options],
+  separator => $tab,
+);
+
+$mcdis = RadioButtons(
+  [@options],
+  "False",
+  order => [@options],
+  separator => $tab,
+);
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+The table below gives the decisions on all applications to two of the largest graduate programs at the University of California, Berkeley, by gender of the applicant.
+$PAR
+\(
+\begin{array}{l|cc|c}
+ & \text{Admit} & \text{Deny} & \text{Total} \\ \hline
+\text{Man}     & 650 & 592 & 1242 \\
+\text{Woman}   & 220 & 263 & 483 \\ \hline
+\text{Total}   & 870 & 855 & 1725 \\
+\end{array}
+\)
+
+$PAR
+Suppose you select a person from this group at random.
+\{ BeginList( "OL", type=>"1") \}
+$ITEM Find each probability:
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM P(admitted) \{ans_rule(10)\}
+  $ITEM P(admitted \( \mid \) woman) \{ans_rule(10)\}
+  $ITEM P(admitted \( \mid \) man) \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+$PAR
+$ITEM Being admitted and being a woman are independent events. $BR
+\{ $mcind->buttons() \}
+$PAR
+$ITEM Being admitted and being a woman are mutually exclusive events. $BR
+\{ $mcdis->buttons() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a2->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a3->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+
+ANS( $mcind->cmp() );
+ANS( $mcdis->cmp() );
+
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

@@ -1,0 +1,122 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n1a = random(165, 175, 1);
+$n2a = random(190, 210, 1);
+$randoma = random(1, 2, 1);
+if ($randoma == 1) {
+  $gender = "female";
+  $ansa = Real($n1a / ($n1a + $n2a));
+} else {
+  $gender = "male";
+  $ansa = Real($n2a / ($n1a + $n2a));
+}
+$exercisea = "There are $n1a females and $n2a males. Find \( \widehat{p} \), ".
+             "the proportion who are $gender.";
+
+$n1b = random(40, 55, 1);
+$n2b = random(305, 325, 1);
+$randomb = random(1, 2, 1);
+if ($randomb == 1) {
+  $smokestat = "smoke";
+  $ansb = Real($n1b / ($n1b + $n2b));
+} else {
+  $smokestat = "do not smoke";
+  $ansb = Real($n2b / ($n1b + $n2b));
+}
+$exerciseb = "There are $n1b students who smoke and $n2b student who do not ".
+             "smoke. Find \( \widehat{p} \), the proportion who $smokestat.";
+
+$n1c = random(90, 100, 1);
+$n2c = random(190, 210, 1);
+$n3c = random(30, 40, 1);
+$n4c = random(30, 40, 1);
+$randomc = random(1, 2, 1);
+if ($randomc == 1) {
+  $class = "upperclass students (juniors or seniors)";
+  $ansc = Real(($n3c + $n4c) / ($n1c + $n2c + $n3c + $n4c));
+} else {
+  $class = "underclass students (first years or sophomores)";
+  $ansc = Real(($n1c + $n2c) / ($n1c + $n2c + $n3c + $n4c));
+}
+$exercisec = "There are $n1c first years, $n2c sophomores, $n3c juniors, and ".
+             "$n4c seniors. Find \( \widehat{p} \), the proportion who are $class.";
+
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 2, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $ans1 = $ansa;
+  $text2 = $exercisec;
+  $ans2 = $ansc;
+} else {
+  $text1 = $exerciseb;
+  $ans1 = $ansb;
+  $text2 = $exercisec;
+  $ans2 = $ansc;
+}
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+The following exercises provide information about data in a survey given to students.
+Find the sample proportion \( \widehat{p} \) requested. Give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ ans_rule(10) \}
+  $ITEM $text2 $BR
+  \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

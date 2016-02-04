@@ -1,0 +1,243 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Hypothesis tests)
+## KEYWORDS('Regression', 'Correlation', 'Hypothesis tests')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('13')
+## Section1('13.2')
+## Problem1('E17')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$x1= random( 7, 7.5, .1 );
+$x2= random( 10, 10.5, .1 );
+$x3= random( 12.8, 13.4, .1 );
+$x4= random( 7.0, 7.3, .1 );
+$x5= random( 6.2, 6.4, .1 );
+$x6= random( 11.3, 11.6, .1 );
+
+$y1= random( 3, 5, 1 );
+$y2= random( 7, 8, 1 );
+$y3= random( 7, 9 ,1 );
+$y4= random( 3, 5, 1 );
+$y5= random( 3, 5, 1 );
+$y6= random( 7, 9, 1 );
+
+$n = Real(6);
+
+
+$sumx = Real( $x1 + $x2 + $x3 + $x4 + $x5 + $x6 );
+$sumy = Real( $y1 + $y2 + $y3 + $y4 + $y5 + $y6 );
+$sumxy = Real( $x1*$y1 + $x2*$y2 + $x3*$y3 + $x4*$y4 + $x5*$y5+ $x6*$y6 );
+$sumx2 = Real( $x1**2 + $x2**2 + $x3**2 + $x4**2 + $x5**2 + $x6**2 );
+$sumy2 = Real( $y1**2 + $y2**2 + $y3**2 + $y4**2 + $y5**2 + $y6**2 );
+
+
+$meanx = Real( $sumx/$n );
+$meany = Real( $sumy/$n );
+
+$sx = Real( sqrt( (($x1-$meanx)**2 +($x2-$meanx)**2 +($x3-$meanx)**2 +($x4-$meanx)**2 +($x5-$meanx)**2 +($x6-$meanx)**2)/($n-1) ) );
+$sy = Real( sqrt( (($y1-$meany)**2 +($y2-$meany)**2 +($y3-$meany)**2 +($y4-$meany)**2 +($y5-$meany)**2 +($y6-$meany)**2)/($n-1) ) );
+
+$SSxx = Real( ($n-1)*($sx**2) );
+$SSxy = Real( $sumxy - $sumx*$sumy/$n );
+
+$b1 = Real( $SSxy/ $SSxx );
+$b0 = Real($meany-$b1*$meanx);
+
+$yhat1=Real($b0+$b1*$x1);
+$yhat2=Real($b0+$b1*$x2);
+$yhat3=Real($b0+$b1*$x3);
+$yhat4=Real($b0+$b1*$x4);
+$yhat5=Real($b0+$b1*$x5);
+$yhat6=Real($b0+$b1*$x6);
+
+
+$s = Real( sqrt( (($y1-$yhat1)**2 +($y2-$yhat2)**2 +($y3-$yhat3)**2 +($y4-$yhat4)**2 +($y5-$yhat5)**2 +($y6-$yhat6)**2)/($n-2) ) );
+
+
+
+
+
+
+$xh = Real( sqrt( (($x1-$meanx)**2 +($x2-$meanx)**2 +($x3-$meanx)**2 +($x4-$meanx)**2 +($x5-$meanx)**2 +($x6-$meanx)**2) ) );
+
+$sb1 = Real( $s/$xh );
+
+$ts=Real( $b1/ $sb1 );
+$pval=Real(2*tprob($n-2,abs($ts)));
+
+
+$lower = Real( $b1 - 2.132*$sb1 );
+$upper = Real( $b1 + 2.132*$sb1 );
+
+
+
+
+
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(\neq\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.5){
+$answer = "\(P\)-value > .5";}
+elsif($pval<=.50 && $pval>.40){
+$answer = ".40 < \(P\)-value < .50";}
+elsif($pval<=.40 && $pval>.30){
+$answer = ".30 < \(P\)-value < .40";}
+elsif($pval<=.30 && $pval>.20){
+$answer = ".20 < \(P\)-value < .30";}
+elsif($pval<=.20 && $pval>.10){
+$answer = ".10 < \(P\)-value < .20";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.04){
+$answer = ".04 < \(P\)-value < .05";}
+elsif($pval<=.04 && $pval>.02){
+$answer = ".02 < \(P\)-value < .04";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.002){
+$answer = ".002 < \(P\)-value < .005";}
+elsif($pval<=.002 && $pval>.001){
+$answer = ".001 < \(P\)-value < .002";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the slope of the true regression line is different from 0.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the slope of the true regression line is different from 0.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+$mc->makeLast('\(P\)-value > .5','.40 < \(P\)-value < .50',
+'.30 < \(P\)-value < .40',
+'.20 < \(P\)-value < .30',
+'.10 < \(P\)-value < .20',
+'.05 < \(P\)-value < .10',
+'.04 < \(P\)-value < .05',
+'.02 < \(P\)-value < .04',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.002 < \(P\)-value < .005',
+'.001 < \(P\)-value < .002',
+' \(P\)-value < .001');
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence that the slope of the true regression line is different from 0.", "Fail to reject \(H_0\).  We do not have significant evidence that the slope of the true regression line is different from 0.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+The greenhouse gas emissions(GGE) and number of cylinders(CY) for the random sample of car models is shown below.
+The least squares line for this data is \(\hat{y}=$b0+$b1 x\), and the sums are \(\sum{x}=$sumx\), \(\sum{y}=$sumy\), \(\sum{x^2}=$sumx2\), \(\sum{y^2}=$sumy2\), and \(\sum{xy}=$sumxy\).  Is there statistically significant evidence that the slope of the true regression line is different from 0?
+$PAR
+
+\{ begintable(3) \}
+\{ row( "Model", "GGE", "CY" ) \}
+\{ row( "1", "$x1", "$y1" ) \}
+\{ row( "2", "$x2", "$y2" ) \}
+\{ row( "3", "$x3", "$y3" ) \}
+\{ row( "4", "$x4", "$y4" ) \}
+\{ row( "5", "$x5", "$y5" ) \}
+\{ row( "6", "$x6", "$y6" ) \}
+\{ endtable() \}
+$PAR
+
+\(H_0:\beta_1 = 0 \)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+
+END_TEXT
+
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+
+ENDDOCUMENT();

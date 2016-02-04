@@ -1,0 +1,145 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'shape and center')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$skew1 = random(-10, 10, 5);
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => random(200, 300, 5),
+  mean => random(10, 20, 2),
+  sd => 1,
+  skew => $skew1,
+  name => "A",
+);
+$hist1 = StatGraphicsUWL::histogram(
+  data => $quant1,
+);
+
+if ($skew1 < 0) {
+  $correctskew1 = "Left-skewed";
+  $meanmed1 = "smaller than the median";
+  $skew2 = 0;
+} elsif ($skew1 == 0) {
+  $correctskew1 = "Approximately symmetric";
+  $meanmed1 = "approximately equal to the median";
+  $skew2 = random(5, 10, 5) * random(-1, 1, 2);
+} else {
+  $correctskew1 = "Right-skewed";
+  $meanmed1 = "larger than the median";
+  $skew2 = 0;
+}
+
+$skewdesc1 = PopUp(
+  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
+  $correctskew1,
+);
+
+$meanmedcomp1 = PopUp(
+  ["?", "smaller than the median", "approximately equal to the median", "larger than the median"],
+  $meanmed1,
+);
+
+
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => random(200, 300, 5),
+  mean => random(10, 20, 2),
+  sd => 1,
+  skew => $skew2,
+  name => "B",
+);
+$hist2 = StatGraphicsUWL::histogram(
+  data => $quant2,
+);
+
+if ($skew2 < 0) {
+  $correctskew2 = "Left-skewed";
+  $meanmed2 = "smaller than the median";
+} elsif ($skew2 == 0) {
+  $correctskew2 = "Approximately symmetric";
+  $meanmed2 = "approximately equal to the median";
+} else {
+  $correctskew2 = "Right-skewed";
+  $meanmed2 = "larger than the median";
+}
+
+$skewdesc2 = PopUp(
+  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
+  $correctskew2,
+);
+
+$meanmedcomp2 = PopUp(
+  ["?", "smaller than the median", "approximately equal to the median", "larger than the median"],
+  $meanmed2,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use these histograms to answer the following questions.
+$PAR
+$BCENTER
+  \{ image(insertGraph($hist1), width=>300, height=>300, tex_size=>450) \}
+  \{ image(insertGraph($hist2), width=>300, height=>300, tex_size=>450) \}
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM How would you describe the shape of histogram A? $BR
+  \{ $skewdesc1->menu() \}
+  $ITEM Based upon histogram A, is the mean likely to be smaller than the median,
+  approximately equal to the median, or larger than the median? $BR
+  \{ $meanmedcomp1->menu() \}
+  $ITEM How would you describe the shape of histogram B? $BR
+  \{ $skewdesc2->menu() \}
+  $ITEM Based upon histogram B, is the mean likely to be smaller than the median,
+  approximately equal to the median, or larger than the median? $BR
+  \{ $meanmedcomp2->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($skewdesc1->cmp());
+ANS($meanmedcomp1->cmp());
+ANS($skewdesc2->cmp());
+ANS($meanmedcomp2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

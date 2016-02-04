@@ -1,0 +1,118 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection(Expectation)
+## KEYWORDS('Probability Distributions','Expected Value')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.1')
+## Problem1('E15')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$randi = random( 1, 3, 1 );
+
+if( randi == 1)
+{
+$a1 = Real(".4");
+$a2 = Real(".28");
+$a3 = Real(".15");
+$a4 = Real(".12");
+}
+elsif( randi == 2)
+{
+$a1 = Real(".44");
+$a2 = Real(".28");
+$a3 = Real(".12");
+$a4 = Real(".11");
+}
+else
+{
+$a1 = Real(".43");
+$a2 = Real(".27");
+$a3 = Real(".16");
+$a4 = Real(".09");
+}
+
+
+$answer1 = Real("150*$a2+300*$a3+450*$a4+600*.05")->reduce;
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+You are trying to decide whether to buy a $250 service contract for your new computer. If you buy the service contract, you get an unlimited number of free repairs. If you don't buy the service contract, each repair will cost $150. You investigate and find the information in the table below about the number of repairs and their probabilities.
+$PAR
+\(
+\begin{tabular}{cc}
+Number of Repairs & Probability \\ \hline
+0 & $a1 \\
+1 & $a2 \\
+2 & $a3 \\
+3 & $a4  \\
+4 & .05 \\
+\end{tabular}
+\)
+
+$PAR
+${BBOLD} 1. $EBOLD
+Find the expected cost if you don't buy the contract.
+\{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.005)->cmp );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

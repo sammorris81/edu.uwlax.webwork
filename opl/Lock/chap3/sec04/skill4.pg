@@ -1,0 +1,156 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'bootstrap confidence intervals using percentiles')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.4')
+## Problem1('Skill Builder 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+$start = localtime;
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+$n1 = random(180, 220, 1);
+$agree1 = random(60, 80, 1);
+$disagree1 = $n1 - $agree1;
+
+@nlevels1 = (2);
+@freqs1 = ($agree1, $disagree1);
+$cat1 = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n1,
+  nlevels => [@nlevels1],
+  freqs => [@freqs1],
+  random => "F",
+);
+
+$bsprops1 = new DataGenUWL(
+  datatype => 'bs_one_cat',
+  data => $cat1,
+  N => 500,
+  name => "A",
+);
+
+$lower1 = QuantitativeUWL::percentile(data=>$bsprops1, p=>0.025);
+$lower1 = Real(sprintf("%.3f", $lower1));
+$upper1 = QuantitativeUWL::percentile(data=>$bsprops1, p=>0.975);
+$upper1 = Real(sprintf("%.3f", $upper1));
+$table1 = QuantitativeUWL::percentile_table(data=>$bsprops1);
+
+$agree2 = random(350, 400, 1);
+$disagree2 = random(550, 600, 1);
+$neutral2 = random(30, 50, 1);
+$n2 = $agree2 + $disagree2 + $neutral2;
+
+@nlevels2 = (3);
+@freqs2 = ($agree2, $disagree2, $neutral2);
+$cat2 = new DataGenUWL(
+  datatype => 'one_cat',
+  n => $n2,
+  nlevels => [@nlevels2],
+  freqs => [@freqs2],
+  random => "F",
+);
+
+$bsprops2 = new DataGenUWL(
+    datatype => 'bs_one_cat',
+    data => $cat2,
+    N => 500,
+    name => "B",
+);
+
+$random = random(1, 2, 1);
+
+if ($random == 1) {
+  $clevel = 90;
+} else {
+  $clevel = 99;
+}
+
+$plower = (1 - $clevel / 100) / 2;
+$pupper = $plower + $clevel/100;
+
+$lower2 = QuantitativeUWL::percentile(data=>$bsprops2, p=>$plower);
+$lower2 = Real(sprintf("%.3f", $lower2));
+$upper2 = QuantitativeUWL::percentile(data=>$bsprops2, p=>$pupper);
+$upper2 = Real(sprintf("%.3f", $upper2));
+$table2 = QuantitativeUWL::percentile_table(data=>$bsprops2);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+These two questions give information about the proportion of a sample that agrees
+with a certain statement. The tables gives some percentiles from a bootstrap distribution
+of 500 sample proportions for each sample result.
+
+\{ BeginList("OL", type=>"1") \}
+  $ITEM In a random sample of $n1 people, $agree1 agree. The table below gives some
+  percentiles from a bootstrap distribution of 500 sample proportions generated
+  from this sample.
+  $PAR
+  $BCENTER
+    \{ $table1 \}
+  $ECENTER
+  $BR
+  Find a 95$PERCENT confidence interval using the percentiles in the table.
+  Give your answers to 3 decimal places. ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $PAR
+  $ITEM In a random sample of $n2 people, $agree2 agree, $disagree2 disgagree, and
+  $neutral2 are undecided. The table below gives some percentiles from a bootstrap
+  distribution of 500 sample proportions generated from this sample.
+  $PAR
+  $BCENTER
+    \{ $table2 \}
+  $ECENTER
+  $BR
+  Find a $clevel$PERCENT confidence interval using the percentiles in the table.
+  Give your answers to 3 decimal places. ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+\{ EndList("OL") \}
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+ANS($lower1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+
+ANS($lower2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

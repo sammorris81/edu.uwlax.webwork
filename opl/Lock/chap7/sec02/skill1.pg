@@ -1,0 +1,215 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('chi-square tests for categorical variables', 'testing goodness-of-fit for a single categorical variable')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@freqs1 = (56, 44, 132, 68, 72, 28);
+@rowlabs1 = ('Group 1', 'Group 2', 'Group 3');
+@collabs1 = ('Yes', 'No');
+@labels1 = (@rowlabs1, @collabs1);
+@nlevels1 = (3, 2);
+$cat1 = new DataGenUWL(
+  datatype => 'two_cat',
+  nlevels => [@nlevels1],
+  freqs => [@freqs1],
+  random => "T",
+  labels => [@labels1],
+);
+$table1 = CategoricalUWL::freqtable(data => $cat1);
+
+$randomrow1 = random(0, 2, 1);
+$randomcol1 = random(0, 1, 1);
+
+$observed1 = CategoricalUWL::singlefreq(
+  data => $cat1,
+  row => ($randomrow1 + 1),
+  col => ($randomcol1 + 1)
+);
+$rowtot1 = CategoricalUWL::margintotal(
+  data => $cat1, index => 1, level => ($randomrow1 + 1),
+);
+$coltot1 = CategoricalUWL::margintotal(
+  data => $cat1, index => 2, level => ($randomcol1 + 1),
+);
+$expect1 = Real($rowtot1 * $coltot1 / $cat1->{n});
+$df1 = Real(($cat1->{nrows} - 1) * ($cat1->{ncols} - 1));
+
+
+@freqs2 = (39, 34, 43, 34, 78, 89, 70, 63, 23, 37, 27, 33);
+@rowlabs2 = ("A".."C");
+@collabs2 = ("D".."G");
+@labels2 = (@rowlabs2, @collabs2);
+@nlevels2 = (3, 4);
+$cat2 = new DataGenUWL(
+  datatype => 'two_cat',
+  nlevels => [@nlevels2],
+  freqs => [@freqs2],
+  random => "T",
+  labels => [@labels2],
+);
+$table2 = CategoricalUWL::freqtable(data => $cat2);
+
+$randomrow2 = random(0, 2, 1);
+$randomcol2 = random(0, 3, 1);
+
+$observed2 = CategoricalUWL::singlefreq(
+  data => $cat2,
+  row => ($randomrow2 + 1),
+  col => ($randomcol2 + 1)
+);
+$rowtot2 = CategoricalUWL::margintotal(
+  data => $cat2, index => 1, level => ($randomrow2 + 1),
+);
+$coltot2 = CategoricalUWL::margintotal(
+  data => $cat2, index => 2, level => ($randomcol2 + 1),
+);
+$expect2 = Real($rowtot2 * $coltot2 / $cat2->{n});
+$df2 = Real(($cat2->{nrows} - 1) * ($cat2->{ncols} - 1));
+
+@freqs3 = (40, 50, 5, 15, 10, 60, 45, 10, 5, 0);
+@rowlabs3 = ("Control", "Treatment");
+@collabs3 = ("Strongly Agree", "Agree", "Neutral", "Disagree", "Strongly Disagree");
+@labels3 = (@rowlabs3, @collabs3);
+@nlevels3 = (2, 5);
+$cat3 = new DataGenUWL(
+  datatype => 'two_cat',
+  nlevels => [@nlevels3],
+  freqs => [@freqs3],
+  random => "T",
+  labels => [@labels3],
+);
+$table3 = CategoricalUWL::freqtable(data => $cat3);
+
+$randomrow3 = random(0, 1, 1);
+$randomcol3 = random(0, 4, 1);
+
+$observed3 = CategoricalUWL::singlefreq(
+  data => $cat3,
+  row => ($randomrow3 + 1),
+  col => ($randomcol3 + 1)
+);
+$rowtot3 = CategoricalUWL::margintotal(
+  data => $cat3, index => 1, level => ($randomrow3 + 1),
+);
+$coltot3 = CategoricalUWL::margintotal(
+  data => $cat3, index => 2, level => ($randomcol3 + 1),
+);
+$expect3 = Real($rowtot3 * $coltot3 / $cat3->{n});
+$df3 = Real(($cat3->{nrows} - 1) * ($cat3->{ncols} - 1));
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Finding the expected count:$EBOLD $BR
+To find the expected count for a table cell for a chi-square test for association,
+use the following formula (p. 480)
+$PAR
+$BCENTER
+\(
+  \text{Expected count} = \displaystyle \frac{\text{Row total} \cdot \text{Col total}}{\text{Sample size}}
+\)
+$ECENTER
+$PAR
+$BBOLD Finding the degrees of freedom:$EBOLD $BR
+To find the degrees of freedom for the chi-square distribution, take \((r - 1) (c - 1)\)
+where \(r\) is the number of rows (excluding the \{BITALIC()\}Total\{EITALIC()\} row)
+and \(c\) is the number of columns (excluding the \{BITALIC()\}Total\{EITALIC()\} column).
+END_HINT
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+The following questions give a two-way table and specify a particular cell for
+that table. In each case a) find the expected count for the cell and b) give the degrees
+of freedom for the chi-square test based on the two-way table.
+Give your answers to 2 decimal places.
+
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM \{ $table1 \}
+  $PAR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM What is the expected count for the ($rowlabs1[$randomrow1],
+    $collabs1[$randomcol1]) cell?
+    \{ans_rule(10)\}
+    $ITEM What are the degrees of freedom for the chi-square distribution for this
+    table? \{ans_rule(10)\}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM \{ $table2 \}
+  $PAR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM What is the expected count for the ($rowlabs2[$randomrow2],
+    $collabs2[$randomcol2]) cell?
+    \{ans_rule(10)\}
+    $ITEM What are the degrees of freedom for the chi-square distribution for this
+    table? \{ans_rule(10)\}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM \{ $table3 \}
+  $PAR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM What is the expected count for the ($rowlabs3[$randomrow3],
+    $collabs3[$randomcol3]) cell?
+    \{ans_rule(10)\}
+    $ITEM What are the degrees of freedom for the chi-square distribution for this
+    table? \{ans_rule(10)\}
+  \{ EndList("OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($df1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+
+ANS($expect2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($df2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+
+ANS($expect3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($df3->with(tolerance=>0, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

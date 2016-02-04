@@ -1,0 +1,231 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Experimental design)
+## DBsection(Concepts)
+## KEYWORDS('experimental design')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('13')
+## Section1('13.1')
+## Problem1('3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$rand1 = random(1, 4);
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+
+if( $rand1==1)
+{
+BEGIN_TEXT
+A crop scientist is conducting research with a drought resistant corn hybrid.
+She is interested in determining if increasing the spacing between these plants
+will increase yield. She prepares 20 single acre plots and randomly assigns 10
+to have normal spacing while the other 10 are planted with an expanded spacing.
+The resulting average yield for each group of 10 plots was recorded.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study is best described as an', 'experiment.');
+$mult1->extra(
+  'observational study.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The explanatory variable is', 'whether the corn plants had normal spacing or expanded spacing.');
+$mult2->extra(
+  'the average yield for each group of 10 crops.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The response variable is', 'the average yield for each group of 10 crops.');
+$mult3->extra(
+  'whether the corn plants had normal spacing or expanded spacing.'
+);
+
+}
+elsif($rand1==2)
+{
+
+BEGIN_TEXT
+A crop scientist is conducting research with a drought resistant corn hybrid.
+She is interested in determining if using fertilizer X will increase yield. She
+prepares 20 single acre plots and randomly assigns 10 to have normal soil while
+the other 10 are planted with fertilizer X. The resulting average yield for each
+group of 10 plots was recorded.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study is best described as an', 'experiment.');
+$mult1->extra(
+  'observational study.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The explanatory variable is', 'whether the corn plants had fertilizer X or not.');
+$mult2->extra(
+  'the average yield for each group of 10 crops.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The response variable is', 'the average yield for each group of 10 crops.');
+$mult3->extra(
+  'whether the corn plants had fertilizer X or not.'
+);
+
+}
+elsif($rand1==3)
+{
+
+BEGIN_TEXT
+Does daily exposure to bright light make subjects more alert? A study was conducted
+in which the daily habits of 30 college students were documented, focusing on
+how much time they spent in brightly lit rooms or outside on sunny days. After a
+week, the subjects were given a computer-based alertness test on which they
+receive a score on a 0 to 100 point scale. Their scores were compared with how
+much time they spent in brightly lit places that week.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study is best described as an', 'observational study.');
+$mult1->extra(
+  'experiment.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The explanatory variable is', 'how much time the students spent in brightly lit places.');
+$mult2->extra(
+  'the score on the computer-based alertness test.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The response variable is', 'the score on the computer-based alertness test.');
+$mult3->extra(
+  'how much time the students spent in brightly lit places.'
+);
+
+}
+else
+{
+
+BEGIN_TEXT
+Does daily cardio exercise make subjects perform better on tests of intelligence?
+A study was conducted in which the daily habits of 45 college students were documented,
+focusing on the number of hours spent on exercise in a week. After a week, the
+subjects were given a computer-based intelligence test on which they receive a
+score on a 0 to 100 point scale. Their scores were compared with how many hours
+they spent exercising that week.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study is best described as an', 'observational study.');
+$mult1->extra(
+  'experiment.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The explanatory variable is', 'the number of hours exercised during the week.');
+$mult2->extra(
+  'the score on the computer-based intelligence test.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The response variable is', 'the score on the computer-based intelligence test.');
+$mult3->extra(
+  'the number of hours exercised during the week.'
+);
+
+}
+
+
+BEGIN_TEXT
+$PAR
+$BBOLD a. $EBOLD
+\{ $mult1->print_q() \}
+\{ $mult1->print_a() \}
+
+$PAR
+$BBOLD b. $EBOLD
+\{ $mult2->print_q() \}
+\{ $mult2->print_a() \}
+
+$PAR
+$BBOLD c. $EBOLD
+\{ $mult3->print_q() \}
+\{ $mult3->print_a() \}
+
+END_TEXT
+
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+ANS( radio_cmp( $mult1->correct_ans() ) );
+ANS( radio_cmp( $mult2->correct_ans() ) );
+ANS( radio_cmp( $mult3->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

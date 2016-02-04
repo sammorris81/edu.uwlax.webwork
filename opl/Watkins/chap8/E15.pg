@@ -1,0 +1,188 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence interval', 'proportions')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E15')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+$N = 1000;
+$n = 500;
+
+$mean1 = random(0.60, 0.80, 0.05);
+$sd1 =  sqrt($mean1 * (1 - $mean1) / $n);
+$quant1 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $N,
+    mean => $mean1,
+    sd => $sd1,
+    randomsummary => "T",
+    name => "",
+);
+
+
+$se = sprintf("%.3f", $quant1->{sd});
+$prop = Real( sprintf("%.3f", $quant1->{mean}) );
+$moe = Real( sprintf("%.3f", 2 * $se) );
+$lower = sprintf("%.3f", $prop - $moe);
+$upper = sprintf("%.3f", $prop + $moe);
+
+$mean2 = $prop;
+$n2 = 100;
+$sd2 =  sqrt($prop * (1-$prop) / $n2);
+
+$quant2 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $N,
+    mean => $mean2,
+    sd => $sd2,
+    randomsummary => "F",
+    name => "",
+);
+
+$xmin = floor(min($quant1->{min}, $quant2->{min}) * 10) / 10;
+$xmax = ceil(max($quant1->{max}, $quant2->{max}) * 10) / 10;
+
+@labels = ("?", "Histogram A", "Histogram B");
+$order = random(1, 2, 1);
+if ($order == 1){
+  $disp1 = StatGraphicsUWL::histogram(
+    data => $quant1,
+    name => "Histogram A",
+    xmin => $xmin,
+    xmax => $xmax,
+    xticklength => 0.1,
+  );
+  $disp2 = StatGraphicsUWL::histogram(
+    data => $quant2,
+    name => "Histogram B",
+    xmin => $xmin,
+    xmax => $xmax,
+    xticklength => 0.1,
+  );
+  $correct = "Histogram A";
+} elsif ($order == 2){
+  $disp1 = StatGraphicsUWL::histogram(
+    data => $quant2,
+    name => "Histogram A",
+    xmin => $xmin,
+    xmax => $xmax,
+    xticklength => 0.1,
+  );
+  $disp2 = StatGraphicsUWL::histogram(
+    data => $quant1,
+    name => "Histogram B",
+    xmin => $xmin,
+    xmax => $xmax,
+    xticklength => 0.1,
+  );
+  $correct = "Histogram B";
+}
+
+$idhist = PopUp(
+  [@labels],
+  $correct
+);
+
+$interpret = new_checkbox_multiple_choice();
+$interpret -> qa (
+  "Select $BITALIC each $EITALIC correct interpretation of the confidence interval ".
+  "in the prompt",
+  "If the sampling were repeated many times, you would expect that 95$PERCENT ".
+  "of the resulting confidence intervals to contain the proportion of all seniors ".
+  "who drive to campus.",
+  "You are 95$PERCENT confident that the proportion of all seniors who drive to ".
+  "campus is between $lower and $upper.",
+);
+$interpret -> extra(
+  "95$PERCENT of all seniors drive to campus from ". sprintf("%.2f", $lower*100) ."$PERCENT to ".
+  sprintf("%.2f", $upper*100) . "$PERCENT of the time, and the rest drive more frequently or less ".
+  "frequently.",
+  "If the sampling were repeated many times, you would expect 95$PERCENT of the ".
+  "resulting samples to have a sample proportion that falls in the interval from ".
+  "$lower to $upper.",
+  "All seniors drive to campus an average of ". sprintf("%.2f", $prop*100)."$PERCENT ".
+  "of the time."
+);
+$interpret -> makeLast("None of the above");
+
+###########################
+## Initialization
+###########################
+Context()->texStrings;
+BEGIN_TEXT
+$BBOLD Confidence interval for proportions: $EBOLD
+$BR
+You want to determine the percentage of seniors who drive to campus. You take a
+random sample of $n seniors and ask them if they drive to campus. You find a 95$PERCENT
+confidence interval of ($lower, $upper).
+Give your answers to 3 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the proportion of seniors in this sample who drive to campus? \{ ans_rule(10) \}
+  $ITEM What is the margin of error for this confidence interval? \{ ans_rule(10) \}
+  $ITEM Which of the two following histograms most accurately represents the sampling
+  distribution for this proportion? \{ $idhist->menu() \}
+  \{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+  AlignedRow([
+      image( insertGraph($disp1), width=>300, height=>300, tex_size=>"400" ),
+      image( insertGraph($disp2), width=>300, height=>300, tex_size=>"400" )
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+  EndTable()
+  \}
+  $anssep
+  $ITEM \{ $interpret -> print_q() \}
+  \{ $interpret -> print_a() \}
+
+\{ EndList( "OL" ) \}
+
+
+END_TEXT
+
+ANS( $prop -> with(tolerance=>0.01, tolType=>"Absolute")->cmp );
+ANS( $moe -> with(tolerance=>0.01, tolType=>"Absolute")->cmp );
+ANS( $idhist -> cmp() );
+ANS( checkbox_cmp( $interpret->correct_ans() ) );
+ENDDOCUMENT();

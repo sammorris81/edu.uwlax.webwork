@@ -1,0 +1,106 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Independent samples - t)
+## KEYWORDS('Confidence intervals', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('E7')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$f = random( 1, 3, 1 );
+
+
+$n1 = Real( 393 );
+$n2 = Real( 396 );
+
+$m1 = random( 2.2, 2.4, .01 );
+$m2 = random( 2.8, 3, .01 );
+$sd1 = random( 1.2, 1.3, .01 );
+$sd2 = random( 1.5, 1.6, .01 );
+
+
+
+if( $f==1){
+$z = Real( 1.660),
+$s = Real( 90 );}
+elsif( $f==2){
+$z = Real( 1.984),
+$s = Real( 95 );}
+elsif( $f==3){
+$z = Real( 2.626),
+$s = Real( 99 );}
+
+
+
+$lower1 = Real(" ($m1-$m2)-$z*sqrt($sd1**2/$n1+$sd2**2/$n2) ")->reduce;
+
+$upper1 = Real(" ($m1-$m2)+$z*sqrt($sd1**2/$n1+$sd2**2/$n2)  ")->reduce;
+
+if( $lower1 > 0)
+{
+$string = 'Based on this CI, Insurer A yielded a greater mean length of stay for the two insurance companies on the $s$PERCENT level.';
+}
+elsif( $upper1 < 0)
+{
+$string = 'Based on this CI, Insurer A yielded a lower mean length of stay for the two insurance companies on the $s$PERCENT level.';
+}
+else
+{
+$string = 'Based on this CI, Insurer A yielded the same mean length of stay for the two insurance companies on the $s$PERCENT level.';
+}
+
+$radio = new_multiple_choice();
+$radio->qa( 'Do you have statistically significant evidence of a difference between the population means for the two companies.', $string);
+$radio->makeLast( 'Based on this CI, Insurer A yielded a greater mean length of stay for the two insurance companies on the $s$PERCENT level.', 'Based on this CI, Insurer A yielded a lower mean length of stay for the two insurance companies on the $s$PERCENT level.', 'Based on this CI, Insurer A yielded the same mean length of stay for the two insurance companies on the $s$PERCENT level.');
+
+
+BEGIN_TEXT
+
+A study to compare two insurance companies on length of stay for pediatric asthma patients randomly sampled 393 cases from Insurer A. An independent random sample of 396 cases from Insurer B gave the results on length of stay; the summary statistics are show below.
+$PAR
+Construct a $s$PERCENT confidence interval for the difference in means, where group 1 represents Insurer A.
+$PAR
+Insurer A:  \(\overline{x}_1 \) = $m1,  \(s_1\) = $sd1,  \(n_1\) = $n1
+$BR
+Insurer B:  \(\overline{x}_2 \) = $m2,  \(s_2\) = $sd2,  \(n_2\) = $n2
+
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+$PAR
+
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+
+END_TEXT
+
+ANS($lower1->with(tolerance=>.07)->cmp);
+ANS($upper1->with(tolerance=>.07)->cmp);
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+
+ENDDOCUMENT();

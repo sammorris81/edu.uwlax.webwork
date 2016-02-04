@@ -1,0 +1,98 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.20')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "niceTables.pl"
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+$showPartialCorrectAnswers = 1;
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = Real(2000);
+$every_day = Real(302);
+$once_a_week = Real(277);
+$occasionally = Real(526);
+$rarely = Real(475);
+$never = Real(420);
+
+$rel_every_day = Real($every_day / $n);
+$rel_once_a_week = Real($once_a_week / $n);
+$rel_occasionally = Real($occasionally / $n);
+$rel_rarely = Real($rarely / $n);
+$rel_never = Real($never / $n);
+$rel_never_round = sprintf("%.4f", $rel_never);
+
+$once_plus = Real($rel_once_a_week + $rel_every_day);
+$rare_min  = Real($rel_rarely + $rel_never);
+
+Context()->texStrings;
+BEGIN_TEXT
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Talking about sports${EITALIC} $BR
+A survey in November 2012 asked a random sample of 2,000 US adults ${LQ}How
+often do you talk about sports with family and friend?${RQ}. The results are
+summarized in the following table:
+$PAR
+$BCENTER
+\{ DataTable(
+  [
+    [['Response', headerrow => 1, midrule => 1], 'Frequency', 'Rel. Frequency'],
+    ['Every day or nearly every day', '$every_day', ans_rule(5)],
+    ['About once a week', '$once_a_week', ans_rule(5)],
+    ['Occasionally', '$occasionally', ans_rule(5)],
+    ['Rarely', '$rarely', ans_rule(5)],
+    [['Never', midrule => 1], '$never', $rel_never_round],
+    [['Total', headerrow => 1, midrule =>1], '$n', '']
+  ],
+  caption => 'Survey results',
+  align => 'l c c'
+);\}
+$ECENTER
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+$PAR
+As described on p. 47 of your book, the ${BITALIC}relative frequency${EITALIC}
+of a group is the proportion of observations in that group. For example, the
+relative proportion of people who never talk about sports is given by
+\[
+   \displaystyle \frac{$never}{$n} = $rel_never_round
+\]
+$PAR
+Fill in the remaining relative frequencies for this table.
+END_TEXT
+
+ANS($rel_every_day->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($rel_once_a_week->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($rel_occasionally->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($rel_rarely->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

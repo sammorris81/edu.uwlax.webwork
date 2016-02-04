@@ -1,0 +1,65 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('4')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(200,400,1);
+$s=random(80,120,1);
+$n=random(35,45,1);
+$t=random(7,12,1);
+$x3=sprintf("%0.2f",($t)/($s/sqrt($n)));
+$x4=sprintf("%0.2f",(-$t)/($s/sqrt($n)));
+
+
+$an1 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+BEGIN_TEXT
+A college entrance examination has scores that are normally distributed with mean $m and standard deviation $s.
+
+$PAR
+If you select $n scores at random, what is the probability that their mean will be within $t points of the population mean of $m? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+
+
+
+ENDDOCUMENT();

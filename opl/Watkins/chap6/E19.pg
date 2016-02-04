@@ -1,0 +1,137 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Random variables)
+## DBsection()
+## KEYWORDS('Probability Distributions','Mean','Variance')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.2')
+## Problem1('E19')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = random( .07, .13, .01);
+$a2 = random( .27, .33, .01);
+$a3 = random( .37, .43, .01);
+$a4 = Real(" 1-( $a1 + $a2 + $a3 ) ")->reduce;
+
+
+
+
+
+
+$mean = Real(" 200*$a1 + 300*$a2 + 400*$a3 + 500*$a4 ")->reduce;
+$sd = Real(" sqrt( (200-$mean)^2*$a1 + (300-$mean)^2*$a2 + (400-$mean)^2*$a3 + (500-$mean)^2*$a4 ) ")->reduce;
+
+$mean2 = Real(" $mean + 60 ")->reduce;
+
+$mean3 = Real(" $mean*.8 + 60 ")->reduce;
+$sd3 = Real(" $sd*.8 ")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+The amount of tips you get each week in your job as a server varies widely, according to the probability distribution below.
+$PAR
+\(
+\begin{tabular}{cc}
+Amount of Tips & Probability \\ \hline
+200 & $a1 \\
+300 & $a2 \\
+400 & $a3 \\
+500 & $a4 \\
+\end{tabular}
+\)
+
+$PAR
+${BBOLD} 1. $EBOLD
+What are your expected total weekly tips?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD
+Now suppose you get a base salary of $60 a week, in addition to your tips.
+$PAR
+What are your total expected weekly earnings?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 3. $EBOLD
+In addition, suppose that each week you share 20$PERCENT of your tips with other restaurant employees.
+$PAR
+What are your expected total weekly earnings now?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $mean->with(tolerance=>.005)->cmp );
+ANS( $sd->with(tolerance=>.005)->cmp );
+ANS( $mean2->with(tolerance=>.005)->cmp );
+ANS( $sd->with(tolerance=>.005)->cmp );
+ANS( $mean3->with(tolerance=>.005)->cmp );
+ANS( $sd3->with(tolerance=>.005)->cmp );
+
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

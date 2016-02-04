@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('Sample Proportion', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.3')
+## Problem1('2')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$p=random(.200,.250,.001);
+$p1=$p*100;
+$n=random(485,515,1);
+
+$x1=sprintf("%0.2f",(.20-$p)/sqrt($p*(1-$p)/$n));
+$x2=sprintf("%0.2f",(105/$n-$p)/sqrt($p*(1-$p)/$n));
+$x3=sprintf("%0.2f",(.22-$p)/sqrt($p*(1-$p)/$n));
+$x4=sprintf("%0.2f",(.18-$p)/sqrt($p*(1-$p)/$n));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(sprintf("%0.4f",uprob($x2)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+
+
+BEGIN_TEXT
+
+According to the U.S. Census Bureau, $p1$PERCENT of the Spanish-surnamed population in the United States have one of these surnames: Garcia, Martinez, Rodriguez, Lopez, Hernandez, Gonzalez, Perez, Sanchez, Rivera, Torres, Gonzales.  Suppose you take a random sample of $n Spanish-surnamed people in the United States.
+
+$PAR
+What is the probability of getting 20$PERCENT or fewer with one of these surnames in your sample? \{ans_rule(8)\}
+$PAR
+What is the probability of getting between 18$PERCENT and 22$PERCENT with one of these surnames? \{ans_rule(8)\}
+$PAR
+What is the probability of getting 105 or more people with one of these surnames? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

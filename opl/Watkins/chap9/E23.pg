@@ -1,0 +1,139 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Two sample proportion)
+## KEYWORDS('Hypothesis tests','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E23')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+
+$p1 = random( .32, .38, .01 );
+$n1 = random( 620, 680, 5 );
+$p1quest = Real( $p1*100 );
+
+$p2 = random( .27, .31, .01 );
+$n2 = random( 1550, 1600, 1 );
+$p2quest = Real( $p2*100 );
+
+$p = Real( ($p1*$n1+$p2*$n2)/($n1+$n2) );
+
+
+$ts = Real(" ($p1 - $p2)/sqrt($p*(1-$p)*(1/$n1+1/$n2)) ")->reduce;
+
+$pval = Real(uprob(sprintf("%0.2f",$ts)))->reduce;
+$pvalans = Real( sprintf("%0.4f",$pval) );
+
+
+$fmc = new_multiple_choice();
+
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$fquestion = "What sign should appear in the alternative hypothesis?";
+
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.01\).";
+
+## What's the answer?
+$fanswer = '\(>\)';
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.01)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the proportion of people living in urban areas is larger for those who Twitter than those who do not Twitter.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the proportion of people living in urban areas is larger for those who Twitter than those who do not Twitter.";
+}
+
+
+
+
+## Link the question and its answer
+
+$fmc->qa($fquestion, $fanswer);
+
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that the proportion of people living in urban areas is larger for those who Twitter than those who do not Twitter.','Fail to reject \(H_0\).  We do not have significant evidence that the proportion of people living in urban areas is larger for those who Twitter than those who do not Twitter.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+The Pew Internet and American Life Project collected information on Twittering by conducting a randomized survey of people who use the World Wide Web, which was then split into two groups, the first being a sample of $n1 "American adults who said they used a service like Twitter or another service that allowed them to share updates about themselves or to see the updates of others." The second group consisted of $n2 Internet users who do not Twitter.
+$PAR
+Among those who Twitter, $p1quest$PERCENT live in urban areas, while among non Twitter users only $p2quest$PERCENT live in urban areas. Is the proportion of those living in urban areas larger for those who Twitter than those who don't?  (Let group 1 represent those who Twitter.)
+$PAR
+\(H_0: p1-p2 = 0\)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( $pvalans->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

@@ -1,0 +1,94 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection()
+## KEYWORDS('probability basics', 'probability rules')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$pa = Real(random(0.1, 0.5, 0.02));
+$pb = Real(random(0.1, 0.5, 0.02));
+$paandb = Real($pa * $pb);
+
+$pnota = Real(1 - $pa);
+$pnotb = Real(1 - $pb);
+$paorb = Real($pa + $pb - $paandb);
+$paifb = Real($paandb / $pb);
+$pbifa = Real($paandb / $pa);
+
+@options = (
+  ' i. Yes',
+  ' ii. No',
+);
+
+$showHint = 3;
+BEGIN_HINT
+To get started on this question, it may be helpful to know the following fact.
+When events A and B are independent, P(A and B) = P(A) \(\cdot\) P(B). If you
+need some additional guidance on this question, take a look at the basic probability
+rules given on p. 650.
+END_HINT
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In the following questions, use the fact that we have independent events A and B
+with P(A) = $pa, P(B) = $pb. Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(A and B) \{ ans_rule(10) \}
+  $ITEM Find P(A or B) \{ ans_rule(10) \}
+  $ITEM Find P(A if B) \{ ans_rule(10) \}
+  $ITEM Find P(B if A) \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($paandb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paorb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paifb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pbifa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

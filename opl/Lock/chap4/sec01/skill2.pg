@@ -1,0 +1,196 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@hyps1 = ( # choices
+  " i. \( \mu_A = \mu_B \)",
+  " ii. \( \mu_A < \mu_B \)",
+  " iii. \( \mu_A > \mu_B \)",
+  " iv. \( \mu_A \neq \mu_B \)",
+);
+
+$nullprop = random(0.2, 0.4, 0.1);
+@hyps2 = (
+  " i. \( p = $nullprop \)",
+  " ii. \( p < $nullprop \)",
+  " iii. \( p > $nullprop \)",
+  " iv. \( p \neq $nullprop \)",
+);
+
+$nullmean = random(50, 70, 2);
+@hyps3 = (
+  " i. \( \mu = $nullmean \)",
+  " ii. \( \mu < $nullmean \)",
+  " iii. \( \mu > $nullmean \)",
+  " iv. \( \mu \neq $nullmean \)",
+);
+
+$random1 = random(1, 3, 1);
+$random2 = random(1, 3, 1);
+if ($random1 == 1 && $random2 == 1){
+  $random3 = random(2, 3, 1);
+} elsif ($random1 == 2 && $random2 == 2) {
+  $random3 = random(1, 3, 2);
+} elsif ($random1 == 3 && $random2 == 3) {
+  $random3 = random(1, 2, 1);
+} else {
+  $random3 = random(1, 3, 1);
+}
+
+if ($random1 == 1) {
+  $comparison1 = "less than";
+  $correctalt1 = $hyps1[$random1];
+} elsif ($random1 == 2) {
+  $comparison1 = "greater than";
+  $correctalt1 = $hyps1[$random1];
+} else {
+  $comparison1 = "not equal to";
+  $correctalt1 = $hyps1[$random1];
+}
+
+if ($random2 == 1) {
+  $comparison2 = "less than";
+  $correctalt2 = $hyps2[$random2];
+} elsif ($random2 == 2) {
+  $comparison2 = "greater than";
+  $correctalt2 = $hyps2[$random2];
+} else {
+  $comparison2 = "not equal to";
+  $correctalt2 = $hyps2[$random2];
+}
+
+if ($random3 == 1) {
+  $comparison3 = "less than";
+  $correctalt3 = $hyps3[$random3];
+} elsif ($random3 == 2) {
+  $comparison3 = "greater than";
+  $correctalt3 = $hyps3[$random3];
+} else {
+  $comparison3 = "not equal to";
+  $correctalt3 = $hyps3[$random3];
+}
+
+###########################
+## Initialization
+###########################
+
+$mcnull1 = RadioButtons(
+  [@hyps1],
+  $hyps1[0],
+  order => [@hyps1],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcalt1 = RadioButtons(
+  [@hyps1],
+  $correctalt1,
+  order => [@hyps1],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcnull2 = RadioButtons(
+  [@hyps2],
+  $hyps2[0],
+  order => [@hyps2],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcalt2 = RadioButtons(
+  [@hyps2],
+  $correctalt2,
+  order => [@hyps2],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcnull3 = RadioButtons(
+  [@hyps3],
+  $hyps3[0],
+  order => [@hyps3],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcalt3 = RadioButtons(
+  [@hyps3],
+  $correctalt3,
+  order => [@hyps3],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, select the appropriate null and alternative hypotheses for the
+statistical test described.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Testing to see if there is evidence that the mean of group A is $comparison1 the
+  mean of group B. $BR
+  \( H_0: \) \{ $mcnull1->buttons() \} $BR
+  \( H_a: \) \{ $mcalt1->buttons() \}
+  $PAR
+  $ITEM Testing to see if there is evidence that a proportion is $comparison2 $nullprop. $BR
+  \( H_0: \) \{ $mcnull2->buttons() \} $BR
+  \( H_a: \) \{ $mcalt2->buttons() \}
+  $PAR
+  $ITEM Testing to see if there is evidence that a mean is $comparison3 $nullmean. $BR
+  \( H_0: \) \{ $mcnull3->buttons() \} $BR
+  \( H_a: \) \{ $mcalt3->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mcnull1->cmp());
+ANS($mcalt1->cmp());
+ANS($mcnull2->cmp());
+ANS($mcalt2->cmp());
+ANS($mcnull3->cmp());
+ANS($mcalt3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

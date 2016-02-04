@@ -1,0 +1,213 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'creating randomization distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.4')
+## Problem1('4.135')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$count1 = random(12, 14, 1);
+$n1 = random(24, 28, 1);
+$phat1 = sprintf("%.3f", ($count1 / $n1));
+
+$count2 = random(6, 8, 1);
+$n2 = random(25, 28, 1);
+$phat2 = sprintf("%.3f", ($count2 / $n2));
+
+$N = 1000;
+
+$bs_diffs = new DataGenUWL(
+  datatype => 'bs_two_cat',
+  N => $N,
+  counts => [$count1, $count2],
+  n => [$n1, $n2],
+  method => 'reallocate',
+);
+
+$param = 'p_c - p_p';
+$ntotal = $n1 + $n2;
+$nullval = 0;
+$type = 'GT';
+$statistic = Real($phat1 - $phat2);
+
+$histrandom = StatGraphicsUWL::histogram(
+  data => $bs_diffs,
+  summaries => "F",
+);
+
+$nullhyp = hyptestProblemUWL::selectnull(
+  nullval => $nullval,
+  param => $param,
+);
+
+
+$althyp = hyptestProblemUWL::selectalt(
+  nullval => $nullval,
+  param => $param,
+  type => $type,
+);
+
+$pvalue = QuantitativeUWL::random_pvalue(
+  data => $bs_diffs,
+  test_stat => $statistic,
+  alternative => $type,
+);
+
+$pvalue = Real($pvalue);
+$nextreme = $pvalue * $N;
+
+$rejinterp = "We have statistically significant evidence to suggest that the " .
+             "proportion of patients receiving cannabis who experience pain ".
+             "relief is higher than the proportion of patients on the placebo ".
+             "who experience pain relief.";
+
+$f2rinterp = "We do not have statistically significant evidence to suggest that " .
+             "the proportion of patients receiving cannabis who experience pain ".
+             "relief is higher than the proportion of patients on the placebo ".
+             "who experience pain relief.";
+
+$accinterp = "We have statistically significant evidence that there is no ".
+             "difference in the proportion of patients receiving cannabis versus ".
+             "the placebo who experience pain relief.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+if ($pvalue < 0.05) {
+  $correct_dec    = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec    = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+In 1980, the active ingredient in marijuana was shown to outperform a placebo in
+reducing nausea in chemotherapy. Many studies are now underway to see if the drug
+has additional medicinal uses. In one controlled, randomized trail, $ntotal patients
+with HIV were randomly assigned to two groups, with one group getting cannabis
+(marijuana) and the other getting a placebo. All of the patients had severe neuropathic
+pain, and the response variable is whether or not pain was reduced by 30$PERCENT or
+more (a standard benchmark in pain measurement). The results from this study suggest that
+$count1 of the $n1 patients assigned to marijuana showed improvement and $count2 of
+the $n2 patients assigned to the placebo showed improvement.
+$PAR
+Conduct a hypothesis test to see if marijuana is more effective than a placebo in
+relieving pain.
+$PAR
+The histogram of randomization distribution is given below.
+In $nextreme randomizations (out of $N) the randomization distribution resulted
+in values as large or larger than the statistic for this data.
+$PAR
+$BCENTER
+\{ image( insertGraph($histrandom) , width=>300,height=>300,tex_size=>500 )
+\}
+$ECENTER
+$PAR
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \{ $nullhyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the correct alternative hypothesis for this test? $BR
+  \{ $althyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the statistic from this sample (canabis - placebo)? Give your
+  answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Select the appropriate decision for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcdec -> buttons() \}
+  $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcinterp -> buttons() \}
+  $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($nullhyp->cmp());
+ANS($althyp->cmp());
+ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pvalue->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+ENDDOCUMENT();

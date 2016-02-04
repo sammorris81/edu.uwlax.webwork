@@ -1,0 +1,128 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection()
+## KEYWORDS('probability basics', 'probability rules')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$pa = Real(random(0.1, 0.5, 0.02));
+$pb = Real(random(0.1, 0.5, 0.02));
+$minab = min($pa, $pb);
+do {
+  $paandb = Real(random(0.05, ($minab - 0.01), 0.02));
+} until ($paandb != ($pa * $pb));
+
+$pnota = Real(1 - $pa);
+$pnotb = Real(1 - $pb);
+$paorb = Real($pa + $pb - $paandb);
+$paifb = Real($paandb / $pb);
+$pbifa = Real($paandb / $pa);
+
+@options = (
+  ' i. Yes',
+  ' ii. No',
+);
+
+$mcdis = RadioButtons(
+  [@options],
+  ' ii. No',
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mcind = RadioButtons(
+  [@options],
+  ' ii. No',
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Basic rules of probability $EBOLD $BR
+For help with this question, take a look at p. 650 in your textbook for a list
+of basic rules that you can use to find the requested probabilities using the
+given information.
+$PAR
+$BBOLD Disjoint events $EBOLD $BR
+Events A and B are said to be disjoint \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = 0.
+$PAR
+$BBOLD Independent events $EBOLD $BR
+Events A and B are said to be independent \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = P(A) \(\cdot\) P(B).
+END_HINT
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In the following questions, use the information that, for events A and B, we have
+P(A) = $pa, P(B) = $pb, and P(A and B) = $paandb. Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(not A) \{ ans_rule(10) \}
+  $ITEM Find P(not B) \{ ans_rule(10) \}
+  $ITEM Find P(A or B) \{ ans_rule(10) \}
+  $ITEM Find P(A if B) \{ ans_rule(10) \}
+  $ITEM Find P(B if A) \{ ans_rule(10) \}
+  $ITEM Are events A and B disjoint? $BR
+  \{ $mcdis->buttons() \}
+  $ITEM Are events A and B independent? $BR
+  \{ $mcind->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pnota->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pnotb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paorb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paifb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pbifa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdis->cmp());
+ANS($mcind->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

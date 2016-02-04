@@ -1,0 +1,178 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Experimental design)
+## DBsection(Concepts)
+## KEYWORDS('experimental design')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('13')
+## Section1('13.1')
+## Problem1('1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$rand1 = random(1, 2);
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+
+if( $rand1==1)
+{
+BEGIN_TEXT
+A personal trainer believes that his new workout plan of lifting weights combined
+with cardio may help his clients lose more body fat than a workout plan of just
+cardio. To test his theory, he asks locals to sign up to participate in his study.
+36 men and 24 women sign up for the study. The trainer also thinks the treatment
+will work differently on men and women. Therefore, he divides the group into men
+and women and then randomizes the two treatments within each group. The trainer
+measures the body fat of each participant, and then measures it again after three
+months when the workout plan has been completed.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This is an example of a', 'block design where we have blocked on gender.');
+$mult1->extra(
+  'completely randomized design.',
+  'block design where we have blocked on the workout plan.',
+  'matched pairs design.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The treatments are', 'the cardio/weights program and the cardio program.');
+$mult2->extra(
+  'the body fat measurements of the participants.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The cases are', 'the 36 men and 24 women.');
+$mult3->extra(
+  'the cardio/weights program and the cardio program.',
+  'the change in the body fat measurements of the participants.',
+  'the gender of the participants.'
+);
+
+}
+else
+{
+
+BEGIN_TEXT
+A researcher wants to test how diets A and B affect the weight loss of rabbits.
+She has 20 rabbits to use, but all of the rabbits are different sizes, which
+might affect how much weight they lose. The researcher decides to group the four
+smallest rabbits in one group, the next four smallest rabbits in another group,
+etc., until the final group has the four largest rabbits. Then, from each group
+she randomly selects two rabbits to have diet A, and the remaining rabbits in the
+groups have diet B.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This is an example of a', 'block design where we have blocked on rabbit size.');
+$mult1->extra(
+  'completely randomized design.',
+  'block design where we have blocked on the diet to which the rabbit is assigned.',
+  'matched pairs design.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'The treatments are', 'diets A and B.');
+$mult2->extra(
+  'the size of the rabbit.',
+  'how much weight a rabbit loses.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The cases are', 'the 20 rabbits.');
+$mult3->extra(
+  'diets A and B.',
+  'the size of the rabbits.',
+  'the weight that each rabbit loses..'
+);
+
+}
+
+BEGIN_TEXT
+$PAR
+$BBOLD a. $EBOLD
+\{ $mult1->print_q() \}
+\{ $mult1->print_a() \}
+
+$PAR
+$BBOLD b. $EBOLD
+\{ $mult2->print_q() \}
+\{ $mult2->print_a() \}
+
+$PAR
+$BBOLD c. $EBOLD
+\{ $mult3->print_q() \}
+\{ $mult3->print_a() \}
+
+END_TEXT
+
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+ANS( radio_cmp( $mult1->correct_ans() ) );
+ANS( radio_cmp( $mult2->correct_ans() ) );
+ANS( radio_cmp( $mult3->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

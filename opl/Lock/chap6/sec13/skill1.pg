@@ -1,0 +1,146 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Paired samples)
+## KEYWORDS('inference for means and proportions', 'paired difference in means')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.13')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$m1 = Real(non_zero_random(-20, 20, 0.2));
+$m2 = Real(non_zero_random(-20, 20, 0.2));
+
+$sd1 = random(5, 10, 0.2);
+$sd2 = random(5, 10, 0.2);
+
+$n1 = random(10, 100, 2);
+$n2 = random(10, 100, 2);
+
+$se1 = Real($sd1 / sqrt($n1));
+$se2 = Real($sd2 / sqrt($n2));
+
+@confidences = (80, 90, 95, 98, 99);
+
+$random1 = random(0, 4, 1);
+$random2 = random(0, 4, 1);
+
+$cl1 = (100 - $confidences[$random1]) / 200;
+$cl2 = (100 - $confidences[$random2]) / 200;
+
+$tstar1 = sprintf("%.3f", tdistr(($n1 - 1), $cl1));
+$tstar2 = sprintf("%.3f", tdistr(($n2 - 1), $cl2));
+
+$me1 = Real($tstar1 * $se1);
+$me2 = Real($tstar2 * $se2);
+
+$lower1 = Real($m1 - $me1);
+$upper1 = Real($m1 + $me1);
+
+$lower2 = Real($m2 - $me2);
+$upper2 = Real($m2 + $me2);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Point estimate:$EBOLD $BR
+We always use the statistic from the sample as the
+\{BITALIC()\}point estimate\{EITALIC()\} because it is the best guess for the
+unknown population parameter.
+$PAR
+$BBOLD Margin of error:$EBOLD $BR
+For a confidence interval, the margin of error is what we add and subtract from
+the point estimate to get the endpoints of the interval.
+$PAR
+$BBOLD Confidence interval:$EBOLD $BR
+The formula for a confidence interval for a difference in means with paired data
+is given by $PAR
+$BCENTER
+\(\overline{x}_d \pm t^* \displaystyle \frac{s_d}{\sqrt{n_d}}\)
+$ECENTER
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In the following questions, use the t-distribution to find a confidence interval
+for the difference in means \( \mu_d \) given the relevant sample results
+from paired data. Give the best point estimate for \(\mu_d\), the margin
+of error, and the confidence interval. Assume the results come from random
+samples from populations that are approximately normally distributed, and that
+differences are computed using \(\overline{x}_d = \overline{x}_1 - \overline{x}_2\).
+Give your answers to 2 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(\mu_d\) using the sample
+  results \(\overline{x}_d = $m1\), \(s_d = $sd1\), and \(n_d=$n1\).
+  Use \(t^* = $tstar1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(\mu_d\) using the sample
+  results \(\overline{x}_d = $m2\), \(s_d = $sd2\), and \(n_d=$n2\).
+  Use \(t^* = $tstar2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ANS($m2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

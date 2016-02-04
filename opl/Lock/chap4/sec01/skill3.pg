@@ -1,0 +1,279 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+Scaffold::Begin();
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
+}
+
+Context("Numeric");
+
+$randomcompare = random(1, 3, 1);  # to facilitate correct answers later
+if ($randomcompare == 1) {
+  $comparison = "less than";
+} elsif ($randomcompare == 2) {
+  $comparison = "greater than";
+} else {
+  $comparison = "different from";
+}
+
+$randomtext = random(1, 3, 1);
+
+if ($randomtext == 1) {
+  $text1 = "Testing to see if there is evidence that the proportion of males who ".
+           "smoke is $comparison the proportion of females who smoke.";
+
+  @params1 = ( # choices
+    " i. \( p \)",
+    " ii. \( \mu \)",
+    " iii. \( p_M, \ p_F \)",
+    " iv. \( \mu_M, \ \mu_F \)",
+  );
+
+  $correctparam1 = " iii. \( p_M, \ p_F \)";
+
+  @hyps1 = ( # choices
+    " i. \( p_M = p_F \)",
+    " ii. \( p_M < p_F \)",
+    " iii. \( p_M > p_F \)",
+    " iv. \( p_M \neq p_F \)",
+  );
+
+  $correctalt1 = $hyps1[$randomcompare];
+
+} elsif ($randomtext == 2) {
+  $text1 = "Testing to see if average sales in stores where customers are approached ".
+           "by salespeople (group 1) is $comparison in stores where they are not (group 2).";
+
+  @params1 = ( # choices
+    " i. \( p \)",
+    " ii. \( \mu \)",
+    " iii. \( p_1, \ p_2 \)",
+    " iv. \( \mu_1, \ \mu_2 \)",
+  );
+
+  $correctparam1 = " iv. \( \mu_1, \ \mu_2 \)";
+
+  @hyps1 = ( # choices
+    " i. \( \mu_1 = \mu_2 \)",
+    " ii. \( \mu_1 < \mu_2 \)",
+    " iii. \( \mu_1 > \mu_2 \)",
+    " iv. \( \mu_1 \neq \mu_2 \)",
+  );
+
+  $correctalt1 = $hyps1[$randomcompare];
+
+} else {
+  $text1 = "Testing to see if there is evidence that the mean time spent studying ".
+           "per week for first-year students is $comparison upperclass students.";
+
+  @params1 = ( # choices
+    " i. \( p \)",
+    " ii. \( \mu \)",
+    " iii. \( p_{FY}, \ p_U \)",
+    " iv. \( \mu_{FY}, \ \mu_U \)",
+  );
+
+  $correctparam1 = " iv. \( \mu_{FY}, \ \mu_U \)";
+
+  @hyps1 = ( # choices
+    " i. \( \mu_{FY} = \mu_U \)",
+    " ii. \( \mu_{FY} < \mu_U \)",
+    " iii. \( \mu_{FY} > \mu_U \)",
+    " iv. \( \mu_{FY} \neq \mu_U \)",
+  );
+
+  $correctalt1 = $hyps1[$randomcompare];
+}
+
+
+$nullprop = random(0.15, 0.25, 0.02);
+$nullperc = $nullprop * 100;
+$text2 = "Testing to see if there is evidence that the percentage of a population who ".
+         "watch the Home Shopping Network is less than $nullperc$PERCENT";
+
+@params2 = ( # choices
+  " i. \( p \)",
+  " ii. \( \mu \)",
+  " iii. \( p_1, \ p_2 \)",
+  " iv. \( \mu_1, \ \mu_2 \)",
+);
+
+$correctparam2 = " i. \( p \)";
+
+@hyps2 = (
+  " i. \( p = $nullprop \)",
+  " ii. \( p < $nullprop \)",
+  " iii. \( p > $nullprop \)",
+  " iv. \( p \neq $nullprop \)",
+);
+
+$correctalt2 = $hyps2[1];
+
+###########################
+## Initialization
+###########################
+
+$mcparam1 = RadioButtons(
+  [@params1],
+  $correctparam1,
+  order => [@params1],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcparam2 = RadioButtons(
+  [@params2],
+  $correctparam2,
+  order => [@params2],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcnull1 = RadioButtons(
+  [@hyps1],
+  $hyps1[0],
+  order => [@hyps1],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcalt1 = RadioButtons(
+  [@hyps1],
+  $correctalt1,
+  order => [@hyps1],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcnull2 = RadioButtons(
+  [@hyps2],
+  $hyps2[0],
+  order => [@hyps2],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mcalt2 = RadioButtons(
+  [@hyps2],
+  $correctalt2,
+  order => [@hyps2],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Consider the two statistical tests given below to answer the questions in parts
+1 and 2. Once you have answered the questions in Part 1 correctly, Part 2 will
+become available.
+$PAR
+$BBOLD Note $EBOLD You will not be allowed to continue to part 2 until part 1
+is correct, so you must click "Submit Answers" before Part 2 will open.
+\{ BeginList("OL", type=>"1") \}
+  $ITEM $text1
+  $ITEM $text2
+\{ EndList("OL") \}
+END_TEXT
+
+Section::Begin("Part 1: Idenfity the relevant parameter(s)",
+  can_open => "always",
+  is_open => "correct_or_first_incorrect"
+);
+BEGIN_TEXT
+For each of the statistical tests described above, select the relevant parameter(s).
+\{ BeginList("OL", type=>"1") \}
+  $ITEM $text1
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM \{ $mcparam1->named_buttons("param1") \}
+    $PAR
+  \{ EndList("OL") \}
+  $ITEM $text2
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM \{ $mcparam2->named_buttons("param2") \}
+  \{ EndList("OL") \}
+\{ EndList("OL") \}
+END_TEXT
+LABELED_ANS( "param1", $mcparam1->cmp() );
+LABELED_ANS( "param2", $mcparam2->cmp() );
+Section::End();
+
+Section::Begin("Part 2: Select the appropriate hypotheses",
+  can_open => "when_previous_correct",
+  is_open => "correct_or_first_incorrect"
+);
+BEGIN_TEXT
+For each of the statistical tests described below, select the appropriate null
+and alternative hypotheses.
+\{ BeginList("OL", type=>"1") \}
+  $ITEM $text1
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM Hypotheses:$BR
+    $tab \( H_0: \) \{ $mcnull1->named_buttons("null1") \} $BR
+    $tab \( H_a: \) \{ $mcalt1->named_buttons("alt1") \}
+    $PAR
+  \{ EndList("OL") \}
+  $ITEM $text2
+  \{ BeginList("OL", type=>"a") \}
+    $ITEM Hypotheses:$BR
+    $tab \( H_0: \) \{ $mcnull2->named_buttons("null2") \} $BR
+    $tab \( H_a: \) \{ $mcalt2->named_buttons("alt2") \}
+    $PAR
+  \{ EndList("OL") \}
+\{ EndList("OL") \}
+END_TEXT
+LABELED_ANS( "null1", $mcnull1->cmp() );
+LABELED_ANS( "alt1", $mcalt1->cmp() );
+LABELED_ANS( "null2", $mcnull2->cmp() );
+LABELED_ANS( "alt2", $mcalt2->cmp() );
+Section::End();
+
+
+
+###########################
+## Answer Section
+###########################
+Scaffold::End();
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,105 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Outcomes & events)
+## KEYWORDS('Probability','Random Behavior')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('E9,13')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+## Simple probability with randomized factors.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$answer1 = Real("2^6")->reduce;
+$answer2 = Real("(1/2)^6")->reduce;
+$answer3 = Real("6^6")->reduce;
+$answer4 = Real("(1/6)^6")->reduce;
+
+$a1 = random( 4, 6, 1 );
+$a2 = random( 3, 5, 1 );
+$a3 = random( 2, 3, 1 );
+
+$answer5 = Real("$a1 * $a2")->reduce;
+$answer6 = Real("$a1 * $a2 * $a3")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL", type=>"1") \}
+$ITEM Consider flipping a fair coin six times.
+\{ BeginList("OL", type=>"a") \}
+  $ITEM How many different possible outcomes are there? \{ans_rule(10)\}
+  $ITEM What is the probability that you will get heads all six times? Give your
+  answer to four decimal places. \{ans_rule(10)\}
+\{ EndList("OL") \}
+$PAR
+$ITEM Consider rolling a fair die six times.
+\{ BeginList("OL", type=>"a") \}
+  $ITEM How many different possible outcomes are there? \{ans_rule(10)\}
+  $ITEM What is the probability that you will get a 3 all six times? Give your
+  answer to four decimal places. \{ans_rule(10)\}
+\{ EndList("OL") \}
+$PAR
+$ITEM Miguel is designing an experiment to test which combinations of colors makes the
+type on computer screens easiest to read. His two factors are the color of the background
+and the color of the text. He has $a1 background colors and $a2 text colors to choose from.
+\{ BeginList("OL", type=>"a") \}
+  $ITEM How many different possible treatments are there? \{ans_rule(10)\}
+  $ITEM Suppose Miguel adds a third factor, brightness, to his experiment. He will
+  have $a3 levels of brightness on the screen. How many possible distinct treatments
+  are there? \{ans_rule(10)\}
+\{ EndList("OL") \}
+\{ EndList("OL") \}
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>0, tolType=>"Absolute")->cmp );
+ANS( $answer2->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $answer3->with(tolerance=>0, tolType=>"Absolute")->cmp );
+ANS( $answer4->with(tolerance=>0.001, tolType=>"Absolute")->cmp );
+ANS( $answer5->with(tolerance=>0, tolType=>"Absolute")->cmp );
+ANS( $answer6->with(tolerance=>0, tolType=>"Absolute")->cmp );
+
+
+###########################
+## Solution Section
+###########################
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

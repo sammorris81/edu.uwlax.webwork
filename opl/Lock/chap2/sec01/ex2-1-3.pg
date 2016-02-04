@@ -1,0 +1,87 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.20')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+$showPartialCorrectAnswers = 1;
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = Real(118+148+132+105);
+@nlevels = (4, 2);
+@labels = ("Psychiatrists", "Architects", "Orthopedic surgeons", "Lawyers",
+           "Left-handed", "Right-handed");
+@freqs = (10, 108, 26, 122, 5, 127, 16, 89);
+
+$cat1 = new DataGenUWL(
+  datatype => 'two_cat',
+  n => $n,
+  nlevels => [@nlevels],
+  freqs => [@freqs],
+  labels => [@labels],
+  random => "F",
+);
+
+$p_left = CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>2);
+$p_left = Real($p_left / $n);
+$p_left_arch = CategoricalUWL::marginalprop(data=>$cat1, row=>2, col=>1, index=>2);
+$p_left_arch = Real($p_left_arch);
+$p_arch_left = CategoricalUWL::marginalprop(data=>$cat1, row=>2, col=>1, index=>1);
+$p_arch_left = Real($p_arch_left);
+
+
+Context()->texStrings;
+BEGIN_TEXT
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Handedness and occupation${EITALIC} $BR
+In a study on handedness in occupations, 10 of 118 psychiatrists were left-handed,
+26 of 148 architects were left-handed, 5 of 132 orthopedic surgeons were
+left-handed, and 15 of 105 lawyers were left-handed. The results are summarized
+in the following table:
+$PAR
+$BCENTER
+\{ CategoricalUWL::freqtable(data=>$cat1) \}
+$ECENTER
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What proportion of the people in the sample are left-handed? \{ans_rule(10)\}
+  $ITEM What proportion of left-handed people are architects? \{ans_rule(10)\}
+  $ITEM What proportion of architects are left-handed? \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($p_left->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_left_arch->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($p_arch_left->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

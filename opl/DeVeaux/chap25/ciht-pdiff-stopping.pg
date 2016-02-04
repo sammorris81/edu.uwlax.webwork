@@ -1,0 +1,193 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Paired samples)
+## KEYWORDS('Hypothesis tests', 'Paired samples')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('25')
+## Section1('25.1')
+## Problem1('23')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$f = random( 1, 3, 1 );
+
+$m1 = sprintf("%.1f", random(135, 143, 0.1));
+$md = sprintf("%.1f", random(-53, -47, 0.1));
+$m2 = sprintf("%.3f", $m1 - $md);
+$sd1 = sprintf("%.2f", random(9, 10, 0.01));
+$sd2 = sprintf("%.2f", random(20, 21, 0.01));
+$sdd = sprintf("%.2f", random(16, 17, 0.01));
+
+$n = 10;
+
+if ($f == 1) {
+  $s = Real( .90 );
+  $alpha = sprintf("%.2f", 0.10);
+} elsif ($f == 2) {
+  $s = Real( .95 );
+  $alpha = sprintf("%.2f", 0.05);
+} elsif ($f == 3) {
+  $s = Real( .99 );
+  $alpha = sprintf("%.2f", 0.01)
+}
+
+$df = $n - 1;
+
+$t1 = sprintf("%.3f", tdistr($df, (1-$s)/2 ));
+$se = $sdd / sqrt($n);
+
+$lower1 = Real(sprintf("%.3f", ($md) - $t1*$se));
+$upper1 = Real(sprintf("%.3f", ($md) + $t1*$se));
+
+$nullval = Real(0);
+$ts = Real(sprintf("%.3f", $md / $se));
+$pval = Real(sprintf("%.4f", tprob($df, abs($ts))));
+
+@params = ( # choices
+  ' a. \( p \)',
+  ' b. \( \mu \)',
+  ' c. \( p_1 - p_2 \)',
+  ' d. \( \mu_1 - \mu_2 \)',
+  ' e. \( \mu_d \)',
+);
+
+$param = RadioButtons(
+  [@params],
+  ' e. \( \mu_d \)',
+  order => [@params],
+  labels => ['a.', 'b.', 'c.', 'd.', 'e.'],
+);
+
+@hyps = ( # choices
+  ' a. \( = \)',
+  ' b. \( < \)',
+  ' c. \( > \)',
+  ' d. \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' b. \( < \)',
+    order => [@hyps],
+    labels => ['a.', 'b.', 'c.', 'd.'],
+);
+
+$rejinterp = "We have significant evidence to suggest that the stopping distance, " .
+             "on average, was longer for the wet pavement than the dry pavement.";
+
+$f2rinterp = "We do not have significant evidence to suggest that the stopping distance, " .
+             "on average, was longer for the wet pavement than the dry pavement.";
+
+$accinterp = "We have significant evidence to suggest that the stopping distance, ".
+             "on average, was the same for the wet pavement and the dry pavement.";
+
+if ($pval < $alpha){
+    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+
+BEGIN_TEXT
+A tire manufacturer tested the braking performance of one of its tire models on
+a test track. The company tried the tires on $n different cars, recording
+the stopping distance for each car on both wet and dry pavement.
+Some summary statistics are given below.
+$PAR
+Dry Pavement (Group 1): \( n = $n, \overline{x}= $m1, s = $sd1 \)
+$BR
+Wet Pavement (Group 2): \( n = $n, \overline{x}= $m2, s = $sd2 \)
+$BR
+Difference (Group 1 - Group 2): \( n_d = $n, \overline{x}_d= $md, s_d = $sdd \)
+$PAR
+You may assume any necessary conditions for inference. Unless otherwise stated,
+give your answers to three decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM Construct a \{$s * 100\}$PERCENT confidence interval for the average
+  difference in the stopping distance between wet and dry pavement.
+  Give your answers to two decimal places. $BR
+  ( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+  $ITEM Conduct a hypothesis test to determine whether the stopping distance,
+  on average, is shorter for dry pavement than wet pavement.
+  \{ BeginList( "OL", type=>"i") \}
+    $ITEM What is the parameter of interest? $BR
+    \{ $param->buttons( separator => "") \}
+    $ITEM What is the correct null value for this test? $BR
+    \{ ans_rule(10) \}
+    $ITEM What sign should appear in the alternative hypothesis? $BR
+    \{ $alt -> buttons( separator => "" ) \}
+    $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
+    $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.0001\),
+    enter 0)
+    $ITEM Select the appropriate conclusion for this test statistic at a
+    significance level of \( \alpha = $alpha \). $BR
+    \{ $conclusion -> buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($lower1->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($upper1->with(tolerance=>.1, tolType=>"absolute")->cmp);
+ANS($param->cmp());
+ANS($nullval->with(tolerance=>0, tolType=>"absolute")->cmp());
+ANS($alt->cmp());
+ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($conclusion->cmp());
+
+
+
+ENDDOCUMENT();

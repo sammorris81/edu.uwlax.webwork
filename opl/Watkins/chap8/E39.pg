@@ -1,0 +1,74 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample proportion)
+## KEYWORDS('Hypothesis tests','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.2')
+## Problem1('E39')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$radio = new_multiple_choice();
+$radio->qa( 'Which of these statements is the best explanation of what is meant by the P-value of a test of significance', 'Assuming that the null is true, the P-value is the probability of observing a value of a test statistic, z, at least as far out in the tails of the sampling distribution as is the value of z from your sample');
+$radio->extra( 'Assuming that you had a random sample and the other conditions for a significance test are met, the P-vale is the probability that the null is true', 'The P-value is the probability that the null is false', 'Assuming that the sampling distribution is normal, the P-value is the probability that the null is true', 'Assuming that the null is true, the P-value is the probability of observing the same value of z that you got in your sample');
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+\{ $radio->print_q() \}
+\{ $radio->print_a() \}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( radio_cmp( $radio->correct_ans() ) );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

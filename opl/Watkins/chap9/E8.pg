@@ -1,0 +1,86 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Two sample proportion)
+## KEYWORDS('Confidence intervals','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E8')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+
+$r1 = random( 60, 65, 1 );
+$n1 = Real( 1000 );
+$p1 = random( .41, .48, .01 );
+$p1quest = Real( $p1*100 );
+
+$r2 = random( 8, 12, 1 );
+$n2 = Real( 1000 );
+$p2 = random( .3, .4, .01 );
+$p2quest = Real( $p2*100 );
+
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+
+
+
+$lower = Real(" ($p1-$p2) - $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2) ")->reduce;
+
+$upper = Real(" ($p1-$p2) + $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+"At what age do you think people should be permitted to have a driver's license?" In 1995, $p1quest$PERCENT of 1000 randomly sampled adults in the United States responded that 16 was the correct age. In 2004, only $p2quest$PERCENT of 1000 randomly sampled adults responded this way.
+Find a $s$PERCENT confidence interval for the difference in population proportions of people believing 16 is the correct age for the two years. (Let group 1 represent 1995.)
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

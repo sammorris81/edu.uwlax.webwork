@@ -1,0 +1,138 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample proportion)
+## KEYWORDS('Hypothesis tests','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.2')
+## Problem1('E33')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$nullval=Real(.5);
+$p = random( .30, .38, .01 );
+$n = random( 1000, 1500, 1 );
+$t = 100*$p;
+
+
+
+$ts = Real(" ($p - $nullval)/sqrt($nullval*(1-$nullval)/$n) ")->reduce;
+
+$pval = Real(1-uprob(sprintf("%0.2f",$ts)))->reduce;
+$pvalans = Real( sprintf("%0.4f",$pval) );
+
+
+$fmc = new_multiple_choice();
+
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$fquestion = "What sign should appear in the alternative hypothesis?";
+
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = '\(<\)';
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that less than half of the United States believes in ghosts.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that less than half of the United States believes in ghosts.";
+}
+
+
+
+
+## Link the question and its answer
+
+$fmc->qa($fquestion, $fanswer);
+
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that less than half of the United States believes in ghosts.','Fail to reject \(H_0\).  We do not have significant evidence that less than half of the United States believes in ghosts.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+For an Associated Press-Ipsos poll, a random sample of $n adults answered this question: "In general, do you believe in or do you not believe in ghosts?" $t$PERCENT responded that they believe in ghosts.
+$PAR
+
+
+
+You will use a hypothesis test to test whether it is plausible that, if you could ask all adults in United States this question, half would say they believe in ghosts. Use the alternative hypothesis that less than half would say this.  Fill in the blank with the test value (in decimal form).
+$PAR
+\(H_0: p = \)\{ ans_rule(5) \}
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($nullval->with(tolerance=>.0)->cmp);
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( $pvalans->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

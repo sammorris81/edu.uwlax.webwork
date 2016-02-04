@@ -1,0 +1,189 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Ted Wendt at <twendt@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Multiple regression)
+## DBsection(Hypothesis tests)
+## KEYWORDS('')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('15')
+## Section1('15.1')
+## Problem1('E1')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+
+$ts1 = Real("5.11")->reduce;
+$pvalans1 = Real("0.022")->reduce;
+$ts2 = Real("-2.61")->reduce;
+$pvalans2 = Real("0.021")->reduce;
+$ts3 = Real("2.14")->reduce;
+$pvalans3 = Real("0.051")->reduce;
+$R2=Real("0.422")->reduce;
+$b0=Real("74.368")->reduce;
+$b1=Real("-11.526")->reduce;
+$b2=Real("1.3939")->reduce;
+
+
+
+$mc2 = new_multiple_choice();
+$mc1 = new_multiple_choice();
+$mc3 = new_multiple_choice();
+
+
+## What's the question to pose?
+$question1 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+$question3 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+
+##ANSWER FOR CONCLUSION
+$answer1 = "We have significant evidence that at least one of the explanatory variables is useful in predicting life expectancy.";
+$answer2 = "We have significant evidence that proportion of the country that is forested is useful in predicting life expectancy, even with military expenditure already in the model.";
+$answer3 = "We do not have significant evidence that military expenditure is useful in predicting life expectancy when percentage forested is already in the model.";
+
+
+## Link the question and its answer
+$mc1->qa($question1, $answer1);
+$mc2->qa($question2, $answer2);
+$mc3->qa($question3, $answer3);
+
+## What are some spurious answers?
+$mc1->makeLast('We have significant evidence that at least one of the explanatory variables is useful in predicting life expectancy.','We do not have significant evidence that at least one of the explanatory variables is useful in predicting life expectancy.');
+
+$mc2->makeLast('We have significant evidence that proportion of the country that is forested is useful in predicting life expectancy, even with military expenditure already in the model.','We do not have significant evidence that proportion of the country that is forested is useful in predicting life expectancy when military expenditure is already in the model.');
+
+$mc3->makeLast(
+'We have significant evidence that military expenditure is useful in predicting life expectancy, even with percentage forested already in the model.','We do not have significant evidence that military expenditure is useful in predicting life expectancy when percentage forested is already in the model.');
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+You want to model the relationship between a country's life expectancy at birth and the explanatory (independent) variables of the proportion of the country that is forested and its military expenditure as a percentage of the gross domestice product (GDP).  The data available are from Latin American countries and a few Caribbean island nations (for a total of 17 observations).  Output obtained when running the regression using all variables in SPSS is given below.
+$PAR
+Model Summary:
+\{begintable(4)\}
+\{row("R",		"R Square",	"Adjusted R Square",	"Std. Error of the Estimate")\}
+\{row("0.650",	"0.422",	"0.339",	"2.66325")\}
+\{ endtable() \}
+
+$PAR
+
+ANOVA:
+\{begintable(6)\}
+\{row("Model",		"Sum of Squares",	"df",	"Mean Square",	"F",	"Sig.")\}
+\{row("Regression",	"72.429",	"2",	"36.214",	"5.11",	"0.022")\}
+\{row("Residual",	"99.301",	"14",	"7.093", "", "")\}
+\{row("Total",	"171.729",	"16", "", "", "")\}
+\{ endtable() \}
+
+
+$PAR
+Coefficients:
+\{begintable(5)\}
+\{row("","B",	"Std. Error",	"t", "Sig.")\}
+\{row("(Constant)",	"74.368",	"1.858",		"40.02",	"0.000")\}
+\{row("Forested",	"-11.526",	"4.417",		"-2.61",	"0.021")\}
+\{row("Military",	"1.3939",	"0.650", "2.15", "0.051")\}
+\{ endtable() \}
+
+
+
+
+
+
+$PAR
+Consider first using an overall test to determine if at least one of the explanatory variables is useful in predicting life expectancy.  Report the test statistic and P-value, then choose the appropriate conclusion.
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+\{ $mc1->print_q() \}
+\{ $mc1->print_a() \}
+
+
+$PAR
+If \(x_1\) stands for the amount forested, \(x_2\) stands for military expenditure, and \(y\) stands for life expectancy, fill in the blanks with the correct estimated model parameters from the output:
+$PAR
+\(y=\)\{ ans_rule(6) \}+\{ ans_rule(6) \}\(x_1\)+\{ ans_rule(6) \}\(x_2\)
+
+
+$PAR
+$PAR
+Now consider determining if the proportion of the country that is forested is needed in the model when military expenditure is already in the model by testing \(H_0:\beta_1=0\) versus \(H_a:\beta_1\neq0\)
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+$PAR
+$PAR
+Now consider determining if miliatry expenditure is needed in the model when the proportion of the country that is forested is already in the model by testing \(H_0:\beta_2=0\) versus \(H_a:\beta_2\neq0\)
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+\{ $mc3->print_q() \}
+\{ $mc3->print_a() \}
+
+
+$PAR
+Report the coefficient of determination for this model as a decimal: \{ ans_rule(15) \}.
+
+
+
+END_TEXT
+
+
+ANS($ts1->with(tolerance=>.007)->cmp);
+ANS( $pvalans1->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc1->correct_ans) );
+
+ANS($b0->with(tolerance=>.007)->cmp);
+ANS($b1->with(tolerance=>.007)->cmp);
+ANS($b2->with(tolerance=>.007)->cmp);
+
+
+ANS($ts2->with(tolerance=>.007)->cmp);
+ANS( $pvalans2->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc2->correct_ans) );
+
+ANS($ts3->with(tolerance=>.007)->cmp);
+ANS( $pvalans3->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc3->correct_ans) );
+
+
+ANS($R2->with(tolerance=>.007)->cmp);
+
+
+
+ENDDOCUMENT();

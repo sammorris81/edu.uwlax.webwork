@@ -1,0 +1,158 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection()
+## KEYWORDS('probability basics', 'probability rules')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('Skill Builder 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+
+$pa = Real(random(0.1, 0.5, 0.02));
+$pb = Real(random(0.1, 0.5, 0.02));
+$pnota = Real(1 - $pa);
+$pnotb = Real(1 - $pb);
+do {
+  $paandb = Real(random(0.05, ($minab - 0.01), 0.02));
+} until ($paandb != ($pa * $pb));
+$panotb = Real($pa - $paandb);
+$pbnota = Real($pb - $paandb);
+$pnotanotb = 1 - ($paandb + $panotb + $pbnota);
+
+$paorb = Real($pa + $pb - $paandb);
+$paifb = Real($paandb / $pb);
+$pbifa = Real($paandb / $pa);
+
+@options = (
+  ' i. Yes',
+  ' ii. No',
+);
+
+$mcdis = RadioButtons(
+  [@options],
+  ' ii. No',
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mcind = RadioButtons(
+  [@options],
+  ' ii. No',
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Finding the probability using the table $EBOLD $BR
+In the table below, each table cell gives the probability of a combination of A
+and B happening.
+There are 4 table cells included in the table:
+\{BeginList("OL")\}
+  $ITEM A and B,
+  $ITEM A and not B,
+  $ITEM not A and B, and
+  $ITEM not A and not B.
+\{EndList("OL")\}
+You can use these four combinations to find a number of different probabilities.
+
+Here are a couple of examples for the table below:
+\{BeginList("UL")\}
+  $ITEM To find P(not A and not B), look at the table cell for not A and not B.
+  So, P(not A and not B) = $pnotanotb
+  $ITEM To find P(not A), just add up all the table cells that correspond to
+  the column for not A. So, P(not A) = $pbnota + $pnotanotb = $pnota
+\{EndList("UL")\}
+$PAR
+
+$BBOLD Disjoint events $EBOLD $BR
+Events A and B are said to be disjoint \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = 0.
+$PAR
+$BBOLD Independent events $EBOLD $BR
+Events A and B are said to be independent \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = P(A) \(\cdot\) P(B).
+END_HINT
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+The following table gives probabilities for various combinations of events
+A, B, and their complements. Use the information from this table in the following
+questions. Give your answers to 4 decimal places.
+\{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+  AlignedRow(["", "A", "not A"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["B", "$paandb", "$pbnota"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["not B", "$panotb", "$pnotanotb"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  EndTable()
+\}
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(A) \{ ans_rule(10) \}
+  $ITEM Find P(not B) \{ ans_rule(10) \}
+  $ITEM Find P(A and B) \{ ans_rule(10) \}
+  $ITEM Find P(A or B) \{ ans_rule(10) \}
+  $ITEM Find P(A if B) \{ ans_rule(10) \}
+  $ITEM Find P(B if A) \{ ans_rule(10) \}
+  $ITEM Are events A and B disjoint? $BR
+  \{ $mcdis->buttons() \}
+  $ITEM Are events A and B independent? $BR
+  \{ $mcind->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pnotb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paandb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paorb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($paifb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pbifa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdis->cmp());
+ANS($mcind->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

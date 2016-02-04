@@ -1,0 +1,151 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample mean - t)
+## KEYWORDS('inference for means and proportions', 'confidence interval for a single mean')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.5')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$m1 = Real(random(10, 100, 0.2));
+$m2 = Real(random(10, 100, 0.2));
+$m3 = Real(random(10, 100, 0.2));
+
+$sd1 = random(1, 3, 0.2);
+$sd2 = random(1, 3, 0.2);
+$sd3 = random(1, 3, 0.2);
+
+$n1 = random(10, 100, 2);
+$n2 = random(10, 100, 2);
+$n3 = random(10, 100, 2);
+
+$se1 = Real($sd1 / sqrt($n1));
+$se2 = Real($sd2 / sqrt($n2));
+$se3 = Real($sd3 / sqrt($n3));
+
+@confidences = (80, 90, 95, 98, 99);
+
+$random1 = random(0, 4, 1);
+$random2 = random(0, 4, 1);
+$random3 = random(0, 4, 1);
+
+$cl1 = (100 - $confidences[$random1]) / 200;
+$cl2 = (100 - $confidences[$random2]) / 200;
+$cl3 = (100 - $confidences[$random3]) / 200;
+
+$tstar1 = sprintf("%.3f", tdistr(($n1 - 1), $cl1));
+$tstar2 = sprintf("%.3f", tdistr(($n2 - 1), $cl2));
+$tstar3 = sprintf("%.3f", tdistr(($n3 - 1), $cl3));
+
+$me1 = Real($tstar1 * $se1);
+$me2 = Real($tstar2 * $se2);
+$me3 = Real($tstar3 * $se3);
+
+$lower1 = Real($m1 - $me1);
+$upper1 = Real($m1 + $me1);
+
+$lower2 = Real($m2 - $me2);
+$upper2 = Real($m2 + $me2);
+
+$lower3 = Real($m3 - $me3);
+$upper3 = Real($m3 + $me3);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, use the t-distribution to find a confidence interval
+for a mean \( \mu \) given the relevant sample results. Give the best point estimate
+for \(\mu\), the margin of error, and the confidence interval. Assume the
+results come from a random sample from a population that is approximately normally
+distributed.
+Give your answers to 2 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(\mu\) using the sample
+  results \(\overline{x} = $m1\), \(s = $sd1\), and \(n=$n1\).
+  Use \(t^* = $tstar1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(\mu\) using the sample
+  results \(\overline{x} = $m2\), \(s = $sd2\), and \(n=$n2\).
+  Use \(t^* = $tstar2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(\mu\) using the sample
+  results \(\overline{x} = $m3\), \(s = $sd3\), and \(n=$n3\).
+  Use \(t^* = $tstar3\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ANS($m2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ANS($m3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

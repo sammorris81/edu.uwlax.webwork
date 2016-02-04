@@ -1,0 +1,186 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'understanding and interpreting confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.2')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@params = ( # choices
+  " i. \( p \)",
+  " ii. \( \mu \)",
+  " iii. \( p_1 - p_2 \)",
+  " iv. \( \mu_1 - \mu_2 \)",
+);
+
+
+$parama = " ii. \( \mu \)";
+$stata = "\( \overline{x} \)";
+$centera = random(20, 30, 1);
+$moea = random(3, 8, 1);
+$sea = $moea / 2;
+
+$paramb = " i. \( p \)";
+$statb = "\( \widehat{p} \)";
+$centerb = random(0.30, 0.40, 0.01);
+$moeb = random(0.02, 0.14, 0.02);
+$seb = $moeb / 2;
+
+$paramc = " iv. \( \mu_1 - \mu_2 \)";
+$statc = "\( \overline{x}_1 - \overline{x}_2 \)";
+$centerc = random(2, 6, 1);
+$moec = random(5, 10, 1);
+$sec = $moec / 2;
+
+$paramd = " iii. \( p_1 - p_2 \)";
+$statd = "\( \widehat{p}_1 - \widehat{p}_2 \)";
+$centerd = random(0.05, 0.14, 0.01);
+$moed = random(0.02, 0.14, 0.02);
+$sed = $moed / 2;
+
+###########################
+## Initialization
+###########################
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $param1 = $parama;
+  $stat1 = $stata;
+  $center1 = $centera;
+  $moe1 = $moea;
+  $se1 = $sea;
+  $param2 = $paramc;
+  $stat2 = $statc;
+  $center2 = $centerc;
+  $moe2 = $moec;
+  $se2 = $sec;
+} elsif ($random == 2) {
+  $param1 = $paramb;
+  $stat1 = $statb;
+  $center1 = $centerb;
+  $moe1 = $moeb;
+  $se1 = $seb;
+  $param2 = $paramd;
+  $stat2 = $statd;
+  $center2 = $centerd;
+  $moe2 = $moed;
+  $se2 = $sed;
+} elsif ($random == 3) {
+  $param1 = $paramd;
+  $stat1 = $statd;
+  $center1 = $centerd;
+  $moe1 = $moed;
+  $se1 = $sed;
+  $param2 = $parama;
+  $stat2 = $stata;
+  $center2 = $centera;
+  $moe2 = $moea;
+  $se2 = $sea;
+} else {
+  $param1 = $paramc;
+  $stat1 = $statc;
+  $center1 = $centerc;
+  $moe1 = $moec;
+  $se1 = $sec;
+  $param2 = $paramb;
+  $stat2 = $statb;
+  $center2 = $centerb;
+  $moe2 = $moeb;
+  $se2 = $seb;
+}
+
+$lower1 = Real($center1 - $moe1);
+$upper1 = Real($center1 + $moe1);
+$lower2 = Real($center2 - $moe2);
+$upper2 = Real($center2 + $moe2);
+
+$mc1 = RadioButtons(
+  [@params],
+  $param1,
+  order => [@params],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@params],
+  $param2,
+  order => [@params],
+  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, information about a sample is given. Assuming the
+sampling distribution is symmetric and bell-shaped, use the information to give
+a 95$PERCENT confidence interval, and indicate the parameter being estimated.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $stat1 = $center1 and the $BITALIC standard error $EITALIC is $se1. Give your answer to 4
+  decimal places.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Interval: (\{ans_rule(10) \}, \{ans_rule(10) \})
+    $ITEM What is parameter being estimated? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $BR
+  $ITEM $stat2 = $center2 and the $BITALIC margin of error $EITALIC is $moe2. Give your answer to
+  4 decimal places.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Interval: (\{ans_rule(10) \}, \{ans_rule(10) \})
+    $ITEM What is parameter being estimated? $BR
+    \{ $mc2->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

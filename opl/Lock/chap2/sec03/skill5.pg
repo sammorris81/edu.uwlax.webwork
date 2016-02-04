@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Application of a normal distribution)
+## KEYWORDS('describing data', 'quantitative variables', 'spread')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.3')
+## Problem1('Skill Builder 7')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$sd1 = random(10, 20, 4);
+$mean1 = random(100, 200, 2);
+$lower1 = Real($mean1 - 2 * $sd1);
+$upper1 = Real($mean1 + 2 * $sd1);
+
+$sd2 = random(1, 2, 0.1);
+$mean2 = random(10, 20, 2);
+$lower2 = Real($mean2 - 2 * $sd2);
+$upper2 = Real($mean2 + 2 * $sd2);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For these questions, use the 95$PERCENT rule and the fact that summary statistics
+come from a distribution that is symmetric and bell-shaped to find an interval that
+is expected to contain about 95$PERCENT of the data values. Give your answers to
+4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A bell-shaped distribution with mean $mean1 and standard deviation $sd1 $BR
+  (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $ITEM A bell-shaped distribution with mean $mean2 and standard deviation $sd2 $BR
+  (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

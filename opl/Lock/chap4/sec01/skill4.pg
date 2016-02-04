@@ -1,0 +1,182 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('Skill Builder 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
+}
+
+Context("Numeric");
+
+
+###########################
+## Initialization
+###########################
+
+@one_params = (
+  "\( p \)",
+  "\( \mu \)",
+  "\( \widehat{p} \)",
+  "\( \overline{x} \)",
+);
+
+@two_params_1 = (
+  "\( p_1 \)",
+  "\( \mu_1 \)",
+  "\( \widehat{p}_1 \)",
+  "\( \overline{x}_1 \)",
+);
+
+@two_params_2 = (
+  "\( p_2 \)",
+  "\( \mu_2 \)",
+  "\( \widehat{p}_2 \)",
+  "\( \overline{x}_2 \)",
+);
+
+@comparisons = (
+  " \( = \) ",
+  " \( < \) ",
+  " \( > \) ",
+  " \( \neq \) ",
+);
+
+@choices = (
+  "?",
+  "Valid",
+  "Not valid",
+);
+
+$randomparm1 = random(0, 3, 1);
+$randomnull1 = random(0, 3, 1);
+do { $randomalt1 = random(0, 3, 1); } until ($randomalt1 != $randomnull1);
+if ($randomparm1 == 0 || $randomparm1 == 2) {
+  $nullval1 = random(0.1, 0.9, 0.1);
+} else {
+  $nullval1 = random(10, 30, 1);
+}
+$null1 = "\(H_0\): ". $one_params[$randomparm1] . $comparisons[$randomnull1] . $nullval1;
+$alt1 = "\(H_a\): ". $one_params[$randomparm1] . $comparisons[$randomalt1]. $nullval1;
+if ($randomparm1 <= 1 && $randomnull1 == 0) {
+  $correct1 = "Valid";
+} else {
+  $correct1 = "Not valid";
+}
+$mc1 = PopUp(
+  [@choices],
+  $correct1,
+);
+
+if ($randomparm1 <= 1) {  # make sure at least one of them has a valid parameter
+  $randomparm2 = random(2, 3, 1);
+} else {
+  $randomparm2 = random(0, 1, 1);
+}
+if ($randomnull1 != 0) {  # make sure at least one has the appropriate sign
+  $randomnull2 = 0;
+} else {
+  $randomnull2 = random(0, 3, 1);
+}
+do { $randomalt2 = random(0, 3, 1); } until ($randomalt2 != $randomnull2);
+if ($randomparm2 == 0 || $randomparm2 == 2) {
+  $nullval2 = random(0.1, 0.9, 0.1);
+} else {
+  $nullval2 = random(10, 30, 1);
+}
+$null2 = "\(H_0\): ". $one_params[$randomparm2] . $comparisons[$randomnull2] . $nullval2;
+$alt2 = "\(H_a\): ". $one_params[$randomparm2] . $comparisons[$randomalt2]. $nullval2;
+if ($randomparm2 <= 1 && $randomnull2 == 0) {
+  $correct2 = "Valid";
+} else {
+  $correct2 = "Not valid";
+}
+$mc2 = PopUp(
+  [@choices],
+  $correct2,
+);
+
+if ($randomparm1 <= 1 && $randomparm2 <= 1) {
+  $randomparm3 = random(2, 3, 1);
+} else {
+  $randomparm3 = random(0, 1, 1);
+}
+if ($randomnull1 != 0 || $randomnull2 != 0) {
+  $randomnull3 = 0;
+} else {
+  $randomnull3 = random(1, 3, 1);
+}
+do { $randomalt3 = random(0, 3, 1); } until ($randomalt3 != $randomnull3);
+$null3 = "\(H_0\): ". $two_params_1[$randomparm3] . $comparisons[$randomnull3] . $two_params_2[$randomparm3];
+$alt3 = "\(H_a\): ". $two_params_1[$randomparm3] . $comparisons[$randomalt3]. $two_params_2[$randomparm3];
+if ($randomparm3 <= 1 && $randomnull3 == 0) {
+  $correct3 = "Valid";
+} else {
+  $correct3 = "Not valid";
+}
+$mc3 = PopUp(
+  [@choices],
+  $correct3
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, state whether the sets of hypotheses given are valid
+hypotheses.
+
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $null1 $tab vs $tab $alt1 $tab \{ $mc1->menu() \}
+  $ITEM $null2 $tab vs $tab $alt2 $tab \{ $mc2->menu() \}
+  $ITEM $null3 $tab vs $tab $alt3 $tab \{ $mc3->menu() \}
+\{ EndList( "OL") \}
+
+END_TEXT
+ANS( $mc1->cmp() );
+ANS( $mc2->cmp() );
+ANS( $mc3->cmp() );
+
+
+###########################
+## Answer Section
+###########################
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

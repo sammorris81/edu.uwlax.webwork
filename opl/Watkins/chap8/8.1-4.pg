@@ -1,0 +1,60 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('Confidence Interval','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('4')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$E=random(.01,.05,.001);
+$p=50;
+
+$a1 = random( 1, 3, 1 );
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+$ans1 = Real(ceil($p/100*(1-$p/100)*($z/$E)**2));
+
+
+BEGIN_TEXT
+Researchers are interested in determing the proportion people who are satisfied with K-12 eduacation.  Without taking an initial sample, how many people should they include in their sample to arrive at a $s$PERCENT confidence interval for the proportion that has an error of no more than $E? \{ ans_rule(6) \}
+
+
+
+END_TEXT
+
+ANS( $ans1->with(tolerance=>0.00)->cmp );
+
+
+ENDDOCUMENT();

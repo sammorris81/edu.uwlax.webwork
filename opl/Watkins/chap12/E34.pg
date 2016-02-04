@@ -1,0 +1,164 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Independence')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.3')
+## Problem1('E34')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$o1 = random(4400,4500,1);
+$o2 = random(1500,1600,1);
+$o3 = random(60,70,1);
+$o4 = random(25,35,1);
+
+$r1 = Real( $o1+$o2)->reduce;
+$r2 = Real( $o3+$o4)->reduce;
+
+$c1 = Real( $o1+$o3)->reduce;
+$c2 = Real( $o2+$o4)->reduce;
+
+$total = Real( $o1+$o2+$o3+$o4 )->reduce;
+
+
+$e1 = Real($r1*$c1/$total);
+$e2 = Real($r1*$c2/$total);
+$e3 = Real($r2*$c1/$total);
+$e4 = Real($r2*$c2/$total);
+
+$exp_grp = random(1, 4, 1);
+if ($exp_grp == 1){
+  $group = "did not develop breast cancer and were younger than 25 when giving birth to their first child";
+  $exp = $e1;
+} elsif ($exp_grp == 2) {
+  $group = "did not develop breast cancer and were 25 or older when giving birth to their first child";
+  $exp = $e2;
+} elsif ($exp_grp == 3) {
+  $group = "did develop breast cancer and were younger than 25 when giving birth to their first child";
+  $exp = $e3;
+} else {
+  $group = "did develop breast cancer and were 25 or older when giving birth to their first child";
+  $exp = $e4;
+}
+
+$ts = Real( sprintf("%.2f", ($o1 - $e1)**2 / ($e1) + ($o2 - $e2)**2 / $e2 + ($o3 - $e3)**2 / ($e3) + ($o4 - $e4)**2 / ($e4) ) );
+
+$df = Real(1);
+$pval = Real(sprintf("%.4f", chisqrprob($df,$ts)));
+
+
+$f = random( 1, 3, 1 );
+if ($f == 1) {
+  $alpha = sprintf("%.2f", 0.10);
+} elsif ($f == 2) {
+  $alpha = sprintf("%.2f", 0.05);
+} elsif ($f == 3) {
+  $alpha = sprintf("%.2f", 0.01)
+}
+
+$rejinterp = "We have significant evidence that age of the mother at the birth of ".
+             "her first child and developing breast cancer are not independent.";
+
+$f2rinterp = "We do not have significant evidence that age of the mother at the birth of ".
+             "her first child and developing breast cancer are not independent.";
+
+$accinterp = "We have significant evidence that the age of the mother at the birth of ".
+             "her first child and developing breast cancer are independent.";
+
+if ($pval < $alpha){
+    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+BEGIN_TEXT
+
+The first U.S National Health and Nutrition Examination Survey in the 1980s reported
+on the age of a mother at the birth of her first child and whether the mother eventually
+developed breast cancer. The counts are shown in the table below.
+
+$PAR
+\{ begintable(4) \}
+\{ row( "Developed Breast Cancer?", "Younger Than 25", "25 or Older", "Total" ) \}
+\{ row( "No", "$o1", "$o2", "$r1" ) \}
+\{ row( "Yes", "$o3", "$o4", "$r2" ) \}
+\{ row( "Total", "$c1", "$c2", "$total" ) \}
+\{ endtable() \}
+$PAR
+Give your answers to three decimal places.
+\{ BeginList( "OL", type=>"a") \}
+$ITEM What is the expected count of those women who $group? \{ans_rule(10)\}
+$ITEM What is the test statistic to determine if age of the mother and developing breast cancer are independent?
+\{ ans_rule(10) \}
+$ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
+$ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+enter 0)
+$ITEM Select the appropriate conclusion for this test statistic at a significance level of \( \alpha = $alpha \). $BR
+\{ $conclusion -> buttons() \}
+\{EndList( "OL" )\}
+
+
+END_TEXT
+ANS($exp->with(tolerance=>.01, tolType=>"absolute")->cmp);
+ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp);
+ANS( $df->cmp );
+ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp);
+ANS( $conclusion->cmp );
+
+
+ENDDOCUMENT();
+

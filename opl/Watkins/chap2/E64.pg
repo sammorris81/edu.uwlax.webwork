@@ -1,0 +1,87 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('E64')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$mm=random(485,520,1);
+$sm=random(100,130,1);
+$p1m=random(20,35,1);
+$p2m=random(10,19,1);
+$v1m=udistr($p1m / 100);
+$an1m=Real(sprintf("%.2f", $v1m * $sm + $mm));
+$v2m=udistr($p2m / 100);
+$an2m=Real(sprintf("%.2f", $v2m * $sm + $mm));
+
+$mv=random(485,520,1);
+$sv=random(100,130,1);
+$x1v=sprintf("%0.2f",(600-$mv)/$sv);
+$x2v=sprintf("%0.2f",(400-$mv)/$sv);
+$x3v=sprintf("%0.2f",(700-$mv)/$sv);
+$x4v=sprintf("%0.2f",(450-$mv)/$sv);
+
+$an3v = Real(1-sprintf("%0.4f",uprob($x4v)));
+$an2v = Real(sprintf("%0.4f",uprob($x3v)));
+$an1v = Real(sprintf("%.4f", -uprob($x1v) + uprob($x2v)));
+
+BEGIN_TEXT
+\{ BeginList( "OL", type=>"a") \}
+$ITEM SAT math scores are scaled so that they are approximately normal, with a mean of
+$mm and a standard deviation of $sm.
+\{ BeginList( "OL", type=>"i") \}
+$ITEM A college wants to send letter to students scoring in the top $p1m$PERCENT on the
+math portion of the exam.  What SAT math score should they use as the dividing
+line between those who get letters and those who do not? \{ans_rule(8)\}
+$ITEM What score would they use as the dividing line if they choose to send letters to
+only the top $p2m$PERCENT instead? \{ans_rule(8)\}
+\{ EndList( "OL" ) \}
+
+$ITEM SAT verbal scores are scaled so that they are approximately normal,
+with a mean of $mv and a standard deviation of $sv.  Find the probability that a
+randomly selected student has an SAT critical reading score in the following ranges:
+\{ BeginList( "OL", type=>"i") \}
+$ITEM Between 400 and 600: \{ans_rule(8)\}
+$ITEM Over 700: \{ans_rule(8)\}
+$ITEM Below 450: \{ans_rule(8)\}
+\{ EndList( "OL" ) \}
+
+\{ EndList( "OL" ) \}
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1m->with(tolerance=>1, tolType=>"Absolute")->cmp);
+ANS($an2m->with(tolerance=>1, tolType=>"Absolute")->cmp);
+
+ANS($an1v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an2v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an3v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+
+
+ENDDOCUMENT();

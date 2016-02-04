@@ -1,0 +1,191 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample mean - t)
+## KEYWORDS('Hypothesis tests', 'one sample mean', 'mirex')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('23')
+## Section1('23.1')
+## Problem1('Ex1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+## This problem comes from the example on p. 561 of DeVeaux, Velleman, and Bock
+## Stats: Data and Models - Third Edition
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$nullval = Real(sprintf("%.2f", random(0.15, 0.19, 0.01)));
+$mean = $nullval + 0.0113;
+$n = 7;
+$quant = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n,
+    skew => 0,
+    mean => $mean,
+    sd => 0.0495,
+    round => 3,
+    randomsummary => 'T',
+);
+$xbar  = $quant->{mean};
+$sd = $quant->{sd};
+@x  = @{$quant->{x}};
+
+$se = $sd / sqrt($n);
+
+$ts = Real( sprintf("%.3f", ($xbar-$nullval) / $se ));
+$pval = Real( sprintf("%.3f", tprob(($n - 1), $ts) ) );
+
+@params = ( # choices
+  ' a. \( p \)',
+  ' b. \( \mu \)',
+  ' c. \( p_1 - p_2 \)',
+  ' d. \( \mu_1 - \mu_2 \)'
+);
+
+$param = RadioButtons(
+  [@params],
+  ' b. \( \mu \)',
+  order => [@params],
+  labels => ['a.', 'b.', 'c.', 'd.'],
+);
+
+@hyps = ( # choices
+  ' a. \( = \)',
+  ' b. \( < \)',
+  ' c. \( > \)',
+  ' d. \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' c. \( > \)',
+    order => [@hyps],
+    labels => ['a.', 'b.', 'c.', 'd.'],
+);
+
+$rejinterp = "We have significant evidence to suggest that the average mirex ".
+             "concentration exceeds the level recommended by the EPA.";
+
+$f2rinterp = "We do not have significant evidence to suggest that the average mirex ".
+             "concentration exceeds the level recommended by the EPA.";
+
+$accinterp = "We have significant evidence to suggest that the average mirex ".
+             "concentration is $nullval ppm.";
+
+$a = random(1, 3, 1);
+
+if ($a == 1) {
+    $sig = sprintf("%.2f", 0.10)
+} elsif ($a == 2) {
+    $sig = sprintf("%.2f", 0.05)
+} else {
+    $sig = sprintf("%.2f", 0.01)
+}
+
+if ($pval < $sig){
+    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+
+
+BEGIN_TEXT
+
+In a 2004 study published in $BITALIC Science, $EITALIC a team of researchers
+published a study of contaminants in farmed salmon. Fish from many sources were analyzed for 14
+organic contaminants. The study expressed concerns about the level of contaminants
+found. One of these was the insecticide mirex, which has been shown to be carcinogenic
+and is suspected to be toxic to the liver, kidneys, and endocrine system. As a safety
+recommendation to recreational fishers, the Environmental Protection Agency (EPA)
+recommends only eating fish that do not exceed mirex concentrations of $nullval ppm.
+Researchers measured mirex concentrations in $n fish, and the results are shown below.
+$PAR
+$extrasep
+$BCENTER
+\{ join(", ", @x) \}
+$ECENTER
+$extrasep
+Conduct a hypothesis test to determine whether the average mirex concentration
+exceeds the level recommended by the EPA. You may assume that the population of
+mirex concentrations is approximately normal.
+$PAR
+Give your answers to three decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the parameter of interest? $BR
+  \{ $param->buttons( separator => "") \}
+  $ITEM What is the correct null value for this test? $BR
+  \{ ans_rule(10) \}
+  $ITEM What sign should appear in the alternative hypothesis? $BR
+  \{ $alt -> buttons( separator => "" ) \}
+  $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
+  $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.0001\),
+    enter 0)
+  $ITEM Select the appropriate conclusion for this test statistic at a
+  significance level of \( \alpha = $sig \). $BR
+  \{ $conclusion -> buttons() \}
+\{ EndList( "OL") \}
+
+
+END_TEXT
+ANS($param->cmp());
+ANS($nullval->with(tolerance=>0, tolType=>"absolute")->cmp());
+ANS($alt->cmp());
+ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($conclusion->cmp());
+
+
+ENDDOCUMENT();

@@ -1,0 +1,197 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'creating randomization distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.4')
+## Problem1('4.123')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = 8;
+$count1 = 8;
+
+$phat1 = 1;
+
+$statistic = Real($phat1);
+$nullval = 0.50;
+$param = 'p';
+$type = 'GT';
+
+$N = 1000;
+$bs_props = new DataGenUWL(
+  datatype => 'bs_one_cat',
+  N => $N,
+  n => $n,
+  nullval => $nullval,
+);
+
+$histrandom = StatGraphicsUWL::histogram(
+  data => $bs_props,
+  summaries => "F",
+);
+
+$nullhyp = hyptestProblemUWL::selectnull(
+  nullval => $nullval,
+  param => $param,
+);
+
+$althyp = hyptestProblemUWL::selectalt(
+  nullval => $nullval,
+  param => $param,
+  type => $type,
+);
+
+$pvalue = QuantitativeUWL::random_pvalue(
+  data => $bs_props,
+  test_stat => $statistic,
+  alternative => $type,
+);
+
+$rejinterp = "We have statistically significant evidence that the proportion of ".
+             "times Paul was correct is higher than if he was just guessing.";
+$f2rinterp = "We do not have statistically significant evidence that the ".
+             "proportion of times Paul was correct is higher than if he was ".
+             "just guessing.";
+$accinterp = "We have statistically significant evidence that the proportion of ".
+             "times Paul was correct is the same as if he was just guessing.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+$pvalue = Real($pvalue);
+$nextreme = $pvalue * $N;
+
+if ($pvalue < 0.05) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec = $dec_options[1];
+  $correct_inter = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+
+
+In the 2010 World Cup, Paul the Octopus (in a German aquarium) became famous for
+being correct in all eight of the predictions it made, including predicting Spain
+over Germany in a semifinal match. Before each game, two containers of food (mussels)
+were lowered into the octopus's tank. The containers were identical, except for
+country flags of the opposing teams, one on each container. Whichever container Paul
+opened was deemed his predicted winner. Does Paul have psychic powers? In other words,
+is an 8-for-8 record significantly better than just guessing?
+$PAR
+Use the information about the randomization distribution below to answer the following
+questions about the hypothesis test we could use to test this question.
+$PAR
+The histogram of randomization distribution is given below.
+In $nextreme randomizations (out of $N) the randomization distribution resulted
+in values as large or larger than the statistic for this data.
+$PAR
+$BCENTER
+\{ image( insertGraph($histrandom) , width=>300,height=>300,tex_size=>500 )
+\}
+$ECENTER
+$PAR
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \{ $nullhyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the correct alternative hypothesis for this test? $BR
+  \{ $althyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the statistic from this sample? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Select the appropriate decision for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($nullhyp->cmp());
+ANS($althyp->cmp());
+ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pvalue->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+ENDDOCUMENT();

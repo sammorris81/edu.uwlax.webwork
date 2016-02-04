@@ -1,0 +1,151 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('P1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+#ProblemRandomize(when=>"Always", onlyAfterDue=>0);
+
+$includeprobs = random(1, 5, 1);
+
+$prompt1 =  'Are the number of hours per day 16 year olds spent using electronic media '.
+            'greater in 2013 than in 2003?';
+$prompt2 =  'A researcher wants to know if those who work long hours have more trouble sleeping than '.
+            'those who work shorter hours. 1,501 workers that work over 40 hours per week, and 958 that work under 40 hours '.
+            'per week were sampled independently, and were asked if they have trouble sleeping.';
+$prompt3 =  'ITS says that computer labs are unnecessary on campus now since most students '.
+            'have their own computers.  The student newspaper wants to see if this claim is true, '.
+            'so they surveyed UW-L students to estimate the prevalence of personal computers.';
+$prompt4 =  'Wayne Gretzky played 41 games and missed 17 games due to injury in his last '.
+            'season with the Oilers.  Is the average number of goals scored lower for the Oilers '.
+            'when Gretzky was injured than when he was playing?';
+$prompt5 =  'The Dean of CLS at UW-L says decreasing the number of computer labs would disproportionately '.
+            'affect CLS students.  She sends a survey out to randomly selected students in CLS '.
+            'and SAH to see if fewer CLS students have their own computer compared '.
+            'to students in SAH.';
+
+if ($includeprobs == 1){
+    $question1 = $prompt1;
+    $correct1 = ' Difference in Averages';
+    $question2 = $prompt3;
+    $correct2 = ' Single Proportion';
+    $question3 = $prompt4;
+    $correct3 = ' Difference in Averages';
+} elsif ($includeprobs == 2) {
+    $question1 = $prompt2;
+    $correct1 = ' Difference in Proportions';
+    $question2 = $prompt4;
+    $correct2 = ' Difference in Averages';
+    $question3 = $prompt5;
+    $correct3 = ' Difference in Proportions';
+} elsif ($includeprobs == 3) {
+    $question1 = $prompt1;
+    $correct1 = ' Difference in Averages';
+    $question2 = $prompt5;
+    $correct2 = ' Difference in Proportions';
+    $question3 = $prompt2;
+    $correct3 = ' Difference in Proportions';
+} elsif ($includeprobs == 4) {
+    $question1 = $prompt4;
+    $correct1 = ' Difference in Averages';
+    $question2 = $prompt3;
+    $correct2 = ' Single Proportion';
+    $question3 = $prompt1;
+    $correct3 = ' Difference in Averages';
+} else {
+    $question1 = $prompt5;
+    $correct1 = ' Difference in Proportions';
+    $question2 = $prompt2;
+    $correct2 = ' Difference in Proportions';
+    $question3 = $prompt3;
+    $correct3 = ' Single Proportion';
+}
+
+@options = (
+    ' Single Proportion',
+    ' Single Average',
+    ' Difference in Proportions',
+    ' Difference in Averages',
+);
+
+@labels = ('i', 'ii', 'iii', 'iv');
+
+$pick1 = RadioButtons(
+  [ @options ],
+  $correct1,
+  order => [ @options ],
+  labels => [ @labels ],
+);
+
+$pick2 = RadioButtons(
+  [ @options ],
+  $correct2,
+  order => [ @options ],
+  labels => [ @labels ],
+);
+
+$pick3 = RadioButtons(
+  [ @options ],
+  $correct3,
+  order => [ @options ],
+  labels => [ @labels ],
+);
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+Context("Numeric");
+BEGIN_TEXT
+For each of the following scenarios, choose the most appropriate type of procedure.
+\{ BeginList( "OL", type=>"a") \}
+$ITEM $question1 $BR
+\{ $pick1 -> buttons( separator => "" ) \}
+$PAR
+$ITEM $question2 $BR
+\{ $pick2 -> buttons( separator => "" ) \}
+$PAR
+$ITEM $question3 $BR
+\{ $pick3 -> buttons( separator => "" ) \}
+$PAR
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS( $pick1->cmp() );
+ANS( $pick2->cmp() );
+ANS( $pick3->cmp() );
+
+ENDDOCUMENT();

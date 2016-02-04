@@ -1,0 +1,52 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'introducing hypothesis tests')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.1')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "uwlHypTestBank.pl"
+);
+
+TEXT(beginproblem());
+
+BEGIN_TEXT
+  $BBOLD Single Proportions: $EBOLD There are a total of $num_sp single
+  proportion questions. $PAR
+  $text_sp[0]
+  $PAR
+  $text_sp[1]
+  $PAR
+  $text_sp[2]
+  $PAR
+  $PAR
+  $BBOLD Single Averages: $EBOLD There are a total of $num_sa single
+  average questions. $PAR
+  $text_sa[0]
+  $PAR
+  $text_sa[1]
+  $PAR
+END_TEXT
+
+
+###########################
+## Answer Section
+###########################
+loadMacros("uwlSingleAvgBuild.pl");
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,77 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'shape and center')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+$quant = new DataGenUWL(
+  datatype => 'single_quant',
+  n => random(5, 9, 2),
+  mean => random(10, 20, 2),
+  sd => 1,
+  skew => 0,
+  round => 1
+);
+
+@x = @{$quant->{x}};
+$mean = Real(usefulstatUWL::mean(@x));
+$med = Real(usefulstatUWL::med(@x));
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following dataset, give the mean and median. Give your answer to 4 decimal places.
+$PAR
+\{ join(", ", @{$quant->{x}}) \}
+$PAR
+Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mean->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($med->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

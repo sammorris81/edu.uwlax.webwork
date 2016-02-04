@@ -1,0 +1,85 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Two sample proportion)
+## KEYWORDS('Confidence intervals','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E1')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+
+$r1 = random( 60, 65, 1 );
+$n1 = Real( 75 );
+$p1 = Real( $r1/$n1 );
+
+$r2 = random( 8, 12, 1 );
+$n2 = Real( 19 );
+$p2 = Real( $r2/$n2 );
+
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+
+
+
+$lower = Real(" ($p1-$p2) - $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2) ")->reduce;
+
+$upper = Real(" ($p1-$p2) + $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+A statistics instructor kept track of students' grades on her final examination and whether they did the exam in pencil or in pen. Of the $n1 students who used a pencil, $r1 got grades of 70$PERCENT or higher. Of the $n2 students who used a pen, $r2 got grades of 70$PERCENT or higher. Assume that these students can be considered random samples from the students who could take this instructor's final examination.
+$PAR
+Find a $s$PERCENT confidence interval for the difference in the population proportions scoring about 70$PERCENT for the two types of writing utensils.  (Let group 1 represent those who used a pencil.)
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

@@ -1,0 +1,49 @@
+################################################################################
+# WeBWorK Online Homework Delivery System
+# Copyright � 2000-2003 The WeBWorK Project, http://openwebwork.sf.net/
+# $CVSHeader: webwork2/courses.dist/modelCourse/templates/setHeader.pg,v 1.1.2.1 2008/06/25 11:55:31 gage Exp $
+# 
+# This program is free software; you can redistribute it and/or modify it under
+# the terms of either: (a) the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any later
+# version, or (b) the "Artistic License" which comes with this package.
+# 
+# This program is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See either the GNU General Public License or the
+# Artistic License for more details.
+################################################################################
+
+DOCUMENT();
+
+loadMacros(
+	"PG.pl",
+	"PGbasicmacros.pl",
+	
+);
+
+#TEXT($BEGIN_ONE_COLUMN);
+
+TEXT(MODES(TeX =>EV3(<<'EOT'),HTML=>"",Latex2HTML=>""));
+\lhead{ $studentName }
+\chead{ MTH 145 - Homework $setNumber }
+\rhead{Fall 2013}
+\noindent {\large \bf $studentName}
+\hfill
+\noindent {\large \bf MTH 145 - Section $sectionNumber - Fall 2013}
+EOT
+
+BEGIN_TEXT
+$BBOLD WeBWorK $setNumber is due: $formattedDueDate$EBOLD
+$BR
+$BBOLD Textbook chapters: $EBOLD
+$BR
+Be sure to carefully follow all directions for each problem.  To receive credit, attempts at problems must be completed within WeBWorK before the assignment ends.  Answers will be available for this assignment in WeBWorK after $formattedDueDate. 
+END_TEXT
+
+TEXT(MODES(TeX =>EV3(<<'EOT'),HTML=>"",Latex2HTML=>""));
+\hrule
+EOT
+#TEXT($END_ONE_COLUMN);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

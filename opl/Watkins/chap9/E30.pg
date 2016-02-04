@@ -1,0 +1,140 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Two sample proportion)
+## KEYWORDS('Hypothesis tests','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.2')
+## Problem1('E30')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+
+$p1 = random( .60, .64, .01 );
+$n1 = Real( 100 );
+$p1quest = Real( $p1*100 );
+
+$p2 = random( .52, .56, .01 );
+$n2 = Real( 300 );
+$p2quest = Real( $p2*100 );
+
+$p = Real( ($p1*$n1+$p2*$n2)/($n1+$n2) );
+
+
+$ts = Real(" ($p1 - $p2)/sqrt($p*(1-$p)*(1/$n1+1/$n2)) ")->reduce;
+
+$pval = Real(uprob(sprintf("%0.2f",$ts)))->reduce;
+$pvalans = Real(2* sprintf("%0.4f",$pval) );
+
+
+$fmc = new_multiple_choice();
+
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$fquestion = "What sign should appear in the alternative hypothesis?";
+
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.01\).";
+
+## What's the answer?
+$fanswer = '\(\neq\)';
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pvalans<.01)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a difference in Internet use between these two age groups.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a difference in Internet use between these two age groups.";
+}
+
+
+
+
+## Link the question and its answer
+
+$fmc->qa($fquestion, $fanswer);
+
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence of a difference in Internet use between these two age groups.','Fail to reject \(H_0\).  We do not have significant evidence of a difference in Internet use between these two age groups.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+In the poll on Internet usage described in the previous problem, $p1quest$PERCENT of the 18-29 age group reported using the Internet more than 1 hour per day, while $p2quest$PERCENT of the 30-49 age group reported this level of usage.
+$PAR
+Assuming there were about 100 people in the 18-29 sample and about 300 people in the 30-49 sample, do these data represent a statistically significant difference in Internet use between these two age groups? (Let group 1 represent the 18-29 year olds.)
+$PAR
+\(H_0: p1-p2 = 0\)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+$PAR
+The p-value for this test is \{ ans_rule(15) \}.
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+Context()->normalStrings;
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( $pvalans->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

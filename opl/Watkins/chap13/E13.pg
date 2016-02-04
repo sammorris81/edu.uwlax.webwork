@@ -1,0 +1,233 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Hypothesis tests)
+## KEYWORDS('Hypothesis test', 'Regression', 'Prediction', Confidence intervals')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('13')
+## Section1('13.1')
+## Problem1('E13')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+
+$n = Real( 5 );
+$df = Real($n - 2);
+
+$b0t = Real( 12.5 );
+$b0 = Real( 2.770 );
+$b0se = Real( 0.2217 );
+$b0pval = 2 * Real(tprob($df,abs($b0t)));
+$b0pvalround = sprintf("%.4f", $b0pval);
+$b0pvalround = $b0pvalround < 0.0001 ? "<0.0001" : $b0pvalround;
+
+$b1t = random(-8, -9, 0.05);
+$b1t = Real($b1t);
+$b1se = Real( 0.0039 );
+$b1 = Real( $b1t * $b1se );
+$b1round = Real(sprintf("%.3f", $b1));
+$slope = abs($b1round);
+$b1pval = 2 * Real(tprob($df,abs($b1t)));
+$b1pvalround = sprintf("%.4f", $b1pval);
+$b1pvalround = $b1pvalround < 0.0001 ? "<0.0001" : $b1pvalround;
+$b1tol = Real(0.01);
+
+$tstar = Real(3.182);
+$upper = Real($b1 + $tstar * $b1se);
+$lower = Real($b1 - $tstar * $b1se);
+$moe = Real($tstar * $b1se);
+
+$rsq = Real(0.961);
+$r = sgn($b1t) * Real(sqrt($rsq));
+$rround = sprintf("%.4f", $r);
+
+$xpred = random(35, 60, 0.1);
+$ypred = Real( $b0 + $b1round * $xpred );
+$ypredlow = Real($b0 + ($b1round - $b1tol) * $xpred);
+$ypredhigh = Real($b0 + ($b1round + $b1tol) * $xpred);
+$ypredtol = Real(max(abs($ypred - $ypredlow), abs($ypred - $ypredhigh)) + 0.001);
+$ypredround = sprintf("%.3f", $ypred);
+$res = non_zero_random(-1, 1, 0.1);
+$res = Real($res);
+$yactual = Real($ypredround + $res);
+
+$reslow = Real($yactual - $ypredlow);
+$reshigh = Real($yactual - $ypredhigh);
+$restol = Real(max(abs($res - $reslow), abs($res - $reshigh)) + 0.001);
+
+
+if($displayMode eq "TeX"){
+    $anssep = "";
+} else {
+    $anssep = $BR;
+}
+
+$alternative = RadioButtons(
+  [ # choices
+    " a. \( H_A: \beta_1 < 0 \)",
+    " b. \( H_A: \beta_1 > 0 \)",
+    " c. \( H_A: \beta_1 \neq 0 \)"
+  ],
+  " c. \( H_A: \beta_1 \neq 0 \)",  #correct answer
+  order => [
+    " a. \( H_A: \beta_1 < 0 \)",
+    " b. \( H_A: \beta_1 > 0 \)",
+    " c. \( H_A: \beta_1 \neq 0 \)"
+  ],
+  labels => [
+    'a.',
+    'b.',
+    'c.'
+  ],
+  separator => $anssep,
+);
+
+$rejinterp = "We have significant evidence to suggest there is a ".
+    "non-zero correlation between the titanium dioxide percentage and silicon dioxide ".
+    "percentage.";
+
+$f2rinterp = "We do not have significant evidence to suggest there is a ".
+    "non-zero correlation between the titanium dioxide percentage and silicon dioxide ".
+    "percentage.";
+
+$accinterp = "We do have significant evidence to suggest there is no ".
+    "correlation between the titanium dioxide percentage and silicon dioxide ".
+    "percentage.";
+
+$f = random( 1, 3, 1 );
+if ($f == 1) {
+  $alpha = sprintf("%.2f", 0.10);
+} elsif ($f == 2) {
+  $alpha = sprintf("%.2f", 0.05);
+} elsif ($f == 3) {
+  $alpha = sprintf("%.2f", 0.01)
+}
+
+if ($b1pval < $alpha){
+    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+BEGIN_TEXT
+Mars rocks contain a high proportion of silicon dioxide (the predominant
+compound in sand and glass) and much smaller amounts of titatnium dioxide (
+similar to silicon dioxide but with titanium replacing the silicon). The
+following regression results come from a random sample of 5 rocks from Mars.
+$PAR
+$BBOLD Simple linear regression results:$EBOLD $BR
+Dependent Variable: $PERCENT TiO2 $BR
+Independent Variable: $PERCENT SiO2 $BR
+$PERCENT TiO2 \(= $b0 + \underline{\phantom{xxxxxxxxxxxx}} * \) $PERCENT SiO2 $BR
+Sample size: $n $BR
+R (correlation coefficient) = \{ ans_rule(10) \} $BR
+R-sq = \{ sprintf("%.4f", $rsq) \}
+$PAR
+$BBOLD Parameter Estimates:$EBOLD
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+AlignedRow(["Parameter", "Estimate", "Std. Err.", "DF", "t-stat", "p-value"],
+            align=>"CENTER", valign=>"MIDDLE", separation=>0).
+AlignedRow(["Intercept", "\( $b0 \)", "\( $b0se \)", "\( $df \)", "\( $b0t \)", "\( $b0pvalround \)"],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+AlignedRow(["hmpg", ans_rule(10), "\( $b1se \)", "\( $df \)", "\( $b1t \)", "\( $b1pvalround \)" ],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+EndTable()
+\}
+$BR
+Conduct a hypothesis test to see if there is a non-zero correlation between
+titanium dioxide percentage and silicon dioxide percentage. You may assume any
+necessary conditions for inference. Give your answers to 3 decimal places.
+$PAR
+\{BeginList( "OL", type=>'a' )\}
+  $ITEM Fill in the missing value for r and slope in the output above.
+  $PAR
+  $ITEM The null hypothesis is \( H_0: \beta_1 = 0 \). What is the alternative
+  hypothesis for this hypothesis test?
+  $BR
+  \{ $alternative -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM The p-value for this test statistic is given in the table above. Select
+  the appropriate conclusion for this test statistic at a significance level
+  of \( \alpha = 0.05 \).
+  $BR
+  \{ $conclusion -> buttons() \}
+  $PAR
+  $ITEM Suppose there is a rock that has a silicon dioxide percentage of $xpred.
+  \{BeginList( "OL", type=>"i" )\}
+    $ITEM What is the predicted titanium dioxide percentage for this rock? \{ ans_rule(10) \}
+    $ITEM If the rock actually has a titanium dioxide concentration measurement of $yactual
+    what is the residual for the rock? \{ans_rule(10) \}
+  \{EndList( "OL" )\}
+  $PAR
+  $ITEM A 95$PERCENT confidence interval for the slope is
+  ( \{ sprintf("%.2f", $lower) \}, \{ sprintf("%.2f", $upper) \} ). What is the
+  margin of error for this interval? \{ ans_rule(10) \}
+\{EndList( "OL" )\}
+
+END_TEXT
+
+ANS($r->with(tolerance=>.01, tolType=>"absolute")->cmp);
+ANS($b1round->with(tolerance=>$b1tol, tolType=>"absolute")->cmp);
+ANS($alternative->cmp() );
+ANS($conclusion->cmp() );
+ANS($ypred->with(tolerance=>$ypredtol, tolType=>"absolute")->cmp);
+ANS($res->with(tolerance=>$restol, tolType=>"absolute")->cmp);
+ANS($moe->with(tolerance=>.01, tolType=>"absolute")->cmp);
+
+ENDDOCUMENT();

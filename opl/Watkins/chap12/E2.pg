@@ -1,0 +1,178 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for goodness of fit)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Goodness of fit')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.1')
+## Problem1('E2')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$a1 = random( 30, 40, 1 );
+$a2 = random( 20, 25, 1 );
+$a3 = random( 3, 5, 1 );
+$a4 = random( 3, 5, 1 );
+$a5 = Real( " $a1 + $a2 + $a3 + $a4 ")->reduce;
+
+$b1 = Real( .45 );
+$b2 = Real( .42 );
+$b3 = Real( .09 );
+$b4 = Real( .04 );
+
+$ts = Real(" ($a1 - $a5*$b1)^2/($a5*$b1) + ($a2 - $a5*$b2)^2/($a5*$b2) + ($a3 - $a5*$b3)^2/($a5*$b3) + ($a4 - $a5*$b4)^2/($a5*$b4) ")->reduce;
+
+$pval=Real(chisqrprob(3,$ts))->reduce;
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+else{
+$answer = "\(P\)-value < .001";
+}
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that white homicide victims have a different distribution of blood types as the donor population.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that white homicide victims have a different distribution of blood types as the donor population.";
+}
+
+
+
+
+## Link the question and its answer
+
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'\(P\)-value < .001');
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that white homicide victims have a different distribution of blood types as the donor population.','Fail to reject \(H_0\).  We do not have significant evidence that white homicide victims have a different distribution of blood types as the donor population.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+The blood types of $a5 white homicide victims in Philadelphia are shown in the table below. White blood donors in Philadelphia have a distribution with 45$PERCENT Type O, 42$PERCENT Type A, 9$PERCENT Type B, and 4$PERCENT Type AB.
+
+$PAR
+\{ begintable(2) \}
+\{ row( "Blood Type", "Frequency" ) \}
+\{ row( "O", "$a1" ) \}
+\{ row( "A", "$a2" ) \}
+\{ row( "B", "$a3" ) \}
+\{ row( "AB", "$a4" ) \}
+\{ row( "Total", "$a5" ) \}
+\{ endtable() \}
+$PAR
+
+
+
+What is the test statistic for determining if white homicide victims do not have the same distribution of blood types as the donor population?
+\{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();
+
+

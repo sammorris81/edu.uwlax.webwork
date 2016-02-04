@@ -1,0 +1,67 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('E63')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(485,520,1);
+$s=random(100,130,1);
+$x1=sprintf("%0.2f",(600-$m)/$s);
+$x2=sprintf("%0.2f",(400-$m)/$s);
+$x3=sprintf("%0.2f",(700-$m)/$s);
+$x4=sprintf("%0.2f",(450-$m)/$s);
+
+$an3 = Real(1-sprintf("%0.4f",uprob($x4)));
+$an2 = Real(sprintf("%0.4f",uprob($x3)));
+$an1 = Real(-sprintf("%0.4f",uprob($x1))+sprintf("%0.4f",uprob($x2)));
+
+BEGIN_TEXT
+
+SAT critical reading scores are scaled so that they are approximately normal, with a mean of $m and a standard deviation of $s.  Find the probability that a randomly selected student has an SAT critical reading score in the following ranges:
+
+$PAR
+Between 400 and 600: \{ans_rule(8)\}
+$PAR
+Over 700: \{ans_rule(8)\}
+$PAR
+Below 450: \{ans_rule(8)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

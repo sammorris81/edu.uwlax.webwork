@@ -1,0 +1,120 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'measuring evidence with p-values')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.2')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = 1000;
+$mean = 0;
+$sd = 1;
+$quant = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n,
+  mean => $mean,
+  sd => $sd,
+  skew => 0,
+  name => "D",
+  randomsummary => "F",
+);
+
+$hist = StatGraphicsUWL::histogram(
+  data => $quant,
+);
+
+$random1 = random(-1, 1, 2);
+
+$mult1 = random(0.7, 1.2, 0.01);
+$ts1 = $mean + $random1 * $mult1 * $sd;
+$pval1 = QuantitativeUWL::random_pvalue(
+  data => $quant,
+  test_stat => $ts1,
+  alternative => 'NEQ'
+);
+$pval1 = Real($pval1);
+$count1 = $pval1 * $n / 2;
+
+$mult2 = random(1.3, 1.6, 0.01);
+$ts2 = $mean - $random1 * $mult2 * $sd;
+$pval2 = QuantitativeUWL::random_pvalue(
+  data => $quant,
+  test_stat => $ts2,
+  alternative => 'NEQ'
+);
+$pval2 = Real($pval2);
+$count2 = $pval2 * $n / 2;
+
+if ($random1 < 0) {
+  $compare1 = "as smaller or smaller than";
+  $compare2 = "as large or larger than";
+} else {
+  $compare1 = "as large or larger than";
+  $compare2 = "as small or smaller than";
+}
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$BCENTER
+  \{ image(insertGraph($hist), width=>300, height=>300, tex_size=>450) \}
+$ECENTER
+$PAR
+The histogram above shows a randomization distribution based on $n simulated
+samples for testing \(H_0\): \(\mu_1 = \mu_2\) vs \(H_a\): \(\mu_1 \neq \mu_2\).
+Use the distribution to determine the p-value for the following observed statistic
+\( D = \overline{x}_1 - \overline{x}_2 \).
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM In $count1 randomizations, the randomization distribution resulted in
+  samples where \(D\) was $compare1 $ts1. What is the p-value
+  for \(D = $ts1\)? \{ ans_rule(10) \}
+  $ITEM In $count2 randomizations, the randomization distribution resulted in
+  samples where \(D\) was $compare2 $ts2. What is the p-value
+  for \(D = $ts2\)? \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pval1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pval2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

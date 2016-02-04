@@ -1,0 +1,87 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Discrete distributions)
+## DBsection(Binomial)
+## KEYWORDS('probability basics', 'binomial probabilities')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.4')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$random1 = random(4, 10, 1);
+do {$random2 = random(4, 10, 1);} until ($random2 != $random1);
+
+$randomn1 = random(7, 12, 1);
+do {$randomn2 = random(7, 12, 1);} until ($randomn2 != $randomn1);
+$randomk1 = random(2, $randomn1, 1);
+$randomk2 = random(2, $randomn2, 1);
+
+$ans1 = Real(fact($random1));
+$ans2 = Real(fact($random2));
+$num1 = fact($randomn1);
+$den1 = fact($randomk1) * fact($randomn1 - $randomk1);
+$num2 = fact($randomn2);
+$den2 = fact($randomk2) * fact($randomn2 - $randomk2);
+$ans3 = Real($num1 / $den1);
+$ans4 = Real($num2 / $den2);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, find the requested quantity.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $random1! \{ ans_rule(10) \} $PAR
+  $ITEM $random2! \{ ans_rule(10) \} $PAR
+  $ITEM \(\binom{$randomn1}{$randomk1}\) \{ ans_rule(10) \} $PAR
+  $ITEM \(\binom{$randomn2}{$randomk2}\) \{ ans_rule(10) \} $PAR
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($ans4->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

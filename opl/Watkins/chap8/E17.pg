@@ -1,0 +1,59 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('Confidence Interval','Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E17')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$a = random( 2, 4, 1 );
+
+$e = Real( .0693/$a );
+$ans = Real( 1.96**2*.25/($e**2) );
+
+
+
+
+
+
+
+BEGIN_TEXT
+
+You take a random sample of 200 apples from a shipment from abroad and construct a 95$PERCENT confidence interval to estimate the proportion that have the residue of any pesticide that has been banned by the FDA. You get a margin of error that is $a times larger that you would like.
+$PAR
+What sample size should you have used to obtain the desired margin of error?
+\{ ans_rule(6) \}
+
+
+
+END_TEXT
+
+ANS($ans->cmp);
+
+
+
+ENDDOCUMENT();

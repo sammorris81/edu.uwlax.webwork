@@ -1,0 +1,86 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Two sample proportion)
+## KEYWORDS('Confidence Intervals','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E49')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+
+$r1 = random( 60, 65, 1 );
+$n1 = random( 1700, 1750, 5 );
+$p1 = random( .46, .50, .01 );
+$p1quest = Real( $p1*100 );
+
+$r2 = random( 8, 12, 1 );
+$n2 = random( 1000, 1050, 5 );
+$p2 = random( .44, .48, .01 );
+$p2quest = Real( $p2*100 );
+
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+
+
+
+$lower = Real(" ($p1-$p2) - $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2) ")->reduce;
+
+$upper = Real(" ($p1-$p2) + $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+Each year Gallup conducts a poll about public education on behalf of Phi Delta Kappa, an association of professional educators. Beginning in 1974, respondents were asked to give a grade to the public schools in their community. That year, $p1quest$PERCENT of the sample of $n1 adults assigned a grade of A or B. In 2008, the comparable figure was $p2quest$PERCENT, with a sample size of $n2.
+$PAR
+Find a $s$PERCENT confidence interval for the difference in population proportions of people giving public schools an A or B for the different years. (Let group 1 represent the year 1974.)
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

@@ -1,0 +1,197 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Experimental design)
+## DBsection(Concepts)
+## KEYWORDS('experimental design')
+## TitleText1('Stats: Data and Models')
+## EditionText1('3')
+## AuthorText1('DeVeaux, Velleman, Bock')
+## Chapter1('13')
+## Section1('13.1')
+## Problem1('2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$rand1 = random(1, 2);
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+
+if( $rand1==1)
+{
+BEGIN_TEXT
+The November 17, 1994 issue of The New England Medical Journal reported on a study
+of the effects of hormone therapy on middle-aged women. About 950 women took part
+in the study; half were selected randomly to receive the hormone therapy and the
+other half were given a placebo (they did not know which). After about a year,
+blood tests were conducted on each subject by a lab technician who was unaware
+of which group (treatment or placebo) the blood samples originated from. In presenting
+the results of the experiment, the authors reported that the women in the treatment
+group had experienced a statistically significant increase in HDL (the so-called
+  "good" cholesterol) and a statistically significant reduction in LDL (the
+  so-called "bad" cholesterol) when compared with the control group.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study would be classified as', 'double-blind.');
+$mult1->makeLast(
+  'un-blinded.',
+  'single-blind.',
+  'double-blind.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'This is an example of a', 'completely randomized design.');
+$mult2->extra(
+  'block design.',
+  'matched pairs design.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The treatments are', 'the hormone therapy and the placebo.');
+$mult3->extra(
+  'the HDL and the LDL.'
+);
+
+$mult4 = new_multiple_choice();
+$mult4->qa( 'The cases are', 'the 950 women in the study.');
+$mult4->extra(
+  'the blood tests.'
+);
+
+}
+else
+{
+
+BEGIN_TEXT
+About 870 men took part in a study to study the effectiveness of a hormone therapy.
+Half of the men were selected randomly to come in and receive the hormone therapy
+while the other half were told to stay home and thus did not receive the therapy.
+After about a year, blood tests were conducted on each subject by a lab technician
+who was aware of which group (treatment or those given nothing) the blood samples
+originated from. In presenting the results of the experiment, the authors reported
+that the men in the treatment group had experienced a statistically significant
+increase in HDL (the so-called "good" cholesterol) and a statistically significant
+reduction in LDL (the so-called "bad" cholesterol) when compared with the control group.
+$PAR
+Which of the following are true?
+END_TEXT
+
+$mult1 = new_multiple_choice();
+$mult1->qa( 'This study would be classified as', 'un-blinded.');
+$mult1->makeLast(
+  'un-blinded.',
+  'single-blind.',
+  'double-blind.'
+);
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'This is an example of a', 'completely randomized design.');
+$mult2->extra(
+  'block design.',
+  'matched pairs design.'
+);
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'The treatments are', 'the hormone therapy or the absence of it.');
+$mult3->extra(
+  'the HDL and the LDL.'
+);
+
+$mult4 = new_multiple_choice();
+$mult4->qa( 'The cases are', 'the 870 men in the study.');
+$mult4->extra(
+  'the blood tests.'
+);
+
+}
+
+BEGIN_TEXT
+$PAR
+$BBOLD a. $EBOLD
+\{ $mult1->print_q() \}
+\{ $mult1->print_a() \}
+
+$PAR
+$BBOLD b. $EBOLD
+\{ $mult2->print_q() \}
+\{ $mult2->print_a() \}
+
+$PAR
+$BBOLD c. $EBOLD
+\{ $mult3->print_q() \}
+\{ $mult3->print_a() \}
+
+$PAR
+$BBOLD d. $EBOLD
+\{ $mult4->print_q() \}
+\{ $mult4->print_a() \}
+
+END_TEXT
+
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+ANS( radio_cmp( $mult1->correct_ans() ) );
+ANS( radio_cmp( $mult2->correct_ans() ) );
+ANS( radio_cmp( $mult3->correct_ans() ) );
+ANS( radio_cmp( $mult4->correct_ans() ) );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -1,0 +1,147 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Probability: direct computation, inclusion/exclusion)
+## KEYWORDS('probability','random behavior' )
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('E3')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$rand1 = random(1, 2, 1);
+$rand2 = random(1, 2, 1);
+$rand3 = random(1, 2, 1);
+
+$a1 = Real(30/36);
+$a2 = Real(4/36);
+$a3 = Real(8/36);
+$a4 = Real(6/36);
+$a5 = Real(11/36);
+$a6 = Real(1/36);
+$a7 = Real(2/36);
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+BEGIN_TEXT
+Two fair dice are rolled. Determine the following probabilities. Give your answers to
+four decimal places.
+\{ BeginList( "OL", type=>"a") \}
+END_TEXT
+
+if( $rand1==1)
+{
+BEGIN_TEXT
+$ITEM Not getting doubles \{ans_rule(10)\}
+END_TEXT
+}
+else{
+BEGIN_TEXT
+$ITEM Getting a sum of 5 \{ans_rule(10)\}
+END_TEXT
+}
+
+if( $rand2==1)
+{
+BEGIN_TEXT
+$ITEM Getting a sum of 7 or 11 \{ans_rule(10)\}
+END_TEXT
+}
+else{
+BEGIN_TEXT
+$ITEM A 5 occurring on the first die \{ans_rule(10)\}
+END_TEXT
+}
+
+if( $rand3==1)
+{
+BEGIN_TEXT
+$ITEM Getting at least one 5 \{ans_rule(10)\}
+END_TEXT
+}
+else{
+BEGIN_TEXT
+$ITEM A 5 occurring on both dice \{ans_rule(10)\}
+END_TEXT
+}
+
+BEGIN_TEXT
+$ITEM Getting 5 as the absolute value of the difference of the two numbers \{ans_rule(10)\}
+\{ EndList("OL") \}
+END_TEXT
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+if($rand1==1)
+{
+ANS( $a1->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+else{
+ANS( $a2->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+
+if($rand2==1)
+{
+ANS( $a3->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+else{
+ANS( $a4->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+
+if($rand3==1)
+{
+ANS( $a5->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+else{
+ANS( $a6->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+}
+
+ANS( $a7->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+
+###########################
+## Solution Section
+###########################
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

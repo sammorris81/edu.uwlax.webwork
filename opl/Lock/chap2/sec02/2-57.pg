@@ -1,0 +1,99 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('2.57')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "";
+} else {
+  $anssep = $BR;
+}
+$showPartialCorrectAnswers = 0;
+
+Context("Numeric");
+
+$n = random(6, 8, 2);
+$quant = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n,
+  mean => random(15, 25, 2),
+  sd => 3,
+  skew => 0,
+  round => 0
+);
+
+Context("Numeric");
+
+@x = @{$quant->{x}};
+$mean_noout = Real(usefulstatUWL::mean(@x));
+$med_noout = Real(usefulstatUWL::med(@x));
+
+$outlier = random(70, 80, 1);
+push(@x, $outlier);
+
+$mean_out = Real(usefulstatUWL::mean(@x));
+$med_out = Real(usefulstatUWL::med(@x));
+
+
+$mc = PopUp(
+    ["?", "Mean", "Median"],
+    "Mean"
+);
+
+
+
+BEGIN_TEXT
+The number of grams of fiber eaten in one day for a sample of \{ $n + 1 \} people
+are $PAR
+$BCENTER
+\{ join(", ", @x) \}
+$ECENTER
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find the mean and the median for these data. Give your answers to 4 decimal
+  places. $BR
+  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+  $PAR
+  $ITEM The value of $outlier appears to be an obvious outlier. Compute the mean
+  and median for the $n numbers with the outlier excluded. $BR
+  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+  $PAR
+  $ITEM Which of the summary statistics does the outlier impact the most? \{ $mc->menu() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS($mean_out->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($med_out->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mean_noout->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($med_noout->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($mc->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

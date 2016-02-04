@@ -1,0 +1,197 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sample survey methods)
+## DBsection(Concepts)
+## KEYWORDS('data')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('1')
+## Section1('1.2')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$exercisea = 'To estimate the proportion of Americans who support changing the '.
+             'drinking age from 21 to 18, a random sample of 100 college students '.
+             'are asked the question "Would you support a measure to lower the drinking '.
+             'age from 21 to 18?"';
+$samplea = 'The 100 selected college students';
+$popa = 'All Americans';
+$truepopa = 'All college students';
+
+$exerciseb = 'To investigate the growth of the canine population in New York City, '.
+             '100 dogs are randomly selected from a registry of licensed pets in '.
+             'the city, and the researchers record whether or not the dog is spayed '.
+             'or neutered.';
+$sampleb = 'The 100 selected dogs';
+$popb = 'The canine population in New York City';
+$truepopb = 'The registered canine population in New York City';
+
+$exercisec = 'To investigate interest across all residents of the US in a new type '.
+             'of ice skate, a random sample of 1500 people in Minnesota are asked '.
+             'about their interest in the product.';
+$samplec = 'The 1500 selected people';
+$popc = 'All residents of the US';
+$truepopc = 'All residents of Minnesota';
+
+$exercised = 'To determine the height distribution of female high school students, '.
+             'the rosters are collected from 20 randomly selected high school girls '.
+             'basketball teams.';
+$sampled = 'The 20 randomly selected high school girls';
+$popd = 'All female high school students';
+$truepopd = 'All female high school basketball players';
+
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $sample1 = $samplea;
+  $pop1 = $popa;
+  $truepop1 = $truepopa;
+  $text2 = $exerciseb;
+  $sample2 = $sampleb;
+  $pop2 = $popb;
+  $truepop2 = $truepopb;
+} elsif ($random == 2) {
+  $text1 = $exercisec;
+  $sample1 = $samplec;
+  $pop1 = $popc;
+  $truepop1 = $truepopc;
+  $text2 = $exercised;
+  $sample2 = $sampled;
+  $pop2 = $popd;
+  $truepop2 = $truepopd;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  $sample1 = $sampled;
+  $pop1 = $popd;
+  $truepop1 = $truepopd;
+  $text2 = $exercisea;
+  $sample2 = $samplea;
+  $pop2 = $popa;
+  $truepop2 = $truepopa;
+} else {
+  $text1 = $exerciseb;
+  $sample1 = $sampleb;
+  $pop1 = $popb;
+  $truepop1 = $truepopb;
+  $text2 = $exercisec;
+  $sample2 = $samplec;
+  $pop2 = $popc;
+  $truepop2 = $truepopc;
+}
+
+$order = random(1, 6, 1);
+if ($order == 1) {
+  @options1 = ('?', $sample1, $pop1, $truepop1);  # 1 2 3
+  @options2 = ('?', $truepop2, $sample2, $pop2);  # 3 1 2
+} elsif ($order == 2) {
+  @options1 = ('?', $sample1, $truepop1, $pop1);  # 1 3 2
+  @options2 = ('?', $truepop2, $pop2, $sample2);  # 3 2 1
+} elsif ($order == 3) {
+  @options1 = ('?', $pop1, $sample1, $truepop1);  # 2 1 3
+  @options2 = ('?', $sample2, $truepop2, $pop2);  # 1 3 2
+} elsif ($order == 4) {
+  @options1 = ('?', $pop1, $truepop1, $sample1);  # 2 3 1
+  @options2 = ('?', $sample2, $pop2, $truepop2);  # 1 2 3
+} elsif ($order == 5) {
+  @options1 = ('?', $truepop1, $pop1, $sample1);  # 3 2 1
+  @options2 = ('?', $pop2, $sample2, $truepop2);  # 2 1 3
+} else {
+  @options1 = ('?', $truepop1, $sample1, $pop1);  # 3 1 2
+  @options2 = ('?', $pop2, $truepop2, $sample2);  # 2 3 1
+}
+
+$s1 = PopUp(
+  [@options1],
+  $sample1,
+);
+$p1 = PopUp(
+  [@options1],
+  $pop1,
+);
+$tp1 = PopUp(
+  [@options1],
+  $truepop1,
+);
+
+$s2 = PopUp(
+  [@options2],
+  $sample2,
+);
+$p2 = PopUp(
+  [@options2],
+  $pop2,
+);
+$tp2 = PopUp(
+  [@options2],
+  $truepop2,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following exercises, a biased sampling situation is described. In each case
+identify a) the sample, b) the desired population of interest, and c) the true population to which
+we can generalize based on the sample.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Sample: \{ $s1->menu() \}
+    $ITEM Desired population: \{ $p1->menu() \}
+    $ITEM True population: \{ $tp1->menu() \}
+  \{ EndList( "OL" ) \}
+  $ITEM $text2
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Sample: \{ $s2->menu() \}
+    $ITEM Desired population: \{ $p2->menu() \}
+    $ITEM True population: \{ $tp2->menu() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($s1->cmp());
+ANS($p1->cmp());
+ANS($tp1->cmp());
+ANS($s2->cmp());
+ANS($p2->cmp());
+ANS($tp2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

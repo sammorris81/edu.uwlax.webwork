@@ -1,0 +1,101 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample proportion)
+## KEYWORDS('Confidence Interval', 'Proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('E7')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+$random = random( 1, 3, 1 );
+$n1 = random( 400, 600, 20 );
+$p1 = random( 0.60, 0.70, 0.01 );
+$count1 = sprintf("%.0f", $p1 * $n1);
+$p1 = $count1 / $n1;
+
+$a2 = random( 1, 3, 1 );
+$n2 = random( 1000, 1100, 1 );
+$p2 = random( 0.85, 0.95, 0.01 );
+$count2 = sprintf("%.0f", $p2 * $n2);
+$p2 = $count2 / $n2;
+
+if ($random==1) {
+    $s1 = 0.90;
+    $s2 = 0.95;
+} elsif ($random==2) {
+    $s1 = 0.95;
+    $s2 = 0.99;
+} else {
+    $s1 = 0.99;
+    $s2 = 0.90;
+}
+
+$z1 = udistr((1 - $s1)/2);
+$se1 = sqrt( $p1 * (1 - $p1) / $n1);
+$lower1 = Real(sprintf("%.4f", $p1 - $z1 * $se1));
+$upper1 = Real(sprintf("%.4f", $p1 + $z1 * $se1));
+
+$z2 = udistr((1 - $s2)/2);
+$se2 = sqrt( $p2 * (1 - $p2) / $n2);
+$lower2 = Real(sprintf("%.4f", $p2 - $z2 * $se2));
+$upper2 = Real(sprintf("%.4f", $p2 + $z2 * $se2));
+
+BEGIN_TEXT
+\{BeginList( "OL", type=>"1" ) \}
+$ITEM In a survey consisting of a randomly selected national sample of $n1 teens ages
+13-17, $count1 responded that their school was helping them discover what
+type of work they would love to do as a career.
+$PAR
+Find a \{ $s1*100 \}$PERCENT confidence interval for the proportion of all teens
+ages 13-17 in the United States who would respond that their school is helping
+them discover a career path. Give your answers to 4 decimal places.
+$PAR
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+
+$ITEM President George W. Bush received the highest approval rating ever given to a
+president since the presidential approval polls began in the 1930s. Right after
+the September 11, 2001 terrorist attacks on New York City and Washington, he
+received an approval from $count2 respondents in the ABC news poll of $n2 randomly
+selected American adults.
+$PAR
+Find a \{$s2*100 \}$PERCENT confidence interval for the proportion of all American
+adults who approved of the job President Bush was doing. Give your answers to 4
+decimal places.
+$PAR
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($lower1->with(tolerance=>.001, tolType=>"absolute")->cmp);
+ANS($upper1->with(tolerance=>.001, tolType=>"absolute")->cmp);
+ANS($lower2->with(tolerance=>.001, tolType=>"absolute")->cmp);
+ANS($upper2->with(tolerance=>.001, tolType=>"absolute")->cmp);
+
+ENDDOCUMENT();

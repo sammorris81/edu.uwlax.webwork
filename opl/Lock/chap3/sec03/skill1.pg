@@ -1,0 +1,337 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'constructing bootstrap confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n1 = Real(random(6, 8, 1));
+$quant1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n1,
+  mean => 40,
+  sd => 10,
+  round => 0,
+  name => "Sample 1",
+);
+
+$bootstrap1g1 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant1,
+  n => $n1,
+  extras => "F",
+);
+
+$bootstrap1g2 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant1,
+  n => $n1,
+  extras => "F",
+);
+
+$bootstrap1g3 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant1,
+  n => $n1,
+  extras => "F",
+);
+
+$wrongn1 = $n1 + random(-2, 2, 4);
+$bootstrap1b1 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant1,
+  n => $wrongn1,
+  extras => "F",
+);
+
+$bootstrap1b2 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant1,
+  n => $n1,
+  extras => "T",
+);
+
+$n2 = Real(random(5, 7, 1));
+$quant2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n2,
+  mean => 95,
+  sd => 10,
+  round => 0,
+  name => "Sample 2"
+);
+
+$bootstrap2g1 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant2,
+  n => $n2,
+  extras => "F",
+);
+
+$bootstrap2g2 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant2,
+  n => $n2,
+  extras => "F",
+);
+
+$bootstrap2g3 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant2,
+  n => $n2,
+  extras => "F",
+);
+
+$wrongn2 = $n2 + random(-2, 2, 4);
+$bootstrap2b1 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant2,
+  n => $wrongn2,
+  extras => "F",
+);
+
+$bootstrap2b2 = new DataGenUWL(
+  datatype => 'bs_one_samp',
+  data => $quant2,
+  n => $n2,
+  extras => "T",
+);
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 3, 1);
+
+if ($random == 1) {
+  @bootstrap1a = @{$bootstrap1g1->{x}};
+  $correct1a = "Possible";
+  @bootstrap1b = @{$bootstrap1b1->{x}};
+  $correct1b = "Not Possible";
+  @bootstrap1c = @{$bootstrap1g2->{x}};
+  $correct1c = "Possible";
+  @bootstrap1d = @{$bootstrap1g3->{x}};
+  $correct1d = "Possible";
+  @bootstrap1e = @{$bootstrap1b2->{x}};
+  $correct1e = "Not Possible";
+
+  @bootstrap2a = @{$bootstrap2g1->{x}};
+  $correct2a = "Possible";
+  @bootstrap2b = @{$bootstrap2g2->{x}};
+  $correct2b = "Possible";
+  @bootstrap2c = @{$bootstrap2b1->{x}};
+  $correct2c = "Not Possible";
+  @bootstrap2d = @{$bootstrap2b2->{x}};
+  $correct2d = "Not Possible";
+  @bootstrap2e = @{$bootstrap2g3->{x}};
+  $correct2e = "Possible";
+} elsif ($random == 2) {
+  @bootstrap1a = @{$bootstrap1b1->{x}};
+  $correct1a = "Not Possible";
+  @bootstrap1b = @{$bootstrap1g1->{x}};
+  $correct1b = "Possible";
+  @bootstrap1c = @{$bootstrap1b2->{x}};
+  $correct1c = "Not Possible";
+  @bootstrap1d = @{$bootstrap1g2->{x}};
+  $correct1d = "Possible";
+  @bootstrap1e = @{$bootstrap1g3->{x}};
+  $correct1e = "Possible";
+
+  @bootstrap2a = @{$bootstrap2g1->{x}};
+  $correct2a = "Possible";
+  @bootstrap2b = @{$bootstrap2g2->{x}};
+  $correct2b = "Possible";
+  @bootstrap2c = @{$bootstrap2b1->{x}};
+  $correct2c = "Not Possible";
+  @bootstrap2d = @{$bootstrap2g3->{x}};
+  $correct2d = "Possible";
+  @bootstrap2e = @{$bootstrap2b2->{x}};
+  $correct2e = "Not Possible";
+} elsif ($random == 3) {
+  @bootstrap1a = @{$bootstrap1b1->{x}};
+  $correct1a = "Not Possible";
+  @bootstrap1b = @{$bootstrap1b2->{x}};
+  $correct1b = "Not Possible";
+  @bootstrap1c = @{$bootstrap1g1->{x}};
+  $correct1c = "Possible";
+  @bootstrap1d = @{$bootstrap1g2->{x}};
+  $correct1d = "Possible";
+  @bootstrap1e = @{$bootstrap1g3->{x}};
+  $correct1e = "Possible";
+
+  @bootstrap2a = @{$bootstrap2g1->{x}};
+  $correct2a = "Possible";
+  @bootstrap2b = @{$bootstrap2b1->{x}};
+  $correct2b = "Not Possible";
+  @bootstrap2c = @{$bootstrap2g2->{x}};
+  $correct2c = "Possible";
+  @bootstrap2d = @{$bootstrap2b2->{x}};
+  $correct2d = "Not Possible";
+  @bootstrap2e = @{$bootstrap2g3->{x}};
+  $correct2e = "Possible";
+}
+
+@possible = (
+  "?",
+  "Possible",
+  "Not Possible",
+);
+
+$mc1a = PopUp(
+  [@possible],
+  $correct1a,
+);
+
+$mc1b = PopUp(
+  [@possible],
+  $correct1b,
+);
+
+$mc1c = PopUp(
+  [@possible],
+  $correct1c,
+);
+
+$mc1d = PopUp(
+  [@possible],
+  $correct1d,
+);
+
+$mc1e = PopUp(
+  [@possible],
+  $correct1e,
+);
+
+$mc2a = PopUp(
+  [@possible],
+  $correct2a,
+);
+
+$mc2b = PopUp(
+  [@possible],
+  $correct2b,
+);
+
+$mc2c = PopUp(
+  [@possible],
+  $correct2c,
+);
+
+$mc2d = PopUp(
+  [@possible],
+  $correct2d,
+);
+
+$mc2e = PopUp(
+  [@possible],
+  $correct2e,
+);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Understanding bootstrap samples:$EBOLD $BR
+There are two key characteristics that must be satisfied for a sample to be a
+possible bootstrap sample.
+\{BeginList("UL")\}
+  $ITEM A bootstrap sample can only have values in it that are in the original
+  sample.
+  $ITEM A bootstrap sample must have the same number of observations in it as
+  the original sample.
+\{EndList("UL")\}
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In these questions, use the original sample to identify how many observations each
+bootstrap sample should contain. Then indicate if the values given in the subsequent
+samples are a possible bootstrap sample from the original sample.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Original sample: \{ join(", ", @{$quant1->{x}}) \}
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM How many observations should each bootstrap sample contain? \{ ans_rule(10) \}
+    $ITEM For each of the following samples, identify if they are a possible bootstrap
+    sample from the original sample.
+    \{ BeginList( "UL" ) \}
+      $ITEM \{ join(", ", @bootstrap1a) \} \{ $mc1a->menu() \}
+      $ITEM \{ join(", ", @bootstrap1b) \} \{ $mc1b->menu() \}
+      $ITEM \{ join(", ", @bootstrap1c) \} \{ $mc1c->menu() \}
+      $ITEM \{ join(", ", @bootstrap1d) \} \{ $mc1d->menu() \}
+      $ITEM \{ join(", ", @bootstrap1e) \} \{ $mc1e->menu() \}
+    \{ EndList( "UL" ) \}
+  \{ EndList( "OL" ) \}
+$PAR
+$ITEM Original sample: \{ join(", ", @{$quant2->{x}}) \}.
+\{ BeginList( "OL", type=>"a") \}
+    $ITEM How many observations should each bootstrap sample contain? \{ ans_rule(10) \}
+    $ITEM For each of the following samples, identify if they are a possible bootstrap
+    sample from the original sample.
+    \{ BeginList( "UL" ) \}
+      $ITEM \{ join(", ", @bootstrap2a) \} \{ $mc2a->menu() \}
+      $ITEM \{ join(", ", @bootstrap2b) \} \{ $mc2b->menu() \}
+      $ITEM \{ join(", ", @bootstrap2c) \} \{ $mc2c->menu() \}
+      $ITEM \{ join(", ", @bootstrap2d) \} \{ $mc2d->menu() \}
+      $ITEM \{ join(", ", @bootstrap2e) \} \{ $mc2e->menu() \}
+    \{ EndList("UL") \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($n1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($mc1a->cmp());
+ANS($mc1b->cmp());
+ANS($mc1c->cmp());
+ANS($mc1d->cmp());
+ANS($mc1e->cmp());
+
+ANS($n2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($mc2a->cmp());
+ANS($mc2b->cmp());
+ANS($mc2c->cmp());
+ANS($mc2d->cmp());
+ANS($mc2e->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

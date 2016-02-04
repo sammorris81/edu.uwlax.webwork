@@ -1,0 +1,213 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'creating randomization distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.4')
+## Problem1('4.128')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = 8;
+
+$quant1 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n,
+    skew => 0,
+    mean => 81,
+    sd => 5,
+    round => 1,
+    randomsummary => 'F',
+);
+
+@x1 = @{$quant1->{x}};
+$n1 = $quant1->{n};
+$mean1 = sprintf("%.3f", $quant1->{mean});
+
+$statistic = Real($mean1);
+$nullval = 80;
+
+$N = 1000;
+$bs_means = new DataGenUWL(
+  datatype => 'bs_one_mean',
+  data => $quant1,
+  nullval => $nullval,
+  N => $N,
+);
+
+$param = '\mu';
+$type = 'GT';
+
+$histrandom = StatGraphicsUWL::histogram(
+  data => $bs_means,
+  summaries => "F",
+);
+
+$nullhyp = hyptestProblemUWL::selectnull(
+  nullval => $nullval,
+  param => $param,
+);
+
+$althyp = hyptestProblemUWL::selectalt(
+  nullval => $nullval,
+  param => $param,
+  type => $type,
+);
+
+$pvalue = QuantitativeUWL::random_pvalue(
+  data => $bs_means,
+  test_stat => $statistic,
+  alternative => $type,
+);
+
+$pvalue = Real($pvalue);
+$nextreme = $pvalue * $N;
+
+$rejinterp = "We have statistically significant evidence to suggest that the ".
+             "average arsenic levels in this supplier's chicken is higher than ".
+             "80 ppb.";
+
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "the average arsenic levels in this supplier's chicken is higher ".
+             "than 80 ppb.";
+
+$accinterp = "We have statistically significant evidence that the avearge ".
+             "arsenic levels in this supplier's chicken is 80 ppb.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+if ($pvalue < 0.05) {
+  $correct_dec    = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec    = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+Arsenic-based addivites are mixed in the diet of about 70$PERCENT of the 9 billion
+broiler chickens produced annually in the US. A restaurant chain has decided to cancel
+contracts with chick suppliers if the average amount of arsenic in their chicken is
+higher than 80 ppb (parts per billion). They have randomly selected $n1 chickens from
+one of the suppliers and the arsenic measurements are given below:
+$PAR
+$BCENTER
+  \{ join(", ", @x1) \}
+$ECENTER
+$PAR
+Conduct a hypothesis test to see if this restaurant should cancel its contract with the supplier.
+$PAR
+The histogram of randomization distribution is given below.
+In $nextreme randomizations (out of $N) the randomization distribution resulted
+in values as large or larger than the statistic for this data.
+$PAR
+$BCENTER
+\{ image( insertGraph($histrandom) , width=>300,height=>300,tex_size=>500 )
+\}
+$ECENTER
+$PAR
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \{ $nullhyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the correct alternative hypothesis for this test? $BR
+  \{ $althyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the statistic from this sample? Give your answer to two decimal places.\{ ans_rule(10) \}
+  $PAR
+  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Select the appropriate decision for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcdec -> buttons() \}
+  $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcinterp -> buttons() \}
+  $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($nullhyp->cmp());
+ANS($althyp->cmp());
+ANS($statistic->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($pvalue->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+ENDDOCUMENT();

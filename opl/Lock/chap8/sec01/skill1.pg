@@ -1,0 +1,220 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## KEYWORDS('ANOVA to compare means', 'analysis of variance')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('8')
+## Section1('8.1')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$nreps1 = 5;
+
+$a1 = random( 3, 5, 1 );
+if ($a1 == 3) {
+  $groups1 = "three";
+  $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1";
+} elsif ($a1 == 4) {
+  $groups1 = "four";
+  $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1, n_4 = $nreps1";
+} elsif ($a1 == 5) {
+  $groups1 = "five";
+  $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1, n_4 = $nreps1, n_5 = $nreps1";
+}
+$ntot1 = $nreps1 * $a1;
+$dfa1 = Real($a1 - 1);
+$dfe1 = Real($a1 * ($nreps1 - 1));
+$dftot1 = Real($dfa1 + $dfe1);
+
+$SSA1   = random(80, 85, .01);
+$SSTot1 = Real(random(115, 130, 1));
+$SSE1   = Real($SSTot1 - $SSA1);
+
+$MSA1 = Real(sprintf("%.4f", $SSA1 / $dfa1));
+$MSE1 = Real(sprintf("%.4f", $SSE1 / $dfe1));
+
+$F1 = Real(sprintf("%.4f", $MSA1 / $MSE1));
+
+$pval1 = fprob($dfa1, $dfe1, $F1);
+if ($pval1 < 0.0001) {
+  $pvaldisp1 = "\( < 0.0001 \)";
+} else {
+  $pvaldisp1 = sprintf("%.4f", $pval1);
+}
+
+do { $a2 = random( 3, 5, 1 ); } until ($a2 != $a1);
+@n2;
+for my $i (0..($a2 - 1)) {
+  push(@n2, random(4, 8, 1));
+}
+if ($a2 == 3) {
+  $groups2 = "three";
+  $ns2 = "n_2 = $n2[0], n_2 = $n2[1], n_3 = $n2[2]";
+} elsif ($a2 == 4) {
+  $groups2 = "four";
+  $ns2 = "n_2 = $n2[0], n_2 = $n2[1], n_3 = $n2[2], n_4 = $n2[3]";
+} elsif ($a2 == 5) {
+  $groups2 = "five";
+  $ns2 = "n_2 = $n2[0], n_2 = $n2[1], n_3 = $n2[2], n_4 = $n2[3], n_5 = $n2[4]";
+}
+$ntot2 = usefulstatUWL::sum(@n2);
+
+$dfa2 = Real($a2 - 1);
+$dftot2 = Real($ntot2 - 1);
+$dfe2 = Real($dftot2 - $dfa2);
+
+$SSA2   = random(100, 150, .01);
+$SSTot2 = Real(400);
+$SSE2   = Real($SSTot2 - $SSA2);
+
+$MSA2 = Real(sprintf("%.4f", $SSA2 / $dfa2));
+$MSE2 = Real(sprintf("%.4f", $SSE2 / $dfe2));
+
+$F2 = Real(sprintf("%.4f", $MSA2 / $MSE2));
+
+$pval2 = fprob($dfa2, $dfe2, $F2);
+if ($pval2 < 0.0001) {
+  $pvaldisp2 = "\( < 0.0001 \)";
+} else {
+  $pvaldisp2 = sprintf("%.4f", $pval2);
+}
+
+
+
+@options = (
+  " i. Reject \( H_0 \)",
+  " ii. Do not reject \( H_0 \)",
+);
+
+if ($pval1 < 0.05) {
+  $correct1 = $options[0];
+} else {
+  $correct1 = $options[1];
+}
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+if ($pval2 < 0.05) {
+  $correct2 = $options[0];
+} else {
+  $correct2 = $options[1];
+}
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$showHint = 3;
+BEGIN_HINT
+For help to fill out the ANOVA table, take a look at p. 499 in your book.
+END_HINT
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+The following questions give the sample sizes for the groups in a dataset and an
+outline of an analysis of variance table with some information on the sums of
+squares. In each question a) fill in the missing parts of the table, and b) state
+the conclusion of the test. Give your answers to 3 decimal
+places.
+
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM There are $groups1 groups with \($ns1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Fill in the missing parts of the ANOVA table $BR
+    \{ begintable(6) \}
+    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
+    \{ row( "Groups", ans_rule(10), "$SSA1", ans_rule(10), ans_rule(10), "$pvaldisp1", ) \}
+    \{ row( "Error", ans_rule(10), "$SSE1", ans_rule(10), "$SPACE", "$SPACE", ) \}
+    \{ row( "Total", ans_rule(10), ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ endtable() \}
+    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM There are $groups2 groups with \($ns2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Fill in the missing parts of the ANOVA table $BR
+    \{ begintable(6) \}
+    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
+    \{ row( "Groups", ans_rule(10), "$SSA2", ans_rule(10), ans_rule(10), "$pvaldisp2", ) \}
+    \{ row( "Error", ans_rule(10), ans_rule(10), ans_rule(10), "$SPACE", "$SPACE",) \}
+    \{ row( "Total", ans_rule(10), "$SSTot2", "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ endtable() \}
+    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+ANS($dfa1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($MSA1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($F1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($dfe1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($MSE1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($dftot1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSTot1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+
+ANS($dfa2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($MSA2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($F2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($dfe2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSE2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($MSE2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($dftot2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

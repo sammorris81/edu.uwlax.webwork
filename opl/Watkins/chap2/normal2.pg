@@ -1,0 +1,91 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('normal2')
+## Author(Melissa Bingham)
+## Institution(University of Wisconsin-La Crosse)
+
+DOCUMENT();
+
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+$m=random(10,20,1);
+$s=random(1,3,1);
+$v1=$m+random(0,3,.01);
+$v2=$m+random(-3,0,.01);
+$v3=$m+random(0,3,.01);
+$v4=$m+random(-3,0,.01);
+$v5=$m+random(-3,0,.01);
+$v6=$m+random(0,3,.01);
+$v7=$m+random(0,1,.01);
+$v8=$m+random(1,3,.01);
+$v9=$m+random(-5,-6,.01);
+$v10=$m+random(-3,0,.01);
+
+$x1=sprintf("%0.2f",($v1-$m)/$s);
+$x2=sprintf("%0.2f",($v2-$m)/$s);
+$x3=sprintf("%0.2f",($v3-$m)/$s);
+$x4=sprintf("%0.2f",($v4-$m)/$s);
+$x5=sprintf("%0.2f",($v5-$m)/$s);
+$x6=sprintf("%0.2f",($v6-$m)/$s);
+$x7=sprintf("%0.2f",($v7-$m)/$s);
+$x8=sprintf("%0.2f",($v8-$m)/$s);
+$x9=sprintf("%0.2f",($v9-$m)/$s);
+$x10=sprintf("%0.2f",($v10-$m)/$s);
+
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(1-sprintf("%0.4f",uprob($x2)));
+$an3 = Real(sprintf("%0.4f",uprob($x3)));
+$an4 = Real(sprintf("%0.4f",uprob($x4)));
+$an5 = Real(-sprintf("%0.4f",uprob($x6))+sprintf("%0.4f",uprob($x5)));
+$an6 = Real(-sprintf("%0.4f",uprob($x8))+sprintf("%0.4f",uprob($x7)));
+$an7 = Real(-sprintf("%0.4f",uprob($x10))+sprintf("%0.4f",uprob($x9)));
+
+BEGIN_TEXT
+
+Let \(x \) be a normal random variable with mean $m and standard deviation $s.  Find the following probabilities.
+\{ BeginList( "OL", type=>"a") \}
+$ITEM \(P(x<$v1) \) = \{ans_rule(8)\}
+$ITEM \(P(x<$v2) \) = \{ans_rule(8)\}
+$ITEM \(P(x>$v3) \) = \{ans_rule(8)\}
+$ITEM \(P(x>$v4) \) = \{ans_rule(8)\}
+$ITEM \(P($v5<x<$v6) \) = \{ans_rule(8)\}
+$ITEM \(P($v7<x<$v8) \) = \{ans_rule(8)\}
+$ITEM \(P($v9<x<$v10) \) = \{ans_rule(8)\}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an2->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an3->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an4->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an5->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an6->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an7->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+
+
+ENDDOCUMENT();

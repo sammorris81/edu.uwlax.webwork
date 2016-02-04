@@ -1,0 +1,114 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## KEYWORDS('approximating with a distribution', 'normal distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('5')
+## Section1('5.1')
+## Problem1('Skill Builder 6')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+$area1 = random(0.1, 0.3, 0.05);
+do {$area2 = random(0.2, 0.8, 0.05);} until ($area1 != $area2);
+$area3 = random(0.4, 0.6, 0.05);
+do {$area4 = random(0.1, 0.5, 0.05);} until ($area3 != $area4);
+$area5 = random(0.8, 0.95, 0.05);
+do {$area6 = random(0.8, 0.95, 0.05);} until ($area5 != $area6);
+
+$z1 = Real(sprintf("%.3f", udistr(1 - $area1)));
+$z2 = Real(sprintf("%.3f", udistr(1 - $area2)));
+$z3 = Real(sprintf("%.3f", udistr($area3)));
+$z4 = Real(sprintf("%.3f", udistr($area4)));
+$z5u = Real(sprintf("%.3f", udistr((1 - $area5)/2)));
+$z5l = Real(-$z5u);
+$z6u = Real(sprintf("%.3f", udistr((1 - $area6)/2)));
+$z6l = Real(-$z6u);
+
+$m1 = random(5, 20, 5);
+$m2 = random(5, 20, 5);
+$m3 = random(10, 25, 5);
+$m4 = random(10, 25, 5);
+$m5 = random(15, 30, 5);
+$m6 = random(15, 30, 5);
+
+$s1 = random(5, 10, 0.5);
+$s2 = random(5, 10, 0.5);
+$s3 = random(5, 10, 0.5);
+$s4 = random(5, 10, 0.5);
+$s5 = random(5, 10, 0.5);
+$s6 = random(5, 10, 0.5);
+
+$x1 = Real($z1 * $s1 + $m1);
+$x2 = Real($z2 * $s2 + $m2);
+$x3 = Real($z3 * $s3 + $m3);
+$x4 = Real($z4 * $s4 + $m4);
+$x5l = Real($z5l * $s5 + $m5);
+$x5u = Real($z5u * $s5 + $m5);
+$x6l = Real($z6l * $s6 + $m6);
+$x6u = Real($z6u * $s6 + $m6);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, use the given density to find the specified \(x\) values.
+Give your answers to 3 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM What \(x\) has $area1 to the left of it in a N($m1, $s1) distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area2 to the left of it in a N($m2, $s2) distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area3 to the right of it in a N($m3, $s3) distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area4 to the right of it in a N($m4, $s4) distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What interval covers $area5 in a N($m5, $s5) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What interval covers $area6 in a N($m6, $s6) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($x1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x3->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x4->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x5l->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x5u->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x6l->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+ANS($x6u->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

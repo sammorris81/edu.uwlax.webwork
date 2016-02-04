@@ -1,0 +1,109 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('2.20')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$n = random(300, 340, 1);
+@nlevels = (2, 2);
+@labels = ("Dyslexia", "Control", "DYXC1 break", "DYXC1 no break");
+@probs = (0.033, 0.016, 0.625, 0.326);
+
+$cat1 = new DataGenUWL(
+  datatype => 'two_cat',
+  n => $n,
+  nlevels => [@nlevels],
+  probs => [@probs],
+  labels => [@labels],
+  random => "T",
+);
+
+$break_giv_dys = CategoricalUWL::marginalprop( data=>$cat1, row=>1, col=>1, index=>1 );
+$nobreak_giv_con = CategoricalUWL::marginalprop( data=>$cat1, row=>2, col=>2, index=>1 );
+$break_giv_dys = Real($break_giv_dys);
+$nobreak_giv_con = Real($nobreak_giv_con);
+
+$dys_giv_break = CategoricalUWL::marginalprop( data=>$cat1, row=>1, col=>1, index=>2 );
+$con_giv_nobreak = CategoricalUWL::marginalprop( data=>$cat1, row=>2, col=>2, index=>2 );
+$dys_giv_break = Real($dys_giv_break);
+$con_giv_nobreak = Real($con_giv_nobreak);
+
+$break_and_dys = CategoricalUWL::jointprop( data=>$cat1, row=>1, col=>1 );
+$nobreak_and_con = CategoricalUWL::jointprop( data=>$cat1, row=>2, col=>2 );
+$break_and_dys = Real($break_and_dys);
+$nobreak_and_con = Real($nobreak_and_con);
+
+Context()->texStrings;
+BEGIN_TEXT
+A disruption of a gene called DYXC1 on chromosome 15 for humans may be related to
+an increased risk of developing dyslexia. Researchers ($BITALIC Science News$EITALIC,
+August 30, 2003, p 131.) studied the gene in \{
+  CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>1)
+\} people diagnosed with dyslexia and in a control group of \{
+  CategoricalUWL::margintotal(data=>$cat1, level=>2, index=>1)
+\} others who had no learning disorder. The DYXC1 break
+occured in \{
+  CategoricalUWL::singlefreq(data=>$cat1, row=>1, col=>1)
+\} of those with dyslexia and in \{
+  CategoricalUWL::singlefreq(data=>$cat1, row=>2, col=>1)
+\} of those in the control group. These frequencies are summarized in the following table:
+$PAR
+\{ CategoricalUWL::freqtable(data=>$cat1) \}
+$PAR
+For each of the following questions, give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What proportion of people who have dyslexia have the DYXC1 break? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What proportion of people who do not have dyslexia do not have the DYXC1 break? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What proportion of people who have the DYXC1 break have dyslexia? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What proportion of people who do not have the DYXC1 break do not have dyslexia? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What proportion of people in the sample have the DYXC1 break and dyslexia? \{ ans_rule(10) \}
+  $PAR
+  $ITEM What proportion of people in the sample do not have the DYXC1 break and
+  do not have dyslexia? \{ ans_rule(10) \}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS($break_giv_dys->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($nobreak_giv_con->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($dys_giv_break->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($con_giv_nobreak->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($break_and_dys->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($nobreak_and_con->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();

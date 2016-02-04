@@ -1,0 +1,70 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('Sample Proportion', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.3')
+## Problem1('1')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$p=random(.88,.95,.01);
+$p1=$p*100;
+$n=random(980,1020,1);
+
+$x1=sprintf("%0.2f",(.90-$p)/sqrt($p*(1-$p)/$n));
+$x2=sprintf("%0.2f",(925/$n-$p)/sqrt($p*(1-$p)/$n));
+
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(sprintf("%0.4f",uprob($x2)));
+
+
+
+BEGIN_TEXT
+The ethnicity of $p1$PERCENT of the population of China is Han Chinese.  Suppose you take a random sample of $n Chinese.
+
+$PAR
+What is the probability of getting 90$PERCENT or fewer Han Chinese in your sample? \{ans_rule(8)\}
+$PAR
+What is the probability of getting 925 or more Han Chinese? \{ans_rule(8)\}
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+
+
+
+ENDDOCUMENT();

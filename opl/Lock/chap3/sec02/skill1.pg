@@ -1,0 +1,134 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'understanding and interpreting confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$parama = "\( \mu \)";
+$stata = "\( \overline{x} \)";
+$centera = random(20, 30, 1);
+$moea = random(3, 8, 1);
+
+$paramb = "\( p \)";
+$statb = "\( \widehat{p} \)";
+$centerb = random(0.30, 0.40, 0.01);
+$moeb = random(0.01, 0.08, 0.01);
+
+$paramc = "\( \mu_1 - \mu_2 \)";
+$statc = "\( \overline{x}_1 - \overline{x}_2 \)";
+$centerc = random(2, 6, 1);
+$moec = random(5, 10, 1);
+
+$paramd = "\( p_1 - p_2 \)";
+$statd = "\( \widehat{p}_1 - \widehat{p}_2 \)";
+$centerd = random(0.05, 0.14, 0.01);
+$moed = random(0.04, 0.08, 0.01);
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $param1 = $parama;
+  $stat1 = $stata;
+  $center1 = $centera;
+  $moe1 = $moea;
+  $param2 = $paramc;
+  $stat2 = $statc;
+  $center2 = $centerc;
+  $moe2 = $moec;
+} elsif ($random == 2) {
+  $param1 = $paramb;
+  $stat1 = $statb;
+  $center1 = $centerb;
+  $moe1 = $moeb;
+  $param2 = $paramd;
+  $stat2 = $statd;
+  $center2 = $centerd;
+  $moe2 = $moed;
+} elsif ($random == 3) {
+  $param1 = $paramd;
+  $stat1 = $statd;
+  $center1 = $centerd;
+  $moe1 = $moed;
+  $param2 = $parama;
+  $stat2 = $stata;
+  $center2 = $centera;
+  $moe2 = $moea;
+} else {
+  $param1 = $paramc;
+  $stat1 = $statc;
+  $center1 = $centerc;
+  $moe1 = $moec;
+  $param2 = $paramb;
+  $stat2 = $statb;
+  $center2 = $centerb;
+  $moe2 = $moeb;
+}
+
+$lower1 = Real($center1 - $moe1);
+$upper1 = Real($center1 + $moe1);
+$lower2 = Real($center2 - $moe2);
+$upper2 = Real($center2 + $moe2);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, construct an interval estimate for the given parameter
+using the given sample statistic and margin of error. Give your answer to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM For $param1, using $stat1 = $center1 with margin of error $moe1. ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $ITEM For $param2, using $stat2 = $center2 with margin of error $moe2. ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

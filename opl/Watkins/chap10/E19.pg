@@ -1,0 +1,189 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample mean - t)
+## KEYWORDS('Hypothesis tests', 'Single mean')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.2')
+## Problem1('E19')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$x1=random(15,17,.01);
+$x2=random(15,17,.01);
+$x3=random(15,17,.01);
+$x4=random(15,17,.01);
+$x5=random(15,17,.01);
+$x6=random(15,17,.01);
+$x7=random(15,17,.01);
+$x8=random(15,17,.01);
+$x9=random(15,17,.01);
+$x10=random(15,17,.01);
+
+$sumx=$x1+$x2+$x3+$x4+$x5+$x6+$x7+$x8+$x9+$x10;
+$sumx2=$x1**2+$x2**2+$x3**2+$x4**2+$x5**2+$x6**2+$x7**2+$x8**2+$x9**2+$x10**2;
+$s=sqrt(($sumx2-($sumx**2)/10)/9);
+$xbar=$sumx/10;
+$nullval=Real(16);
+$ts=Real(($xbar-$nullval)/($s/sqrt(10)));
+$pval=Real(2*tprob(9,abs($ts)));
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(\neq\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.5){
+$answer = "\(P\)-value > .5";}
+elsif($pval<=.50 && $pval>.40){
+$answer = ".40 < \(P\)-value < .50";}
+elsif($pval<=.40 && $pval>.30){
+$answer = ".30 < \(P\)-value < .40";}
+elsif($pval<=.30 && $pval>.20){
+$answer = ".20 < \(P\)-value < .30";}
+elsif($pval<=.20 && $pval>.10){
+$answer = ".10 < \(P\)-value < .20";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.04){
+$answer = ".04 < \(P\)-value < .05";}
+elsif($pval<=.04 && $pval>.02){
+$answer = ".02 < \(P\)-value < .04";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.002){
+$answer = ".002 < \(P\)-value < .005";}
+elsif($pval<=.002 && $pval>.001){
+$answer = ".001 < \(P\)-value < .002";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the population mean amount of water differs from 16 ounces and the machine should be adjusted.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the population mean amount of water differs from 16 ounces.  The machine does not need adjustment.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .5','.40 < \(P\)-value < .50',
+'.30 < \(P\)-value < .40',
+'.20 < \(P\)-value < .30',
+'.10 < \(P\)-value < .20',
+'.05 < \(P\)-value < .10',
+'.04 < \(P\)-value < .05',
+'.02 < \(P\)-value < .04',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.002 < \(P\)-value < .005',
+'.001 < \(P\)-value < .002',
+' \(P\)-value < .001');
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+if($pval<.05)
+{
+$mc2->extra('Fail to reject \(H_0\).  We do not have significant evidence that the population mean amount of water differs from 16 ounces.  The machine does not need adjustment.');
+}
+else
+{
+$mc2->extra('Reject \(H_0\).  We have significant evidence that the population mean amount of water differs from 16 ounces and the machine should be adjusted.');
+}
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Jack and Jill opened a water-bottling factory.  The distribution of the number of ounces of water in the bottles is approximately normal.  The population mean amount of water is supposed to be 16 ounces, but the water-filling machine slips away from that amount occasionally and has to be adjusted.  Jack and Jill take a random sample of bottles from today's production and weigh the water in each.  The weights (in ounces) are
+
+$PAR
+$x1, $x2, $x3, $x4, $x5, $x6, $x7, $x8, $x9, $x10
+$PAR
+
+
+You will use a hypothesis test to determine if the mean amount of water differs from what is desired and the machine needs adjusting.  Fill in the blank with the test value.
+$PAR
+\(H_0:\mu= \)\{ ans_rule(3) \}
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+ANS($nullval->with(tolerance=>.0)->cmp);
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.02)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

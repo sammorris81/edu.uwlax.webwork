@@ -1,0 +1,183 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## KEYWORDS('ANOVA')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('14')
+## Section1('14.2')
+## Problem1('E10')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$k = Real( 7 );
+$n = Real( 70 );
+
+$df1 = Real( $k-1 );
+$df2 = Real( $n-$k );
+$dft = Real( $df1 + $df2 );
+
+
+$MSE = random( 39, 41, .1 );
+$F = random( 16, 17, .1 );
+
+$MST = Real( $F*$MSE );
+$SST = Real( $MST*$df1 );
+$SSE = Real( $MSE*$df2 );
+$SS = Real( $SST+$SSE );
+
+$pval=Real( fprob($df1,$df2,abs($F)) );
+
+
+
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.1){
+$answer = " \(P\)-value > .1";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.01){
+$answer = ".01 < \(P\)-value < .025";}
+elsif($pval<=.01 && $pval>.001){
+$answer = ".001 < \(P\)-value < .01";}
+else{
+$answer = " \(P\)-value < .001";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence of a difference in the means.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence of a difference in the means.";
+}
+
+
+
+
+## Link the question and its answer
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast(' \(P\)-value > .1',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.01 < \(P\)-value < .025',
+'.001 < \(P\)-value < .01',
+' \(P\)-value < .001' );
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence of a difference in the means.", "Fail to reject \(H_0\).  We do not have significant evidence of a difference in the means.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BEGIN_TEXT
+
+In an experiment, there were seven treatments and ten observations on each.
+$PAR
+
+\{ begintable(5) \}
+\{ row( "Source", "df", "SS", "MS", "F" ) \}
+\{ row( "Between/Treatment", ans_rule(5), ans_rule(5), ans_rule(5), "$F", ) \}
+\{ row( "Within/Error", ans_rule(5), ans_rule(5), "$MSE", "", ) \}
+\{ row( "Total", ans_rule(5), ans_rule(5), "", "", ) \}
+
+\{ endtable() \}
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+
+
+
+END_TEXT
+
+ANS($df1->with(tolerance=>.00)->cmp);
+ANS($SST->with(tolerance=>.01)->cmp);
+ANS($MST->with(tolerance=>.01)->cmp);
+ANS($df2->with(tolerance=>.00)->cmp);
+ANS($SSE->with(tolerance=>.01)->cmp);
+ANS($dft->with(tolerance=>.00)->cmp);
+ANS($SS->with(tolerance=>.01)->cmp);
+
+
+
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

@@ -1,0 +1,177 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Independent samples - t)
+## KEYWORDS('inference for means and proportions', 'confidence interval for a difference in means')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.11')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$m1a = Real(random(5, 20, 0.2));
+do { $m1b = Real(random(5, 20, 0.2)); } until (abs($m1a - $m1b) > 3);
+$m2a = Real(random(10, 25, 0.2));
+do { $m2b = Real(random(10, 25, 0.2)); } until (abs($m2a - $m2b) > 3);
+$m3a = Real(random(15, 30, 0.2));
+do { $m3b = Real(random(15, 30, 0.2)); } until (abs($m3a - $m3b) > 3);
+
+$m1 = $m1a - $m1b;
+$m2 = $m2a - $m2b;
+$m3 = $m3a - $m3b;
+
+$sd1a = random(5, 10, 0.1);
+$sd1b = random(5, 10, 0.1);
+$sd2a = random(5, 10, 0.1);
+$sd2b = random(5, 10, 0.1);
+$sd3a = random(5, 10, 0.1);
+$sd3b = random(5, 10, 0.1);
+
+$n1a = random(10, 100, 2);
+$n1b = random(10, 100, 2);
+$n2a = random(10, 100, 2);
+$n2b = random(10, 100, 2);
+$n3a = random(10, 100, 2);
+$n3b = random(10, 100, 2);
+
+$se1 = Real(sqrt(($sd1a**2) / $n1a + ($sd1b**2) / $n1b));
+$se2 = Real(sqrt(($sd2a**2) / $n2a + ($sd2b**2) / $n2b));
+$se3 = Real(sqrt(($sd3a**2) / $n3a + ($sd3b**2) / $n3b));
+
+@confidences = (80, 90, 95, 98, 99);
+
+$random1 = random(0, 4, 1);
+$random2 = random(0, 4, 1);
+$random3 = random(0, 4, 1);
+
+$cl1 = (100 - $confidences[$random1]) / 200;
+$cl2 = (100 - $confidences[$random2]) / 200;
+$cl3 = (100 - $confidences[$random3]) / 200;
+
+$df1 = floor(usefulstatUWL::sw($sd1a, $n1a, $sd1b, $n1b));
+$df2 = floor(usefulstatUWL::sw($sd2a, $n2a, $sd2b, $n2b));
+$df3 = floor(usefulstatUWL::sw($sd3a, $n3a, $sd3b, $n3b));
+
+$tstar1a = tdistr($df1, $cl1);
+$tstar1b = tdistr(($df1 + 1), $cl1);
+$tstar2a = tdistr($df2, $cl2);
+$tstar2b = tdistr(($df2 + 1), $cl2);
+$tstar3a = tdistr($df3, $cl3);
+$tstar3b = tdistr(($df3 + 1), $cl3);
+
+$tstar1 = sprintf("%.3f", ($tstar1a + $tstar1b) / 2);
+$tstar2 = sprintf("%.3f", ($tstar2a + $tstar2b) / 2);
+$tstar3 = sprintf("%.3f", ($tstar3a + $tstar3b) / 2);
+
+$me1 = Real($tstar1 * $se1);
+$me2 = Real($tstar2 * $se2);
+$me3 = Real($tstar3 * $se3);
+
+$lower1 = Real($m1 - $me1);
+$upper1 = Real($m1 + $me1);
+
+$lower2 = Real($m2 - $me2);
+$upper2 = Real($m2 + $me2);
+
+$lower3 = Real($m3 - $me3);
+$upper3 = Real($m3 + $me3);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, use the t-distribution to find a confidence interval
+for a difference in means \( \mu_1 - \mu_2 \) given the relevant sample results.
+Give the best point estimate for \(\mu_1 - \mu_2\), the margin of error, and the
+confidence interval. Assume the results come from random samples from a populations
+that are approximately normally distributed.
+Give your answers to 2 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(\mu_1 - \mu_2\) using the
+  sample results \(\overline{x}_1 = $m1a\), \(s_1 = $sd1a\), \(n_1=$n1a\) and
+  \(\overline{x}_2 = $m1b\), \(s_2 = $sd1b\), \(n_2=$n1b\).
+  Use \(t^* = $tstar1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(\mu_1 - \mu_2\) using the
+  sample results \(\overline{x}_1 = $m2a\), \(s_1 = $sd2a\), \(n_1=$n2a\) and
+  \(\overline{x}_2 = $m2b\), \(s_2 = $sd2b\), \(n_2=$n2b\).
+  Use \(t^* = $tstar2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(\mu_1 - \mu_2\) using the
+  sample results \(\overline{x}_1 = $m3a\), \(s_1 = $sd3a\), \(n_1=$n3a\) and
+  \(\overline{x}_2 = $m3b\), \(s_2 = $sd3b\), \(n_2=$n3b\).
+  Use \(t^* = $tstar3\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ANS($m2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ANS($m3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($me3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($lower3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($upper3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

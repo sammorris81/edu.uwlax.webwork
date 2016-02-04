@@ -1,0 +1,329 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Regression)
+## KEYWORDS('inference for regression', 'ANOVA for regression')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('9')
+## Section1('9.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n1 = Real(random(25, 40, 1));
+do {$n2 = Real(random(25, 40, 1));} until ($n1 != $n2);
+do {$n3 = Real(random(25, 40, 1));} until (($n1 != $n3) && ($n2 != $n3));
+
+@b1mult = (1.5, 2, 6);
+@idx = shuffle(3);
+@b1mult = @b1mult[@idx];
+$dfm = Real(1);
+
+$quantx1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n1,
+  mean => 10,
+  sd => 3.3,
+  skew => 0,
+  randomsummary => "F",
+  round => 2,
+);
+@x1 = @{$quantx1->{x}};
+$int1 = random(28, 30, 0.01);
+$slope1 = random(4, 5, 0.01);
+$sig1 = $b1mult[0] * $slope1;
+$quant1 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x1],
+  int => $int1,
+  slope => $slope1,
+  sig => $sig1,
+);
+$SSM1 = Real($quant1->{ssm});
+$MSM1 = Real($quant1->{msm});
+$SSE1 = Real($quant1->{sse});
+$MSE1 = Real($quant1->{mse});
+$SSTot1 = Real($quant1->{sstot});
+$dfe1 = Real($n1 - 2);
+$dftot1 = Real($n1 - 1);
+$F1 = Real($MSM1 / $MSE1);
+$rsq1 = Real($SSM1 / $SSTot1);
+
+$pval1 = fprob(1, $dfe1, $F1);
+if ($pval1 < 0.001) {
+  $pvaldisp1 = "\( < 0.001 \)";
+} else {
+  $pvaldisp1 = sprintf("%.3f", $pval1);
+}
+
+
+$quantx2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n2,
+  mean => 10,
+  sd => 3.3,
+  skew => 0,
+  randomsummary => "F",
+  round => 2,
+);
+@x2 = @{$quantx2->{x}};
+$int2 = random(800, 820, 1);
+$slope2 = random(3, 4, 0.01);
+$sig2 = $b1mult[1] * $slope2;
+$quant2 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x2],
+  int => $int2,
+  slope => $slope2,
+  sig => $sig2,
+);
+$SSM2 = Real($quant2->{ssm});
+$MSM2 = Real($quant2->{msm});
+$SSE2 = Real($quant2->{sse});
+$MSE2 = Real($quant2->{mse});
+$SSTot2 = Real($quant2->{sstot});
+$dfe2 = Real($n2 - 2);
+$dftot2 = Real($n2 - 1);
+$F2 = Real($MSM2 / $MSE2);
+$rsq2 = Real($SSM2 / $SSTot2);
+
+$pval2 = fprob(1, $dfe2, $F2);
+if ($pval2 < 0.001) {
+  $pvaldisp2 = "\( < 0.001 \)";
+} else {
+  $pvaldisp2 = sprintf("%.3f", $pval2);
+}
+
+$quantx3 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => $n3,
+  mean => 10,
+  sd => 3.3,
+  skew => 0,
+  randomsummary => "F",
+  round => 2,
+);
+@x3 = @{$quantx3->{x}};
+$int3 = random(75, 80, 0.1);
+$slope3 = random(-1, -4, 0.1);
+$sig3 = $b1mult[2] * $slope3;
+$quant3 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x3],
+  int => $int3,
+  slope => $slope3,
+  sig => $sig3,
+);
+$SSM3 = Real($quant3->{ssm});
+$MSM3 = Real($quant3->{msm});
+$SSE3 = Real($quant3->{sse});
+$MSE3 = Real($quant3->{mse});
+$SSTot3 = Real($quant3->{sstot});
+$dfe3 = Real($n3 - 2);
+$dftot3 = Real($n3 - 1);
+$F3 = Real($MSM3 / $MSE3);
+$rsq3 = Real($SSM3 / $SSTot3);
+
+$pval3 = fprob(1, $dfe3, $F3);
+if ($pval3 < 0.001) {
+  $pvaldisp3 = "\( < 0.001 \)";
+} else {
+  $pvaldisp3 = sprintf("%.3f", $pval3);
+}
+
+@options = (' a. Reject \(H_0\)', ' b. Do not reject \(H_0\)');
+$correct1 = ($pval1 < 0.05) ? $options[0] : $options[1];
+$correct2 = ($pval2 < 0.05) ? $options[0] : $options[1];
+$correct3 = ($pval3 < 0.05) ? $options[0] : $options[1];
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+$PAR
+$BBOLD Completing the ANOVA table: $EBOLD $BR
+For help to fill out the ANOVA table, take a look at p. 542 in your book.
+$PAR
+$BBOLD Estimating the sample size: $EBOLD $BR
+In the ANOVA table for a simple linear regression, the total degrees of freedom
+is always \(n - 1\).
+$PAR
+$BBOLD Finding \(R^2\): $EBOLD $BR
+\(R^2\) tells us the percentage of the variability in our response that can be
+explained by the explanatory variable. For a regression model, the $BITALIC Sum
+of Squares Total $EITALIC gives to variability of the response, and the
+$BIATLIC Sum of Squares Regression $EITALIC gives the variability of the
+response variable that can be explained by the model. So to find \(R^2\) we need
+take
+$PAR
+$BCENTER
+\(
+  R^2 = \displaystyle\frac{\text{SS}_\text{Regression}}{\text{SS}_\text{Model}}.
+\)
+$ECENTER
+$PAR
+$BBOLD Hypothesis test decision: $EBOLD $BR
+As explained on p. 541 in your book, we can use the ANOVA table to see how well
+our model explains the variability in the response variable. The ANOVA table
+gives a way to test the following hypotheses:
+$PAR
+$BCENTER
+\(
+  \begin{align}
+  H_0: &\text{The model is ineffective (i.e. } \beta_1 = 0\text{)}\\
+  H_a: &\text{The model is effective (i.e. } \beta_1 \neq 0\text{)}
+  \end{align}
+\)
+$PAR
+So, to make your decision, just compare the p-value in the ANOVA table to the
+significance level given in the question.
+$ECENTER
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+For each of the following questions, you are given a partial outline of the ANOVA
+table from a simple linear regression. In each question, a) complete the outline
+of the ANOVA table, b) give the sample size, c) calculate \(R^2\), and d) give
+the conclusion of the hypothesis test looking at whether the model is effective.
+Give your answers to 2 decimal places.
+
+\{BeginList("OL", type=>"1") \}
+  $ITEM
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Fill in the missing parts of the ANOVA table $BR
+    \{ begintable(6) \}
+    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
+    \{ row( "Regression", ans_rule(10), ans_rule(10), "$MSM1", ans_rule(10), "$pvaldisp1", ) \}
+    \{ row( "Residual Error", ans_rule(10), "$SSE1", ans_rule(10), "$SPACE", "$SPACE", ) \}
+    \{ row( "Total", "$dftot1", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ endtable() \}
+    $ITEM What is the sample size? \{ans_rule(10)\}
+    $ITEM What is \(R^2\)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Fill in the missing parts of the ANOVA table $BR
+    \{ begintable(6) \}
+    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
+    \{ row( "Regression", ans_rule(10), ans_rule(10), "$MSM2", ans_rule(10), "$pvaldisp2", ) \}
+    \{ row( "Residual Error", ans_rule(10), ans_rule(10), "$MSE2", "$SPACE", "$SPACE",) \}
+    \{ row( "Total", "$dftot2", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ endtable() \}
+    $ITEM What is the sample size? \{ans_rule(10)\}
+    $ITEM What is \(R^2\)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Fill in the missing parts of the ANOVA table $BR
+    \{ begintable(6) \}
+    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
+    \{ row( "Regression", ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), "$pvaldisp3", ) \}
+    \{ row( "Residual Error", "$dfe3", ans_rule(10), "$MSE3", "$SPACE", "$SPACE",) \}
+    \{ row( "Total", ans_rule(10), "$SSTot3", "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ endtable() \}
+    $ITEM What is the sample size? \{ans_rule(10)\}
+    $ITEM What is \(R^2\)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    \{ $mc1->buttons() \}
+  \{ EndList("OL") \}
+
+\{EndList("OL")\}
+
+END_TEXT
+###########################
+## Answer Section
+###########################
+ANS($dfm->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSM1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($F1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($dfe1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($MSE1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($SSTot1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($n1->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($rsq1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+ANS($dfm->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSM2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($F2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($dfe2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSE2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($SSTot2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($n2->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($rsq2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ANS($dfm->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($SSM3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($MSM3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($F3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($SSE3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($dftot3->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($n3->with(tolerance=>0, tolType=>"Absolute")->cmp());
+ANS($rsq3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

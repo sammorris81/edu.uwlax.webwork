@@ -1,0 +1,132 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject('Statistics')
+## DBchapter('Simple linear regression')
+## DBsection('Regression')
+## Level(2)
+## KEYWORDS('Least-Squares Line','Regression')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('3')
+## Section1('3.2')
+## Problem1('3')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = random( 100, 120, 1 );
+$a2 = random( 56, 90, 1 );
+$a3 = random( 90, 110, 1 );
+$a4 = random( 150, 170, 1 );
+$a5 = random( 190, 200, 1 );
+$a6 = random( 140, 160, 1 );
+$a7 = random( 120, 140, 1 );
+
+$b1 = random( 10, 12, 1 );
+$b2 = random( 25, 30, 1 );
+$b3 = random( 18, 22, 1 );
+$b4 = random( 11, 14, 1 );
+$b5 = random( 10, 15, 1 );
+$b6 = random( 20, 25, 1 );
+$b7 = random( 22, 27, 1 );
+
+$x = random( 90, 190, 1 );
+
+$meanx = Real(" ( $a1 + $a2 + $a3 + $a4 + $a5 +$a6 + $a7)/7 ")->reduce;
+$meany = Real(" ( $b1 + $b2 + $b3 + $b4 + $b5 + $b6 + $b7)/7 ")->reduce;
+$slope = Real(" (($a1-$meanx)*($b1-$meany) + ($a2-$meanx)*($b2-$meany) + ($a3-$meanx)*($b3-$meany) + ($a4-$meanx)*($b4-$meany) + ($a5-$meanx)*($b5-$meany) + ($a6-$meanx)*($b6-$meany) + ($a7-$meanx)*($b7-$meany)) / (($a1-$meanx)^2 + ($a2-$meanx)^2 + ($a3-$meanx)^2 + ($a4-$meanx)^2 + ($a5-$meanx)^2 + ($a6-$meanx)^2 + ($a7-$meanx)^2)")->reduce;
+
+$intercept = Real(" $meany - $slope*$meanx ")->reduce;
+
+$y = Real(" $intercept + $slope*$x ")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Consider the following data, where x is the independent variable and y is the dependent variable.
+$PAR
+\{ begintable(2) \}
+\{ row( "x", "y" ) \}
+\{ row( "$a1", "$b1" ) \}
+\{ row( "$a2", "$b2" ) \}
+\{ row( "$a3", "$b3" ) \}
+\{ row( "$a4", "$b4" ) \}
+\{ row( "$a5", "$b5" ) \}
+\{ row( "$a6", "$b6" ) \}
+\{ row( "$a7", "$b7" ) \}
+\{ endtable() \}
+$PAR
+
+
+${BBOLD} 1. $EBOLD
+Find the least-squares line for this data
+$PAR
+y = \{ans_rule(6)\} + \{ans_rule(6)\} x
+
+
+$PAR
+${BBOLD} 2. $EBOLD
+What would you predict for y when x = $x
+$PAR
+\{ans_rule(15)\}
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $intercept->with(tolerance=>.005)->cmp );
+ANS( $slope->with(tolerance=>.005)->cmp );
+
+ANS( $y->with(tolerance=>.005)->cmp );
+
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

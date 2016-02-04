@@ -1,0 +1,129 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'determining statistical significance')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.3')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+do {
+  $pval1 = random(0.0001, 0.9999, 0.0001);
+} until (
+  $pval1 != 0.05
+);
+
+do {
+  $pval2 = random(0.0001, 0.9999, 0.0001);
+} until (
+  (main::abs($pval1 - $pval2) > 0.025) && ($pval2 != 0.05)
+);
+
+if (($pval1 < 0.05) && ($pval2 < 0.05)) {
+  do {
+    $pval3 = random(0.0501, 0.9999, 0.0001);
+  } until (
+    (main::abs($pval3 - $pval1) > 0.025) &&
+    (main::abs($pval3 - $pval2) > 0.025)
+  );
+} else {
+  do {
+    $pval3 = random(0.0001, 0.0499, 0.0001);
+  } until (
+    (main::abs($pval3 - $pval1) > 0.025) &&
+    (main::abs($pval3 - $pval2) > 0.025)
+  );
+}
+
+$pval1 = sprintf("%.4f", $pval1);
+$pval2 = sprintf("%.4f", $pval2);
+$pval3 = sprintf("%.4f", $pval3);
+
+@options = (
+  " i. Reject \( H_0 \)",
+  " ii. Do not reject \( H_0 \)",
+);
+
+$correct1 = ($pval1 < 0.05) ? $options[0] : $options[1];
+$correct2 = ($pval2 < 0.05) ? $options[0] : $options[1];
+$correct3 = ($pval3 < 0.05) ? $options[0] : $options[1];
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['i.', 'ii.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, select the appropriate conclusion of the test based
+on the p-value if we use a 5$PERCENT significance level.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM p-value = $pval1 $tab \{ $mc1->buttons() \}
+  $ITEM p-value = $pval2 $tab \{ $mc2->buttons() \}
+  $ITEM p-value = $pval3 $tab \{ $mc3->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+ANS($mc3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

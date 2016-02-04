@@ -1,0 +1,66 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Type I/type II errors and power)
+## KEYWORDS('Hypothesis tests','Proportion', 'Error')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.4')
+## Problem1('E53')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+$n = random( 200, 280, 1 );
+
+
+if( $a1==1){
+$p = Real( .01 );}
+elsif( $a1==2){
+$p = Real( .05 );}
+elsif( $a1==3){
+$p = Real( .1 );}
+
+$ans = Real( ceil($n*$p) );
+
+
+
+
+
+BEGIN_TEXT
+
+When flipping a fair coin, the probability of getting heads is .5. Suppose $n people perform a test of significance with this coin. Each person plans to reject the null hypothesis that p = .5 if their P-value is less than $p.
+$PAR
+How many of these people do you expect to make a Type I error (round up to nearest whole number)?
+\{ ans_rule(6) \}
+
+
+
+END_TEXT
+
+ANS($ans->with(tolerance=>.0)->cmp);
+
+
+
+
+ENDDOCUMENT();

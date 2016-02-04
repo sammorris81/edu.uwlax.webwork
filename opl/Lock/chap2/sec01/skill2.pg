@@ -1,0 +1,125 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'categorical variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+@proportions = (
+  '?',
+  'Sample proportion',
+  'Population proportion'
+);
+
+$exercisea = "In the 2010 US Census, we see that 37,342,870 people, or 12.4$PERCENT ".
+             "of all residents, are foreign-born.";
+$propa = 'Population proportion';
+
+$exerciseb = 'A recent headline states that "73'.$PERCENT.' say Woman President Likely '.
+             'in Next 10 Years." The report gives the results of a survey of 1000 '.
+             "randomly selected likely voters in the US.";
+$propb = 'Sample proportion';
+
+$exercisec = "A survey conducted of 1502 randomly selected US adults found that ".
+             "62.0$PERCENT of them believed the government does not provide enough support ".
+             "for soldiers returning from Iraq or Afghanistan.";
+$propc = 'Sample proportion';
+
+$exercised = "Of all 1,547,990 members of the high school class of 2010 who took ".
+             "the SAT, 72.0$PERCENT were from a public high school.";
+$propd = 'Population proportion';
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $prop1 = $propa;
+  $text2 = $exercisec;
+  $prop2 = $propc;
+} elsif ($random == 2) {
+  $text1 = $exerciseb;
+  $prop1 = $propb;
+  $text2 = $exercised;
+  $prop2 = $propd;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  $prop1 = $propd;
+  $text2 = $exercisea;
+  $prop2 = $propa;
+} else {
+  $text1 = $exercisec;
+  $prop1 = $propc;
+  $text2 = $exerciseb;
+  $prop2 = $propb;
+}
+
+$p1 = PopUp(
+  [@proportions],
+  $prop1,
+);
+
+$p2 = PopUp(
+  [@proportions],
+  $prop2,
+);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In each of the following questions, identify if the proportion given is a sample
+proportion or a population proportion.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ $p1->menu() \}
+  $ITEM $text2 $BR
+  \{ $p2->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1->cmp());
+ANS($p2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

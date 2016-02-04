@@ -1,0 +1,107 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection()
+## KEYWORDS('probability basics', 'tree diagrams and bayes rule')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.2')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$pA = Real(random(0.15, 0.85, 0.02));
+$pB = Real(1 - $pA);
+
+$pRgiveA = Real(random(0.15, 0.85, 0.02));
+$pSgiveA = Real(1 - $pRgiveA);
+$pRgiveB = Real(random(0.15, 0.85, 0.02));
+$pSgiveB = Real(1 - $pRgiveB);
+
+$pAR = Real($pA * $pRgiveA);
+$pAS = Real($pA * $pSgiveA);
+$pBR = Real($pB * $pRgiveB);
+$pBS = Real($pB * $pSgiveB);
+
+$pR = Real($pAR + $pBR);
+$pS = Real($pAS + $pBS);
+
+$pAgiveR = Real($pAR / $pR);
+$pBgiveS = Real($pBS / $pS);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Researchers studied blood types A+, A-, B+, and B- and found the following probabilities.
+$PAR
+The probability blood was classified as type A is P(A) = $pA $BR
+The probability blood was classified as type B is P(B) = $pB $BR
+The probability blood was classified as + if it was type A is P(+ if A) = $pRgiveA $BR
+The probability blood was classified as - if it was type A is P(- if A) = $pSgiveA $BR
+The probability blood was classified as + if it was type B is P(+ if B) = $pRgiveB $BR
+The probability blood was classified as - if it was type B is P(- if B) = $pSgiveB
+$PAR
+Use the given probabilities to find the following probabilities. You may find it
+useful to use a tree diagram in answering these questions.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(A and +) \{ ans_rule(10) \}
+  $ITEM Find P(A and -) \{ ans_rule(10) \}
+  $ITEM Find P(B and +) \{ ans_rule(10) \}
+  $ITEM Find P(B and -) \{ ans_rule(10) \}
+  $ITEM Find P(+) \{ ans_rule(10) \}
+  $ITEM Find P(-) \{ ans_rule(10) \}
+  $ITEM Find P(A if +) \{ ans_rule(10) \}
+  $ITEM Find P(B if -) \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pAR->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pAS->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pBR->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pBS->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pR->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pS->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pAgiveR->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pBgiveS->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

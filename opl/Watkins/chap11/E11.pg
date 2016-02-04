@@ -1,0 +1,198 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Independent samples - t)
+## KEYWORDS('Hypothesis test', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.2')
+## Problem1('E11')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$x1= random( -.4, 1.6, .1 );
+$x2= random( -.4, 1.6, .1 );
+$x3= random( -.4, 1.6, .1 );
+$x4= random( -.4, 1.6, .1 );
+$x5= random( -.4, 1.6, .1 );
+
+$y1= random( -.8, .8, .1 );
+$y2= random( -.8, .8, .1 );
+$y3= random( -.8, .8, .1 );
+$y4= random( -.8, .8, .1 );
+$y5= random( -.8, .8, .1 );
+
+$n1 = Real(5);
+
+$sumx = abs($x1)+abs($x2)+abs($x3)+abs($x4)+abs($x5);
+$sumx2=$x1**2+$x2**2+$x3**2+$x4**2+$x5**2;
+$s=sqrt(($sumx2-($sumx**2)/$n1)/($n1-1));
+$xbar=$sumx/$n1;
+
+$n2 = Real(5);
+
+$sumy=abs($y1)+abs($y2)+abs($y3)+abs($y4)+abs($y5);
+$sumy2=$y1**2+$y2**2+$y3**2+$y4**2+$y5**2;
+$s2=sqrt(($sumy2-($sumy**2)/$n2)/($n2-1));
+$ybar=$sumy/$n2;
+
+
+$ts=Real(($xbar-$ybar)/sqrt($s**2/$n1+$s2**2/$n2));
+$pval=Real(tprob($n1+$n2-2,abs($ts)));
+
+$fmc = new_multiple_choice();
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+$fquestion = "What sign should appear in the alternative hypothesis?";
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+$fanswer = "\(>\)";
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+elsif($pval<=.001 && $pval>.0005){
+$answer = ".0005 < \(P\)-value < .001";}
+else{
+$answer = " \(P\)-value < .0005";
+}
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that students tend to make larger errors (in absolute value) when the line segments are vertical than when the line segments are horizontal.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that students tend to make larger errors (in absolute value) when the line segments are vertical than when the line segments are horizontal.";
+}
+
+
+
+
+## Link the question and its answer
+$fmc->qa($fquestion, $fanswer);
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'.0005 < \(P\)-value < .001',
+' \(P\)-value < .0005');
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast("Reject \(H_0\).  We have significant evidence that students tend to make larger errors (in absolute value) when the line segments are vertical than when the line segments are horizontal.", "Fail to reject \(H_0\).  We do not have significant evidence that students tend to make larger errors (in absolute value) when the line segments are vertical than when the line segments are horizontal.");
+
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Students were given pieces of paper with five vertical or horizontal line segments and asked to mark the midpoint of each segment. Then, using a ruler, each student measured how far each mark was from the real midpoint of each segment. He or she then averaged the five errors. The results are given below. Before beginning this experiment, the instructor believed that students tend to make larger errors when the line segments are vertical than when the line segments are horizontal. Take the $BBOLD absolute value $EBOLD of the measurements and conduct a significance test of the instructor's claim.
+$PAR
+Vertical (Group 1): $x1, $x2, $x3, $x4, $x5
+$BR
+Horizontal (Group 2): $y1, $y2, $y3, $y4, $y5
+$PAR
+
+
+\(H_0:\mu1-\mu2 = 0 \)
+$PAR
+\{ $fmc->print_q() \}
+\{ $fmc->print_a() \}
+
+$PAR
+The test statistic for this test is   \{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS( radio_cmp($fmc->correct_ans) );
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();

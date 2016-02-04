@@ -1,0 +1,116 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Description of distributions)
+## Level(2)
+## KEYWORDS('distribution','histogram')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.1')
+## Problem1('histograms1')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+
+$ml = new_select_list();
+$ml->rf_print_q(~~&pop_up_list_print_q);
+$ml -> ra_pop_up_list([ No_answer => "",LS => "Left-skewed", RS => "Right-skewed", N => "Normal", U => "Uniform" ] );
+
+$ml -> qa (
+"Pick the correct distributional shape",
+"N",
+);
+
+$ml->choose(1);
+
+$ml2 = new_select_list();
+$ml2->rf_print_q(~~&pop_up_list_print_q);
+$ml2 -> ra_pop_up_list([ No_answer => "",LS => "Left-skewed", RS => "Right-skewed", N => "Normal", U => "Uniform" ] );
+
+$ml2 -> qa (
+"Pick the correct distributional shape",
+"RS",
+);
+
+$ml2->choose(1);
+
+$ml3 = new_select_list();
+$ml3->rf_print_q(~~&pop_up_list_print_q);
+$ml3 -> ra_pop_up_list([ No_answer => "",LS => "Left-skewed", RS => "Right-skewed", N => "Normal", U => "Uniform" ] );
+
+$ml3 -> qa (
+"Pick the correct distributional shape",
+"LS",
+);
+
+$ml3->choose(1);
+
+$ml4 = new_select_list();
+$ml4->rf_print_q(~~&pop_up_list_print_q);
+$ml4 -> ra_pop_up_list([ No_answer => "",LS => "Left-skewed", RS => "Right-skewed", N => "Normal", U => "Uniform" ] );
+
+$ml4 -> qa (
+"Pick the correct distributional shape",
+"U",
+);
+
+$ml4->choose(1);
+
+
+
+
+BEGIN_TEXT
+Match each of the following histograms with the distributional shape that best describes it from Left-skewed, Right-skewed, Normal, or Uniform.
+$PAR
+\{ image( "Fig1.png", width=>504, height=>279 ) \}
+$BR
+\{ $ml->print_q \}
+
+$PAR
+\{ image( "Fig2.png", width=>509, height=>253 ) \}
+$BR
+\{ $ml2->print_q \}
+
+$PAR
+\{ image( "Fig3.png", width=>509, height=>253 ) \}
+$BR
+\{ $ml3->print_q \}
+
+$PAR
+\{ image( "Fig4.png", width=>509, height=>253 ) \}
+$BR
+\{ $ml4->print_q \}
+
+END_TEXT
+
+ANS( str_cmp( $ml->ra_correct_ans )   ) ;
+ANS( str_cmp( $ml2->ra_correct_ans )   ) ;
+ANS( str_cmp( $ml3->ra_correct_ans )   ) ;
+ANS( str_cmp( $ml4->ra_correct_ans )   ) ;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

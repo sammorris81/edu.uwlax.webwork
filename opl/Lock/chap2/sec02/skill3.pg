@@ -1,0 +1,123 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables', 'shape and center')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('Skill Builder 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+@means = (
+  '?',
+  'Sample mean',
+  'Population mean'
+);
+
+$exercisea = "The average number of calories eaten in one day is 2386 for a sample ".
+             "of 100 participants";
+$meana = 'Sample mean';
+
+$exerciseb = "The average number of text messages sent or received in a day was 60, ".
+             "in a survey of \( n = 799 \) teen cell phone users conducted in June 2011.";
+$meanb = 'Sample mean';
+
+$exercisec = "The average number of yards per punt for all punts in the National ".
+             "Football League is 41.5 yards";
+$meanc = 'Population mean';
+
+$exercised = "The average number of television sets owned per household for all ".
+             "households in the US is 2.6";
+$meand = 'Population mean';
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $mean1 = $meana;
+  $text2 = $exercisec;
+  $mean2 = $meanc;
+} elsif ($random == 2) {
+  $text1 = $exerciseb;
+  $mean1 = $meanb;
+  $text2 = $exercised;
+  $mean2 = $meand;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  $mean1 = $meand;
+  $text2 = $exercisea;
+  $mean2 = $meana;
+} else {
+  $text1 = $exercisec;
+  $mean1 = $meanc;
+  $text2 = $exerciseb;
+  $mean2 = $meanb;
+}
+
+$m1 = PopUp(
+  [@means],
+  $mean1,
+);
+
+$m2 = PopUp(
+  [@means],
+  $mean2,
+);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In each of the following questions, identify if the mean given is a sample
+mean or a population mean.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ $m1->menu() \}
+  $ITEM $text2 $BR
+  \{ $m2->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($m1->cmp());
+ANS($m2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

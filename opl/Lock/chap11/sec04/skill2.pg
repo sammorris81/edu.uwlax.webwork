@@ -1,0 +1,103 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Discrete distributions)
+## DBsection(Binomial)
+## KEYWORDS('probability basics', 'binomial probabilities')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.4')
+## Problem1('Skill Builder 3 and 4')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$randomn1 = random(7, 12, 1);
+do {$randomn2 = random(7, 12, 1);} until ($randomn2 != $randomn1);
+$randomx1 = random(2, $randomn1, 1);
+do {$randomx2 = random(2, $randomn2, 1);} until ($randomx2 != $randomx1);
+
+$randomp1 = random(0.1, 0.8, 0.05);
+do {$randomp2 = random(0.1, 0.8, 0.05);} until ($randomp2 != $randomp1);
+
+$ncr1 = fact($randomn1) / (fact($randomx1) * fact($randomn1 - $randomx1));
+$ncr2 = fact($randomn2) / (fact($randomx2) * fact($randomn2 - $randomx2));
+
+$px1 = Real($ncr1 * $randomp1**$randomx1 * (1 - $randomp1)**($randomn1 - $randomx1));
+$px2 = Real($ncr2 * $randomp2**$randomx2 * (1 - $randomp2)**($randomn2 - $randomx2));
+
+$m1 = Real($randomn1 * $randomp1);
+$m2 = Real($randomn2 * $randomp2);
+
+$s1 = Real(sqrt($randomn1 * $randomp1 * (1 - $randomp1)));
+$s2 = Real(sqrt($randomn2 * $randomp2 * (1 - $randomp2)));
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use the binomial distribution to find the requested probability, mean, and standard
+deviation. Give your answers to 4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Let \(X\) be a binomial random variable with \(n = $randomn1\) and \(p = $randomp1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Find P(\(X = $randomx1\)). \{ ans_rule(10) \}
+    $ITEM What is the mean of \(X\)? \{ ans_rule(10) \}
+    $ITEM What is the standard deviation of \(X\)? \{ ans_rule(10) \}
+  \{ EndList( "OL" ) \}
+  $ITEM Let \(X\) be a binomial random variable with \(n = $randomn2\) and \(p = $randomp2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Find P(\(X = $randomx2\)). \{ ans_rule(10) \}
+    $ITEM What is the mean of \(X\)? \{ ans_rule(10) \}
+    $ITEM What is the standard deviation of \(X\)? \{ ans_rule(10) \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+
+ANS($px1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($s1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($px2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($m2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($s2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

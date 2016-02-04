@@ -1,0 +1,142 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Correlation)
+## KEYWORDS('describing data', 'two quantitative variables: scatterplot and correlation')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.5')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@vartype = ( # choices
+  ' a. Negative',
+  ' b. Positive'
+);
+
+$exercisea = 'Size of a house and Cost to heat the house';
+$correcta = ' b. Positive';
+
+$exerciseb = 'Distance driven since the last fill-up of the gas tank and Amount '.
+             'of gas left in the tank';
+$correctb = ' a. Negative';
+
+$exercisec = 'Outside temperature and Amount of clothes worn';
+$correctc = ' b. Positive';
+
+$exercised = 'Number of text messages sent on a cell phone and Number of text '.
+             'messages received on the phone';
+$correctd = ' b. Positive';
+
+$exercisee = 'Number of people in a square mile and Number of trees in the square '.
+             'mile';
+$correcte = ' a. Negative';
+
+$exercisef = 'Amount of time spent studying and Grade on the exam';
+$correctf = ' b. Positive';
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 6, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  $right1 = $correcta;
+  $text2 = $exercised;
+  $right2 = $correctd;
+} elsif ($random == 2) {
+  $text1 = $exerciseb;
+  $right1 = $correctb;
+  $text2 = $exercisee;
+  $right2 = $correcte;
+} elsif ($random == 3) {
+  $text1 = $exercisec;
+  $right1 = $correctc;
+  $text2 = $exercisef;
+  $right2 = $correctf;
+} elsif ($random == 4) {
+  $text1 = $exercised;
+  $right1 = $correctd;
+  $text2 = $exercisec;
+  $right2 = $correctc;
+} elsif ($random == 5) {
+  $text1 = $exercisef;
+  $right1 = $correctf;
+  $text2 = $exercisee;
+  $right2 = $correcte;
+} else {
+  $text1 = $exerciseb;
+  $right1 = $correctb;
+  $text2 = $exercisea;
+  $right2 = $correcta;
+}
+
+$mc1 = RadioButtons(
+ [@vartype],
+ $right1,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+$mc2 = RadioButtons(
+ [@vartype],
+ $right2,
+ order => [@vartype],
+ labels => ['a.', 'b.']
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, two quantitative variables are described. Do you expect
+a positive or negative association between the two variables?
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1 $BR
+  \{ $mc1->buttons( separator => "") \}
+  $ITEM $text2 $BR
+  \{ $mc2->buttons( separator => "") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

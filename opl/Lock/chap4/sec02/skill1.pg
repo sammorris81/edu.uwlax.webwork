@@ -1,0 +1,124 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'measuring evidence with p-values')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$pval1a = random(0.0001, 0.2, 0.0001);
+if ($pval1a > 0.1) {
+  $pval1b = random(0.0001, 0.05, 0.0001);
+} else {
+  $pval1b = random(0.15, 0.20, 0.0001);
+}
+$pval2a = random(0.0001, 0.9999, 0.0001);
+if ($pval2a > 0.5) {
+  $pval2b = random(0.0001, 0.2, 0.0001);
+} else {
+  $pval2b = random(0.6, 0.9999, 0.0001);
+}
+$pval3a = random(0.0001, 0.9999, 0.0001);
+do { $pval3b = random(0.0001, 0.9999, 0.0001); } until ($pval3b != $pval3a);
+$pval4a = random(0.0001, 0.0500, 0.0001);
+if ($pval4a > 0.01) {
+  $pval4b = random(0.0001, 0.005, 0.0001);
+} else {
+  $pval4b = random(0.0101, 0.05, 0.0001);
+}
+
+$correct1 = ($pval1a < $pval1b) ? $pval1a : $pval1b;
+$correct2 = ($pval2a < $pval2b) ? $pval2a : $pval2b;
+$correct3 = ($pval3a < $pval3b) ? $pval3a : $pval3b;
+$correct4 = ($pval4a < $pval4b) ? $pval4a : $pval4b;
+
+@options1 = ("p-value = ".sprintf("%.4f", $pval1a), "p-value = ".sprintf("%.4f", $pval1b));
+$mc1 = RadioButtons(
+  [@options1],
+  "p-value = ".sprintf("%.4f", $correct1),
+  order => [@options1],
+  separator => $tab,
+);
+
+@options2 = ("p-value = ".sprintf("%.4f", $pval2a), "p-value = ".sprintf("%.4f", $pval2b));
+$mc2 = RadioButtons(
+  [@options2],
+  "p-value = ".sprintf("%.4f", $correct2),
+  order => [@options2],
+  separator => $tab,
+);
+
+@options3 = ("p-value = ".sprintf("%.4f", $pval3a), "p-value = ".sprintf("%.4f", $pval3b));
+$mc3 = RadioButtons(
+  [@options3],
+  "p-value = ".sprintf("%.4f", $correct3),
+  order => [@options3],
+  separator => $tab,
+);
+
+@options4 = ("p-value = ".sprintf("%.4f", $pval4a), "p-value = ".sprintf("%.4f", $pval4b));
+$mc4 = RadioButtons(
+  [@options4],
+  "p-value = ".sprintf("%.4f", $correct4),
+  order => [@options4],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, two p-values are given. Select the p-value which provides
+the strongest evidence against \(H_0\).
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM \{ $mc1->buttons() \}
+  $ITEM \{ $mc2->buttons() \}
+  $ITEM \{ $mc3->buttons() \}
+  $ITEM \{ $mc4->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($mc1->cmp());
+ANS($mc2->cmp());
+ANS($mc3->cmp());
+ANS($mc4->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

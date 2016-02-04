@@ -1,0 +1,110 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Conditional probability -- direct)
+## KEYWORDS('Probability','Conditional','Multiplication Rule')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.3')
+## Problem1('E34')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = Real("3/14")->reduce;
+$a2 = Real("(3/14)*(2/13)/(3/14)")->reduce;
+$a3 = Real("(6/14)*(3/13)/(6/14)")->reduce;
+$a4 = Real("(6/14)*(5/13)+(3/14)*(2/13)+(5/14)*(4/13)")->reduce;
+
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Your sock drawer hasn't been organized in a while. It contains six identical brown socks, three identical white socks, and five identical black socks. You draw two socks at random (without replacement).
+
+$PAR
+
+${BBOLD} 1. $EBOLD
+Find P(first sock is white)
+\{ans_rule(15)\}
+$PAR
+
+${BBOLD} 2. $EBOLD
+Find P(second sock is white|first sock is white)
+\{ans_rule(15)\}
+$PAR
+
+${BBOLD} 3. $EBOLD
+Find P(second sock is white|first sock is brown)
+\{ans_rule(15)\}
+$PAR
+
+${BBOLD} 4. $EBOLD
+What is the probability that you get two socks that match?
+\{ans_rule(15)\}
+$PAR
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>.005)->cmp );
+ANS( $a2->with(tolerance=>.005)->cmp );
+ANS( $a3->with(tolerance=>.005)->cmp );
+ANS( $a4->with(tolerance=>.005)->cmp );
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

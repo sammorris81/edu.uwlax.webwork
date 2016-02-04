@@ -1,0 +1,92 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(One sample mean - t)
+## KEYWORDS('Confidence interval', 'Mean')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('10')
+## Section1('10.1')
+## Problem1('E7')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$a1 = random( 1, 3, 1 );
+
+$b1 = random( 65, 80, .1 );
+$b2 = random( 65, 80, .1 );
+$b3 = random( 65, 80, .1 );
+$b4 = random( 65, 80, .1 );
+$b5 = random( 65, 80, .1 );
+$b6 = random( 65, 80, .1 );
+
+$m1 = Real( ($b1+$b2+$b3+$b4+$b5+$b6)/6 );
+$n1 = Real( 6 );
+$sd1 = Real(sqrt( (($b1-$m1)**2+($b2-$m1)**2+($b3-$m1)**2+($b4-$m1)**2+($b5-$m1)**2+($b6-$m1)**2)/($n1-1) ));
+
+
+
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+$t=tdistr($n1-1,(1-$s/100)/2);
+
+
+$lower1 = Real(" $m1-$t*$sd1/sqrt($n1) ")->reduce;
+
+$upper1 = Real(" $m1+$t*$sd1/sqrt($n1)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+A statistics class at the University of Wisconsin-La Crosse decided to estimate
+the average mass of a small bag of french fries sold at McDonald's. They bought
+$n1 bags during two different time periods on two consecutive days at the same
+McDonald's and weighed the fries. The results are shown below.
+$PAR
+Mass of Small Bag of Fries: $b1, $b2, $b3, $b4, $b5, $b6
+$PAR
+Find a $s$PERCENT confidence interval for the population mean mass of a small
+bag of McDonald's french fries.
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+
+END_TEXT
+
+ANS($lower1->with(tolerance=>.005)->cmp);
+ANS($upper1->with(tolerance=>.005)->cmp);
+
+
+
+ENDDOCUMENT();

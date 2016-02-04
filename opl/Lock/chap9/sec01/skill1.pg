@@ -1,0 +1,253 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Regression)
+## KEYWORDS('inference for regression', 'inference for slope and correlation')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+
+$quantx = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 40,
+  mean => 10,
+  sd => 3.3,
+  skew => 0,
+  randomsummary => "F",
+  round => 2,
+);
+
+@x = @{$quantx->{x}};
+
+@b1mult = (0.5, 1, 150);
+@idx = shuffle(3);
+@b1mult = @b1mult[@idx];
+$tstar = sprintf("%.3f", tdistr(39, 0.025));
+
+$int1 = random(28, 30, 0.01);
+$slope1 = random(4, 5, 0.01);
+$sig1 = $b1mult[0] * $slope1;
+$quant1 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => $int1,
+  slope => $slope1,
+  sig => $sig1,
+);
+$b01 = Real($quant1->{b0});
+$b11 = Real($quant1->{b1});
+$b1se1 = $quant1->{b1se};
+$b1lower1 = Real($b11 - $tstar * $b1se1);
+$b1upper1 = Real($b11 + $tstar * $b1se1);
+$b1pval1 = $quant1->{b1pval};
+$output1 = QuantitativeUWL::simpRegTable(
+  reg => $quant1,
+  xlab => "X",
+);
+
+$int2 = random(800, 820, 1);
+$slope2 = random(3, 4, 0.01);
+$sig2 = $b1mult[1] * $slope2;
+$quant2 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => $int2,
+  slope => $slope2,
+  sig => $sig2,
+);
+$b02 = Real($quant2->{b0});
+$b12 = Real($quant2->{b1});
+$b1se2 = $quant2->{b1se};
+$b1lower2 = Real($b12 - $tstar * $b1se2);
+$b1upper2 = Real($b12 + $tstar * $b1se2);
+$b1pval2 = $quant2->{b1pval};
+$output2 = QuantitativeUWL::simpRegTable(
+  reg => $quant2,
+  xlab => "A",
+);
+
+$int3 = random(75, 80, 0.1);
+$slope3 = random(-20, -15, 0.1);
+$sig3 = $b1mult[2] * $slope3;
+$quant3 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => $int3,
+  slope => $slope3,
+  sig => $sig3,
+);
+$b03 = Real($quant3->{b0});
+$b13 = Real($quant3->{b1});
+$b1se3 = $quant3->{b1se};
+$b1lower3 = Real($b13 - $tstar * $b1se3);
+$b1upper3 = Real($b13 + $tstar * $b1se3);
+$b1pval3 = $quant3->{b1pval};
+$output3 = QuantitativeUWL::simpRegTable(
+  reg => $quant3,
+  xlab => "Score",
+);
+
+@options = (' a. Reject \(H_0\)', ' b. Do not reject \(H_0\)');
+$correct1 = ($b1pval1 < 0.05) ? $options[0] : $options[1];
+$correct2 = ($b1pval2 < 0.05) ? $options[0] : $options[1];
+$correct3 = ($b1pval3 < 0.05) ? $options[0] : $options[1];
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc3 = RadioButtons(
+  [@options],
+  $correct3,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+Take a look at example 9.2 on p.527 in your textbook.
+$PAR
+$BBOLD Estimating slope and intercept: $EBOLD $BR
+In the inkjet printer example, the estimate for the intercept is
+\(b_0\) = -94.22 and the estimate for the slope is
+\(b_1\) = 90.88. These estimates are given in the Estimate column
+of the output.
+$PAR
+$BBOLD Finding the confidence interval: $EBOLD $BR
+In the inkjet printer example, the standard error for the slope is 19.49. This
+is given in the $BITALIC Std. Error$EITALIC column of the output in the row that corresponds to
+the slope (PPM). You use this standard error with the formula given on p. 527 to
+find the confidence interval.
+$PAR
+$BBOLD Hypothesis test decision: $EBOLD $BR
+To test for a linear association between \(x\) and \(y\), we need to test the
+following hypotheses:
+$PAR
+$BCENTER
+\(H_0: \beta_1 = 0\) $BR
+\(H_0: \beta_1 \neq 0\)
+$ECENTER
+$PAR
+In the inkjet printer example, the p-value for this test is 0.000193. This
+is given in the Pr(\(> |t|\)) column of the output in the row that corresponds
+to the slope (PPM). To make your decision, just compare this p-value to the
+significance level given in the question.
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+For each of the following questions, use the computer output to a) estimate the intercept
+\(\beta_0\), b) estimate the slope \(\beta_1\), c) find a 95$PERCENT confidence interval
+for \(\beta_1\), and d) give the conclusion of the test for a linear association.
+Give your answers to 3 decimal places.
+
+\{BeginList("OL", type=>"1") \}
+  $ITEM \{$output1\}
+  $BR
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Intercept Estimate \((b_0)\): \{ans_rule(10)\}
+    $ITEM Slope Estimate \((b_1)\): \{ans_rule(10)\}
+    $ITEM 95$PERCENT Confidence Interval for \(\beta_1\) (use \(t^* = $tstar\)):
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the conclusion at \(\alpha=0.05\)? $BR
+    \{$mc1->buttons()\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM \{$output2\}
+  $BR
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Intercept Estimate \((b_0)\): \{ans_rule(10)\}
+    $ITEM Slope Estimate \((b_1)\): \{ans_rule(10)\}
+    $ITEM 95$PERCENT Confidence Interval for \(\beta_1\) (use \(t^* = $tstar\)):
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the conclusion at \(\alpha=0.05\)? $BR
+    \{$mc2->buttons()\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM \{$output3\}
+  $BR
+  \{BeginList("OL", type=>"a") \}
+    $ITEM Intercept Estimate \((b_0)\): \{ans_rule(10)\}
+    $ITEM Slope Estimate \((b_1)\): \{ans_rule(10)\}
+    $ITEM 95$PERCENT Confidence Interval for \(\beta_1\) (use \(t^* = $tstar\)):
+    (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the conclusion at \(\alpha=0.05\)? $BR
+    \{$mc3->buttons()\}
+  \{EndList("OL")\}
+
+\{EndList("OL")\}
+
+END_TEXT
+###########################
+## Answer Section
+###########################
+ANS($b01->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b11->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1lower1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1upper1->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+
+ANS($b02->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b12->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1lower2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1upper2->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+ANS($b03->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b13->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1lower3->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($b1upper3->with(tolerance=>.01, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

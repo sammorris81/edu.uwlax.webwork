@@ -1,0 +1,123 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Outcomes & events)
+## KEYWORDS('Probability','Addition Rule','Disjoint Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.2')
+## Problem1('E16')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+## Do NOT show partial correct answers
+$showPartialCorrectAnswers = 0;
+
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+
+
+
+$mult = new_multiple_choice();
+$mult->qa( 'One person has health insurance; the other person has health insurance.', 'Not Disjoint');
+$mult->makeLast( 'Disjoint', 'Not Disjoint' );
+
+$mult2 = new_multiple_choice();
+$mult2->qa( 'Both people have health insurance; only one person has health insurance.', 'Disjoint');
+$mult2->makeLast( 'Disjoint', 'Not Disjoint' );
+
+$mult3 = new_multiple_choice();
+$mult3->qa( 'One person is over age 65; the other person is under age 19.', 'Not Disjoint');
+$mult3->makeLast( 'Disjoint', 'Not Disjoint' );
+
+$mult4 = new_multiple_choice();
+$mult4->qa( 'One person is 106 years old; the other person is the first persons mother.', 'Disjoint');
+$mult4->makeLast( 'Disjoint', 'Not Disjoint' );
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+##
+BEGIN_TEXT
+Suppose you select two people at random from a nearby health clinic. Are these pairs of events disjoint?
+
+$PAR
+${BBOLD} 1.$EBOLD
+\{ $mult->print_q() \}
+\{ $mult->print_a() \}
+
+$PAR
+${BBOLD} 2.$EBOLD
+\{ $mult2->print_q() \}
+\{ $mult2->print_a() \}
+
+$PAR
+${BBOLD} 3.$EBOLD
+\{ $mult3->print_q() \}
+\{ $mult3->print_a() \}
+
+$PAR
+${BBOLD} 4.$EBOLD
+\{ $mult4->print_q() \}
+\{ $mult4->print_a() \}
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+
+ANS( radio_cmp( $mult->correct_ans() ) );
+ANS( radio_cmp( $mult2->correct_ans() ) );
+ANS( radio_cmp( $mult3->correct_ans() ) );
+ANS( radio_cmp( $mult4->correct_ans() ) );
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

@@ -1,0 +1,107 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Other distribution)
+## KEYWORDS('inference for means and proportions', 'distribution of differences in means')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.10')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n1a = random(5, 10, 1);
+$n1b = random(5, 10, 1);
+$n2a = random(10, 20, 1);
+$n2b = random(10, 20, 1);
+$n3a = random(20, 50, 1);
+$n3b = random(20, 50, 1);
+$n4a = random(50, 100, 1);
+$n4b = random(50, 100, 1);
+
+$t1 = non_zero_random(-3, 3, 0.1);
+$t2 = non_zero_random(-3, 3, 0.1);
+$t3 = non_zero_random(-3, 3, 0.1);
+$t4 = non_zero_random(-3, 3, 0.1);
+
+$side1 = ($t1 < 0) ? "below" : "above";
+$side2 = ($t2 < 0) ? "below" : "above";
+$side3 = ($t3 < 0) ? "below" : "above";
+$side4 = ($t4 < 0) ? "below" : "above";
+
+$df1 = min($n1a, $n1b) - 1;
+$df2 = min($n2a, $n2b) - 1;
+$df3 = min($n3a, $n3b) - 1;
+$df4 = min($n4a, $n4b) - 1;
+
+$a1 = tprob($df1, $t1);
+$a2 = tprob($df2, $t2);
+$a3 = tprob($df3, $t3);
+$a4 = tprob($df4, $t4);
+
+$a1 = ($t1 < 0) ? Real(1 - $a1) : Real($a1);
+$a2 = ($t2 < 0) ? Real(1 - $a2) : Real($a2);
+$a3 = ($t3 < 0) ? Real(1 - $a3) : Real($a3);
+$a4 = ($t4 < 0) ? Real(1 - $a4) : Real($a4);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use the t-distribution to answer the following questions. Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find the area in a t-distribution $side1 $t1 if the samples have
+  sizes \(n_1 = $n1a\) and \(n_2 = $n1b\). \{ ans_rule(10) \}
+  $ITEM Find the area in a t-distribution $side2 $t2 if the samples have
+  sizes \(n_1 = $n2a\) and \(n_2 = $n2b\). \{ ans_rule(10) \}
+  $ITEM Find the area in a t-distribution $side3 $t3 if the samples have
+  sizes \(n_1 = $n3a\) and \(n_2 = $n3b\). \{ ans_rule(10) \}
+  $ITEM Find the area in a t-distribution $side4 $t4 if the samples have
+  sizes \(n_1 = $n4a\) and \(n_2 = $n4b\). \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($a1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($a2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($a3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($a4->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

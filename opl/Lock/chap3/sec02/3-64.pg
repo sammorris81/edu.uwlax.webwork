@@ -1,0 +1,177 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'understanding and interpreting confidence intervals')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.2')
+## Problem1('3.64')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+$N = 1000;
+$sd = 16;
+
+$n1 = 50;
+$mean1 = random(65, 80, 5);
+$sd1 =  $sd / sqrt($n1);
+
+# generating 1000 x-bars with se = sd1
+rserve_eval('z <- rnorm(' . $N .')
+  z <- (z - mean(z)) / sd(z)
+  data1 <- z * ' . $sd1 . ' + ' . $mean1);
+
+# rserve returns an array
+($se) = rserve_eval('sd(data1)');
+$se = Real(sprintf("%.2f", $se));
+($mean) = rserve_eval('mean(data1)');
+$mean = Real(sprintf("%.2f", $mean));
+
+$moe = Real(sprintf("%.2f", 2 * $se));
+$lower = sprintf("%.2f", $mean - $moe);
+$upper = sprintf("%.2f", $mean + $moe);
+
+$mean2 = $mean;
+$n2 = 500;
+$sd2 =  $se * sqrt($n1 / $n2);
+
+# generating 1000 x-bars with se = sd2
+rserve_eval('data2 <- z * ' . $sd2 . ' + ' . $mean2);
+
+($xmin, $xmax) = rserve_eval('range(c(data1, data2))');
+
+@labels = ("?", "Histogram A", "Histogram B");
+$order = random(1, 2, 1);
+$width = 300;
+$height = 300;
+if ($order == 1){
+  $hist = rserve_start_plot('png', $width, $height);
+
+  rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+    hist(data1, xlim = c('. $xmin .', ' . $xmax .'),
+         main = "Histogram A", xlab = "")');
+  $disp1 = rserve_finish_plot($hist);
+
+  $hist = rserve_start_plot('png', $width, $height);
+
+  rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+    hist(data2, xlim = c('. $xmin .', ' . $xmax .'),
+         main = "Histogram B", xlab = "")');
+  $disp2 = rserve_finish_plot($hist);
+  $correct = "Histogram A";
+} elsif ($order == 2){
+  $hist = rserve_start_plot('png', $width, $height);
+
+  rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+    hist(data2, xlim = c('. $xmin .', ' . $xmax .'),
+         main = "Histogram A", xlab = "")');
+  $disp1 = rserve_finish_plot($hist);
+  $hist = rserve_start_plot('png', $width, $height);
+
+  rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+    hist(data1, xlim = c('. $xmin .', ' . $xmax .'),
+         main = "Histogram B", xlab = "")');
+  $disp2 = rserve_finish_plot($hist);
+  $correct = "Histogram B";
+}
+
+$idhist = PopUp(
+  [@labels],
+  $correct
+);
+
+$interpret = new_checkbox_multiple_choice();
+$interpret -> qa (
+  "Select $BITALIC each $EITALIC correct interpretation of the confidence interval ".
+  "in the prompt",
+  "If the sampling were repeated many times, you would expect that 95$PERCENT ".
+  "of the resulting confidence intervals to contain the average pulse rate of all ".
+  "students at her college.",
+  "She is 95$PERCENT confident that the average pulse rate for all students at her ".
+  "college is between $lower and $upper.",
+);
+$interpret -> extra(
+  "95$PERCENT of all students at her college have a pulse rate ". sprintf("%.2f", $lower) ." to ".
+  sprintf("%.2f", $upper) . ", and the rest have higher or lower pulse rates.",
+  "If the sampling were repeated many times, you would expect 95$PERCENT of the ".
+  "resulting samples to have a sample average that falls in the interval from ".
+  "$lower to $upper.",
+  "She is 95$PERCENT confident that the average pulse rate of students in the sample ".
+  "is between $lower and $upper.",
+  "She is 95$PERCENT confident that the average pulse rate for all US college " .
+  "students is between $lower and $upper.",
+  "95$PERCENT of the time, all students at her college will have a pulse rate between ".
+  "$lower and $upper.",
+);
+$interpret -> makeLast("None of the above");
+
+###########################
+## Initialization
+###########################
+Context()->texStrings;
+BEGIN_TEXT
+
+$BBOLD Confidence interval for averages: $EBOLD
+$BR
+Suppose that a student is working on a statistics project using data on pulse rates
+collected from a random sample of $n students from her college. From her sample, she
+finds the 95$PERCENT confidence interval is ($lower, $upper).
+Give your answers to 2 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the average pulse rate for this sample of students? \{ ans_rule(10) \}
+  $ITEM What is the standard error for this statistic? \{ ans_rule(10) \}
+  $ITEM Which of the two following histograms most accurately represents the sampling
+  distribution for this average? \{ $idhist->menu() \}
+  \{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+  AlignedRow([
+      image( $disp1, width=>$width, height=>$height, tex_size=>"400" ),
+      image( $disp2, width=>$width, height=>$height, tex_size=>"400" )
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+  EndTable()
+  \}
+  $anssep
+  $ITEM \{ $interpret -> print_q() \}
+  \{ $interpret -> print_a() \}
+\{ EndList( "OL" ) \}
+END_TEXT
+
+ANS( $mean -> with(tolerance=>0.1, tolType=>"Absolute")->cmp );
+ANS( $se -> with(tolerance=>0.1, tolType=>"Absolute")->cmp );
+ANS( $idhist -> cmp() );
+ANS( checkbox_cmp( $interpret->correct_ans() ) );
+
+ENDDOCUMENT();

@@ -1,0 +1,74 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Probability: direct computation, inclusion/exclusion)
+## KEYWORDS('Probability','Independent Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.4')
+## Problem1('E51')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = random( 38, 45, 1 );
+$a2 = random( 4, 7, 1 );
+
+$answer1 = Real("($a1/100*$a2/100)")->reduce;
+$answer2 = Real("(($a1/100+$a2/100)-($a1/100*$a2/100))")->reduce;
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+$a1$PERCENT of people in a town have type O blood, and $a2$PERCENT are Rh-positive.
+Assume blood type and Rh type are independent. Give your answers to four decimal
+places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM Find the probability that a randomly selected person has type O blood and is Rh-positive. \{ans_rule(10)\}
+  $ITEM Find the probability that a randomly selected person has type O blood or is Rh-positive. \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $answer2->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

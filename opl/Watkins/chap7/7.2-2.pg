@@ -1,0 +1,75 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample mean)
+## KEYWORDS('Sample Mean', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.2')
+## Problem1('2')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m=random(5.7,7.0,.1);
+$s=random(10,13,1);
+$n1=random(3,6,1);
+$n2=random(7,10,1);
+
+$x1=sprintf("%0.2f",(0-$m)/$s);
+$x2=sprintf("%0.2f",(0-$m)/($s/sqrt($n1)));
+$x3=sprintf("%0.2f",(10-$m)/($s/sqrt($n2)));
+$x4=sprintf("%0.2f",(8-$m)/($s/sqrt($n2)));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x1)));
+$an2 = Real(1-sprintf("%0.4f",uprob($x2)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x4)));
+
+
+BEGIN_TEXT
+Last January 1, Jenny thought about buying individual stocks.  Over the next year, the mean of the percentage changes in individual stock prices is $m$PERCENT and the standard deviation of these percentage changes is $s$PERCENT.  The distribution of price changes is normal.
+
+
+$PAR
+If Jenny had picked one stock at random, what is the probability that it would have gone down in price? \{ans_rule(8)\}
+$PAR
+If Jenny had picked $n1 stocks at random, what is the probability that their mean percentage changes would be negative? \{ans_rule(8)\}
+$PAR
+If Jenny had picked $n2 stocks at random, what is the probability that their mean percentage change would be between 8$PERCENT and 10$PERCENT? \{ans_rule(8)\}
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+
+ENDDOCUMENT();

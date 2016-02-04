@@ -1,0 +1,70 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Level(2)
+## KEYWORDS('normal distribution')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('2')
+## Section1('2.4')
+## Problem1('E65')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$m1=random(68,72,.1);
+$s1=random(2,4,.1);
+$m2=random(63,67,.1);
+$s2=random(2,3,.1);
+
+$x1=sprintf("%0.2f",(62-$m1)/$s1);
+$x2=sprintf("%0.2f",(72-$m1)/$s1);
+$x3=sprintf("%0.2f",(62-$m2)/$s2);
+$x4=sprintf("%0.2f",(72-$m2)/$s2);
+
+$an1 = Real(-sprintf("%0.4f",uprob($x2))+sprintf("%0.4f",uprob($x1)));
+$an2 = Real(-sprintf("%0.4f",uprob($x4))+sprintf("%0.4f",uprob($x3)));
+
+
+
+BEGIN_TEXT
+
+To work as a flight attendant for United Airlines, you must be between 62 and 72 inches tall.  The heights of 20- to 29-year-old males in the United States have mean $m1 inches and standard deviation $s1 inches.  The heights of 20- to 29-year-old females in the United States have mean $m2 inches and standard deviation $s2 inches.  Both distributions are normal.
+
+$PAR
+Give the probability that a randomly selected male this age meets United's height limitation. \{ans_rule(8)\}
+$PAR
+Give the probability that a randomly selected female this age meets United's height limitation. \{ans_rule(8)\}
+
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

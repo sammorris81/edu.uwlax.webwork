@@ -1,0 +1,205 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'creating randomization distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.4')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@inequality = (
+  "<",
+  ">",
+  "\neq",
+);
+
+@sided = (
+  "?",
+  "Left-tailed",
+  "Right-tailed",
+  "Two-tailed"
+);
+
+$random1 = random(0, 2, 1);
+$random2 = random(0, 2, 1);
+$random3 = random(0, 2, 1);
+$random4 = random(0, 2, 1);
+
+$nullprop = Real(random(0.3, 0.7, 0.1));
+if ($random1 == 0) {
+  $stat1 = random(($nullprop - 0.2), ($nullprop - 0.1), 0.05);
+  $correct1 = $sided[1];
+} elsif ($random1 == 1) {
+  $stat1 = random(($nulprop + 0.1), ($nullprop + 0.2), 0.05);
+  $correct1 = $sided[2];
+} else {
+  do {
+    $stat1 = random(($nullprop - 0.2), ($nullprop + 0.2), 0.05);
+  } until (
+    $stat1 != $nullprop
+  );
+  $correct1 = $sided[3];
+}
+
+$null1 = "\(H_0: p = $nullprop\)";
+$alt1 = "\(H_a: p " . $inequality[$random1] . " $nullprop\)";
+$n1 = random(25, 40, 1);
+
+$mc1 = PopUp(
+  [@sided],
+  $correct1,
+);
+
+$nullmean = Real(random(50, 70, 2));
+if ($random2 == 0) {
+  $stat2 = random(($nullmean - 20), ($nullmean - 5), 1);
+  $correct2 = $sided[1];
+} elsif ($random2 == 1) {
+  $stat2 = random(($nullmean + 5), ($nullmean + 20), 1);
+  $correct2 = $sided[2];
+} else {
+  do {
+    $stat2 = random(($nullmean - 20), ($nullmean + 20), 1);
+  } until (
+    $stat2 != $nullmean
+  );
+  $correct2 = $sided[3];
+}
+
+$null2 = "\(H_0: \mu = $nullmean\)";
+$alt2 = "\(H_a: \mu " . $inequality[$random2] . " $nullmean\)";
+$n2 = random(25, 40, 1);
+
+$mc2 = PopUp(
+  [@sided],
+  $correct2,
+);
+
+$nulldiff = Real(0);
+
+if ($random3 == 0) {
+  $stat3 = random(-0.5, -0.1, .05);
+  $correct3 = $sided[1];
+} elsif ($random3 == 1) {
+  $stat3 = random(0.1, 0.5, 0.05);
+  $correct3 = $sided[2];
+} else {
+  $stat3 = non_zero_random(-0.5, 0.5, 0.05);
+  $correct3 = $sided[3];
+}
+
+$null3 = "\(H_0: p_1 = p_2\)";
+$alt3 = "\(H_a: p_1 " . $inequality[$random3] . " p_2\)";
+$n31 = random(25, 40, 1); $n32 = random(25, 40, 1);
+
+$mc3 = PopUp(
+  [@sided],
+  $correct3,
+);
+
+if ($random4 == 0) {
+  $stat4 = random(-12, 1, 1);
+  $correct4 = $sided[1];
+} elsif ($random4 == 1) {
+  $stat4 = random(1, 12, 1);
+  $correct4 = $sided[2];
+} else {
+  $stat4 = non_zero_random(-12, 12, 1);
+  $correct4 = $sided[3];
+}
+
+$null4 = "\(H_0: \mu_1 = \mu_2\)";
+$alt4 = "\(H_a: \mu_1 " . $inequality[$random4] . " \mu_2\)";
+$n41 = random(25, 40, 1); $n42 = random(25, 40, 1);
+
+$mc4 = PopUp(
+  [@sided],
+  $correct4,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, the null and alternative hypotheses for a test are given
+as well as some information about the actual sample(s). Indicate where the randomization distribution
+will be centered. In addition, indicate whether the test is a left-tailed, a right-tailed,
+or a two-tailed test.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Hypotheses: $null1 vs $alt1 $BR
+  Sample: \(\widehat{p} = $stat1\), \(n = $n1\) $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM What kind of test is this? \{ $mc1->menu() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM Hypotheses: $null2 vs $alt2 $BR
+  Sample: \(\overline{x} = $stat2\), \(n = $n2\) $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM What kind of test is this? \{ $mc2->menu() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM Hypotheses: $null3 vs $alt3 $BR
+  Sample: \(D = \widehat{p}_1 - \widehat{p}_2 = $stat3\), \(n_1 = $n31\), \(n_2 = $n32\)
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM What kind of test is this? \{ $mc3->menu() \}
+  \{ EndList("OL") \}
+  $PAR
+  $ITEM Hypotheses: $null4 vs $alt4 $BR
+  Sample: \(D = \overline{x}_1 - \overline{x}_2 = $stat4\), \(n_1 = $n41\), \(n_2 = $n42\)
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM What kind of test is this? \{ $mc4->menu() \}
+  \{ EndList("OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($nullprop->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+ANS($nullmean->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+ANS($nulldiff->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc3->cmp());
+ANS($nulldiff->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc4->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

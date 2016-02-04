@@ -1,0 +1,80 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Probability: direct computation, inclusion/exclusion)
+## KEYWORDS('Probability','Independent Events')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.4')
+## Problem1('E55')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$a1 = random( 12, 16, 1 ); # probability
+$a2 = random( 8, 13, 2 ); # sample size
+
+#$answer1 = Real("($a1/100)**$a2")->reduce;
+$answer1 = Real("($a1/100)**$a2")->reduce;
+$answer2 = Real("1-(1-$a1/100)^$a2")->reduce;
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+About $a1$PERCENT of college freshmen have to take a remedial course in reading.
+Suppose you take a random sample of $a2 college freshmen. You may assume that the
+event that any student would have to take the remedial course in reading is
+independent of any other student in the sample having to take the remedial reading
+course. Give your answers to four decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the probability that all $a2 will have to take a remedial course in reading? \{ans_rule(10)\}
+  $ITEM What is the probability that at least one will have to take a remedial course in reading? \{ans_rule(10)\}
+\{ EndList( "OL" ) \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $answer2->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

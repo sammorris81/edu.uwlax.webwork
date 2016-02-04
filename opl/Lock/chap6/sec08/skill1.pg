@@ -1,0 +1,205 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Two sample proportion)
+## KEYWORDS('inference for means and proportions', 'confidence interval for a difference in proportions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.8')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$p1a = Real(random(0.05, 0.35, 0.02));
+do { $p1b = Real(random(0.05, 0.35, 0.02)); } until ($p1b != $p1a);
+$p2a = Real(random(0.65, 0.95, 0.02));
+do { $p2b = Real(random(0.65, 0.95, 0.02)); } until ($p2b != $p2a);
+$p3a = Real(random(0.25, 0.75, 0.02));
+do { $p3b = Real(random(0.25, 0.75, 0.02)); } until ($p3b != $p3a);
+
+$n1a = random(200, 500, 50);
+$n1b = random(200, 500, 50);
+$n2a = random(500, 2000, 500);
+$n2b = random(500, 2000, 500);
+$n3a = random(200, 500, 50);
+$n3b = random(200, 500, 50);
+
+$p1 = Real($p1a - $p1b);
+$p2 = Real($p2a - $p2b);
+$p3 = Real($p3a - $p3b);
+
+$se1 = Real(sqrt($p1a * (1 - $p1a) / $n1a + $p1b * (1 - $p1b) / $n1b));
+$se2 = Real(sqrt($p2a * (1 - $p2a) / $n2a + $p2b * (1 - $p2b) / $n2b));
+$se3 = Real(sqrt($p3a * (1 - $p3a) / $n3a + $p3b * (1 - $p3b) / $n3b));
+
+@zstars = (1.282, 1.645, 1.960, 2.326, 2.576);
+@confidences = (80, 90, 95, 98, 99);
+
+$random1 = random(0, 4, 1);
+$random2 = random(0, 4, 1);
+$random3 = random(0, 4, 1);
+
+$me1 = Real($zstars[$random1] * $se1);
+$me2 = Real($zstars[$random2] * $se2);
+$me3 = Real($zstars[$random3] * $se3);
+
+$lower1 = Real($p1 - $me1);
+$upper1 = Real($p1 + $me1);
+
+$lower2 = Real($p2 - $me2);
+$upper2 = Real($p2 + $me2);
+
+$lower3 = Real($p3 - $me3);
+$upper3 = Real($p3 + $me3);
+
+# deal with tolerances for calculator usage
+# $n2 skips by 500, so no matter the sample size assigned, count should be an
+#   integer
+$count1al = floor($p1a * $n1a);
+$count1au = ceil($p1a * $n1a);
+$count1bl = floor($p1b * $n1b);
+$count1bu = ceil($p1b * $n1b);
+
+$count3al = floor($p3a * $n3a);
+$count3au = ceil($p3a * $n3a);
+$count3bl = floor($p3b * $n3b);
+$count3bu = ceil($p3b * $n3b);
+
+$p1al = $count1al / $n1a;
+$p1au = $count1au / $n1a;
+$p1bl = $count1bl / $n1b;
+$p1bu = $count1bu / $n1b;
+
+$p3al = $count3al / $n3a;
+$p3au = $count3au / $n3a;
+$p3bl = $count3bl / $n3b;
+$p3bu = $count3bu / $n3b;
+
+$p1l = Real($p1al - $p1bl);
+$p1u = Real($p1au - $p1bu);
+$p3l = Real($p3al - $p3bl);
+$p3u = Real($p3au - $p3bu);
+
+$se1l = Real(sqrt($p1al * (1 - $p1al) / $n1a + $p1bl * (1 - $p1bl) / $n1b));
+$se1u = Real(sqrt($p1au * (1 - $p1au) / $n1a + $p1bu * (1 - $p1bu) / $n1b));
+$se3l = Real(sqrt($p3al * (1 - $p3al) / $n3a + $p3bl * (1 - $p3bl) / $n3b));
+$se3u = Real(sqrt($p3au * (1 - $p3au) / $n3a + $p3bu * (1 - $p3bu) / $n3b));
+
+$me1l = Real($zstars[$random1] * $se1l);
+$me1u = Real($zstars[$random1] * $se1u);
+$me3l = Real($zstars[$random3] * $se3l);
+$me3u = Real($zstars[$random3] * $se3u);
+
+$lower1l = Real($p1l - $me1l);
+$lower1u = Real($p1u - $me1u);
+$upper1l = Real($p1l + $me1l);
+$upper1u = Real($p1u + $me1u);
+
+$lower3l = Real($p3l - $me3l);
+$lower3u = Real($p3u - $me3u);
+$upper3l = Real($p3l + $me3l);
+$upper3u = Real($p3u + $me3u);
+
+$tolp1 = max(abs($p1 - $p1l), abs($p1 - $p1u)) + 0.0001;
+$tolp3 = max(abs($p3 - $p3l), abs($p3 - $p3u)) + 0.0001;
+$tolme1 = max(abs($me1 - $me1l), abs($me1 - $me1u)) + 0.0001;
+$tolme3 = max(abs($me3 - $me3l), abs($me3 - $me3u)) + 0.0001;
+$tollower1 = max(abs($lower1 - $lower1l), abs($lower1 - $lower1u)) + 0.0001;
+$tolupper1 = max(abs($upper1 - $upper1l), abs($upper1 - $upper1u)) + 0.0001;
+$tollower3 = max(abs($lower3 - $lower3l), abs($lower3 - $lower3u)) + 0.0001;
+$tolupper3 = max(abs($upper3 - $upper3l), abs($upper3 - $upper3u)) + 0.0001;
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following questions, use the normal distribution to find a confidence interval
+for a difference in proportions \( p_1 - p_2 \) given the relevant sample results.
+Give the best point estimate for \(p_1 - p_2\), the margin of error, and the confidence
+interval. Assume the results come from random samples.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(p_1 - p_2\) given that
+  \(\widehat{p}_1 = $p1a\) with \(n_1=$n1a\) and \(\widehat{p}_2 = $p1b\) with \(n_2=$n1b\).
+  Use \(z^* = $zstars[$random1]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(p_1 - p_2\) given that
+  \(\widehat{p}_1 = $p2a\) with \(n_1=$n2a\) and \(\widehat{p}_2 = $p2b\) with \(n_2=$n2b\).
+  Use \(z^* = $zstars[$random2]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(p_1 - p_2\) given that
+  \(\widehat{p}_1 = $p3a\) with \(n_1=$n3a\) and \(\widehat{p}_2 = $p3b\) with \(n_2=$n3b\).
+  Use \(z^* = $zstars[$random3]\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Point estimate: \{ ans_rule(10) \}
+    $ITEM Margin of error: \{ ans_rule(10) \}
+    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1->with(tolerance=>$tolp1, tolType=>"Absolute")->cmp());
+ANS($me1->with(tolerance=>$tolme1, tolType=>"Absolute")->cmp());
+ANS($lower1->with(tolerance=>$tollower1, tolType=>"Absolute")->cmp());
+ANS($upper1->with(tolerance=>$tolupper1, tolType=>"Absolute")->cmp());
+
+ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($me2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ANS($p3->with(tolerance=>$tolp3, tolType=>"Absolute")->cmp());
+ANS($me3->with(tolerance=>$tolme3, tolType=>"Absolute")->cmp());
+ANS($lower3->with(tolerance=>$tollower3, tolType=>"Absolute")->cmp());
+ANS($upper3->with(tolerance=>$tolupper3, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

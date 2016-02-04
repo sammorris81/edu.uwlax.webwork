@@ -1,0 +1,195 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Paired samples)
+## KEYWORDS('inference for means and proportions', 'paired difference in means')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.13')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@inequality = (
+  "<",
+  ">",
+  "\neq",
+);
+
+$sd1 = random(5, 10, 0.2);
+$sd2 = random(5, 10, 0.2);
+
+$n1 = random(10, 100, 2);
+$n2 = random(10, 100, 2);
+
+$df1 = $n1 - 1;
+$df2 = $n2 - 1;
+
+$se1 = Real($sd1 / sqrt($n1));
+$se2 = Real($sd2 / sqrt($n2));
+
+$random1 = random(0, 2, 1);
+if ($random1 == 2) {
+  $random2 = random(0, 1, 1);
+} else {
+  $random2 = 2;
+}
+
+$tcrit1 = ($random1 == 2) ? tdistr($df1, 0.025) : tdistr($df1, 0.05);
+$tcrit2 = ($random2 == 2) ? tdistr($df2, 0.025) : tdistr($df2, 0.05);
+
+do { $mult1 = random(0.3, 4.5, 0.01); } until ($mult1 != $tcrit1);
+do { $mult2 = random(0.3, 4.5, 0.01); } until ($mult2 != $tcrit2);
+
+if ($random1 == 0) {
+  $tsign1 = -1;
+} elsif ($random1 == 1) {
+  $tsign1 = 1;
+} else {
+  $tsign1 = random(-1, 1, 2);
+}
+
+if ($random2 == 0) {
+  $tsign2 = -1;
+} elsif ($random2 == 1) {
+  $tsign2 = 1;
+} else {
+  $tsign2 = random(-1, 1, 2);
+}
+
+$m1 = sprintf("%.1f", $tsign1 * $mult1 * $se1);
+$m2 = sprintf("%.1f", $tsign2 * $mult2 * $se2);
+
+$t1 = Real($m1 / $se1);
+$t2 = Real($m2 / $se2);
+
+$pval1 = ($random1 == 2) ? 2 * tprob($df1, abs($t1)) : tprob($df1, abs($t1));
+$pval2 = ($random2 == 2) ? 2 * tprob($df2, abs($t2)) : tprob($df2, abs($t2));
+
+if ($pval1 < 0.0001) {
+  $pval1 = "\( < 0.0001 \)";
+  $correct1 = " a. Reject \(H_0\)";
+} elsif ($pval1 < 0.05) {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " a. Reject \(H_0\)";
+} else {
+  $pval1 = sprintf("%.4f", $pval1);
+  $correct1 = " b. Fail to reject \(H_0\)";
+}
+
+if ($pval2 < 0.0001) {
+  $pval2 = "\( < 0.0001 \)";
+  $correct2 = " a. Reject \(H_0\)";
+} elsif ($pval2 < 0.05) {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " a. Reject \(H_0\)";
+} else {
+  $pval2 = sprintf("%.4f", $pval2);
+  $correct2 = " b. Fail to reject \(H_0\)";
+}
+
+@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+
+$mc1 = RadioButtons(
+  [@options],
+  $correct1,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+$mc2 = RadioButtons(
+  [@options],
+  $correct2,
+  order => [@options],
+  labels => ['a.', 'b.'],
+  separator => $tab,
+);
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Test statistic:$EBOLD $BR
+The formula for the test statistic for a hypothesis test for a difference in
+means with paired datais given by
+$BCENTER
+\(t = \displaystyle \frac{\overline{x}_d}{s_d / \sqrt{n_d}}\)
+$ECENTER
+END_HINT
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+$PAR
+In the following questions, find the test statistic and give the appropriate
+conclusion for the hypothesis test.
+Assume the results come from random samples, and if the sample sizes are small, assume
+the underlying distributions are relatively normal.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random1] 0\) using
+  the sample results \( \overline{x}_d=$m1 \), \(s_d = $sd1\), with \(n_d=$n1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random2] 0\) using
+  the sample results \( \overline{x}_d=$m2 \), \(s_d = $sd2\), with \(n_d=$n2\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+    Use \(\alpha=0.05\). $BR
+    \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($t1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc1->cmp());
+ANS($t2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mc2->cmp());
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

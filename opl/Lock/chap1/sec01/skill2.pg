@@ -1,0 +1,170 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Classifying data)
+## KEYWORDS('data')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('1')
+## Section1('1.1')
+## Problem1('Skill Builder 2')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+}
+
+Context("Numeric");
+
+$exercisea = 'Lung capacity and number of years smoking cigarettes';
+@optionsa = (
+  '?',
+  'Lung capacity',
+  'Number of years smoking'
+);
+$explana = 'Number of years smoking';
+$respona = 'Lung capacity';
+
+$exerciseb = 'Amount of fertilizer used and the yield of a crop';
+@optionsb = (
+  '?',
+  'Amount of fertilizer used',
+  'Yield of a crop'
+);
+$explanb = 'Amount of fertilizer used';
+$responb = 'Yield of a crop';
+
+$exercisec = 'Blood alcohol content (BAC) and number of alcoholic drinks consumed';
+@optionsc = (
+  '?',
+  'Blood alcohol content (BAC)',
+  'Number of alcoholic drinks consumed'
+);
+$explanc = 'Number of alcoholic drinks consumed';
+$responc = 'Blood alcohol content (BAC)';
+
+$exercised = 'Weekly hours spent exercising and body mass.';
+@optionsd = (
+  '?',
+  'Weekly hours spent exercising',
+  'Body mass'
+);
+$expland = 'Weekly hours spent exercising';
+$respond = 'Body mass';
+
+
+###########################
+## Initialization
+###########################
+
+$random = random(1, 4, 1);
+
+if ($random == 1) {
+  $text1 = $exercisea;
+  @options1 = @optionsa;
+  $explan1 = $explana;
+  $respon1 = $respona;
+  $text2 = $exerciseb;
+  @options2 = @optionsb;
+  $explan2 = $explanb;
+  $respon2 = $responb;
+} elsif ($random == 2) {
+  $text1 = $exercisec;
+  @options1 = @optionsc;
+  $explan1 = $explanc;
+  $respon1 = $responc;
+  $text2 = $exercised;
+  @options2 = @optionsd;
+  $explan2 = $expland;
+  $respon2 = $respond;
+} elsif ($random == 3) {
+  $text1 = $exercised;
+  @options1 = @optionsd;
+  $explan1 = $expland;
+  $respon1 = $respond;
+  $text2 = $exercisea;
+  @options2 = @optionsa;
+  $explan2 = $explana;
+  $respon2 = $respona;
+} else {
+  $text1 = $exerciseb;
+  @options1 = @optionsb;
+  $explan1 = $explanb;
+  $respon1 = $responb;
+  $text2 = $exercisec;
+  @options2 = @optionsc;
+  $explan2 = $explanc;
+  $respon2 = $responc;
+}
+
+$ex1 = PopUp(
+  [@options1],
+  $explan1,
+);
+$re1 = PopUp(
+  [@options1],
+  $respon1,
+);
+
+$ex2 = PopUp(
+  [@options2],
+  $explan2,
+);
+$re2 = PopUp(
+  [@options2],
+  $respon2,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In the following situations, a relationship between two variables is described. In
+each case, we can think of one variable as helping to explain the other. Identify
+the explanatory variable and the response variable.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $text1
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Explanatory: \{ $ex1->menu() \}
+    $ITEM Response: \{ $re1->menu() \}
+  \{ EndList( "OL" ) \}
+  $ITEM $text2
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Explanatory: \{ $ex2->menu() \}
+    $ITEM Response: \{ $re2->menu() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($ex1->cmp());
+ANS($re1->cmp());
+ANS($ex2->cmp());
+ANS($re2->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

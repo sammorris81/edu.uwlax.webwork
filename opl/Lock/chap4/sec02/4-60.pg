@@ -1,0 +1,228 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'measuring evidence with p-values')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.2')
+## Problem1('4.60')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$n = 100;
+
+$quant1 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n,
+    skew => 0,
+    mean => 4.5,
+    sd => 2,
+    randomsummary => 'F',
+);
+
+$quant2 = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n,
+    skew => 0,
+    mean => 4.1,
+    sd => 2,
+    randomsummary => 'F',
+);
+
+@x1 = @{$quant1->{x}};
+$n1 = $quant1->{n};
+$mean1 = sprintf("%.1f", $quant1->{mean});
+@x2 = @{$quant2->{x}};
+$n2 = $quant2->{n};
+$mean2 = sprintf("%.1f", $quant2->{mean});
+
+$N = 500;
+$bs_diffs = new DataGenUWL(
+  datatype => 'bs_two_mean',
+  data => [[@x1], [@x2]],
+  method => 'reallocate',
+  N => $N,
+);
+
+$xbardiff = sprintf("%.1f", ($quant1->{mean} - $quant2->{mean}) );
+
+$statistic = Real($xbardiff);
+$nullval = 0;
+$param = '\mu_s - \mu_n';
+$type = 'NEQ';
+
+$histrandom = StatGraphicsUWL::histogram(
+  data => $bs_diffs,
+  summaries => "F",
+);
+
+$nullhyp = hyptestProblemUWL::selectnull(
+  nullval => $nullval,
+  param => $param,
+);
+
+$althyp = hyptestProblemUWL::selectalt(
+  nullval => $nullval,
+  param => $param,
+  type => $type,
+);
+
+$pvalue = QuantitativeUWL::random_pvalue(
+  data => $bs_diffs,
+  test_stat => $statistic,
+  alternative => $type,
+);
+
+$pvalue = Real($pvalue);
+$nextreme = $pvalue / 2 * $N;
+
+$compare = $statistic > $nullval ? "as large or larger than" : "as small or smaller than";
+
+$rejinterp = "We have statistically significant evicence that the students who ".
+             "smile have a different average leniency score than those who do not.";
+
+$f2rinterp = "We do not have statistically significant evidence that the ".
+             "students who smile have a different average leniency score than ".
+             "those who do not.";
+
+$accinterp = "We have statistically significant evidence that the average ".
+             "leniency score is the same for the students who smile and the ".
+             "students who do not.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+if ($pvalue < 0.05) {
+  $correct_dec    = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec    = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+Can a simple smile have an effect on punishment assigned following an infraction?
+LeFrance and Hecht conducted a study examining the effect of a smile on the leniency
+of discplinary action for wrongdoers. Participants in the experiment took on the
+role of members of a college disciplinary panel judging students accused of cheating.
+For each suspect, along with a description of the offense, a picture was provided
+with either a smile or a neutral facial expression. A leniency score was calculated
+based on the displinary decisions made by the participants. The results from the study
+showed an average leniency score for smiles of $mean1 and an average leniency for
+no smiles of $mean2.
+$PAR
+Conduct a hypothesis test to see if smiling has an impact on leniency score.
+$PAR
+The histogram of randomization distribution is given below.
+In $nextreme randomizations (out of $N) the randomization distribution resulted
+in values $compare the statistic for this data.
+$PAR
+$BCENTER
+\{ image( insertGraph($histrandom) , width=>300, height=>300,tex_size=>500 )
+\}
+$ECENTER
+$PAR
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \{ $nullhyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the correct alternative hypothesis for this test? $BR
+  \{ $althyp -> buttons( separator => "" ) \}
+  $PAR
+  $ITEM What is the statistic from this sample (use smiles - nonsmiles)? Give your answer
+  to one decimal place. \{ ans_rule(10) \}
+  $PAR
+  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $PAR
+  $ITEM Select the appropriate decision for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcdec -> buttons() \}
+  $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = 0.05\)). $BR
+  \{ $mcinterp -> buttons() \}
+  $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($nullhyp->cmp());
+ANS($althyp->cmp());
+ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pvalue->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+ENDDOCUMENT();

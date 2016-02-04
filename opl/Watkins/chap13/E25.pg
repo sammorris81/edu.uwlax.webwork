@@ -1,0 +1,131 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Prediction)
+## KEYWORDS('Regression', 'Correlation', 'Prediction intervals')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('13')
+## Section1('13.2')
+## Problem1('E25')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$x1= random( 0, 1, 1 );
+$x2= random( 2, 3, 1 );
+$x3= random( 10, 11, 1 );
+$x4= random( 20, 21, 1 );
+$x5= random( 30, 31, 1 );
+
+
+$y1= random( 31, 33, .1 );
+$y2= random( 27, 29, .1 );
+$y3= random( 23, 25 ,.1 );
+$y4= random( 15, 18, .1 );
+$y5= random( 10, 11, .1 );
+
+$pred = random( 2, 28, 1 );
+
+
+$n = Real(5);
+
+
+$sumx = Real( $x1 + $x2 + $x3 + $x4 + $x5 );
+$sumy = Real( $y1 + $y2 + $y3 + $y4 + $y5 );
+$sumxy = Real( $x1*$y1 + $x2*$y2 + $x3*$y3 + $x4*$y4 + $x5*$y5 );
+$sumx2 = Real( $x1**2 + $x2**2 + $x3**2 + $x4**2 + $x5**2 );
+$sumy2 = Real( $y1**2 + $y2**2 + $y3**2 + $y4**2 + $y5**2);
+
+$meanx = Real( $sumx/$n );
+$meany = Real( $sumy/$n );
+
+$sx = Real( sqrt( (($x1-$meanx)**2 +($x2-$meanx)**2 +($x3-$meanx)**2 +($x4-$meanx)**2 +($x5-$meanx)**2 )/($n-1) ) );
+$sy = Real( sqrt( (($y1-$meany)**2 +($y2-$meany)**2 +($y3-$meany)**2 +($y4-$meany)**2 +($y5-$meany)**2 )/($n-1) ) );
+
+$SSxx = Real( ($n-1)*($sx**2) );
+$SSyy = Real( ($n-1)*($sy**2) );
+$SSxy = Real( $sumxy - $sumx*$sumy/$n );
+
+$b1 = Real( $SSxy/ $SSxx );
+$b0 = Real($meany-$b1*$meanx);
+
+$yhat1=Real($b0+$b1*$x1);
+$yhat2=Real($b0+$b1*$x2);
+$yhat3=Real($b0+$b1*$x3);
+$yhat4=Real($b0+$b1*$x4);
+$yhat5=Real($b0+$b1*$x5);
+
+
+$s = Real( sqrt( (($y1-$yhat1)**2 +($y2-$yhat2)**2 +($y3-$yhat3)**2 +($y4-$yhat4)**2 +($y5-$yhat5)**2)/($n-2) ) );
+
+
+
+$r = Real( $SSxy/sqrt($SSxx*$SSyy));
+
+
+
+$lower = Real( $b0+$b1*$pred - 2.353*$s*sqrt(1 + 1/$n + ($pred-$meanx)**2/$SSxx) );
+$upper = Real( $b0+$b1*$pred + 2.353*$s*sqrt(1 + 1/$n + ($pred-$meanx)**2/$SSxx) );
+
+
+
+
+
+
+
+
+
+BEGIN_TEXT
+
+To test the potental effectiveness of laetisaric acid in controlling fungal
+diseases in crop plants, various concentrations of the acid were applied to Petri
+dishes containing the fungus Pythium ultimum. After 24 hours, the average radius
+of the fungus colonies at each concentration was calculated.
+The least squares line for this data is \(\hat{y}=$b0+$b1 x\), and the sums are
+\(\sum{x}=$sumx\), \(\sum{y}=$sumy\), \(\sum{x^2}=$sumx2\), \(\sum{y^2}=$sumy2\),
+and \(\sum{xy}=$sumxy\). Find a 90$PERCENT prediction interval for the average
+colony radius when the acid concentration is $pred.
+$PAR
+
+\{ begintable(2) \}
+\{ row( "Acid Concentration", "Average Colony Radius" ) \}
+\{ row( "$x1", "$y1" ) \}
+\{ row( "$x2", "$y2" ) \}
+\{ row( "$x3", "$y3" ) \}
+\{ row( "$x4", "$y4" ) \}
+\{ row( "$x5", "$y5" ) \}
+
+\{ endtable() \}
+$PAR
+(\{ ans_rule(15) \}, \{ ans_rule(15) \})
+
+
+
+END_TEXT
+
+
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+ENDDOCUMENT();

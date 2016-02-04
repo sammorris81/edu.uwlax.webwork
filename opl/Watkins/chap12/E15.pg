@@ -1,0 +1,187 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Chi-squared test for independence)
+## KEYWORDS('Hypothesis test', 'Chi-Square', 'Goodness of fit', 'Homogeneity')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('12')
+## Section1('12.2')
+## Problem1('E15')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+
+$b1 = Real(58*37/317);
+$b2 = Real(58*78/317);
+$b3 = Real(58*202/317);
+$b4 = Real(53*37/317);
+$b5 = Real(53*78/317);
+$b6 = Real(53*202/317);
+$b7 = Real(90*37/317);
+$b8 = Real(90*78/317);
+$b9 = Real(90*202/317);
+$b10 = Real(116*37/317);
+$b11 = Real(116*78/317);
+$b12 = Real(116*202/317);
+
+$ts = Real(" (13 - $b1)^2/$b1 + (15 - $b2)^2/$b2 + (30 - $b3)^2/$b3 + (4 - $b4)^2/$b4 + (18 - $b5)^2/$b5 + (31 - $b6)^2/$b6 + (3 - $b7)^2/$b7 + (23 - $b8)^2/$b8 + (64 - $b9)^2/$b9 + (17 - $b10)^2/$b10 + (22 - $b11)^2/$b11 + (77 - $b12)^2/$b12 ")->reduce;
+
+
+$pval=Real(chisqrprob(6,$ts))->reduce;
+
+
+
+$mc = new_multiple_choice();
+$mc2 = new_multiple_choice();
+
+## What's the question to pose?
+
+$question = "Select the appropriate bounds on the \(P\)-value.";
+$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.05\).";
+
+## What's the answer?
+
+
+###FOR SELECTION OF THE P-VALUE
+if($pval>.25){
+$answer = "\(P\)-value > .25";}
+elsif($pval<=.25 && $pval>.20){
+$answer = ".20 < \(P\)-value < .25";}
+elsif($pval<=.20 && $pval>.15){
+$answer = ".15 < \(P\)-value < .20";}
+elsif($pval<=.15 && $pval>.10){
+$answer = ".10 < \(P\)-value < .15";}
+elsif($pval<=.10 && $pval>.05){
+$answer = ".05 < \(P\)-value < .10";}
+elsif($pval<=.05 && $pval>.025){
+$answer = ".025 < \(P\)-value < .05";}
+elsif($pval<=.025 && $pval>.02){
+$answer = ".02 < \(P\)-value < .025";}
+elsif($pval<=.02 && $pval>.01){
+$answer = ".01 < \(P\)-value < .02";}
+elsif($pval<=.01 && $pval>.005){
+$answer = ".005 < \(P\)-value < .01";}
+elsif($pval<=.005 && $pval>.0025){
+$answer = ".0025 < \(P\)-value < .005";}
+elsif($pval<=.0025 && $pval>.001){
+$answer = ".001 < \(P\)-value < .0025";}
+else{
+$answer = "\(P\)-value < .001";
+}
+
+
+
+
+
+##ANSWER FOR CONCLUSION
+if($pval<.05)
+{
+$answer2 = "Reject \(H_0\).  We have significant evidence that the distribution of ratings is different for the different presidents.";
+}
+else
+{
+$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that the distribution of ratings is different for the different presidents.";
+}
+
+
+
+
+## Link the question and its answer
+
+$mc->qa($question, $answer);
+$mc2->qa($question2, $answer2);
+
+## What are some spurious answers?
+
+
+##EXTRA ANSWERS FOR THE P-VALUE PART
+$mc->makeLast('\(P\)-value > .25','.20 < \(P\)-value < .25',
+'.15 < \(P\)-value < .20',
+'.10 < \(P\)-value < .15',
+'.05 < \(P\)-value < .10',
+'.025 < \(P\)-value < .05',
+'.02 < \(P\)-value < .025',
+'.01 < \(P\)-value < .02',
+'.005 < \(P\)-value < .01',
+'.0025 < \(P\)-value < .005',
+'.001 < \(P\)-value < .0025',
+'\(P\)-value < .001');
+
+
+
+
+##EXTRA ANSWERS FOR THE CONCLUSION
+
+$mc2->makeLast('Reject \(H_0\).  We have significant evidence that the distribution of ratings is different for the different presidents.','Fail to reject \(H_0\).  We do not have significant evidence that the distribution of ratings is different for the different presidents.');
+
+
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+
+
+
+BEGIN_TEXT
+
+Since 1946, a committee of the American bar Association (ABA) has rated the qualifications of the presidential nominations to judgeships. If the committee agrees, it rates each candidate as well-qualified, qualified, or not qualified. If not, the rating can be split. For example, a candidate with a majority of not qualified votes and some qualified votes would be rated not qualified/ qualified, while a candidate with a majority of qualified votes and some not-qualified votes would be rated qualified/ not qualified. The table below gives the ratings, categorized into three groups, for all 317 nominations that were rated for the last four presidents completing their terms.
+
+$PAR
+\{ begintable(5) \}
+\{ row( "", "Not Qualified or Split", "Qualified or Qualified/","Well-Qualified or Well-", "Total" ) \}
+\{ row( "", "Between Qualified/Not Qualified", "Well-Qualified", "Qualified/Qualified", "" ) \}
+\{ row( "Reagan", "13", "15", "30", "58" ) \}
+\{ row( "G.H.W. Bush", "4", "18", "31", "53" ) \}
+\{ row( "Clinton", "3", "23", "64", "90" ) \}
+\{ row( "G.W. Bush", "17", "22", "77", "116" ) \}
+\{ row( "Total", "37", "78", "202", "317" ) \}
+\{ endtable() \}
+$PAR
+
+
+
+What is the test statistic for the chi-squared test?
+\{ ans_rule(15) \}.
+
+
+$PAR
+\{ $mc->print_q() \}
+\{ $mc->print_a() \}
+
+$PAR
+
+\{ $mc2->print_q() \}
+\{ $mc2->print_a() \}
+
+
+
+END_TEXT
+
+ANS($ts->with(tolerance=>.07)->cmp);
+ANS( radio_cmp($mc->correct_ans) );
+ANS( radio_cmp($mc2->correct_ans) );
+
+
+ENDDOCUMENT();
+
+

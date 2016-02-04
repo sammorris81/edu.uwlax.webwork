@@ -1,0 +1,214 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Correlation)
+## KEYWORDS('describing data', 'two quantitative variables: scatterplot and correlation')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.5')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@sigs = (0, 0, 5, 5);
+@slopes = (-5, 5);
+push(@slopes, random(-1, 1, 2) * 5);
+push(@slopes, random(-1, 1, 2) * 0.01);
+@idx = shuffle(4);
+
+@sigs = @sigs[@idx];
+@slopes = @slopes[@idx];
+
+$xmin = 0;
+$xmax = 20;
+$xticklength = 5;
+
+$quantx = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 40,
+  mean => 10,
+  sd => 3.3,
+  skew => 0,
+  randomsummary => "F",
+  round => 2,
+);
+
+@x = @{$quantx->{x}};
+
+$quant1 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => 19,
+  slope => $slopes[0],
+  sig => $sigs[0],
+);
+
+$r1 = $quant1->{r};
+
+$scatter1 = StatGraphicsUWL::scatterplot(
+  data => $quant1,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => $xticklength,
+);
+
+$quant2 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => 19,
+  slope => $slopes[1],
+  sig => $sigs[1],
+);
+
+$r2 = $quant2->{r};
+
+$scatter2 = StatGraphicsUWL::scatterplot(
+  data => $quant2,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => $xticklength,
+);
+
+$quant3 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => 19,
+  slope => $slopes[2],
+  sig => $sigs[2],
+);
+
+$r3 = $quant3->{r};
+
+$scatter3 = StatGraphicsUWL::scatterplot(
+  data => $quant3,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => $xticklength,
+);
+
+$quant4 = new DataGenUWL(
+  datatype => 'simp_reg',
+  x => [@x],
+  int => 19,
+  slope => $slopes[3],
+  sig => $sigs[3],
+);
+
+$r4 = $quant4->{r};
+
+$scatter4 = StatGraphicsUWL::scatterplot(
+  data => $quant4,
+  xmin => $xmin,
+  xmax => $xmax,
+  xticklength => $xticklength,
+);
+
+@options = usefulstatUWL::sortarray($r1, $r2, $r3, $r4);
+unshift(@options, '?');
+
+$cor1 = PopUp(
+  [@options],
+  $r1,
+);
+
+$cor2 = PopUp(
+  [@options],
+  $r2,
+);
+
+$cor3 = PopUp(
+  [@options],
+  $r3,
+);
+
+$cor4 = PopUp(
+  [@options],
+  $r4,
+);
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Match each of the following plots with the correct correlation from the list of following choices.
+Each answer will only be used $BBOLD one $EBOLD time.
+$PAR
+\{BeginList( "OL", type=>"a") \}
+  $ITEM $options[1]
+  $ITEM $options[2]
+  $ITEM $options[3]
+  $ITEM $options[4]
+\{EndList( "OL" )\}
+
+
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+AlignedRow([
+      image( insertGraph($scatter1), width=>300, height=>300, tex_size=>"400" ),
+      image( insertGraph($scatter2), width=>300, height=>300, tex_size=>"400" )
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+AlignedRow([
+      "1. Pick the correct correlation. $BR" . $cor1 -> menu(),
+      "2. Pick the correct correlation. $BR" . $cor2 -> menu()
+      ],
+            align=>"LEFT", valign=>"TOP", separation=>0
+           ).
+AlignedRow([
+      image( insertGraph($scatter3), width=>300, height=>300, tex_size=>"400" ),
+      image( insertGraph($scatter4), width=>300, height=>300, tex_size=>"400" )
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+AlignedRow([
+      "3. Pick the correct correlation. $BR" . $cor3 -> menu(),
+      "4. Pick the correct correlation. $BR" . $cor4 -> menu()
+      ],
+            align=>"LEFT", valign=>"TOP", separation=>0
+           ).
+EndTable()
+\}
+
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($cor1->cmp()) ;
+ANS($cor2->cmp()) ;
+ANS($cor3->cmp()) ;
+ANS($cor4->cmp()) ;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

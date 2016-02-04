@@ -1,0 +1,102 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection()
+## KEYWORDS('probability basics', 'tree diagrams and bayes rule')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('11')
+## Section1('11.2')
+## Problem1('Skill Builder 1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$p1 = Real(random(0.05, 0.40, 0.02));
+do {$p2 = Real(random(0.05, 0.40, 0.02));} until ($p1 != $p2);
+$p3 = Real(1 - ($p1 + $p2));
+
+$pagive1 = Real(random(0.15, 0.85, 0.02));
+$pbgive1 = Real(1 - $pagive1);
+$pagive2 = Real(random(0.15, 0.85, 0.02));
+$pbgive2 = Real(1 - $pagive2);
+$pagive3 = Real(random(0.15, 0.85, 0.02));
+$pbgive3 = Real(1 - $pagive3);
+
+$p1a = Real($p1 * $pagive1);
+$p1b = Real($p1 * $pbgive1);
+$p2a = Real($p2 * $pagive2);
+$p2b = Real($p2 * $pbgive2);
+$p3a = Real($p3 * $pagive3);
+$p3b = Real($p3 * $pbgive3);
+
+###########################
+## Initialization
+###########################
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+In a store, merchandise is classified by a number (1, 2, or 3) and a letter (A or B).
+$PAR
+The probability an item is classified as type 2 is P(type 2) = $p2 $BR
+The probability an item is classified as type 3 is P(type 3) = $p3 $BR
+The probability an item is classified as type A if it is type 1 is
+P(type A if type 1) = $pagive1 $BR
+The probability an item is classified as type B if it is type 1 is
+P(type B if type 1) = $pbgive1 $BR
+The probability an item is classified as type B if it is type 2 is
+P(type B if type 2) = $pbgive2 $BR
+The probability an item is classified as type A if it is type 3 is
+P(type A if type 3) = $pagive3 $BR
+The probability an item is classified as type B if it is type 3 is
+P(type B if type 3) = $pbgive3 $BR
+$PAR
+Use the given probabilities to find the following probabilities. You may find it
+useful to use a tree diagram in answering these questions.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(type 1) \{ ans_rule(10) \}
+  $ITEM Find P(type A if type 2) \{ ans_rule(10) \}
+  $ITEM Find P(type 3 and type A) \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($p1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pagive2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($p3a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

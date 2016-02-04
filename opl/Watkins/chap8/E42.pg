@@ -1,0 +1,154 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One sample proportion)
+## KEYWORDS('Hypothesis test', 'Single proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('8')
+## Section1('8.3')
+## Problem1('E42')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+# trying to deal with rounding issues
+$nullval = Real(0.6667);
+$nullvalact = Real(2/3);
+
+$a1 = random(832, 863, 1);
+
+$n = Real(1217);
+$p = Real($a1 / $n);
+
+@hyps = ( # choices
+  ' a. \( = \)',
+  ' b. \( < \)',
+  ' c. \( > \)',
+  ' d. \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' d. \( \neq \)',
+    order => [@hyps],
+    labels => ['a.', 'b.', 'c.', 'd.'],
+);
+
+$se = sqrt($nullval * (1 - $nullval) / $n);
+$ts = Real(sprintf("%.4f", ($p - $nullval) / $se));
+
+$seact = sqrt($nullvalact * (1 - $nullvalact) / $n);
+$tsact = Real(sprintf("%.4f", ($p - $nullvalact) / $se));
+
+$pval = Real(uprob($ts));
+$pvalans = Real(sprintf("%0.4f", 2 * $pval));
+
+$pvalact = Real(uprob($tsact));
+$pvalansact = Real(sprintf("%0.4f", 2 * $pvalact));
+
+$tsmid = Real(($ts + $tsact) / 2);
+$tstol = Real(max((abs(($ts - $tsact) / 2)), 0.001) + 0.0005);
+$pvalmid = Real(($pvalans + $pvalansact) / 2);
+$pvaltol = Real(max(abs(($pvalans - $pvalansact) / 2), 0.001));
+
+$rejinterp = "We have significant evidence that the proportion of US adults who ".
+             "agree with the statement is different from two-thirds.";
+
+$f2rinterp = "We do not have significant evidence that the proportion of US adults who ".
+             "agree with the statement is different from two-thirds.";
+
+$accinterp = "We have significant evidence that the proportion of US adults who ".
+             "agree with the statement is exactly two-thirds.";
+
+##ANSWER FOR CONCLUSION
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pvalans < $alpha) {
+$corconcl = " a. Reject \(H_0\). ". $rejinterp;
+} else {
+$corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+}
+
+@options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+    [@options],
+    $corconcl,
+    order => [@options],
+    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+);
+
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+
+
+BEGIN_TEXT
+A Harris poll asked, "Do you agree or disagree with this statement?
+Protecting the environment is so important that requirements and standards
+cannot be too high, and continuing environmental improvements must be made
+regardless of cost." Of the random sample of 1217 adults surveyed nationwide,
+$a1 agreed with the statement.
+$PAR
+Conduct a hypothesis test to see if the proportion of the US adults who agree
+with the statement is different from two-thirds?
+$PAR
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+$ITEM What is the correct null hypothesis for this test? $BR
+\(H_0: p = \)\{ ans_rule(10) \}
+$ITEM What sign should appear in the alternative hypothesis? $BR
+\{ $alt -> buttons( separator => "" ) \}
+$ITEM The test statistic for this test is \( z = \) \{ ans_rule(10) \}.
+$ITEM The p-value for this test statistic is \{ ans_rule(10) \}.
+$ITEM Select the appropriate conclusion for this test statistic at a
+significance level of \( \alpha = $alpha \). $BR
+\{ $conclusion -> buttons() \}
+
+
+\{ EndList( "OL" ) \}
+END_TEXT
+
+
+
+ANS($nullval->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($alt->cmp() );
+ANS($tsmid->with(tolerance=>$tstol, tolType=>"Absolute")->cmp);
+ANS($pvalmid->with(tolerance=>$pvaltol, tolType=>"Absolute")->cmp);
+ANS( $conclusion->cmp() );
+
+
+ENDDOCUMENT();

@@ -1,0 +1,97 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Discrete distributions)
+## DBsection(Binomial)
+## KEYWORDS('Probability Distributions','Binomial')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('6')
+## Section1('6.3')
+## Problem1('E29')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+
+$answer1 = Real(" .5951 ");
+$answer2 = Real(" 3 " );
+$answer3 = Real(" 1.5969 ");
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+According to the U.S. Census Bureau, about 15$PERCENT of residents have no health insurance. You are to randomly sample 20 residents for a survey on health insurance coverage.
+
+$PAR
+${BBOLD} 1. $EBOLD
+What is the probability that your sample will include at least three people who do not have health insurance?
+\{ans_rule(15)\}
+
+$PAR
+${BBOLD} 2. $EBOLD
+Compute the expected value of the number of people in your sample without health insurance?
+\{ans_rule(15)\}
+$PAR
+What is the standard deviation?
+\{ans_rule(15)\}
+
+
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $answer1->with(tolerance=>.005)->cmp );
+ANS( $answer2->with(tolerance=>.005)->cmp );
+ANS( $answer3->with(tolerance=>.005)->cmp );
+
+
+
+
+###########################
+## Solution Section
+###########################
+Context()->texStrings;
+SOLUTION(EV3(<<'ENDSOLUTION'));
+$PAR
+Solution:
+$PAR
+
+
+
+ENDSOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

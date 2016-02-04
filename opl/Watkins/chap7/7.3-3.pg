@@ -1,0 +1,75 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('Sample Proportion', 'Normal Distribution', 'Sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('7')
+## Section1('7.3')
+## Problem1('3')
+## Author('Melissa Bingham')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$p=random(.38,.48,.01);
+$p1=$p*100;
+$n=random(200,300,1);
+
+
+$x1=sprintf("%0.2f",(.52-$p)/sqrt($p*(1-$p)/$n));
+$x2=sprintf("%0.2f",(.40-$p)/sqrt($p*(1-$p)/$n));
+$x3=sprintf("%0.2f",(.50-$p)/sqrt($p*(1-$p)/$n));
+
+$an1 = Real(1-sprintf("%0.4f",uprob($x3)));
+$an2 = Real(sprintf("%0.4f",uprob($x1)));
+$an3 = Real(-sprintf("%0.4f",uprob($x3))+sprintf("%0.4f",uprob($x2)));
+
+
+
+
+BEGIN_TEXT
+In fall 2008, $p1$PERCENT of the first-year students attending the California State University system needed remedial work in mathematics.  Suppose you select $n students at random.
+$PAR
+What is the probability that less than half of the students in the sample need remedial work in math? \{ans_rule(8)\}
+$PAR
+What is the probability of getting 52% or more who need remedial work in math? \{ans_rule(8)\}
+$PAR
+What is the probability of getting between 40$PERCENT and 50$PERCENT who need remedial work in math? \{ans_rule(8)\}
+
+
+
+
+
+END_TEXT
+Context()->normalStrings;
+
+ANS($an1->with(tolerance=>.01)->cmp);
+ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an3->with(tolerance=>.01)->cmp);
+
+
+ENDDOCUMENT();

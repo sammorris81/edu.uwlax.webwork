@@ -1,0 +1,119 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Exploratory data analysis/descriptive statistics)
+## DBsection(Summary statistics)
+## KEYWORDS('describing data', 'quantitative variables')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('2')
+## Section1('2.2')
+## Problem1('2.57')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "";
+} else {
+  $anssep = $BR;
+}
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$n1 = Real(5);
+$n2 = Real(6);
+$n3 = Real(7);
+$n4 = Real(8);
+
+rserve_eval('
+  x1 <- sample(1:30, '. $n1 .')
+  x2 <- sample(1:30, '. $n2 .')
+  x3 <- sample(20:40, '. $n3 .')
+  x4 <- sample(20:40, '. $n4 .')
+');
+@x_1 = rserve_eval('x1');
+@x_2 = rserve_eval('x2');
+@x_3 = rserve_eval('x3');
+@x_4 = rserve_eval('x4');
+@x_1_sort = rserve_eval('sort(x1)');
+@x_2_sort = rserve_eval('sort(x2)');
+@x_3_sort = rserve_eval('sort(x3)');
+@x_4_sort = rserve_eval('sort(x4)');
+($med_1) = rserve_eval('median(x1)');
+($med_2) = rserve_eval('median(x2)');
+($med_3) = rserve_eval('median(x3)');
+($med_4) = rserve_eval('median(x4)');
+
+$med_1 = Real($med_1);
+$med_2 = Real($med_2);
+$med_3 = Real($med_3);
+$med_4 = Real($med_4);
+
+
+BEGIN_TEXT
+${BBOLD}Finding the median:${EBOLD}$BR
+In statistics, we represent the center of a dataset often with one of two
+measures. One of these is the median. To find the median, we first sort the
+dataset. The median of a data set is
+\{BeginList("UL")\}
+$ITEM the middle entry of the list if there are an ${BITALIC}odd${EITALIC}
+number of observations
+$ITEM the average of the middle two values if there are an ${BITALIC}even${EITALIC}
+number of observations.
+\{EndList("UL")\}
+Consider the dataset:
+$PAR
+$BCENTER
+\{join(", ", @x_1) \}
+$ECENTER
+$PAR
+To find the median, we first sort the dataset and get \{join(", ", @x_1_sort)\}.
+Since there are an odd number of observations in this dataset, the median is
+observation number \{($n1 + 1) / 2\} or $med_1.
+$PAR
+Consider a new dataset:
+$PAR
+$BCENTER
+\{join(", ", @x_2) \}
+$ECENTER
+$PAR
+To find the median, we first sort the dataset and get \{join(", ", @x_2_sort)\}.
+Since there are an even number of observations in this dataset, the median is
+the average of observation numbers \{$n2 / 2\} and \{$n2 / 2 + 1\} or
+\[
+  \displaystyle \frac{$x_2_sort[$n2 / 2 - 1] + $x_2_sort[$n2 / 2]}{2} = $med_2
+\]
+Find the median of the following datasets. Give your answers to 4 decimal places.
+$PAR
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM \{join(", ", @x_3)\} \{ ans_rule(10) \}
+  $PAR
+  $ITEM \{join(", ", @x_4)\} \{ ans_rule(10) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+###########################
+## Answer Section
+###########################
+
+ANS($med_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+ANS($med_4->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

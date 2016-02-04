@@ -1,0 +1,89 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Sample Space)
+## DBsection(Conditional probability -- direct)
+## KEYWORDS('Probability','Conditional','Multiplication Rule')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('5')
+## Section1('5.3')
+## Problem1('E35')
+## Author(Blake Huebner)
+## Institution(University of Wisconsin-La Crosse)
+
+
+## PROBLEM DESCRIPTION
+##
+## Describe the problem here.
+## Outline any constraints on random variables.
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+###########################
+## Initialization
+###########################
+
+## Set up variables and functions for problem.
+$a1 = Real("4/52 * 4/52")->reduce;
+$a2 = Real("4/52 * 3/51")->reduce;
+$a3 = Real("4/52 * 4/52")->reduce;
+$a4 = Real("4/52 * 4/51")->reduce;
+$a5 = Real("1/4")->reduce;
+$a6 = Real("12/51")->reduce;
+
+
+
+###########################
+## Problem Section
+###########################
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Suppose you draw two cards from a 52-card deck. Compute the following probabilities.
+Give your answers to four decimal places.
+\{BeginList("OL", type=>"a")\}
+$ITEM What is the probability that both cards are aces if you replace the first card
+before drawing the second? \{ans_rule(10)\}
+$ITEM What is the probability that both cards are aces if you do not replace that first
+card before drawing the second? \{ans_rule(10)\}
+$ITEM What is the probability that the first card is an ace and the second is a king
+if you replace the first card before drawing the second? \{ans_rule(10)\}
+$ITEM What is the probability that the first card is an ace and the second is a king
+if you do not replace the first card before drawing the second? \{ans_rule(10)\}
+$ITEM What is the probability that both cards are the same suit if you replace the
+first card before drawing the second? \{ans_rule(10)\}
+$ITEM What is the probability that both cards are the same suit if you do not replace
+the first card before drawing the second? \{ans_rule(10)\}
+\{ EndList("OL") \}
+END_TEXT
+Context()->normalStrings;
+
+###########################
+## Answer Section
+###########################
+
+ANS( $a1->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a2->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a3->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a4->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a5->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+ANS( $a6->with(tolerance=>.001, tolType=>"Absolute")->cmp );
+
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
+

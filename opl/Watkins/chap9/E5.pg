@@ -1,0 +1,87 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Two sample proportion)
+## KEYWORDS('Confidence intervals','Two sample proportion')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('9')
+## Section1('9.1')
+## Problem1('E5')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+
+DOCUMENT();
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+# make sure we're in the context we want
+Context("Numeric");
+
+TEXT(beginproblem());
+
+$a1 = random( 1, 3, 1 );
+
+$r1 = random( 60, 65, 1 );
+$n1 = random( 4500, 4750, 25 );
+$p1 = random( .5, .55, .01 );
+$p1quest = Real( $p1*100 );
+
+$r2 = random( 8, 12, 1 );
+$n2 = random( 2600, 2800, 10 );
+$p2 = random( .59, .62, .01 );
+$p2quest = Real( $p2*100 );
+
+
+if( $a1==1){
+$z = Real( 1.645),
+$s = Real( 90 );}
+elsif( $a1==2){
+$z = Real( 1.96),
+$s = Real( 95 );}
+elsif( $a1==3){
+$z = Real( 2.575),
+$s = Real( 99 );}
+
+
+
+
+$lower = Real(" ($p1-$p2) - $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2) ")->reduce;
+
+$upper = Real(" ($p1-$p2) + $z*sqrt( $p1*(1-$p1)/$n1 + $p2*(1-$p2)/$n2)  ")->reduce;
+
+
+
+
+BEGIN_TEXT
+
+College administrations are continually perplexed about how to deal with hazing issues on their campuses. But how widespread is hazing, and, in fact, what constitutes hazing anyway? One study tried to get an objective handle on this persistent college phenomenon by carrying out a large survey of college and university students on 53 campuses. The study leaders defined hazing as "any activity expected of someone joining or participating in a group that humiliates, degrades, abuses, or endangers them regardless of a person's willingness to participate."
+$PAR
+Of the survey responses, $n1 were females associated with campus groups and $n2 were males associated with campus groups. On the overall question of having ever experienced hazing in any form, $p2quest$PERCENT of the males who participate in campus groups and $p1quest$PERCENT of the females who participate in campus groups responded positively. Find a $s$PERCENT confidence interval for the difference in the population proportion of those experiencing hazing for the two genders.  (Let group 1 represent the females.)
+$PAR
+( \{ ans_rule(6) \} , \{ ans_rule(6) \} )
+
+
+
+END_TEXT
+Context()->normalStrings;
+ANS($lower->with(tolerance=>.07)->cmp);
+ANS($upper->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

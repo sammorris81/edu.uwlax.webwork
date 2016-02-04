@@ -1,0 +1,162 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'confidence intervals', 'sampling distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('3')
+## Section1('3.1')
+## Problem1('M1')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
+Context("Numeric");
+
+$N = 500;
+$n = 30;
+
+$mean1 = random(70, 90, 5);
+$sd1 =  22;
+rserve_eval('z <- rnorm(' . $N .')
+  z <- (z - mean(z)) / sd(z)
+  data1 <- z * ' . $sd1 . ' + ' . $mean1);
+
+($sd1) = rserve_eval('sd(data1)');
+($mean1) = rserve_eval('mean(data1)');
+
+$hist = rserve_start_plot('png', $width, $height);
+
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data1, main = "Sampling Distribution", xlab = "")');
+$disp1 = rserve_finish_plot($hist);
+
+$correct1 = sprintf("%.0f", $mean1);
+$wrong11 = sprintf("%.0f", $correct1 - 3 * $sd1);
+$wrong12 = sprintf("%.0f", $correct1 - 2 * $sd1);
+$wrong13 = sprintf("%.0f", $correct1 - 1 * $sd1);
+$wrong14 = sprintf("%.0f", $correct1 + 1 * $sd1);
+$wrong15 = sprintf("%.0f", $correct1 + 2 * $sd1);
+$wrong16 = sprintf("%.0f", $correct1 + 3 * $sd1);
+
+
+$order1 = random(1, 4, 1);
+if ($order1 == 1){
+  @labels1 = ("?", "$wrong11", "$wrong12", "$wrong13", "$correct1");
+  $correct1 = "$correct1";
+} elsif ($order1 == 2){
+  @labels1 = ("?", "$wrong12", "$wrong13", "$correct1", "$wrong14");
+  $correct1 = "$correct1";
+} elsif ($order1 == 3){
+  @labels1 = ("?", "$wrong13", "$correct1", "$wrong14", "$wrong15");
+  $correct1 = "$correct1";
+} elsif ($order1 == 4){
+  @labels1 = ("?", "$correct1", "$wrong14", "$wrong15", "$wrong16");
+  $correct1 = "$correct1";
+}
+
+$param1 = PopUp(
+  [@labels1],
+  $correct1
+);
+
+
+$mean2 = random(290, 310, 5);
+$sd2 =  10;
+rserve_eval('data2 <- z * ' . $sd2 . ' + ' . $mean2);
+
+($sd2) = rserve_eval('sd(data2)');
+($mean2) = rserve_eval('mean(data2)');
+
+$hist = rserve_start_plot('png', $width, $height);
+
+rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data2, main = "Sampling Distribution", xlab = "")');
+$disp2 = rserve_finish_plot($hist);
+
+$correct2 = sprintf("%.0f", $mean2);
+$wrong21 = sprintf("%.0f", $correct2 - 3 * $sd2);
+$wrong22 = sprintf("%.0f", $correct2 - 2 * $sd2);
+$wrong23 = sprintf("%.0f", $correct2 - 1 * $sd2);
+$wrong24 = sprintf("%.0f", $correct2 + 1 * $sd2);
+$wrong25 = sprintf("%.0f", $correct2 + 2 * $sd2);
+$wrong26 = sprintf("%.0f", $correct2 + 3 * $sd2);
+
+
+$order2 = random(1, 4, 1);
+if ($order2 == 1){
+  @labels2 = ("?", "$wrong21", "$wrong22", "$wrong23", "$correct2");
+  $correct2 = "$correct2";
+} elsif ($order2 == 2){
+  @labels2 = ("?", "$wrong22", "$wrong23", "$correct2", "$wrong24");
+  $correct2 = "$correct2";
+} elsif ($order2 == 3){
+  @labels2 = ("?", "$wrong23", "$correct2", "$wrong24", "$wrong25");
+  $correct2 = "$correct2";
+} elsif ($order2 == 4){
+  @labels2 = ("?", "$correct2", "$wrong24", "$wrong25", "$wrong26");
+  $correct2 = "$correct2";
+}
+
+$param2 = PopUp(
+  [@labels2],
+  $correct2
+);
+
+Context()->texStrings;
+BEGIN_TEXT
+$BBOLD Sampling distribution for averages: $EBOLD
+$BR
+The following sampling distributions represent the averages from $N samples of
+size $n. For each of the sampling distributions, estimate the value of the population
+parameter \(\mu\).
+$PAR
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+AlignedRow([
+      image( $disp1, width=>300, height=>300, tex_size=>"400" ),
+      "a. ".$param1 -> menu()
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+AlignedRow([
+      image( $disp2, width=>300, height=>300, tex_size=>"400" ),
+      "b. ".$param2 -> menu()
+      ],
+      align=>"LEFT", valign=>"TOP", separation=>0
+      ).
+EndTable()
+\}
+
+END_TEXT
+
+ANS( $param1 -> cmp() );
+ANS( $param2 -> cmp() );
+ENDDOCUMENT();

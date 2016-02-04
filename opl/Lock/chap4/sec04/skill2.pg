@@ -1,0 +1,195 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Concepts)
+## KEYWORDS('understanding inference', 'hypothesis tests', 'creating randomization distributions')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('4')
+## Section1('4.4')
+## Problem1('Skill Builder 3')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+@inequality = (
+  "<",
+  ">",
+  "\neq",
+);
+
+@sided = (
+  "?",
+  "Left-tailed",
+  "Right-tailed",
+  "Two-tailed"
+);
+
+
+$random1 = random(0, 2, 1);
+$random2 = random(0, 2, 1);
+if (($random1 != 2) || ($random2 != 2)) {
+  $random3 = 2;
+} else {
+  $random3 = random(0, 2, 1);
+}
+
+$nullprop1 = Real(random(0.3, 0.7, 0.1));
+$null1 = "\(H_0: p = $nullprop1\)";
+$alt1 = "\(H_a: p " . $inequality[$random1] . " $nullprop1\)";
+$n1 = 50;
+$N1 = random(1000, 3000, 1000);
+$se1 = sqrt($nullprop1 * (1 - $nullprop1) / $n1);
+$pval1 = Real(random(0.001, 0.049, 0.011));
+if ($random1 == 0) {
+  $z1 = udistr($pval1);
+  $extreme1 = sprintf("%.0f", $pval1 * $N1);
+  $stat1 = sprintf("%.2f", $nullprop1 - $z1 * $se1);
+  $correct1 = $sided[1];
+  $compare1 = "as smaller or smaller than";
+} elsif ($random1 == 1) {
+  $z1 = udistr($pval1);
+  $extreme1 = sprintf("%.0f", $pval1 * $N1);
+  $stat1 = sprintf("%.2f", $nullprop1 + $z1 * $se1);
+  $correct1 = $sided[2];
+  $compare1 = "as large or larger than";
+} else {
+  $z1 = udistr($pval1 / 2);
+  $extreme1 = sprintf("%.0f", ($pval1 / 2) * $N1);
+  $pval1 = Real($extreme1 * 2 / $N1);  # for rounding
+  $stat1 = sprintf("%.2f", $nullprop1 + random(-1, 1, 2) * $z1 * $se1);
+  $correct1 = $sided[3];
+  $compare1 = $stat1 > $nullprop1 ? "as large or larger than" : "as smaller or smaller than";
+}
+$count1 = sprintf("%.0f", $stat1 * $n1);
+
+
+
+$nullprop2 = Real(random(0.3, 0.7, 0.1));
+$null2 = "\(H_0: p = $nullprop2\)";
+$alt2 = "\(H_a: p " . $inequality[$random2] . " $nullprop2\)";
+$n2 = 100;
+$N2 = random(1000, 3000, 1000);
+$se2 = sqrt($nullprop2 * (1 - $nullprop2) / $n2);
+$pval2 = Real(random(0.051, 0.099, 0.001));
+if ($random2 == 0) {
+  $z2 = udistr($pval2);
+  $extreme2 = sprintf("%.0f", $pval2 * $N2);
+  $stat2 = sprintf("%.2f", $nullprop2 - $z2 * $se2);
+  $correct2 = $sided[1];
+  $compare2 = "as smaller or smaller than";
+} elsif ($random2 == 1) {
+  $z2 = udistr($pval2);
+  $extreme2 = sprintf("%.0f", $pval2 * $N2);
+  $stat2 = sprintf("%.2f", $nullprop2 + $z2 * $se2);
+  $correct2 = $sided[2];
+  $compare2 = "as large or larger than";
+} else {
+  $z2 = udistr($pval2 / 2);
+  $extreme2 = sprintf("%.0f", ($pval2 / 2) * $N2);
+  $pval2 = Real($extreme2 * 2 / $N2);  # for rounding
+  $stat2 = sprintf("%.2f", $nullprop2 + random(-1, 1, 2) * $z2 * $se2);
+  $correct2 = $sided[3];
+  $compare2 = $stat2 > $nullprop2 ? "as large or larger than" : "as smaller or smaller than";
+}
+$count2 = sprintf("%.0f", $stat2 * $n2);
+
+
+$nullprop3 = Real(random(0.3, 0.7, 0.1));
+$null3 = "\(H_0: p = $nullprop3\)";
+$alt3 = "\(H_a: p " . $inequality[$random3] . " $nullprop3\)";
+$n3 = 200;
+$N3 = random(1000, 3000, 1000);
+$se3 = sqrt($nullprop3 * (1 - $nullprop3) / $n3);
+do {
+  $pval3 = Real(random(0.001, 0.199, 0.001));
+} until (
+  ($pval3 != 0.05) && ($pval3 != 0.10)
+);
+if ($random3 == 0) {
+  $z3 = udistr($pval3);
+  $extreme3 = sprintf("%.0f", $pval3 * $N3);
+  $stat3 = sprintf("%.2f", $nullprop3 - $z3 * $se3);
+  $correct3 = $sided[1];
+  $compare3 = "as large or larger than";
+} elsif ($random3 == 1) {
+  $z3 = udistr($pval3);
+  $extreme3 = sprintf("%.0f", $pval3 * $N3);
+  $stat3 = sprintf("%.2f", $nullprop3 + $z3 * $se3);
+  $correct3 = $sided[2];
+  $compare3 = "as smaller or smaller than";
+} else {
+  $z3 = udistr($pval3 / 2);
+  $extreme3 = sprintf("%.0f", ($pval3 / 2) * $N3);
+  $pval3 = Real($extreme3 * 2 / $N3);  # for rounding
+  $stat3 = sprintf("%.2f", $nullprop3 + random(-1, 1, 2) * $z3 * $se3);
+  $correct3 = $sided[3];
+  $compare3 = $stat3 > $nullprop3 ? "as large or larger than" : "as smaller or smaller than";
+}
+$count3 = sprintf("%.0f", $stat3 * $n3);
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+For the following questions, the null and alternative hypotheses for a test are given
+as well as some information about the actual sample(s).
+Use the information to determine the p-value for the following observed sample proportion.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Hypotheses: $null1 vs $alt1 $BR
+  Sample: \(\widehat{p} = $stat1\) $BR
+  In $extreme1 out of $N1 randomizations, the randomization distribution resulted in sample
+  proportions $compare1 $stat1. What is the p-value? \{ ans_rule(10) \}
+  $PAR
+  $ITEM Hypotheses: $null2 vs $alt2 $BR
+  Sample: \(\widehat{p} = $stat2\) $BR
+  In $extreme2 out of $N2 randomizations, the randomization distribution resulted in sample
+  proportions $compare2 $stat2. What is the p-value? \{ ans_rule(10) \}
+  $PAR
+  $ITEM Hypotheses: $null3 vs $alt3 $BR
+  Sample: \(\widehat{p} = $stat3\) $BR
+  In $extreme3 out of $N3 randomizations, the randomization distribution resulted in sample
+  proportions $compare3 $stat3. What is the p-value? \{ ans_rule(10) \}
+  $PAR
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($pval1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pval2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($pval3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
