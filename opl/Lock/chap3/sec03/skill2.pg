@@ -151,10 +151,34 @@ $mc2 = RadioButtons(
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Finding the standard error using the sampling distribution:$EBOLD $BR
+Take a look at example 3.21 in your textbook. When the authors find the
+standard error for the statistic, they point to the standard deviation of the
+bootstrap statistics given on the dotplot for the bootstrap distribution in
+Figure 3.18. The histograms given below are just like the dotplot given in
+Figure 3.18, except the information in the upper right-hand corner is in a
+slightly different order, and they use ${BITALIC}n${EITALIC} instead of
+${BITALIC}# of samples${EITALIC}.
+$PAR
+$BBOLD Finding the confidence interval:$EBOLD
+Once you've found the standard error, the process to find the confidence interval
+is very straightforward. As outlined on p. 199 in your book, when the bootstrap
+distribution is symmetric and bell-shaped, we estimate a 95$PERCENT confidence
+interval using
+\[\text{Statistic} \pm 2 \cdot \text{Standard Error}.\]
+Please note, that the confidence interval formula uses the statistic from the
+sample, ${BITALIC}not${EITALIC} the average of the bootstrap distribution.
+For a fully worked out example, please see Example 3.22 in your book.
+END_HINT
+
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 Use these histograms to answer the following questions.
 $PAR
 $BCENTER
