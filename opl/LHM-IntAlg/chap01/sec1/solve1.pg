@@ -1,0 +1,57 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Algebra)
+## DBchapter(Algebra of real numbers and simplying equations)
+## DBsection(Solving linear equations in one variable)
+## KEYWORDS('solving linear equations')
+## TitleText1('Intermediate Algebra')
+## EditionText1('12')
+## AuthorText1('Lial, Hornsby, McGinnis')
+## Chapter1('1')
+## Section1('1.1')
+## Problem1('Solve Equation 1')
+## Author('Sam Morris, Robert Allen')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$a = random(2,5,1);
+$multiple = random(3,10,1);
+$b = random(1,5,1);
+$c = Compute("$a*$multiple + $b");
+$d = Compute("$c-$b");
+$answer = Compute("$multiple");
+
+Context("Numeric");
+
+BEGIN_TEXT
+Solve the equation \[$a x + $b = $c.\]
+$PAR
+\(x = \) \{ans_rule(15)\}
+END_TEXT
+
+ANS($answer->cmp);
+
+Context()->texStrings;
+BEGIN_SOLUTION
+\begin{align}
+$a x + $b &= $c \\
+$a x + $b \color{green}{-$b} &= $c \color{green}{-$b} \tag*{Subtract $b}\\
+$a x &= $d \tag*{Combine like terms}\\
+\frac{$a x}{\color{green}{$a}} &= \frac{$d}{\color{green}{$a}} \tag*{Divide by $a}\\
+\color{green}{x} &\color{green}{=} \color{green}{$answer}
+\end{align}
+
+END_SOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
