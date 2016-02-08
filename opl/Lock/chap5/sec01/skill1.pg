@@ -63,10 +63,60 @@ $p2c = Real(uprob($z2cl) - uprob($z2cu));
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 0;
+BEGIN_HINT
+$BBOLD Accessing the normal distribution:$EBOLD $BR
+You can use
+\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", "StatKey", "target='_new'")\}
+to find areas under the curve for regions of the normal distribution.
+${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
+because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
+${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
+go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
+${BTT}Normal${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+$PAR
+$BBOLD Finding the area under the normal distribution curve below \(z\):$EBOLD $BR
+To find the area under the normal distribution curve below a specified \(z\),
+you need to click on the checkbox for ${BTT}Left Tail${ETT}. Then click on the
+number below the x-axis of the graph, and change it to the number below which you
+want to find the area under the normal distribution curve. The area under the
+normal distribution curve to the left of that number is given above the x-axis.
+For example, in the image below, you can see that the area under the curve below
+\(z = 0.81\) is 0.791. $BR
+${BCENTER}
+\{ image("belowz.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+$PAR
+$BBOLD Finding the area under the normal distribution curve above \(z\):$EBOLD $BR
+To find the area under the normal distribution curve above a specified \(z\),
+you need to click on the checkbox for ${BTT}Right Tail${ETT}. Then click on the
+number below the x-axis of the graph, and change it to the number above which
+you want to find the area under the normal distribution curve. The area of the
+normal distribution curve to the right of that number is given above the x-axis.
+For example, in the image below, you can see that the area under the curve above
+\(z = -0.61\) is 0.729. $BR
+${BCENTER}
+\{ image("abovez.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+$PAR
+$BBOLD Finding the area under the normal distribution curve between two \(z\)-values:$EBOLD $BR
+To find the area under the normal distribution curve between two specified
+\(z\)-values, you need to click on the checkbox for ${BTT}Left Tail${ETT} and
+${LQ}Right Tail${RQ}. Then change the numbers below the x-axis of the graph to
+be the two endpoints. The area under the normal distribution curve to the left
+of that number is given above the x-axis. For example, in the image below, you
+can see that the area under the curve between \(z = -2.49\) and \(z = -0.89\)
+is 0.181. $BR
+${BCENTER}
+\{ image("betweenz.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, find the specified areas for a N(0, 1) density.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
