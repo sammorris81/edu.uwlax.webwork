@@ -71,8 +71,8 @@ $pval2 = sprintf("%.4f", $pval2);
 $pval3 = sprintf("%.4f", $pval3);
 
 @options = (
-  " i. Reject \( H_0 \)",
-  " ii. Do not reject \( H_0 \)",
+  " Reject \( H_0 \)",
+  " Do not reject \( H_0 \)",
 );
 
 $correct1 = ($pval1 < 0.05) ? $options[0] : $options[1];
@@ -83,7 +83,7 @@ $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -91,7 +91,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -99,7 +99,7 @@ $mc3 = RadioButtons(
   [@options],
   $correct3,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 

@@ -2,56 +2,6 @@ Scaffold::Begin();
 our $refreshCachedImages=0;
 our $submission = $inputs_ref->{previewAnswers};
 
-if ($displayMode eq "TeX") {
-  our $anssep = '\( \ \noindent \)';
-  our $extrasep = '\( \noindent \)';
-  our $tab = '\( \qquad \)';
-  our $sp = '\( \ \)';
-  our $BBQ = '';
-  our $EBQ = '';
-  our $disp_alpha = '\( \alpha \)';
-  our $disp_chisq = '\( \chi^2 \)';
-  our $disp_p   = '\( p \)';
-  our $disp_mu  = '\( \mu \)';
-  our $disp_p1  = '\( p_1 \)';
-  our $disp_p2  = '\( p_2 \)';
-  our $disp_mu1 = '\( \mu_1 \)';
-  our $disp_mu2 = '\( \mu_2 \)';
-  our $disp_mud = '\( \mu_d \)';
-  our $disp_lt  = '\( < \)';
-  our $disp_le  = '\( \leq \)';
-  our $disp_gt  = '\( > \)';
-  our $disp_ge  = '\( \geq \)';
-  our $disp_ne  = '\( \neq \)';
-  our $disp_null = '\( H_0 \)';
-  our $disp_alt  = '\( H_a \)';
-  our $disp_amp  = '\( \& \)';
-} else {
-  our $extrasep = $PAR;
-  our $anssep = $PAR;
-  our $tab = '&nbsp; &nbsp; &nbsp; &nbsp;';
-  our $sp  = '&nbsp;';
-  our $BBQ = '<blockquote>';
-  our $EBQ = '</blockquote>';
-  our $disp_alpha = '<span style = "font-family: serf;">&alpha;</span>';
-  our $disp_chisq = '<span style = "font-family: serf;">&chi;</span><sup>2</sup>';
-  our $disp_p   = 'p';
-  our $disp_mu  = '&mu;';
-  our $disp_p1  = 'p<sub>1</sub>';
-  our $disp_p2  = 'p<sub>2</sub>';
-  our $disp_mu1 = '&mu;<sub>1</sub>';
-  our $disp_mu2 = '&mu;<sub>2</sub>';
-  our $disp_mud = '&mu;<sub>d</sub>';
-  our $disp_lt  = '&lt;';
-  our $disp_le  = '&le;';
-  our $disp_gt  = '&gt;';
-  our $disp_ge  = '&ge;';
-  our $disp_ne  = '&ne;';
-  our $disp_null = 'H<sub>0</sub>';
-  our $disp_alt  = 'H<sub>a</sub>';
-  our $disp_amp  = '&amp;';
-}
-
 # loadMacros('uwlHypTestBank.pl');
 
 ##### Begin building the problem

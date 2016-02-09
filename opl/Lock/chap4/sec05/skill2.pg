@@ -41,10 +41,15 @@ Context("Numeric");
 $random1 = random(0, 1, 1);
 $random2 = random(0, 1, 1);
 
+@options = (
+  " Reject $disp_null",
+  " Do not reject $disp_null",
+);
+
 if ($random1 == 0) {
   $lower1 = random(0.40, 0.50, 0.01);
   $upper1 = $lower1 + random(0.02, 0.10, 0.01);
-  $param1 = "p";
+  $param1 = $disp_p;
 
   do {
     $nullval1a = random(0.35, 0.60, 0.02);
@@ -54,20 +59,20 @@ if ($random1 == 0) {
   } until ($nullval1b != $lower1 && $nullval1b != $upper1 && $nullval1b != $null1a);
 
   if ($nullval1a > $lower1 && $nullval1a < $upper1) {
-    $correct1a = " ii. Do not reject \( H_0 \)";
+    $correct1a = $options[1];
   } else {
-    $correct1a = " i. Reject \( H_0 \)";
+    $correct1a = $options[0];
   }
   if ($nullval1b > $lower1 && $nullval1b < $upper1) {
-    $correct1b = " ii. Do not reject \( H_0 \)";
+    $correct1b = $options[1];
   } else {
-    $correct1b = " i. Reject \( H_0 \)";
+    $correct1b = $options[0];
   }
 
 } else {
   $lower1 = random(130, 140, 1);
   $upper1 = $lower1 + random(10, 20, 2);
-  $param1 = "\mu";
+  $param1 = $disp_mu;
 
   do {
     $nullval1a = random(135, 145, 1);
@@ -77,37 +82,32 @@ if ($random1 == 0) {
   } until ($nullval1b != $lower1 && $nullval1b != $upper1 && $nullval1b != $nullval1a);
 
   if ($nullval1a > $lower1 && $nullval1a < $upper1) {
-    $correct1a = " ii. Do not reject \( H_0 \)";
+    $correct1a = $options[1];
   } else {
-    $correct1a = " i. Reject \( H_0 \)";
+    $correct1a = $options[0];
   }
   if ($nullval1b > $lower1 && $nullval1b < $upper1) {
-    $correct1b = " ii. Do not reject \( H_0 \)";
+    $correct1b = $options[1];
   } else {
-    $correct1b = " i. Reject \( H_0 \)";
+    $correct1b = $options[0];
   }
 }
 
-$null1a = "\( H_0: $param1 = $nullval1a \)";
-$alt1a = "\( H_a: $param1 \neq $nullval1a \)";
-$null1b = "\( H_0: $param1 = $nullval1b \)";
-$alt1b = "\( H_a: $param1 \neq $nullval1b \)";
+$null1a = "$disp_null : $param1 = $nullval1a";
+$alt1a = "$disp_alt : $param1 $disp_ne $nullval1a";
+$null1b = "$disp_null : $param1 = $nullval1b";
+$alt1b = "$disp_alt : $param1 $disp_ne $nullval1b";
 
 @conflevels = (90, 95, 99);
 $conflevel1 = $conflevels[random(0, 2, 1)];
 
 $sig1 = Real(1 - $conflevel1 / 100);
 
-@options = (
-  " i. Reject \( H_0 \)",
-  " ii. Do not reject \( H_0 \)",
-);
-
 $mc1a = RadioButtons(
   [@options],
   $correct1a,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -115,7 +115,7 @@ $mc1b = RadioButtons(
   [@options],
   $correct1b,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -130,14 +130,14 @@ For the following question, a confidence interval is given, followed by two
 possible hypothesis tests. In each case, use the confidence interval to state a
 conclusion of the test for that sample and give the significance level used.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM A $conflevel1$PERCENT confidence interval for \($param1\): $lower1 to $upper1 $BR
+  $ITEM A $conflevel1$PERCENT confidence interval for $param1 is ($lower1, $upper1) $BR
   \{ BeginList( "OL", type=>"a") \}
     $ITEM $null1a vs $alt1a $BR
     Conclusion: \{ $mc1a->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \} $BR
+    Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
     $ITEM $null1b vs $alt1b $BR
     Conclusion: \{ $mc1b->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \}
+    Significance level: $disp_alpha = \{ ans_rule(10) \}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT

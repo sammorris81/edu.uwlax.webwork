@@ -60,19 +60,19 @@ if ($randomtext == 1) {
            "smoke is $comparison the proportion of females who smoke.";
 
   @params1 = ( # choices
-    " \( p \)",
-    " \( \mu \)",
-    " \( p_M, \ p_F \)",
-    " \( \mu_M, \ \mu_F \)",
+    " $disp_p",
+    " $disp_mu",
+    " $disp_pm, $disp_pf",
+    " $disp_mum, $disp_muf",
   );
 
-  $correctparam1 = " \( p_M, \ p_F \)";
+  $correctparam1 = $params1[2];
 
   @hyps1 = ( # choices
-    " \( p_M = p_F \)",
-    " \( p_M < p_F \)",
-    " \( p_M > p_F \)",
-    " \( p_M \neq p_F \)",
+    " $disp_pm = $disp_pf",
+    " $disp_pm $disp_lt $disp_pf",
+    " $disp_pm $disp_gt $disp_pf",
+    " $disp_pm $disp_ne $disp_pf",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -82,19 +82,19 @@ if ($randomtext == 1) {
            "by salespeople (group 1) is $comparison in stores where they are not (group 2).";
 
   @params1 = ( # choices
-    " \( p \)",
-    " \( \mu \)",
-    " \( p_1, \ p_2 \)",
-    " \( \mu_1, \ \mu_2 \)",
+    " $disp_p",
+    " $disp_mu",
+    " $disp_p1, $disp_p2",
+    " $disp_mu1, $disp_mu2",
   );
 
-  $correctparam1 = " \( \mu_1, \ \mu_2 \)";
+  $correctparam1 = $params1[3];
 
   @hyps1 = ( # choices
-    " \( \mu_1 = \mu_2 \)",
-    " \( \mu_1 < \mu_2 \)",
-    " \( \mu_1 > \mu_2 \)",
-    " \( \mu_1 \neq \mu_2 \)",
+    " $disp_mu1 = $disp_mu2",
+    " $disp_mu1 $disp_lt $disp_mu2",
+    " $disp_mu1 $disp_gt $disp_mu2",
+    " $disp_mu1 $disp_ne $disp_mu2",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -104,19 +104,19 @@ if ($randomtext == 1) {
            "per week for first-year students is $comparison upperclass students.";
 
   @params1 = ( # choices
-    " \( p \)",
-    " \( \mu \)",
-    " \( p_{FY}, \ p_U \)",
-    " \( \mu_{FY}, \ \mu_U \)",
+    " $disp_p",
+    " $disp_mu",
+    " $disp_pf, $disp_pu",
+    " $disp_muf, $disp_muu",
   );
 
-  $correctparam1 = " \( \mu_{FY}, \ \mu_U \)";
+  $correctparam1 = $params1[3];
 
   @hyps1 = ( # choices
-    " \( \mu_{FY} = \mu_U \)",
-    " \( \mu_{FY} < \mu_U \)",
-    " \( \mu_{FY} > \mu_U \)",
-    " \( \mu_{FY} \neq \mu_U \)",
+    " $disp_muf = $disp_muu",
+    " $disp_muf $disp_lt $disp_muu",
+    " $disp_muf $disp_gt $disp_muu",
+    " $disp_muf $disp_ne $disp_muu",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -129,19 +129,19 @@ $text2 = "Testing to see if there is evidence that the percentage of a populatio
          "watch the Home Shopping Network is less than $nullperc$PERCENT";
 
 @params2 = ( # choices
-  " \( p \)",
-  " \( \mu \)",
-  " \( p_1, \ p_2 \)",
-  " \( \mu_1, \ \mu_2 \)",
-);
+    " $disp_p",
+    " $disp_mu",
+    " $disp_p1, $disp_p2",
+    " $disp_mu1, $disp_mu2",
+  );
 
-$correctparam2 = " \( p \)";
+$correctparam2 = $params2[0];
 
 @hyps2 = (
-  " \( p = $nullprop \)",
-  " \( p < $nullprop \)",
-  " \( p > $nullprop \)",
-  " \( p \neq $nullprop \)",
+  " $disp_p = $nullprop",
+  " $disp_p $disp_lt $nullprop",
+  " $disp_p $disp_gt $nullprop",
+  " $disp_p $disp_ne $nullprop",
 );
 
 $correctalt2 = $hyps2[1];
@@ -225,15 +225,10 @@ Section::Begin("Part 1: Idenfity the relevant parameter(s)",
 BEGIN_TEXT
 For each of the statistical tests described above, select the relevant parameter(s).
 \{ BeginList("OL", type=>"1") \}
-  $ITEM $text1
-  \{ BeginList("OL", type=>"a") \}
-    $ITEM \{ $mcparam1->named_buttons("param1") \}
-    $PAR
-  \{ EndList("OL") \}
-  $ITEM $text2
-  \{ BeginList("OL", type=>"a") \}
-    $ITEM \{ $mcparam2->named_buttons("param2") \}
-  \{ EndList("OL") \}
+  $ITEM $text1 $BR
+    $tab \{ $mcparam1->named_buttons("param1") \} $PAR
+  $ITEM $text2 $BR
+    $tab \{ $mcparam2->named_buttons("param2") \} $PAR
 \{ EndList("OL") \}
 END_TEXT
 LABELED_ANS( "param1", $mcparam1->cmp() );
@@ -248,20 +243,16 @@ BEGIN_TEXT
 For each of the statistical tests described below, select the appropriate null
 and alternative hypotheses.
 \{ BeginList("OL", type=>"1") \}
-  $ITEM $text1
-  \{ BeginList("OL", type=>"a") \}
-    $ITEM Hypotheses:$BR
-    $tab \( H_0: \) \{ $mcnull1->named_buttons("null1") \} $BR
-    $tab \( H_a: \) \{ $mcalt1->named_buttons("alt1") \}
+  $ITEM $text1 $BR
+    $tab Hypotheses:$BR
+    $tab $tab $disp_null : \{ $mcnull1->named_buttons("null1") \} $BR
+    $tab $tab $disp_alt : \{ $mcalt1->named_buttons("alt1") \}
     $PAR
-  \{ EndList("OL") \}
-  $ITEM $text2
-  \{ BeginList("OL", type=>"a") \}
-    $ITEM Hypotheses:$BR
-    $tab \( H_0: \) \{ $mcnull2->named_buttons("null2") \} $BR
-    $tab \( H_a: \) \{ $mcalt2->named_buttons("alt2") \}
+  $ITEM $text2 $BR
+    $tab Hypotheses:$BR
+    $tab $tab $disp_null : \{ $mcnull2->named_buttons("null2") \} $BR
+    $tab $tab $disp_alt : \{ $mcalt2->named_buttons("alt2") \}
     $PAR
-  \{ EndList("OL") \}
 \{ EndList("OL") \}
 END_TEXT
 LABELED_ANS( "null1", $mcnull1->cmp() );

@@ -89,8 +89,8 @@ if ($randomparm1 == 0 || $randomparm1 == 2) {
 } else {
   $nullval1 = random(10, 30, 1);
 }
-$null1 = "\(H_0\): ". $one_params[$randomparm1] . $comparisons[$randomnull1] . $nullval1;
-$alt1 = "\(H_a\): ". $one_params[$randomparm1] . $comparisons[$randomalt1]. $nullval1;
+$null1 = "$disp_null : ". $one_params[$randomparm1] . $comparisons[$randomnull1] . $nullval1;
+$alt1 = "$disp_alt : ". $one_params[$randomparm1] . $comparisons[$randomalt1]. $nullval1;
 if ($randomparm1 <= 1 && $randomnull1 == 0) {
   $correct1 = "Valid";
 } else {
@@ -117,8 +117,8 @@ if ($randomparm2 == 0 || $randomparm2 == 2) {
 } else {
   $nullval2 = random(10, 30, 1);
 }
-$null2 = "\(H_0\): ". $one_params[$randomparm2] . $comparisons[$randomnull2] . $nullval2;
-$alt2 = "\(H_a\): ". $one_params[$randomparm2] . $comparisons[$randomalt2]. $nullval2;
+$null2 = "$disp_null : ". $one_params[$randomparm2] . $comparisons[$randomnull2] . $nullval2;
+$alt2 = "$disp_alt : ". $one_params[$randomparm2] . $comparisons[$randomalt2]. $nullval2;
 if ($randomparm2 <= 1 && $randomnull2 == 0) {
   $correct2 = "Valid";
 } else {
@@ -140,8 +140,8 @@ if ($randomnull1 != 0 || $randomnull2 != 0) {
   $randomnull3 = random(1, 3, 1);
 }
 do { $randomalt3 = random(0, 3, 1); } until ($randomalt3 != $randomnull3);
-$null3 = "\(H_0\): ". $two_params_1[$randomparm3] . $comparisons[$randomnull3] . $two_params_2[$randomparm3];
-$alt3 = "\(H_a\): ". $two_params_1[$randomparm3] . $comparisons[$randomalt3]. $two_params_2[$randomparm3];
+$null3 = "$disp_null : ". $two_params_1[$randomparm3] . $comparisons[$randomnull3] . $two_params_2[$randomparm3];
+$alt3 = "$disp_alt : ". $two_params_1[$randomparm3] . $comparisons[$randomalt3]. $two_params_2[$randomparm3];
 if ($randomparm3 <= 1 && $randomnull3 == 0) {
   $correct3 = "Valid";
 } else {

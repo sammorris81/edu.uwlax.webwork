@@ -41,58 +41,63 @@ Context("Numeric");
 $random1 = random(0, 1, 1);
 $random2 = random(0, 1, 1);
 
+@options = (
+  " Reject $disp_null",
+  " Do not reject $disp_null",
+);
+
 if ($random1 == 0) {
   $nullprop = random(0.4, 0.6, 0.05);
-  $null1 = "\(H_0: p = $nullprop\)";
-  $alt1 = "\(H_a: p \neq $nullprop\)";
-  $param1 = "\( p \)";
+  $null1 = $disp_null . ":" . $disp_p . "=" . $nullprop;
+  $alt1 = $disp_alt . ":" . $disp_p . $disp_ne . $nullprop;
+  $param1 = $disp_p;
   do { $lower1a = random(0.25, ($nullprop + .05), 0.02); } until ($lower1a != $nullprop);
   do { $upper1a = $lower1a + random(0.1, 0.3, 0.02); } until ($upper1a != $nullprop);
   do { $upper1b = random(($nullprop - 0.05), 0.85, 0.02); } until ($upper1b != $nullprop);
   do { $lower1b = $upper1b - random(0.1, 0.3, 0.02); } until ($lower1b != $nullprop);
   if ($nullprop > $lower1a && $nullprop < $upper1a) {
-    $correct1a = " ii. Do not reject \( H_0 \)";
+    $correct1a = $options[1];
   } else {
-    $correct1a = " i. Reject \( H_0 \)";
+    $correct1a = $options[0];
   }
   if ($nullprop > $lower1b && $nullprop < $upper1b) {
-    $correct1b = " ii. Do not reject \( H_0 \)";
+    $correct1b = $options[1];
   } else {
-    $correct1b = " i. Reject \( H_0 \)";
+    $correct1b = $options[0];
   }
 } else {
   $nullmean = Real(random(10, 20, 2));
-  $null1 = "\( H_0: \mu = $nullmean \)";
-  $alt1 = "\( H_a: \mu \neq $nullmean \)";
-  $param1 = "\( \mu \)";
+  $null1 = "$disp_null : $disp_mu = $nullmean";
+  $alt1 = "$disp_alt : $disp_mu $disp_ne $nullmean";
+  $param1 = $disp_mu;
   do { $lower1a = random(4, ($nullmean + 2), 1); } until ($lower1a != $nullmean);
   do { $upper1a = $lower1a + random(5, 8, 1); } until ($upper1a != $nullmean);
   do { $upper1b = random(($nullmean - 2), 26, 1); } until ($upper1b != $nullmean);
   do { $lower1b = $upper1b - random(5, 8, 1); } until ($lower1b != $nullmean);
   if ($nullmean > $lower1a && $nullmean < $upper1a) {
-    $correct1a = " ii. Do not reject \( H_0 \)";
+    $correct1a = $options[1];
   } else {
-    $correct1a = " i. Reject \( H_0 \)";
+    $correct1a = $options[0];
   }
   if ($nullmean > $lower1b && $nullmean < $upper1b) {
-    $correct1b = " ii. Do not reject \( H_0 \)";
+    $correct1b = $options[1];
   } else {
-    $correct1b = " i. Reject \( H_0 \)";
+    $correct1b = $options[0];
   }
 }
 
 if ($random2 == 0) {
-  $null2 = "\(H_0: p_1 = p_2\)";
-  $alt2 = "\(H_a: p_1 \neq p_2\)";
-  $param2 = "\( p_1 - p_2 \)";
+  $null2 = "$disp_null : $disp_p1 = $disp_p2";
+  $alt2 = "$disp_alt : $disp_p1 $disp_ne $disp_p2";
+  $param2 = "$disp_p1 - $disp_p2";
   $lower2a = non_zero_random(-0.2, 0.06, 0.02);
   do { $upper2a = $lower2a + random(0.05, 0.2, 0.05); } until ($upper2a != 0);
   $upper2b = non_zero_random(-0.06, 0.2, 0.02);
   do { $lower2b = $upper2b - random(0.05, 0.2, 0.05); } until ($lower2b != 0);
 } else {
-  $null2 = "\( H_0: \mu_1 = \mu_2 \)";
-  $alt2 = "\( H_a: \mu_1 \neq \mu_2 \)";
-  $param2 = "\( \mu_1 - \mu_2 \)";
+  $null2 = "$disp_null : $disp_mu1 = $disp_mu2";
+  $alt2 = "$disp_alt : $disp_mu1 $disp_ne $disp_mu2";
+  $param2 = "$disp_mu1 - $disp_mu2";
   $lower2a = non_zero_random(-10, 2, 0.1);
   do { $upper2a = $lower2a + random(4, 6, 0.1); } until ($upper2a != 0);
   $upper2b = non_zero_random(-2, 10, 0.1);
@@ -100,15 +105,15 @@ if ($random2 == 0) {
 }
 
 if ($lower2a < 0 && $upper2a > 0) {
-  $correct2a = " ii. Do not reject \( H_0 \)";
+  $correct2a = $options[1];
 } else {
-  $correct2a = " i. Reject \( H_0 \)";
+  $correct2a = $options[0];
 }
 
 if ($lower2b < 0 && $upper2b > 0) {
-  $correct2b = " ii. Do not reject \( H_0 \)";
+  $correct2b = $options[1];
 } else {
-  $correct2b = " i. Reject \( H_0 \)";
+  $correct2b = $options[0];
 }
 
 @conflevels = (90, 95, 99);
@@ -122,16 +127,11 @@ $sig1b = Real(1 - $conflevel1b / 100);
 $sig2a = Real(1 - $conflevel2a / 100);
 $sig2b = Real(1 - $conflevel2b / 100);
 
-@options = (
-  " i. Reject \( H_0 \)",
-  " ii. Do not reject \( H_0 \)",
-);
-
 $mc1a = RadioButtons(
   [@options],
   $correct1a,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -139,7 +139,7 @@ $mc1b = RadioButtons(
   [@options],
   $correct1b,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -147,7 +147,7 @@ $mc2a = RadioButtons(
   [@options],
   $correct2a,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -155,7 +155,7 @@ $mc2b = RadioButtons(
   [@options],
   $correct2b,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -173,22 +173,22 @@ the significance level used.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Hypotheses: $null1 vs $alt1 $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM $conflevel1a$PERCENT confidence interval for $param1: $lower1a to $upper1a $BR
+    $ITEM $conflevel1a$PERCENT confidence interval for $param1 is ($lower1a, $upper1a) $BR
     Conclusion: \{ $mc1a->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \} $BR
-    $ITEM $conflevel1b$PERCENT confidence interval for $param1: $lower1b to $upper1b $BR
+    Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
+    $ITEM $conflevel1b$PERCENT confidence interval for $param1 is ($lower1b, $upper1b) $BR
     Conclusion: \{ $mc1b->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \}
+    Significance level: $disp_alpha = \{ ans_rule(10) \}
   \{ EndList("OL") \}
   $PAR
   $ITEM Hypotheses: $null2 vs $alt2 $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM $conflevel2a$PERCENT confidence interval for $param2: $lower2a to $upper2a $BR
+    $ITEM $conflevel2a$PERCENT confidence interval for $param2 is ($lower2a, $upper2a) $BR
     Conclusion: \{ $mc2a->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \} $BR
-    $ITEM $conflevel2b$PERCENT confidence interval for $param2: $lower2b to $upper2b $BR
+    Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
+    $ITEM $conflevel2b$PERCENT confidence interval for $param2 is ($lower2b, $upper2b) $BR
     Conclusion: \{ $mc2b->buttons() \} $BR
-    Significance level: \(\alpha =\) \{ ans_rule(10) \}
+    Significance level: $disp_alpha = \{ ans_rule(10) \}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT

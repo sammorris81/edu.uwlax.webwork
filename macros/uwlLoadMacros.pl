@@ -32,4 +32,8 @@ if (!defined(&_uwlUsefulStats_init)) {
   loadMacros("uwlUsefulStats.pl");
 }
 
+if (!defined(&_uwlDisplayMacros_init)) {
+  loadMacros("uwlDisplayMacros.pl")
+}
+
 1; #required at end of file - a perl thing

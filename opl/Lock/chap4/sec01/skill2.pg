@@ -39,26 +39,26 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 @hyps1 = ( # choices
-  " \( \mu_A = \mu_B \)",
-  " \( \mu_A < \mu_B \)",
-  " \( \mu_A > \mu_B \)",
-  " \( \mu_A \neq \mu_B \)",
+  " $disp_mua = $disp_mub",
+  " $disp_mua $disp_lt $disp_mub",
+  " $disp_mua $disp_gt $disp_mub",
+  " $disp_mua $disp_ne $disp_mub",
 );
 
 $nullprop = random(0.2, 0.4, 0.1);
 @hyps2 = (
-  " \( p = $nullprop \)",
-  " \( p < $nullprop \)",
-  " \( p > $nullprop \)",
-  " \( p \neq $nullprop \)",
+  " $disp_p = $nullprop",
+  " $disp_p $disp_lt $nullprop",
+  " $disp_p $disp_gt $nullprop",
+  " $disp_p $disp_ne $nullprop",
 );
 
 $nullmean = random(50, 70, 2);
 @hyps3 = (
-  " \( \mu = $nullmean \)",
-  " \( \mu < $nullmean \)",
-  " \( \mu > $nullmean \)",
-  " \( \mu \neq $nullmean \)",
+  " $disp_mu = $nullmean",
+  " $disp_mu $disp_lt $nullmean",
+  " $disp_mu $disp_gt $nullmean",
+  " $disp_mu $disp_ne $nullmean",
 );
 
 $random1 = random(1, 3, 1);
@@ -170,16 +170,16 @@ statistical test described.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Testing to see if there is evidence that the mean of group A is $comparison1 the
   mean of group B. $BR
-  \( H_0: \) \{ $mcnull1->buttons() \} $BR
-  \( H_a: \) \{ $mcalt1->buttons() \}
+  $disp_null : \{ $mcnull1->buttons() \} $BR
+  $disp_alt : \{ $mcalt1->buttons() \}
   $PAR
   $ITEM Testing to see if there is evidence that a proportion is $comparison2 $nullprop. $BR
-  \( H_0: \) \{ $mcnull2->buttons() \} $BR
-  \( H_a: \) \{ $mcalt2->buttons() \}
+  $disp_null : \{ $mcnull2->buttons() \} $BR
+  $disp_alt : \{ $mcalt2->buttons() \}
   $PAR
   $ITEM Testing to see if there is evidence that a mean is $comparison3 $nullmean. $BR
-  \( H_0: \) \{ $mcnull3->buttons() \} $BR
-  \( H_a: \) \{ $mcalt3->buttons() \}
+  $disp_null : \{ $mcnull3->buttons() \} $BR
+  $disp_alt : \{ $mcalt3->buttons() \}
 \{ EndList( "OL") \}
 END_TEXT
 ###########################
