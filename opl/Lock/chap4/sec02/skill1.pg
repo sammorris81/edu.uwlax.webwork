@@ -99,10 +99,18 @@ $mc4 = RadioButtons(
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Determining strength of evidence against \(H_0\):$EBOLD $BR
+Take a look at the box titled ${BITALIC}The P-value${EITALIC} on p. 236 in your textbook
+to help determine which p-value gives the strongest evidence against \(H_0\)
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 For the following questions, two p-values are given. Select the p-value which provides
 the strongest evidence against \(H_0\).
 \{ BeginList( "OL", type=>"1") \}

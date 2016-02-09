@@ -85,6 +85,28 @@ $count3 = $pval3 * $n;
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Calculating a p-value:$EBOLD $BR
+To find the p-value from a randomization distribution for a one-sided alternative
+hypothesis, we need to determine what proportion of the randomization distribution
+is as extreme of more extreme in the direction of the alternative hypothesis.
+Take a look at Example 4.13 in your textbook. In this example, we want to find the
+p-value for the hypotheses:
+\[
+H_0: p = 0.5\\
+H_a: p < 0.5
+\]
+and the sample statistic from this sample was \(\widehat{p} = 0.64\).
+To find the p-value for this hypothesis test, we need to determine what proportion
+of the randomization distribution is greater than or equal to 0.64. In Figure 4.7,
+we can see that out of the 10,000 simulated samples in the randomization distribution,
+1,145 were greater than 0.64. So the p-value for example 4.13 is
+\[
+\text{p-value} = \frac{1145}{10000} = 0.1145.
+\]
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################

@@ -60,19 +60,19 @@ if ($randomtext == 1) {
            "smoke is $comparison the proportion of females who smoke.";
 
   @params1 = ( # choices
-    " i. \( p \)",
-    " ii. \( \mu \)",
-    " iii. \( p_M, \ p_F \)",
-    " iv. \( \mu_M, \ \mu_F \)",
+    " \( p \)",
+    " \( \mu \)",
+    " \( p_M, \ p_F \)",
+    " \( \mu_M, \ \mu_F \)",
   );
 
-  $correctparam1 = " iii. \( p_M, \ p_F \)";
+  $correctparam1 = " \( p_M, \ p_F \)";
 
   @hyps1 = ( # choices
-    " i. \( p_M = p_F \)",
-    " ii. \( p_M < p_F \)",
-    " iii. \( p_M > p_F \)",
-    " iv. \( p_M \neq p_F \)",
+    " \( p_M = p_F \)",
+    " \( p_M < p_F \)",
+    " \( p_M > p_F \)",
+    " \( p_M \neq p_F \)",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -82,19 +82,19 @@ if ($randomtext == 1) {
            "by salespeople (group 1) is $comparison in stores where they are not (group 2).";
 
   @params1 = ( # choices
-    " i. \( p \)",
-    " ii. \( \mu \)",
-    " iii. \( p_1, \ p_2 \)",
-    " iv. \( \mu_1, \ \mu_2 \)",
+    " \( p \)",
+    " \( \mu \)",
+    " \( p_1, \ p_2 \)",
+    " \( \mu_1, \ \mu_2 \)",
   );
 
-  $correctparam1 = " iv. \( \mu_1, \ \mu_2 \)";
+  $correctparam1 = " \( \mu_1, \ \mu_2 \)";
 
   @hyps1 = ( # choices
-    " i. \( \mu_1 = \mu_2 \)",
-    " ii. \( \mu_1 < \mu_2 \)",
-    " iii. \( \mu_1 > \mu_2 \)",
-    " iv. \( \mu_1 \neq \mu_2 \)",
+    " \( \mu_1 = \mu_2 \)",
+    " \( \mu_1 < \mu_2 \)",
+    " \( \mu_1 > \mu_2 \)",
+    " \( \mu_1 \neq \mu_2 \)",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -104,19 +104,19 @@ if ($randomtext == 1) {
            "per week for first-year students is $comparison upperclass students.";
 
   @params1 = ( # choices
-    " i. \( p \)",
-    " ii. \( \mu \)",
-    " iii. \( p_{FY}, \ p_U \)",
-    " iv. \( \mu_{FY}, \ \mu_U \)",
+    " \( p \)",
+    " \( \mu \)",
+    " \( p_{FY}, \ p_U \)",
+    " \( \mu_{FY}, \ \mu_U \)",
   );
 
-  $correctparam1 = " iv. \( \mu_{FY}, \ \mu_U \)";
+  $correctparam1 = " \( \mu_{FY}, \ \mu_U \)";
 
   @hyps1 = ( # choices
-    " i. \( \mu_{FY} = \mu_U \)",
-    " ii. \( \mu_{FY} < \mu_U \)",
-    " iii. \( \mu_{FY} > \mu_U \)",
-    " iv. \( \mu_{FY} \neq \mu_U \)",
+    " \( \mu_{FY} = \mu_U \)",
+    " \( \mu_{FY} < \mu_U \)",
+    " \( \mu_{FY} > \mu_U \)",
+    " \( \mu_{FY} \neq \mu_U \)",
   );
 
   $correctalt1 = $hyps1[$randomcompare];
@@ -129,19 +129,19 @@ $text2 = "Testing to see if there is evidence that the percentage of a populatio
          "watch the Home Shopping Network is less than $nullperc$PERCENT";
 
 @params2 = ( # choices
-  " i. \( p \)",
-  " ii. \( \mu \)",
-  " iii. \( p_1, \ p_2 \)",
-  " iv. \( \mu_1, \ \mu_2 \)",
+  " \( p \)",
+  " \( \mu \)",
+  " \( p_1, \ p_2 \)",
+  " \( \mu_1, \ \mu_2 \)",
 );
 
-$correctparam2 = " i. \( p \)";
+$correctparam2 = " \( p \)";
 
 @hyps2 = (
-  " i. \( p = $nullprop \)",
-  " ii. \( p < $nullprop \)",
-  " iii. \( p > $nullprop \)",
-  " iv. \( p \neq $nullprop \)",
+  " \( p = $nullprop \)",
+  " \( p < $nullprop \)",
+  " \( p > $nullprop \)",
+  " \( p \neq $nullprop \)",
 );
 
 $correctalt2 = $hyps2[1];
@@ -150,11 +150,12 @@ $correctalt2 = $hyps2[1];
 ## Initialization
 ###########################
 
+@labels = ('i', 'ii', 'iii', 'iv');
 $mcparam1 = RadioButtons(
   [@params1],
   $correctparam1,
   order => [@params1],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -162,7 +163,7 @@ $mcparam2 = RadioButtons(
   [@params2],
   $correctparam2,
   order => [@params2],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -170,7 +171,7 @@ $mcnull1 = RadioButtons(
   [@hyps1],
   $hyps1[0],
   order => [@hyps1],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -178,7 +179,7 @@ $mcalt1 = RadioButtons(
   [@hyps1],
   $correctalt1,
   order => [@hyps1],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -186,7 +187,7 @@ $mcnull2 = RadioButtons(
   [@hyps2],
   $hyps2[0],
   order => [@hyps2],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -194,7 +195,7 @@ $mcalt2 = RadioButtons(
   [@hyps2],
   $correctalt2,
   order => [@hyps2],
-  labels => ['i.', 'ii.', 'iii.', 'iv.'],
+  labels => [@labels],
   separator => $tab,
 );
 

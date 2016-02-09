@@ -155,10 +155,30 @@ $mc3 = PopUp(
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Rules for writing down the hypotheses:$EBOLD $BR
+To check for whether or not hypotheses are valid, you want to check for a couple
+of characteristics.
+\{BeginList("OL", type=>"1")\}
+  $ITEM As outlined on p. 222 in your textbook, all hypotheses are written in
+  terms of population parameters and not in terms of sample statistics. This is
+  because when we conduct hypothesis tests in statistics, we use data from a sample
+  to decide between two competing hypotheses for the parameter. This means that
+  you should not see notation like \(\widehat{p}\) or \(\overline{x}\)
+  in a hypothesis.
+  $ITEM From p. 224 in your textbook: ${LQ}Notice that, in general, the null
+  hypothesis is a statement of equality, while the alternative hypothesis contains
+  a range of values, using notation indicating greater than (\(>\)),
+  not equal to(\(\neq\)), or less than (\(<\)).${RQ}
+\{EndList("OL")\}
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 For the following questions, state whether the sets of hypotheses given are valid
 hypotheses.
 
