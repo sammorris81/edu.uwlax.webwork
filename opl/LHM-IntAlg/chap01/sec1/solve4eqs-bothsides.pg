@@ -1,0 +1,84 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Algebra)
+## DBchapter(Algebra of real numbers and simplying equations)
+## DBsection(Solving linear equations in one variable)
+## KEYWORDS('solving linear equations')
+## TitleText1('Intermediate Algebra')
+## EditionText1('12')
+## AuthorText1('Lial, Hornsby, McGinnis')
+## Chapter1('1')
+## Section1('1.1')
+## Problem1('Solve Equation 1')
+## Author('Sam Morris, Robert Allen')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+#### Identify the contexts for this question
+Context("Numeric");
+Context()->texStrings;  # will automatically format math objects using tex
+
+#### Build the question and get the answer
+## How many different equations do we want
+$giveMe = 4;
+
+## Get the parts that will make the equations
+rserve_eval('possible <- c(seq(-8, -3), seq(3, 8))');
+@a = rserve_eval('sample(x = possible[possible > 0], size = ' . $giveMe . ', replace = FALSE)');
+@b = rserve_eval('sample(x = possible, size = ' . $giveMe . ', replace = FALSE)');
+@x = rserve_eval('sample(x = 3:10, size = ' . $giveMe . ', replace = TRUE)'); # the answers
+
+foreach $i (0..($giveMe-1)) {
+  # update the index
+  $idx = $i + 1;
+  $offset = non_zero_random(-2, 2, 1);
+  $c = $a[$i] - $offset;
+
+  $h = Formula("$offset x + $b[$i]")->reduce;
+  $d = Compute("$offset * $x[$i] + $b[$i]");
+  #$d = Compute("$h", x => $x[$i]);
+
+  $f = Formula("$a[$i] x + $b[$i]")->reduce;
+  $g = Formula("$c x + $d")->reduce;
+
+  ## Tell WeBWorK how to evaluate the answer that the student should enter
+  $answer = Compute("$x[$i]");
+
+  #### Text for the question
+  BEGIN_TEXT
+  $PAR
+  $idx. Solve the equation \[$f = $g.\]
+  $PAR
+  \(x = \) \{ans_rule(15)\}
+  END_TEXT
+
+  ANS($answer->cmp);
+
+  ##### Intermediate quantities to create the solution
+  $e = Compute("$d - $b[$i]");
+
+  #### Text for the solution
+  BEGIN_SOLUTION
+  \begin{align}
+  $a[$i] x + $b[$i] &= $c x + $d \\
+  $a[$i] x + $b[$i] \color{green}{-$b[$i]} &= $c x + $d \color{green}{-$b[$i]} \tag*{Subtract $b[$i]}\\
+  $a[$i] x &= $c x + $e \tag*{Combine like terms}\\
+  $a[$i] x {\color{green}{-$c x}} &= $c x $e {\color{green}{-$c x}} \tag*{Subtract $c x} \\
+  $offset x &= $e \tag*{Combine like terms}\\
+  \frac{$offset x}{\color{green}{$offset}} &= \frac{$e}{\color{green}{$offset}} \tag*{Divide by $offset}\\
+  \color{green}{x} &\color{green}{=} \color{green}{$answer}
+  \end{align}
+  END_SOLUTION
+}
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
