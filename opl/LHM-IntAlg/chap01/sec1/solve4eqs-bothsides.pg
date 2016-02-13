@@ -20,6 +20,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "uwlAlgMacros.pl"
 );
 
 TEXT(beginproblem());
@@ -37,10 +38,40 @@ $solcol = "OrangeRed";
 ## Get the parts that will make the equations
 rserve_eval('possible <- c(seq(-8, -3), seq(3, 8))
              offsets <- c(seq(-3, -2), seq(2, 3))');
-@a = rserve_eval('sample(x = possible[possible > 0], size = ' . $giveMe . ', replace = FALSE)');
-@b = rserve_eval('sample(x = possible, size = ' . $giveMe . ', replace = FALSE)');
-@x = rserve_eval('sample(x = 3:10, size = ' . $giveMe . ', replace = TRUE)'); # the answers
-@offset = rserve_eval('sample(x = offsets, size = ' . $giveMe .', replace = TRUE)');
+# @a = rserve_eval('sample(x = possible[possible > 0], size = ' . $giveMe . ', replace = FALSE)');
+@a = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 8,
+  replace => "FALSE",
+);
+# @b = rserve_eval('sample(x = possible, size = ' . $giveMe . ', replace = FALSE)');
+@b = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => -8,
+  max => 8,
+  zero => "FALSE",
+  one => "FALSE",
+  replace => "FALSE"
+);
+
+# @x = rserve_eval('sample(x = 3:10, size = ' . $giveMe . ', replace = TRUE)'); # the answers
+@x = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 10,
+  replace => "TRUE",
+);
+
+# @offset = rserve_eval('sample(x = offsets, size = ' . $giveMe .', replace = TRUE)');
+@offset = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => -3,
+  max => 3,
+  zero => "FALSE",
+  one => "FALSE",
+  replace => "TRUE",
+);
 @c; @d; @e;
 foreach $i (0..($giveMe - 1)) {
   push(@d, $offset[$i] * $x[$i] + $b[$i]);
