@@ -6,13 +6,17 @@ sub _uwlAlgMacros_init {};
 
 package uwlAlgMacros;
 
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(random_variable);
+
 $clt = "Combine like terms";
-$solcol = "OrangeRed";
+$solcol = "red";
 
 sub random_variable {
+    my $howmany = shift // 1;
     my $letter;
 
-    ($letter) = rserve_eval('sample(x = letters, size = 1, replace = FALSE)');
+    ($letter) = main::rserve_eval('sample(x = letters, size = ' . $howmany . ', replace = FALSE)');
     return($letter);
 }
 
