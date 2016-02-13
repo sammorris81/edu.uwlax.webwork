@@ -6,6 +6,9 @@ sub _uwlAlgMacros_init {};
 
 package uwlAlgMacros;
 
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(random_variable);
+
 $clt = "Combine like terms";
 $solcol = "red";
 
