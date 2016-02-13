@@ -31,8 +31,8 @@ Context()->texStrings;  # will automaticallly format math objexts using tex
 Context()->noreduce('(-x)+y','(-x)-y');  # Formula will keep initial negatives
 
 #($var) = rserve_eval('sample(x = letters, size = 1, replace = FALSE)');
-$var = uwlAlgMacros::random_variable();
-Context()->variables->add($var => 'Real');
+$var = uwlAlgMacros::random_variable();  # adds the variable into the context
+# Context()->variables->add($var => 'Real');
 
 #$clt = "Combine like terms";
 #$solcol = "OrangeRed";
