@@ -24,31 +24,39 @@ loadMacros("uwlLoadWWMacros.pl",
 
 TEXT(beginproblem());
 
-$a = random(2,5,1);
+#### Identify the contexts for this question
+Context("Numeric");
+Context()->texStrings;  # will automaticallly format math objexts using tex
+
+#### Build the question and get the answer
+$a = non_zero_random(-3,5,1);
+$b = non_zero_random(1,5,1);
 $multiple = random(3,10,1);
-$b = random(1,5,1);
-$c = Compute("$a*$multiple + $b");
-$d = Compute("$c-$b");
+
+$lhs = Formula("$a x + $b")->reduce;
+$rhs = Compute("$a*$multiple + $b");
+
 $answer = Compute("$multiple");
 
-Context("Numeric");
-
 BEGIN_TEXT
-Solve the equation \[$a x + $b = $c.\]
+Solve the equation \[$lhs = $rhs.\]
 $PAR
 \(x = \) \{ans_rule(15)\}
 END_TEXT
 
 ANS($answer->cmp);
 
+#### Intermediate quantities to create the solution
+$d = Compute("$rhs - $b");
+
 Context()->texStrings;
 BEGIN_SOLUTION
 \begin{align}
-$a x + $b &= $c \\
-$a x + $b \color{green}{-$b} &= $c \color{green}{-$b} \tag*{Subtract $b}\\
+$lhs &= $rhs \\
+$lhs \color{OrangeRed}{-$b} &= $rhs \color{OrangeRed}{-$b} \tag*{Subtract $b}\\
 $a x &= $d \tag*{Combine like terms}\\
-\frac{$a x}{\color{green}{$a}} &= \frac{$d}{\color{green}{$a}} \tag*{Divide by $a}\\
-\color{green}{x} &\color{green}{=} \color{green}{$answer}
+\frac{$a x}{\color{OrangeRed}{$a}} &= \frac{$d}{\color{OrangeRed}{$a}} \tag*{Divide by $a}\\
+\color{OrangeRed}{x} &\color{OrangeRed}{=} \color{OrangeRed}{$answer}
 \end{align}
 
 END_SOLUTION
