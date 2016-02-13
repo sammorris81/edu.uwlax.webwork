@@ -31,25 +31,35 @@ Context()->texStrings;  # will automatically format math objects using tex
 #### Build the question and get the answer
 ## How many different equations do we want
 $giveMe = 4;
+$clt = "Combine like terms";
+$solcol = "OrangeRed";
 
 ## Get the parts that will make the equations
-rserve_eval('possible <- c(seq(-8, -3), seq(3, 8))');
+rserve_eval('possible <- c(seq(-8, -3), seq(3, 8))
+             offsets <- c(seq(-3, -2), seq(2, 3))');
 @a = rserve_eval('sample(x = possible[possible > 0], size = ' . $giveMe . ', replace = FALSE)');
 @b = rserve_eval('sample(x = possible, size = ' . $giveMe . ', replace = FALSE)');
 @x = rserve_eval('sample(x = 3:10, size = ' . $giveMe . ', replace = TRUE)'); # the answers
+@offset = rserve_eval('sample(x = offsets, size = ' . $giveMe .', replace = TRUE)');
+@c; @d; @e;
+foreach $i (0..($giveMe - 1)) {
+  push(@d, $offset[$i] * $x[$i] + $b[$i]);
+  push(@c, $a[$i] - $offset[$i]);
+  push(@e, $d[$i] - $b[$i]);
+}
 
 foreach $i (0..($giveMe-1)) {
   # update the index
   $idx = $i + 1;
-  $offset = non_zero_random(-2, 2, 1);
-  $c = $a[$i] - $offset;
+#  $offset = non_zero_random(-2, 2, 1);
+#  $c = $a[$i] - $offset;
 
-  $h = Formula("$offset x + $b[$i]")->reduce;
-  $d = Compute("$offset * $x[$i] + $b[$i]");
+  # $h = Formula("$offset[$i] x + $b[$i]")->reduce;
+  $d = Compute("$offset[$i] * $x[$i] + $b[$i]");
   #$d = Compute("$h", x => $x[$i]);
 
   $f = Formula("$a[$i] x + $b[$i]")->reduce;
-  $g = Formula("$c x + $d")->reduce;
+  $g = Formula("$c[$i] x + $d[$i]")->reduce;
 
   ## Tell WeBWorK how to evaluate the answer that the student should enter
   $answer = Compute("$x[$i]");
@@ -65,18 +75,35 @@ foreach $i (0..($giveMe-1)) {
   ANS($answer->cmp);
 
   ##### Intermediate quantities to create the solution
-  $e = Compute("$d - $b[$i]");
+  # $e = Compute("$d[$i] - $b[$i]");
+  $h = Formula("$c[$i] x + $e[$i]")->reduce;
+
+  if ($b[$i] < 0) {
+    $moveb  = "Add " . abs($b[$i]);
+    $invopb = " + " . abs($b[$i]);
+  } else {
+    $moveb  = "Subtract " . $b[$i];
+    $invopb = " - " . $b[$i];
+  }
+
+  if ($c[$i] < 0) {
+    $movec  = "Add " . abs($c[$i]) . "x";
+    $invopc = "\ + " . abs($c[$i]) . "x";
+  } else {
+    $movec  = "Subtract " . $c[$i] . "x";
+    $invopc = "\ - " . $c[$i] . "x";
+  }
 
   #### Text for the solution
   BEGIN_SOLUTION
   \begin{align}
-  $a[$i] x + $b[$i] &= $c x + $d \\
-  $a[$i] x + $b[$i] \color{green}{-$b[$i]} &= $c x + $d \color{green}{-$b[$i]} \tag*{Subtract $b[$i]}\\
-  $a[$i] x &= $c x + $e \tag*{Combine like terms}\\
-  $a[$i] x {\color{green}{-$c x}} &= $c x $e {\color{green}{-$c x}} \tag*{Subtract $c x} \\
-  $offset x &= $e \tag*{Combine like terms}\\
-  \frac{$offset x}{\color{green}{$offset}} &= \frac{$e}{\color{green}{$offset}} \tag*{Divide by $offset}\\
-  \color{green}{x} &\color{green}{=} \color{green}{$answer}
+  $f &= $g \\
+  $f \color{$solcol}{$invopb} &= $g \color{$solcol}{$invopb} \tag*{$moveb}\\
+  $a[$i] x &= $h \tag*{$clt}\\
+  $a[$i] x {\color{$solcol}{$invopc}} &= $h {\color{$solcol}{$invopc}} \tag*{$movec} \\
+  $offset[$i] x &= $e[$i] \tag*{$clt}\\
+  \frac{$offset[$i] x}{\color{$solcol}{$offset[$i]}} &= \frac{$e[$i]}{\color{$solcol}{$offset[$i]}} \tag*{Divide by $offset[$i]}\\
+  \color{$solcol}{x} &\color{$solcol}{=} \color{$solcol}{$answer}
   \end{align}
   END_SOLUTION
 }
