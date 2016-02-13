@@ -31,7 +31,15 @@ Context()->texStrings;  # will automaticallly format math objexts using tex
 Context()->noreduce('(-x)+y','(-x)-y');  # Formula will keep initial negatives
 
 #($var) = rserve_eval('sample(x = letters, size = 1, replace = FALSE)');
-$var = uwlAlgMacros::random_variable();  # adds the variable into the context
+$var = uwlAlgMacros::random_variable();
+uwlAlgMacros::add_variable_to_Context(
+  variables => [$var],
+);
+
+# @vars = uwlAlgMacros::random_variable(2);
+# uwlAlgMacros::add_variable_to_Context(
+#   variables => [@vars],
+# );
 # Context()->variables->add($var => 'Real');
 
 #$clt = "Combine like terms";
@@ -42,8 +50,6 @@ rserve_eval('possible <- c(seq(-8, -2), seq(2, 8))
              offsets <- c(seq(-5, -2), seq(2, 5))');
 ($a,$b) = rserve_eval('sample(x = possible, size = 2, replace = FALSE)');
 ($offset) = rserve_eval('sample(x = offsets, size = 1, replace = FALSE)');
-#($a,$b) = non_trivial_random(min=2,max=8,size=2,replace=FALSE)
-#$offset = non_trivial_random(min=2,max=5,size=1,replace=FALSE);
 $x = random(3,10,1); # the answers
 $c = Compute("$a - $offset");
 $d = Compute("$offset * $x + $b");
@@ -60,9 +66,9 @@ $PAR
 Solve the equation \[$lhs = $rhs.\]
 $PAR
 \($var = \) \{ans_rule(15)\}
-\{ 
-knowlLink("problem strategy", 
-value=>'isolate any term with $var on the left, and any term without $var on the right.') 
+\{
+knowlLink("Click for a hint",
+value=>'Move any term with $var to the left, and any term without $var to the right.')
 \}
 END_TEXT
 

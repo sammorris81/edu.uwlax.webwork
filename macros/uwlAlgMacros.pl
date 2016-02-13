@@ -22,31 +22,30 @@ $clt = "Combine like terms";
 $solcol = "OrangeRed";
 
 ##
- # Adds variables to the main::Context, skipping x.  
- # 
- # @param  variables    list of variables to add 
+ # Adds variables to the main::Context, skipping x.
+ #
+ # @param  variables    list of variables to add
  # @param  type         type of variables (default = 'Real')
  ##
 sub add_variable_to_Context {
     my %options = @_;
-    my $varlist;
 
-    @varlist = $options{'variables'};
+    my @varlist = @{$options{'variables'}};
     my $type = defined($options{'type'}) ? $options{'type'} : 'Real';
 
-    foreach my $var ($varlist) {
-      if $var != 'x' {
+    foreach my $var (@varlist) {
+      if ($var ne 'x') {
         main::Context()->variables->add($var => $type);
       }
     }
 }
 
 ##
- # Returns a list of random letters from a .. z.  
- # 
+ # Returns a list of random letters from a .. z.
+ #
  # @param  size   the number of variables to generate (default = 1).
- # @return        a list if size > 1 and a single variable if size = 1.       
- ## 
+ # @return        a list if size > 1 and a single variable if size = 1.
+ ##
 sub random_variable {
     my $howmany = shift // 1;
     my $letter;
