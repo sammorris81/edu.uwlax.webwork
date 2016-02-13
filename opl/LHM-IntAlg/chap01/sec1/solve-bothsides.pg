@@ -13,7 +13,7 @@
 ## AuthorText1('Lial, Hornsby, McGinnis')
 ## Chapter1('1')
 ## Section1('1.1')
-## Problem1('Solve Simple Linear Equation 1')
+## Problem1('Solve Both-Side Linear Equation 1')
 ## Author('Sam Morris, Robert Allen')
 ## Institution('University of Wisconsin-La Crosse')
 
@@ -36,44 +36,64 @@ $clt = "Combine like terms";
 $solcol = "OrangeRed";
 
 #### Build the question and get the answer
-rserve_eval('possible <- c(seq(-8, -2), seq(2, 8))');
+rserve_eval('possible <- c(seq(-8, -2), seq(2, 8))
+             offsets <- c(seq(-5, -2), seq(2, 5))');
 ($a,$b) = rserve_eval('sample(x = possible, size = 2, replace = FALSE)');
-$mult = non_zero_random(-6,6,1);
+($offset) = rserve_eval('sample(x = offsets, size = 1, replace = FALSE)');
+$x = random(3,10,1); # the answers
+$c = Compute("$a - $offset");
+$d = Compute("$offset * $x + $b");
+$e = Compute("$d - $b");
 
 $lhs = Formula("$a $var + $b")->reduce;
-$rhs = Compute("$a*$mult + $b");
-$answer = Compute("$mult");
+$rhs = Formula("$c $var + $d")->reduce;
+
+## Tell WeBWorK how to evaluate the answer that the student should enter
+$answer = Compute("$x");
 
 BEGIN_TEXT
 $PAR
 Solve the equation \[$lhs = $rhs.\]
 $PAR
 \($var = \) \{ans_rule(15)\}
+\{ 
+knowlLink("Click for a hint", 
+value=>'Move any term with $var to the left, and any term without $var to the right.') 
+\}
 END_TEXT
 
 ANS($answer->cmp);
 
 #### Intermediate quantities to create the solution
-$d = Compute("$rhs - $b");
+$h = Formula("$c $var + $e")->reduce;
 
 if ($b < 0) {
-    $moveb  = "Add " . abs($b);
-    $invopb = " + " . abs($b);
-  } else {
-    $moveb  = "Subtract " . $b;
-    $invopb = " - " . $b;
-  }
+  $moveb  = "Add " . abs($b);
+  $invopb = " + " . abs($b);
+} else {
+  $moveb  = "Subtract " . $b;
+  $invopb = " - " . $b;
+}
 
-Context()->texStrings;
+if ($c < 0) {
+  $movec  = "Add " . abs($c) . $var;
+  $invopc = "\ + " . abs($c) . $var;
+} else {
+  $movec  = "Subtract " . $c . $var;
+  $invopc = "\ - " . $c . $var;
+}
+
+#### Text for the solution
 BEGIN_SOLUTION
 \begin{align}
 $lhs &= $rhs \\
 $lhs \color{$solcol}{$invopb} &= $rhs \color{$solcol}{$invopb} \tag*{$moveb}\\
-$a $var &= $d \tag*{$clt}\\
-\frac{$a $var}{\color{$solcol}{$a}} &= \frac{$d}{\color{$solcol}{$a}} \tag*{Divide by $a}\\
-\color{$solcol}{$var} &\color{$solcol}{=} \color{$solcol}{$answer} 
+$a $var &= $h \tag*{$clt}\\
+$a $var {\color{$solcol}{$invopc}} &= $h {\color{$solcol}{$invopc}} \tag*{$movec} \\
+$offset $var &= $e \tag*{$clt}\\
+\frac{$offset $var}{\color{$solcol}{$offset}} &= \frac{$e}{\color{$solcol}{$offset}} \tag*{Divide by $offset}\\
+\color{$solcol}{$var} &\color{$solcol}{=} \color{$solcol}{$answer}
 \end{align}
-
 END_SOLUTION
 
 ENDDOCUMENT();  #This MUST be the final line of the file.
