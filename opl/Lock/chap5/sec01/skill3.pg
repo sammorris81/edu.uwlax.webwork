@@ -101,10 +101,34 @@ $p2c = Real(uprob($z2cl) - uprob($z2cu));
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 0;
+BEGIN_HINT
+$BBOLD Accessing the normal distribution:$EBOLD $BR
+You can use
+\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", "StatKey", "target='_new'")\}
+to find \(z\) corresponding to regions of the normal distribution of a certain area.
+${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
+because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
+${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
+go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
+${BTT}Normal${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+$PAR
+$BBOLD Changing the mean and standard deviation of a Normal Distribution:$EBOLD $BR
+Click on the button for ${BTT}Edit Parameters${ETT}, and change the mean and
+standard deviation to the desired values, and then click on the button for
+${BTT}Ok${ETT}. For example, in the image below, we specify ${BTT}Mean: 20${ETT}
+and ${BTT}Standard deviation: 9${ETT} for a N(20, 9) distribution. $BR
+$BCENTER
+\{ image("editparams.png", width=>311, height=>177, tex_size=>500) \}
+$ECENTER
+
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, find the specified areas for the given density.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}

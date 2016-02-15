@@ -42,40 +42,44 @@ Context("Numeric");
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
-  $anssep = "";
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
 } else {
-  $anssep = $BR;
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
 }
 
 @options = (
-    " a. width increases",
-    " b. width decreases",
-    " c. no effect"
+    " width increases",
+    " width decreases",
+    " no effect"
 );
-@labels = ("a.", "b.", "c.");
+@labels = ("a", "b", "c");
 
 $random = random(1, 4, 1);
 
 if ($random == 1) {
     $ss = "an increase";
     $cl = "an increase";
-    $correct1 = " b. width decreases";
-    $correct2 = " a. width increases";
+    $correct1 = " width decreases";
+    $correct2 = " width increases";
 } elsif ($random == 2) {
     $ss = "an increase";
     $cl = "a decrease";
-    $correct1 = " b. width decreases";
-    $correct2 = " b. width decreases";
+    $correct1 = " width decreases";
+    $correct2 = " width decreases";
 } elsif ($random == 3) {
     $ss = "a decrease";
     $cl = "a decrease";
-    $correct1 = " a. width increases";
-    $correct2 = " b. width decreases";
+    $correct1 = " width increases";
+    $correct2 = " width decreases";
 } else {
     $ss = "a decrease";
     $cl = "an increase";
-    $correct1 = " a. width increases";
-    $correct2 = " a. width increases";
+    $correct1 = " width increases";
+    $correct2 = " width increases";
 }
 
 $mult1 = RadioButtons(
@@ -98,6 +102,7 @@ BEGIN_TEXT
   $ITEM What is the effect of $ss in the sample size on the width of a
   confidence interval for a single proportion? $BR
   \{ $mult1 -> buttons( separator => "" ) \}
+  $PAR
   $ITEM What is the effect of $cl in the confidence level on the width of a
   confidence interval for a single proportion? $BR
   \{ $mult2 -> buttons( separator => "" ) \}

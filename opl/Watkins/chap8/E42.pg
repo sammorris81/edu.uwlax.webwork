@@ -41,17 +41,18 @@ $n = Real(1217);
 $p = Real($a1 / $n);
 
 @hyps = ( # choices
-  ' a. \( = \)',
-  ' b. \( < \)',
-  ' c. \( > \)',
-  ' d. \( \neq \)'
+  ' \( = \)',
+  ' \( < \)',
+  ' \( > \)',
+  ' \( \neq \)'
 );
 
 $alt = RadioButtons(
     [@hyps],
-    ' d. \( \neq \)',
+    ' \( \neq \)',
     order => [@hyps],
-    labels => ['a.', 'b.', 'c.', 'd.'],
+    labels => ['i', 'ii', 'iii', 'iv'],
+    separator => $tab,
 );
 
 $se = sqrt($nullval * (1 - $nullval) / $n);
@@ -60,10 +61,10 @@ $ts = Real(sprintf("%.4f", ($p - $nullval) / $se));
 $seact = sqrt($nullvalact * (1 - $nullvalact) / $n);
 $tsact = Real(sprintf("%.4f", ($p - $nullvalact) / $se));
 
-$pval = Real(uprob($ts));
+$pval = Real(uprob(sprintf("%0.2f",$ts)));
 $pvalans = Real(sprintf("%0.4f", 2 * $pval));
 
-$pvalact = Real(uprob($tsact));
+$pvalact = Real(uprob(sprintf("%0.2f", $tsact)));
 $pvalansact = Real(sprintf("%0.4f", 2 * $pvalact));
 
 $tsmid = Real(($ts + $tsact) / 2);
@@ -71,14 +72,19 @@ $tstol = Real(max((abs(($ts - $tsact) / 2)), 0.001) + 0.0005);
 $pvalmid = Real(($pvalans + $pvalansact) / 2);
 $pvaltol = Real(max(abs(($pvalans - $pvalansact) / 2), 0.001));
 
-$rejinterp = "We have significant evidence that the proportion of US adults who ".
-             "agree with the statement is different from two-thirds.";
+$rejinterp = "We have statistically significant evidence that the proportion of ".
+             "US adults who agree with the statement is different from two-thirds.";
 
-$f2rinterp = "We do not have significant evidence that the proportion of US adults who ".
-             "agree with the statement is different from two-thirds.";
+$f2rinterp = "We do not have statistically significant evidence that the proportion ".
+             "of US adults who agree with the statement is different from two-thirds.";
 
-$accinterp = "We have significant evidence that the proportion of US adults who ".
-             "agree with the statement is exactly two-thirds.";
+$accinterp = "We have statistically significant evidence that the proportion of ".
+             "US adults who agree with the statement is exactly two-thirds.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
 
 ##ANSWER FOR CONCLUSION
 @alphas = (0.01, 0.05, 0.10);
@@ -86,28 +92,47 @@ $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
 if ($pvalans < $alpha) {
-$corconcl = " a. Reject \(H_0\). ". $rejinterp;
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-$corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
 );
 
 
@@ -128,17 +153,20 @@ with the statement is different from two-thirds?
 $PAR
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What is the correct null hypothesis for this test? $BR
-\(H_0: p = \)\{ ans_rule(10) \}
-$ITEM What sign should appear in the alternative hypothesis? $BR
-\{ $alt -> buttons( separator => "" ) \}
-$ITEM The test statistic for this test is \( z = \) \{ ans_rule(10) \}.
-$ITEM The p-value for this test statistic is \{ ans_rule(10) \}.
-$ITEM Select the appropriate conclusion for this test statistic at a
-significance level of \( \alpha = $alpha \). $BR
-\{ $conclusion -> buttons() \}
-
-
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \(H_0: p = \)\{ ans_rule(10) \} $PAR
+  $ITEM What sign should appear in the alternative hypothesis? $BR
+  \{ $alt -> buttons( separator => "" ) \} $PAR
+  $ITEM The test statistic for this test is \( z = \) \{ ans_rule(10) \}. $PAR
+  $ITEM The p-value for this test statistic is \{ ans_rule(10) \}. $PAR
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
 END_TEXT
 
@@ -148,7 +176,9 @@ ANS($nullval->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 ANS($alt->cmp() );
 ANS($tsmid->with(tolerance=>$tstol, tolType=>"Absolute")->cmp);
 ANS($pvalmid->with(tolerance=>$pvaltol, tolType=>"Absolute")->cmp);
-ANS( $conclusion->cmp() );
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
 
 
 ENDDOCUMENT();

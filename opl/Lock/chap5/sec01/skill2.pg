@@ -60,10 +60,57 @@ $z6l = Real(-$z6u);
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+$showHint = 0;
+BEGIN_HINT
+$BBOLD Accessing the normal distribution:$EBOLD $BR
+You can use
+\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", "StatKey", "target='_new'")\}
+to find \(z\) corresponding to regions of the normal distribution of a certain area.
+${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
+because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
+${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
+go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
+${BTT}Normal${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+$PAR
+$BBOLD Finding the \(z\) value with a certain area below it:$EBOLD $BR
+To find a \(z\) value with a specified area below it, you need to click on the
+checkbox for ${BTT}Left Tail${ETT}. Then click on the number above the x-axis
+of the graph, and change it to the area under the normal distribution curve
+you want below \(z\). The \(z\) that has that area under the normal distribution
+below it is given below the x-axis. For example, in the image below, you can
+see that the \(z\) with 0.791 below it is \(z = 0.81\). $BR
+${BCENTER}
+\{ image("belowz.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+$PAR
+$BBOLD Finding the \(z\) value with a certain area above it:$EBOLD $BR
+To find a \(z\) value with a specified area above it, you need to click on the
+checkbox for ${BTT}Right Tail${ETT}. Then click on the number above the x-axis
+of the graph, and change it to the area under the normal distribution curve
+you want above \(z\). The \(z\) that has that area under the normal distribution
+below it is given below the x-axis. For example, in the image below, you can
+see that the \(z\) with 0.729 below it is \(z = 0.81\). $BR
+${BCENTER}
+\{ image("abovez.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+$PAR
+$BBOLD Finding the interval that covers a specified area:$EBOLD $BR
+To find the endpoints of an interval that cover a specific area under the normal
+distribution curve, you need to click on the checkbox for ${BTT}Two-Tail${ETT}.
+Then change the middle number above the x-axis of the graph to be the area you
+want your interval to cover. The endpoints for the interval are given below the
+x-axis. For example, in the image below, you can see that the interval that
+contains 0.80 of the area under the N(0, 1) distribution is (-1.282, 1.282). $BR
+${BCENTER}
+\{ image("intervalz.png", width=>900, height=>560, tex_size=>500) \}
+${ECENTER}
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, use the N(0, 1) density to find the specified \(z\) values.
 Give your answers to 3 decimal places.
 \{ BeginList( "OL", type=>"1") \}
@@ -71,8 +118,8 @@ Give your answers to 3 decimal places.
   $ITEM What \(z\) has $area2 to the left of it? \(z = \) \{ ans_rule(10) \}
   $ITEM What \(z\) has $area3 to the right of it? \(z = \) \{ ans_rule(10) \}
   $ITEM What \(z\) has $area4 to the right of it? \(z = \) \{ ans_rule(10) \}
-  $ITEM What interval covers $area5? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
-  $ITEM What interval covers $area6? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area5? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area6? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
 \{ EndList( "OL") \}
 END_TEXT
 ###########################

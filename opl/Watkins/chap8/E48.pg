@@ -33,109 +33,140 @@ Context("Numeric");
 
 TEXT(beginproblem());
 
-$nullval= Real( .5 )->reduce;
-
-
+$nullval= Real( .5 );
 
 $n = random( 900, 1100 );
 $p = Real( .53 );
+$count = sprintf("%.0f", $n * $p);
+$p = $count / $n;
 
 $pquest = Real( $p*100 );
 
+@hyps = ( # choices
+  ' \( = \)',
+  ' \( < \)',
+  ' \( > \)',
+  ' \( \neq \)'
+);
 
-$ts = Real(" ($p - $nullval)/sqrt($nullval*(1-$nullval)/$n) ")->reduce;
+$alt = RadioButtons(
+    [@hyps],
+    ' \( > \)',
+    order => [@hyps],
+    labels => ['i', 'ii', 'iii', 'iv'],
+    separator => $tab,
+);
 
-$pval = Real(uprob(sprintf("%0.2f",$ts)))->reduce;
+$se = sqrt($nullval * (1 - $nullval) / $n);
+$ts = Real( sprintf("%.4f", ($p - $nullval) / $se) );
+
+
+$pval = Real(uprob(sprintf("%0.2f",$ts)));
 $pvalans = Real( sprintf("%0.4f",$pval) );
 
+$rejinterp = "We have statistically significant evidence that most adults believe ".
+             "friends are important for success.";
 
-$fmc = new_multiple_choice();
+$f2rinterp = "We do not have statistically significant evidence that most adults ".
+             "believe friends are important for success.";
 
-$mc2 = new_multiple_choice();
+$accinterp = "We have statistically significant evidence that exactly 50$PERCENT ".
+             "of adults believe that friends are important for success.";
 
-## What's the question to pose?
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
 
-$fquestion = "What sign should appear in the alternative hypothesis?";
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
 
-$question2 = "Select the appropriate conclusion for this test at a significance level of \(\alpha=0.01\).";
-
-## What's the answer?
-$fanswer = '\(>\)';
-
-
-
-
-##ANSWER FOR CONCLUSION
-if($pval<.05)
-{
-$answer2 = "Reject \(H_0\).  We have significant evidence that most adults believe friends are important for success.";
+if ($pvalans < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
-else
-{
-$answer2 = "Fail to reject \(H_0\).  We do not have significant evidence that most adults believe friends are important for success.";
-}
 
+@labels = ("i", "ii", "iii");
 
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
 
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
 
-## Link the question and its answer
-
-$fmc->qa($fquestion, $fanswer);
-
-$mc2->qa($question2, $answer2);
-
-## What are some spurious answers?
-$fmc->makeLast( '\(<\)', '\(>\)', '\(\neq\)' );
-
-##EXTRA ANSWERS FOR THE P-VALUE PART
-
-
-
-##EXTRA ANSWERS FOR THE CONCLUSION
-
-$mc2->makeLast("Reject \(H_0\).  We have significant evidence that most adults believe friends are important for success.","Fail to reject \(H_0\).  We do not have significant evidence that most adults believe friends are important for success.");
-
-
-
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
 
 # Show which answers are correct and which ones are incorrect
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 
 
 BEGIN_TEXT
 
-The editors of a magazine have noticed that people seem to believe that a successful life depends on having good friends. They would like to have a story about this and use a headline such as "Most Adults Believe Friends Are Important for Success." So they have commissioned a survey to ask a random sample of adults whether a successful life depends on having good friends. In a random sample of $n adults, 53$PERCENT said yes. Should the editors go ahead and use their headline?
+The editors of a magazine have noticed that people seem to believe that a
+successful life depends on having good friends. They would like to have a
+story about this and use a headline such as ${LQ}Most Adults Believe Friends Are
+Important for Success.${RQ} So they have commissioned a survey to ask a random
+sample of adults whether a successful life depends on having good friends.
+In a random sample of $n adults, $count said yes. Conduct a hypothesis
+test to determine if the editors go ahead and use their headline?
 $PAR
-
-
-
-Fill in the blank with the test value (in decimal form).
-$PAR
-\(H_0: p = \)\{ ans_rule(5) \}
-$PAR
-\{ $fmc->print_q() \}
-\{ $fmc->print_a() \}
-
-$PAR
-The test statistic for this test is   \{ ans_rule(15) \}.
-
-$PAR
-The p-value for this test is \{ ans_rule(15) \}.
-$PAR
-
-\{ $mc2->print_q() \}
-\{ $mc2->print_a() \}
-
-
-
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"a") \}
+  $ITEM What is the correct null hypothesis for this test? $BR
+  \(H_0: p = \)\{ ans_rule(10) \} $PAR
+  $ITEM What sign should appear in the alternative hypothesis? $BR
+  \{ $alt -> buttons( separator => "" ) \} $PAR
+  $ITEM The test statistic for this test is \( z = \) \{ ans_rule(10) \}. $PAR
+  $ITEM The p-value for this test statistic is \{ ans_rule(10) \}. $PAR
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
+\{ EndList( "OL" ) \}
 END_TEXT
-Context()->normalStrings;
-ANS($nullval->with(tolerance=>.0)->cmp);
-ANS( radio_cmp($fmc->correct_ans) );
-ANS($ts->with(tolerance=>.07)->cmp);
-ANS( $pvalans->with(tolerance=>.02)->cmp);
-ANS( radio_cmp($mc2->correct_ans) );
+
+ANS($nullval->with(tolerance=>0, tolType=>"Absolute")->cmp);
+ANS( $alt->cmp() );
+ANS($ts->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS( $pvalans->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
 
 
 ENDDOCUMENT();

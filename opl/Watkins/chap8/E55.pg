@@ -35,17 +35,24 @@ Context("Numeric");
 ## Initialization
 ###########################
 
-$radio = new_multiple_choice();
-$radio2 = new_multiple_choice();
+@options = ('True', 'False');
+@labels = ('a', 'b');
 
+$radio1 = RadioButtons(
+  [@options],
+  $options[0],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
 
-$radio->qa( 'It is possible for Jeffrey or Taline to make a Type I error.', 'True');
-$radio->makeLast( 'True', 'False' );
-
-$radio2->qa( 'It is possible for Jeffrey or Taline to make a Type II error.', 'False');
-$radio2->makeLast( 'True', 'False' );
-
-
+$radio2 = RadioButtons(
+  [@options],
+  $options[1],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
 
 ###########################
 ## Problem Section
@@ -54,15 +61,18 @@ TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
 
-Jeffrey and Taline each want to test whether the proportion of adults in their neighborhood who have graduated from high school is .94, as claimed in the newspaper. Jeffrey takes a random sample of 200 adults and uses a significance level of .05. Taline takes a random sample of 500 adults and uses a significance level of .05. Suppose the newspapers percentage is actually right.
-
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
-
-\{ $radio2->print_q() \}
-\{ $radio2->print_a() \}
-
-
+Jeffrey and Taline each want to test whether the proportion of adults in their
+neighborhood who have graduated from high school is 0.94, as claimed in the
+newspaper. Jeffrey takes a random sample of 200 adults and uses \(\alpha = 0.05\).
+Taline takes a random sample of 500 adults and uses \(\alpha = 0.05\).
+Suppose the newspaper's percentage is actually wrong.
+\{BeginList("OL", type => "1")\}
+  $ITEM It is possible for Jeffrey or Taline to make a Type I error. $BR
+  \{ $radio1 -> buttons() \}
+  $PAR
+  $ITEM It is possible for Jeffrey or Taline to make a Type II error. $BR
+  \{ $radio1 -> buttons() \}
+\{EndList("OL")\}
 
 END_TEXT
 Context()->normalStrings;
@@ -71,22 +81,15 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
-ANS( radio_cmp( $radio2->correct_ans() ) );
-
+ANS( $radio1->cmp() );
+ANS( $radio2->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

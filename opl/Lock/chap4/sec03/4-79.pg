@@ -115,7 +115,7 @@ if ($pvalue < 0.05) {
   $correct_err    = "Type I error";
 } else {
   $correct_dec = $dec_options[1];
-  $correct_inter = $f2rinterp;
+  $correct_interp = $f2rinterp;
   $correct_err    = "Type II error";
 }
 

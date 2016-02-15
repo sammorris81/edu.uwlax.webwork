@@ -40,21 +40,28 @@ $p1 = random( 0.60, 0.70, 0.01 );
 $count1 = sprintf("%.0f", $p1 * $n1);
 $p1 = $count1 / $n1;
 
-$a2 = random( 1, 3, 1 );
 $n2 = random( 1000, 1100, 1 );
-$p2 = random( 0.85, 0.95, 0.01 );
+$p2 = random( 0.15, 0.20, 0.01 );
 $count2 = sprintf("%.0f", $p2 * $n2);
 $p2 = $count2 / $n2;
+
+$n3 = random( 1000, 1100, 1 );
+$p3 = random( 0.85, 0.95, 0.01 );
+$count3 = sprintf("%.0f", $p3 * $n3);
+$p3 = $count3 / $n3;
 
 if ($random==1) {
     $s1 = 0.90;
     $s2 = 0.95;
+    $s3 = 0.99;
 } elsif ($random==2) {
-    $s1 = 0.95;
-    $s2 = 0.99;
-} else {
     $s1 = 0.99;
     $s2 = 0.90;
+    $s3 = 0.95
+} else {
+    $s1 = 0.95;
+    $s2 = 0.99;
+    $s3 = 0.90;
 }
 
 $z1 = udistr((1 - $s1)/2);
@@ -67,6 +74,11 @@ $se2 = sqrt( $p2 * (1 - $p2) / $n2);
 $lower2 = Real(sprintf("%.4f", $p2 - $z2 * $se2));
 $upper2 = Real(sprintf("%.4f", $p2 + $z2 * $se2));
 
+$z3 = udistr((1 - $s3)/2);
+$se3 = sqrt( $p3 * (1 - $p3) / $n3);
+$lower3 = Real(sprintf("%.4f", $p3 - $z3 * $se3));
+$upper3 = Real(sprintf("%.4f", $p3 + $z3 * $se3));
+
 BEGIN_TEXT
 \{BeginList( "OL", type=>"1" ) \}
 $ITEM In a survey consisting of a randomly selected national sample of $n1 teens ages
@@ -78,14 +90,29 @@ ages 13-17 in the United States who would respond that their school is helping
 them discover a career path. Give your answers to 4 decimal places.
 $PAR
 ( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+$PAR
 
-$ITEM President George W. Bush received the highest approval rating ever given to a
-president since the presidential approval polls began in the 1930s. Right after
-the September 11, 2001 terrorist attacks on New York City and Washington, he
-received an approval from $count2 respondents in the ABC news poll of $n2 randomly
-selected American adults.
+$ITEM The major polling organizations sponsored by news media periodically take
+surveys to determine how well Americans think the president is performing. The
+lowest approval rating ever given to a president since the polls began in the
+1930's was for George W. Bush. In an American Research Group poll taken in
+September 2008, during a financial crisis and wars in Iraq and Afghanistan,
+only $count2 out of $n2 randomly selected American adults gave approval.
 $PAR
 Find a \{$s2*100 \}$PERCENT confidence interval for the proportion of all American
+adults who approved of the job President Bush was doing. Give your answers to 4
+decimal places.
+$PAR
+( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+$PAR
+
+$ITEM President George W. Bush also received the highest approval rating ever given to a
+president since the presidential approval polls began in the 1930s. Right after
+the September 11, 2001 terrorist attacks on New York City and Washington, he
+received approval from $count3 respondents in the ABC news poll of $n3 randomly
+selected American adults.
+$PAR
+Find a \{$s3*100 \}$PERCENT confidence interval for the proportion of all American
 adults who approved of the job President Bush was doing. Give your answers to 4
 decimal places.
 $PAR
@@ -97,5 +124,7 @@ ANS($lower1->with(tolerance=>.001, tolType=>"absolute")->cmp);
 ANS($upper1->with(tolerance=>.001, tolType=>"absolute")->cmp);
 ANS($lower2->with(tolerance=>.001, tolType=>"absolute")->cmp);
 ANS($upper2->with(tolerance=>.001, tolType=>"absolute")->cmp);
+ANS($lower3->with(tolerance=>.001, tolType=>"absolute")->cmp);
+ANS($upper3->with(tolerance=>.001, tolType=>"absolute")->cmp);
 
 ENDDOCUMENT();

@@ -31,26 +31,51 @@ loadMacros("uwlLoadWWMacros.pl",
 # make sure we're in the context we want
 Context("Numeric");
 
+$submission = $inputs_ref->{previewAnswers};
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
 ###########################
 ## Initialization
 ###########################
+@options = ('True', 'False');
+@labels = ('a', 'b');
 
-$radio = new_multiple_choice();
-$radio2 = new_multiple_choice();
-$radio3 = new_multiple_choice();
-$radio4 = new_multiple_choice();
-
-$radio->qa( 'Always look at the data before writing the null and alternative hypothesis', 'False');
-$radio->makeLast( 'True', 'False' );
-
-$radio2->qa( 'All else being equal, using a one-sided test will result in a larger P-value than using a two-sided test.', 'False');
-$radio2->makeLast( 'True', 'False' );
-
-$radio3->qa( 'The P-value is the probability that the null hypothesis is true.', 'False');
-$radio3->makeLast( 'True', 'False' );
-
-$radio4->qa( 'A statistically significant result means the P-value is small.', 'True');
-$radio4->makeLast( 'True', 'False' );
+$radio1 = RadioButtons(
+  [@options],
+  $options[1],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
+$radio2 = RadioButtons(
+  [@options],
+  $options[1],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
+$radio3 = RadioButtons(
+  [@options],
+  $options[1],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
+$radio4 = RadioButtons(
+  [@options],
+  $options[0],
+  order => [@options],
+  labels => [@labels],
+  separator => $tab,
+);
 
 
 ###########################
@@ -60,23 +85,21 @@ TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
 
-Determine whether each statement is true of false.
-$PAR
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
-
-$PAR
-\{ $radio2->print_q() \}
-\{ $radio2->print_a() \}
-
-$PAR
-\{ $radio3->print_q() \}
-\{ $radio3->print_a() \}
-
-$PAR
-\{ $radio4->print_q() \}
-\{ $radio4->print_a() \}
-
+Determine whether each statement is true or false.
+\{BeginList("OL", type => "1")\}
+  $ITEM Always look at the data before writing the null and alternative hypothesis. $BR
+  \{ $radio1 -> buttons() \}
+  $PAR
+  $ITEM All else being equal, using a one-sided test will result in a larger
+  P-value than using a two-sided test. $BR
+  \{ $radio2 -> buttons() \}
+  $PAR
+  $ITEM The P-value is the probability that the null hypothesis is true. $BR
+  \{ $radio3 -> buttons() \}
+  $PAR
+  $ITEM A statistically significant result means the P-value is small. $BR
+  \{ $radio4 -> buttons() \}
+\{EndList("OL")\}
 END_TEXT
 Context()->normalStrings;
 
@@ -84,23 +107,16 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
-ANS( radio_cmp( $radio2->correct_ans() ) );
-ANS( radio_cmp( $radio3->correct_ans() ) );
-ANS( radio_cmp( $radio4->correct_ans() ) );
-
+ANS( $radio1->cmp() );
+ANS( $radio2->cmp() );
+ANS( $radio3->cmp() );
+ANS( $radio4->cmp() );
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.
