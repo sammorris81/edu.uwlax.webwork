@@ -52,6 +52,7 @@ $an2v = Real(sprintf("%0.4f",uprob($x3v)));
 $an1v = Real(sprintf("%.4f", -uprob($x1v) + uprob($x2v)));
 
 BEGIN_TEXT
+For each of the following questions, give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"a") \}
 $ITEM SAT math scores are scaled so that they are approximately normal, with a mean of
 $mm and a standard deviation of $sm.
@@ -79,9 +80,9 @@ Context()->normalStrings;
 ANS($an1m->with(tolerance=>1, tolType=>"Absolute")->cmp);
 ANS($an2m->with(tolerance=>1, tolType=>"Absolute")->cmp);
 
-ANS($an1v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an2v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an3v->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an1v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an2v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an3v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 
 
 ENDDOCUMENT();

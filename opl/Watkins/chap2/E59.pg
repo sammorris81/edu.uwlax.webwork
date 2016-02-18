@@ -52,7 +52,9 @@ $an7 = Real(-sprintf("%0.4f",uprob($x10))+sprintf("%0.4f",uprob($x9)))->reduce;
 
 BEGIN_TEXT
 
-Let \(z \) be a random variable with a standard normal distribution.  Find the following probabilities.
+Let \(z \) be a random variable with a standard normal distribution.  Find the
+following probabilities. $PAR
+Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"a") \}
 $ITEM \(P(z<$x1) \) = \{ans_rule(8)\}
 $ITEM \(P(z<$x2) \) = \{ans_rule(8)\}
@@ -66,13 +68,13 @@ $ITEM \(P($x9<z<$x10) \) = \{ans_rule(8)\}
 END_TEXT
 Context()->normalStrings;
 
-ANS($an1->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an2->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an3->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an4->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an5->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an6->with(tolerance=>.01, tolType=>"Absolute")->cmp);
-ANS($an7->with(tolerance=>.01, tolType=>"Absolute")->cmp);
+ANS($an1->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an2->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an3->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an4->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an5->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an6->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an7->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 
 
 ENDDOCUMENT();

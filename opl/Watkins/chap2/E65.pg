@@ -48,23 +48,26 @@ $an2 = Real(-sprintf("%0.4f",uprob($x4))+sprintf("%0.4f",uprob($x3)));
 
 BEGIN_TEXT
 
-To work as a flight attendant for United Airlines, you must be between 62 and 72 inches tall.  The heights of 20- to 29-year-old males in the United States have mean $m1 inches and standard deviation $s1 inches.  The heights of 20- to 29-year-old females in the United States have mean $m2 inches and standard deviation $s2 inches.  Both distributions are normal.
-
+To work as a flight attendant for United Airlines, you must be between 62 and
+72 inches tall.  The heights of 20- to 29-year-old males in the United States
+have mean $m1 inches and standard deviation $s1 inches.  The heights of 20- to
+29-year-old females in the United States have mean $m2 inches and standard
+deviation $s2 inches.  Both distributions are normal.
 $PAR
-Give the probability that a randomly selected male this age meets United's height limitation. \{ans_rule(8)\}
-$PAR
-Give the probability that a randomly selected female this age meets United's height limitation. \{ans_rule(8)\}
-
-
-
-
+Give your answers to 4 decimal places.
+\{BeginList("OL", type=>"a")\}
+$ITEM Give the probability that a randomly selected male this age meets United's
+height limitation. \{ans_rule(8)\}
+$ITEM Give the probability that a randomly selected female this age meets
+United's height limitation. \{ans_rule(8)\}
+\{EndList("OL")\}
 
 
 END_TEXT
 Context()->normalStrings;
 
-ANS($an1->with(tolerance=>.01)->cmp);
-ANS($an2->with(tolerance=>.01)->cmp);
+ANS($an1->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an2->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 
 
 ENDDOCUMENT();

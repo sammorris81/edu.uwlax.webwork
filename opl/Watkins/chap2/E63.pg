@@ -46,22 +46,23 @@ $an1 = Real(-sprintf("%0.4f",uprob($x1))+sprintf("%0.4f",uprob($x2)));
 
 BEGIN_TEXT
 
-SAT critical reading scores are scaled so that they are approximately normal, with a mean of $m and a standard deviation of $s.  Find the probability that a randomly selected student has an SAT critical reading score in the following ranges:
-
+SAT critical reading scores are scaled so that they are approximately normal,
+with a mean of $m and a standard deviation of $s.  Find the probability that a
+randomly selected student has an SAT critical reading score in the following ranges.
 $PAR
-Between 400 and 600: \{ans_rule(8)\}
-$PAR
-Over 700: \{ans_rule(8)\}
-$PAR
-Below 450: \{ans_rule(8)\}
-
+Give your answers to 4 decimal places.
+\{BeginList("OL, type => "a")\}
+$ITEM Between 400 and 600: \{ans_rule(8)\}
+$ITEM Over 700: \{ans_rule(8)\}
+$ITEM Below 450: \{ans_rule(8)\}
+\{EndList("OL")}
 
 END_TEXT
 Context()->normalStrings;
 
-ANS($an1->with(tolerance=>.01)->cmp);
-ANS($an2->with(tolerance=>.01)->cmp);
-ANS($an3->with(tolerance=>.01)->cmp);
+ANS($an1->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an2->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an3->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 
 
 ENDDOCUMENT();
