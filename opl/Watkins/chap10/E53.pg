@@ -36,10 +36,27 @@ Context("Numeric");
 ## Initialization
 ###########################
 
+@options = (
+  "The fraction of times the confidence interval will capture the parameter it " .
+  "is estimating in repeated use of the procedure on different samples.",
+  "The fraction of times the confidence interval will fail to capture the " .
+  "parameter it is estimating in repeated use of the procedures on different samples.",
+  "The fraction of times the confidence interval captures the sample statistic ".
+  "on which it is based.",
+  "None of the above is a good interpretation."
+);
+
+$mc = RadioButtons(
+  [@options],
+  $options[0],
+  last => [$options[3]],
+  labels => ['a', 'b', 'c', 'd'],
+);
+
 $radio = new_multiple_choice();
-$radio->qa( "Select the best answer. The confidence level measures", "the fraction of times the confidence interval will capture the parameter it is estimating in repeated use of the procedure on different samples.");
-$radio->extra( 'the fraction of times the confidence interval will fail to capture the parameter it is estimating in repeated use of the procedures on different samples.', 'the fraction of times the confidence interval captures the sample statistic on which it is based.' );
-$radio->makeLast( 'None of the above is a good interpretation.' );
+$radio->qa( "Select the best answer. The confidence level measures", "");
+$radio->extra( '', '' );
+$radio->makeLast( '' );
 
 
 ###########################
@@ -48,9 +65,9 @@ $radio->makeLast( 'None of the above is a good interpretation.' );
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
+Which of the following best describes what the confidence level of a confidence
+interval measures?
+\{$mc->buttons()\}
 
 END_TEXT
 Context()->normalStrings;
@@ -59,20 +76,14 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( $mc->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

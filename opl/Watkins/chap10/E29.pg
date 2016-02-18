@@ -35,10 +35,19 @@ Context("Numeric");
 ## Initialization
 ###########################
 
-$radio = new_multiple_choice();
-$radio->qa( "Select the best way to complete the sentence: A P-value measures...", "the probability of seeing a value of t at least as extreme as the one observed, given that the null hypothesis is true.");
-$radio->extra( 'the probability that the null hypothesis is true.', 'the probability that the null hypothesis is false.', 'the probability that an alternative hypothesis is true.');
+@options = (
+  "The probability of seeing a value of ${BITALIC}t${EITALIC} at least as extreme ".
+  "as the one observed, given that the null hypothesis is true.",
+  "The probability that the null hypothesis is true.",
+  "The probability that the null hypothesis is false.",
+  "The probability that an alternative hypothesis is true.",
+);
 
+$mc = RadioButtons(
+  [@options],
+  $options[0],
+  labels => ['a', 'b', 'c', 'd']
+);
 
 ###########################
 ## Problem Section
@@ -46,9 +55,9 @@ $radio->extra( 'the probability that the null hypothesis is true.', 'the probabi
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
+Select the best way to complete the sentence. A ${BITALIC}p${EITALIC}-value
+measures...
+\{$mc->buttons()\}
 
 END_TEXT
 Context()->normalStrings;
@@ -57,20 +66,13 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( $mc->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
-
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

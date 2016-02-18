@@ -68,21 +68,39 @@ $a4 = ($t4 < 0) ? Real(1 - $a4) : Real($a4);
 ###########################
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 0;
+BEGIN_HINT
+$BBOLD Accessing the ${BITALIC}t${EITALIC}-distribution:$EBOLD $BR
+You can use
+\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#t", "StatKey", "target='_new'")\}
+to find areas under the curve for regions of the ${BITALIC}t${EITALIC}-distribution.
+${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
+because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
+${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
+go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
+${BTT}t${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+$PAR
+When you first go to the StatKey ${BITALIC}t${EITALIC}-distribution, you will
+need to specify the appropriate degrees of freedom. To change the degrees of
+freedom, you can click on the button for ${BTT}Edit Parameters${ETT}.
+END_HINT
 
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
-Use the t-distribution to answer the following questions. Give your answers to 4 decimal places.
+$PAR
+Use the ${BITALIC}t${EITALIC}-distribution to answer the following questions. Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM Find the area in a t-distribution $side1 $t1 if the sample has
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side1 $t1 if the sample has
   size \(n = $n1\). \{ ans_rule(10) \}
-  $ITEM Find the area in a t-distribution $side2 $t2 if the sample has
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side2 $t2 if the sample has
   size \(n = $n2\). \{ ans_rule(10) \}
-  $ITEM Find the area in a t-distribution $side3 $t3 if the sample has
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side3 $t3 if the sample has
   size \(n = $n3\). \{ ans_rule(10) \}
-  $ITEM Find the area in a t-distribution $side4 $t4 if the sample has
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side4 $t4 if the sample has
   size \(n = $n4\). \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT

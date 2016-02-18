@@ -142,57 +142,59 @@ $pval2 = ($random2 == 2) ? 2 * tprob($df2, abs($t2)) : tprob($df2, abs($t2));
 $pval3 = ($random3 == 2) ? 2 * tprob($df3, abs($t3)) : tprob($df3, abs($t3));
 $pval4 = ($random4 == 2) ? 2 * tprob($df4, abs($t4)) : tprob($df4, abs($t4));
 
+@options = (" Reject \(H_0\)", " Fail to reject \(H_0\)");
+
 if ($pval1 < 0.0001) {
   $pval1 = "\( < 0.0001 \)";
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = $options[0];
 } elsif ($pval1 < 0.05) {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = $options[0];
 } else {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " b. Fail to reject \(H_0\)";
+  $correct1 = $options[1];
 }
 
 if ($pval2 < 0.0001) {
   $pval2 = "\( < 0.0001 \)";
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = $options[0];
 } elsif ($pval2 < 0.05) {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = $options[0];
 } else {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " b. Fail to reject \(H_0\)";
+  $correct2 = $options[1];
 }
 
 if ($pval3 < 0.0001) {
   $pval3 = "\( < 0.0001 \)";
-  $correct3 = " a. Reject \(H_0\)";
+  $correct3 = $options[0];
 } elsif ($pval3 < 0.05) {
   $pval3 = sprintf("%.4f", $pval3);
-  $correct3 = " a. Reject \(H_0\)";
+  $correct3 = $options[0];
 } else {
   $pval3 = sprintf("%.4f", $pval3);
-  $correct3 = " b. Fail to reject \(H_0\)";
+  $correct3 = $options[1];
 }
 
 if ($pval4 < 0.0001) {
   $pval4 = "\( < 0.0001 \)";
-  $correct4 = " a. Reject \(H_0\)";
+  $correct4 = $options[0];
 } elsif ($pval4 < 0.05) {
   $pval4 = sprintf("%.4f", $pval4);
-  $correct4 = " a. Reject \(H_0\)";
+  $correct4 = $options[0];
 } else {
   $pval4 = sprintf("%.4f", $pval4);
-  $correct4 = " b. Fail to reject \(H_0\)";
+  $correct4 = $options[1];
 }
 
-@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+@labels = ('i', 'ii');
 
 $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -200,7 +202,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -208,7 +210,7 @@ $mc3 = RadioButtons(
   [@options],
   $correct3,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -216,7 +218,7 @@ $mc4 = RadioButtons(
   [@options],
   $correct4,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
@@ -224,14 +226,23 @@ $mc4 = RadioButtons(
 ## Initialization
 ###########################
 
-
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Hypothesis test for a single mean using the CLT:$EBOLD $BR
+If you are having trouble with these questions, take a look at the
+${BITALIC}T-Test for Single Mean${EITALIC} box on p. 390 of your book.
+The decision to reject or fail to reject is the same as before. We look to see
+how the p-value compares to \(\alpha\).
+END_HINT
 
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, find the test statistic and give the appropriate
 conclusion for the hypothesis test.
 Assume the results come from a random sample, and if the sample size is small, assume

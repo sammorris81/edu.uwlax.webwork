@@ -121,19 +121,19 @@ $showPartialCorrectAnswers = 1;
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Confidence interval for a single proportion using the CLT:$EBOLD $BR
-For all confidence intervals, we start with a ${BITALIC}point estimate${ETIALIC}
+For all confidence intervals, we start with a ${BITALIC}point estimate${EITALIC}
 for the parameter, and then we add and subtract the ${BITALIC}margin of error${EITALIC}
 to find the confidence interval.
 For a single proportion,
 \{ BeginList( "UL") \}
   $ITEM The ${BITALIC}point estimate${EITALIC} for the parameter is the sample
-  proportion (\(\widehat{p}\)).
+  proportion: \(\widehat{p}\).
   $ITEM The ${BITALIC}margin or error${EITALIC} is
-  \(z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}\).
-\{ EndList("UL") \}
-We use both the point estimate and margin of error to find the confidence
-interval with the formula
+  \[z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}.\]
+  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the point
+  estimate and margin of error in the formula
 \[\widehat{p} \pm z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}.\]
+\{ EndList("UL") \}
 END_HINT
 
 ###########################

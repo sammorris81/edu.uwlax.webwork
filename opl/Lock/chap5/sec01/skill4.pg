@@ -81,7 +81,7 @@ $x6u = Real($z6u * $s6 + $m6);
 ###########################
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 ###########################
 ## Answer Section

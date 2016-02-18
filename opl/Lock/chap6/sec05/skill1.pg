@@ -86,14 +86,33 @@ $upper3 = Real($m3 + $me3);
 ## Initialization
 ###########################
 
-
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Confidence interval for a single mean using the CLT:$EBOLD $BR
+For all confidence intervals, we start with a ${BITALIC}point estimate${EITALIC}
+for the parameter, and then we add and subtract the ${BITALIC}margin of error${EITALIC}
+to find the confidence interval.
+For a single mean,
+\{ BeginList( "UL") \}
+  $ITEM The ${BITALIC}point estimate${EITALIC} for the parameter is the sample
+  average: \(\overline{x}\).
+  $ITEM The ${BITALIC}margin or error${EITALIC} is
+  \[t^* \displaystyle\frac{s}{\sqrt{n}}.\]
+  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the
+  point estimate and margin of error in the formula
+  \[\overline{x} \pm t^* \frac{s}{\sqrt{n}}.\]
+\{ EndList("UL") \}
+
+END_HINT
 
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, use the t-distribution to find a confidence interval
 for a mean \( \mu \) given the relevant sample results. Give the best point estimate
 for \(\mu\), the margin of error, and the confidence interval. Assume the

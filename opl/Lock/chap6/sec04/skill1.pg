@@ -55,33 +55,33 @@ $se2 = Real($sd2 / sqrt($n2));
 $se3 = Real($sd3 / sqrt($n3));
 
 @options = (
-  ' i. Yes',
-  ' ii. No',
+  ' Yes',
+  ' No',
 );
 
 if ($n1 >= 30) {
-  $correct1 = ' i. Yes';
+  $correct1 = ' Yes';
 } else {
-  $correct1 = ' ii. No';
+  $correct1 = ' No';
 }
 
 if ($n2 >= 30) {
-  $correct2 = ' i. Yes';
+  $correct2 = ' Yes';
 } else {
-  $correct2 = ' ii. No';
+  $correct2 = ' No';
 }
 
 if ($n3 >= 30) {
-  $correct3 = ' i. Yes';
+  $correct3 = ' Yes';
 } else {
-  $correct3 = ' ii. No';
+  $correct3 = ' No';
 }
 
 $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -89,7 +89,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -97,7 +97,7 @@ $mc3 = RadioButtons(
   [@options],
   $correct3,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -107,12 +107,22 @@ $mc3 = RadioButtons(
 
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
+
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Sampling distribution for sample means:$EBOLD $BR
+If you are having trouble with these questions, take a look at the
+${BITALIC}Central Limit Theorem for Sample Means Using the Sample Standard
+Deviation${EITALIC}
+box on p. 374 of your book.
+END_HINT
 
 ###########################
 ## Answer Section
 ###########################
 BEGIN_TEXT
+$PAR
 In the following questions, random samples of the given size are drawn from a
 population with the given mean and standard deviation. For each question, a) find
 the mean and standard error of the distribution of sample means, b) indicate

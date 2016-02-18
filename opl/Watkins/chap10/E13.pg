@@ -35,10 +35,19 @@ Context("Numeric");
 ## Initialization
 ###########################
 
-$radio = new_multiple_choice();
-$radio->qa( 'A large population of measurements has unknown mean and standard deviation. Two different random samples of 50 measurements are taken from the population. A 95$PERCENT confidence interval for the population mean is constructed for each sample. Which statement would most likely be true of these two confidence intervals ', 'None of the above is true');
-$radio->extra( 'They would have identical values for the lower and upper limits of the confidence interval', 'They would have the same margin of error','The confidence intervals would have the same center but different widths');
-$radio->makeLast('None of the above is true');
+@options = (
+  ' They would have identical values for the lower and upper limits of the confidence interval',
+  ' They would have the same margin of error',
+  ' The confidence intervals would have the same center but different widths',
+  ' None of the above is true',
+);
+
+$mc = RadioButtons(
+  [@options],
+  $options[3],
+  labels => ['a', 'b', 'c', 'd'],
+  last => [$options[3]]
+);
 
 ###########################
 ## Problem Section
@@ -46,9 +55,12 @@ $radio->makeLast('None of the above is true');
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
+A large population of measurements has unknown mean and standard deviation.
+Two different random samples of 50 measurements are taken from the population.
+A 95$PERCENT confidence interval for the population mean is constructed for each
+sample. Which statement would most likely be true of these two confidence intervals.
+$BR
+\{$mc->buttons()\}
 
 END_TEXT
 Context()->normalStrings;
@@ -57,20 +69,14 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( $mc->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -7,13 +7,13 @@
 ## DBsubject(Statistics)
 ## DBchapter(Hypothesis tests)
 ## DBsection(One sample mean - t)
-## KEYWORDS('Hypothesis test', 'Mean - t')
+## KEYWORDS('Hypothesis tests', 'Mean - t')
 ## TitleText1('Statistics: From Data to Decision')
 ## EditionText1('2')
 ## AuthorText1('Watkins, Scheaffer, Cobb')
 ## Chapter1('10')
 ## Section1('10.3')
-## Problem1('E37')
+## Problem1('E38')
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
@@ -44,20 +44,13 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$nullval=Real( random(68, 72, 0.1) );
-$n = 45;
+$nullval=Real(120);
+$n = random(11,13,1);
+$sd= random( 1.20, 1.26, .01);
+$xbar= random( 116.5, 117.5, .1);
 
-$pval = random(0.0001, 0.003, 0.0001);
-$ts = Real( sprintf("%.3f", tdistr(($n-1), (1 -$pval))));
-$pval = Real($pval);
-
-$diff = random(0.02, 0.2, 0.005);
-$xbar  = sprintf("%.3f", $nullval - $diff);
-
-$se = abs($diff / $ts);
-$sd = sprintf("%.3f", $se * sqrt($n));
-
-$ts = Real(sprintf("%.3f", ($xbar - $nullval) / ($sd/sqrt($n))));
+$ts=Real(($xbar-$nullval)/($sd/sqrt($n)));
+$pval=Real(tprob($n-1,abs($ts)));
 
 @params = ( # choices
   ' \( p \)',
@@ -90,13 +83,13 @@ $alt = RadioButtons(
 );
 
 $rejinterp = "We have statistically significant evidence to suggest that the mean ".
-             "weight of the new shipment is less than the standard.";
+             "thickness of the plates is less than the standard.";
 
 $f2rinterp = "We do not have statistically significant evidence to suggest that ".
-             "the mean weight of the new shipment is less than the standard.";
+             "the mean thickness of the plates is less than the standard.";
 
 $accinterp = "We have statistically significant evidence to suggest that the ".
-             "mean weight of the new shipment is the same as the standard.";
+             "mean thickness of the plates is the same as the standard.";
 
 @dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
 @interps     = ($rejinterp, $f2rinterp, $accinterp);
@@ -156,19 +149,16 @@ $showPartialCorrectAnswers = 1;
 
 
 BEGIN_TEXT
-Golf is big business in Florida. A supplier of golf cart batteries to major courses
-around the state was suddenly deluged by complaints that the carts he was servicing
-were running out of power after about 14 holes of golf, making high-paying patrons
-more than a little unhappy. Calling in a statistician for advice, the supplier
-agreed to a plan that called for sampling batteries from a large new shipment from
-the manufacturer to check their weight. Weight is a key factor in performance
-because the plates inside the battery are made of lead, and a decrease in the
-weight of batteries is usually a sign of a decrease in the quality of these plates.
-In a random sample of $n batteries, they found a mean of \(\overline{x} = $xbar\) and a
-standard deviation of \( s = $sd \)
+Another key feature of golf cart batteries is the thickness of the lead plates
+inside the battery, and an decrease in thickness is usually a sign of a decrease
+in the quality of the battery. The advertised standard for thickness of plates
+in these batteries was $nullval thousandths of an inch. In a random sample of $n
+batteries, they found a mean thickness of \(\overline{x} = $xbar\) and a
+standard deviation of \( s = $sd \). You may assume that the thicknesses of the
+plates are approximately normally distributed.
 $PAR
-The standard for the weight of these batteries was $nullval pounds. Should the
-supplier conclude that the mean weight of the new shipment is less than the standard?
+Should the supplier conclude that the plates are inferior with regard to mean
+thickness?
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}

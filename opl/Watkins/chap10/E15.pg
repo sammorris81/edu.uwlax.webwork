@@ -27,7 +27,7 @@ DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
-
+TEXT(beginproblem());
 # make sure we're in the context we want
 Context("Numeric");
 
@@ -35,20 +35,33 @@ Context("Numeric");
 ## Initialization
 ###########################
 
-$radio = new_multiple_choice();
-$radio->qa( "Suppose a large random sample, with n=100, is going to be taken from a population of 6-year-old girls. A 90$PERCENT confidence interval will be constructed to estimate the population mean height. A smaller random sample, with n=50, will also be taken from the same population of 6-year-old girls, and a 99$PERCENT confidence interval will be constructed to estimate the population mean height. Which confidence interval has a better chance of capturing the population's mean height?", "The 99$PERCENT confidence interval based on a sample of 50 heights has a better chance");
-$radio->extra( 'The 90$PERCENT confidence interval based on a sample of 100 heights has a better chance', 'Both methods have an equal chance');
-$radio->makeLast("You can't determine which method will have a better chance");
+@options = (
+  "The 99$PERCENT confidence interval based on a sample of 50 heights has a better chance",
+  "The 90$PERCENT confidence interval based on a sample of 100 heights has a better chance",
+  "Both methods have an equal chance",
+  "You can't determine which method will have a better chance"
+);
+
+$mc = RadioButtons(
+  [@options],
+  $options[0],
+  last => [$options[2], $options[3]],
+  labels => ['a', 'b', 'c', 'd']
+);
 
 ###########################
 ## Problem Section
 ###########################
-TEXT(beginproblem());
+
 Context()->texStrings;
 BEGIN_TEXT
-
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
+Suppose a large random sample, with n = 100, is going to be taken from a population
+of 6-year-old girls. A 90$PERCENT confidence interval will be constructed to
+estimate the population mean height. A smaller random sample, with n = 50, will
+also be taken from the same population of 6-year-old girls, and a 99$PERCENT
+confidence interval will be constructed to estimate the population mean height.
+Which confidence interval has a better chance of capturing the population's mean height?
+\{$mc->buttons()\}
 
 END_TEXT
 Context()->normalStrings;
@@ -57,20 +70,13 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
+ANS( $mc->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
-
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

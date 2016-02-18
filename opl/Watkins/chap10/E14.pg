@@ -27,43 +27,76 @@ DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
-
+TEXT(beginproblem());
 # make sure we're in the context we want
 Context("Numeric");
+
+$submission = $inputs_ref->{previewAnswers};
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
 
 ###########################
 ## Initialization
 ###########################
 
-$radio = new_multiple_choice();
-$radio->qa( "The standard deviation of the sample is increased", "increases");
-$radio->makeLast("increases", "decreases", "doesn't change");
+@options = ('increases', 'decreases', 'no change');
 
-$radio2 = new_multiple_choice();
-$radio2->qa( "The sample size is increased", "decreases");
-$radio2->makeLast("increases", "decreases", "doesn't change");
+@changes;
 
-$radio3 = new_multiple_choice();
-$radio3->qa( "The confidence level is increased", "increases");
-$radio3->makeLast("increases", "decreases", "doesn't change");
+foreach my $i (1..3) {
+  push(@changes, random(0, 1));
+}
+
+$changesd = RadioButtons(
+  [@options],
+  $options[$changes[0]],
+  order => [@options],
+  labels => ['i', 'ii', 'iii'],
+  separator => $tab,
+);
+
+$changen = RadioButtons(
+  [@options],
+  $options[(1 - $changes[1])],
+  order => [@options],
+  labels => ['i', 'ii', 'iii'],
+  separator => $tab,
+);
+
+$changeconf = RadioButtons(
+  [@options],
+  $options[$changes[2]],
+  order => [@options],
+  labels => ['i', 'ii', 'iii'],
+  separator => $tab,
+);
+
 
 ###########################
 ## Problem Section
 ###########################
-TEXT(beginproblem());
+
 Context()->texStrings;
 BEGIN_TEXT
 What happens to the margin of error if all remains the same except that:
-$PAR
-\{ $radio->print_q() \}
-\{ $radio->print_a() \}
-$PAR
-\{ $radio2->print_q() \}
-\{ $radio2->print_a() \}
-$PAR
-\{ $radio3->print_q() \}
-\{ $radio3->print_a() \}
-
+\{BeginList("OL", type=>"a")\}
+  $ITEM The standard deviaion of the sample $options[$changes[0]]: $BR
+  \{$changesd->buttons()\}
+  $PAR
+  $ITEM The sample size $options[$changes[1]]: $BR
+  \{$changen->buttons()\}
+  $PAR
+  $ITEM The confidence level $options[$changes[2]]: $BR
+  \{$changeconf->buttons()\}
+\{EndList("OL")\}
 
 END_TEXT
 Context()->normalStrings;
@@ -72,22 +105,16 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( radio_cmp( $radio->correct_ans() ) );
-ANS( radio_cmp( $radio2->correct_ans() ) );
-ANS( radio_cmp( $radio3->correct_ans() ) );
+ANS( $changesd->cmp() );
+ANS( $changen->cmp() );
+ANS( $changeconf->cmp() );
 
 
 ###########################
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

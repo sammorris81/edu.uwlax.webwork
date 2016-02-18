@@ -1,0 +1,100 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Sampling distributions)
+## DBsection(Sample proportion)
+## KEYWORDS('inference for means and proportions', 'distribution of a sample proportion')
+## TitleText1('Statistics: Unlocking the Power of Data')
+## EditionText1('1')
+## AuthorText1('Lock, Lock, Lock, Lock, Lock')
+## Chapter1('6')
+## Section1('6.1')
+## Problem1('sampling dist prop')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+$refreshCachedImages=0;
+$submission = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+# ontime arrivals (6.24)
+$p1 = random(0.75, 0.85, 0.01);
+$p2 = random(0.70, 0.80, 0.01);
+
+$n1 = random(200, 500, 50);
+$n2 = random(200, 500, 50);
+
+$se1 = Real(sqrt($p1 * (1 - $p1) / $n1));
+$se2 = Real(sqrt($p2 * (1 - $p2) / $n2));
+
+$z1 = non_zero_random(1, 2);  # looking for within interval
+$z2 = non_zero_random(-2, 2); # looking for above or below
+
+$compare = $z2 < 0 ? "below" : "above";
+
+$mag1 = sprintf("%.2f", $z1 * $se1);
+$phat2 = sprintf("%.2f", $p2 + $z2 * $se2);
+
+$z1 = sprintf("%.4f", ($mag1 - $p1) / $se1);
+$z2 = sprintf("%.4f", ($phat2 - $p2) / $se2);
+
+$prob1 = Real(uprob(-$z1) - uprob($z1));
+$prob2 = Real(uprob(abs($z2)));  # we want in the tail area
+
+###########################
+## Initialization
+###########################
+
+
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+###########################
+## Answer Section
+###########################
+BEGIN_TEXT
+Use sampling distribution for sample proportions to answer the following questions.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Suppose that \{$p1 * 100\}$PERCENT of all flights for a particular
+  airline arrive on time (defined as within 15 minutes of the scheduled
+  arrival time). How likely is it that the ontime proportion for a random
+  sample of $n1 flights will be within $mag1 of the true proportion
+  of flights that are on time? $BR
+  \{ ans_rule(10) \}
+  $ITEM The percent of free throws made in the NBA (National Basketball
+  Association) has been about \{$p2 * 100\}${PERCENT} for the last 50 years.
+  If we take a random sample of $n2, what is the probability that
+  the sample proportion will be $comare $phat2?$BR
+  \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+###########################
+## Answer Section
+###########################
+
+ANS($prob1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($prob2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+
+ENDDOCUMENT();  #This MUST be the final line of the file.

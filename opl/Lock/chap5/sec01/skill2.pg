@@ -58,7 +58,7 @@ $z6l = Real(-$z6u);
 ###########################
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 $showHint = 0;
 BEGIN_HINT

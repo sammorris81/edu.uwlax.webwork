@@ -99,7 +99,7 @@ $p2c = Real(uprob($z2cl) - uprob($z2cu));
 
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 $showHint = 0;
 BEGIN_HINT
@@ -121,7 +121,6 @@ and ${BTT}Standard deviation: 9${ETT} for a N(20, 9) distribution. $BR
 $BCENTER
 \{ image("editparams.png", width=>311, height=>177, tex_size=>500) \}
 $ECENTER
-
 END_HINT
 
 ###########################
