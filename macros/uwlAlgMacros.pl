@@ -8,20 +8,21 @@ package uwlAlgMacros;
 
 @ISA = qw(Exporter);
 
-@EXPORT_OK = qw(random_variable, random_number, add_variable_to_Context, initialize_Context,solution_addsub_move_format); 
+@EXPORT_OK = qw(random_variable, random_number, add_variable_to_Context,
+                initialize_Context, solution_addsub_move_format);
 
 ##
  # Macros for writing Solution section
  ##
-our $clt = "Combine like terms";
-our $solcol = "OrangeRed";
+$main::clt = "Combine like terms";
+$main::solcol = "OrangeRed";
 
 ##
  # Consistant formatting of MathObjects
  ##
 sub initialize_Context {
   main::Context()->texStrings();
-  main::Context()->noreduce('(-x)+y','(-x)-y');  # Formula will keep initial negatives  
+  main::Context()->noreduce('(-x)+y','(-x)-y');  # Formula will keep initial negatives
 }
 
 ##
@@ -121,7 +122,7 @@ sub solution_addsub_move_format {
       $text = $text . $var;
     }
   }
- 
+
   $move = $action . $text;
   $invop = $symbol . $text;
 
