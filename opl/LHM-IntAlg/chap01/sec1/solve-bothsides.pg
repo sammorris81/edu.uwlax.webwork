@@ -27,14 +27,15 @@ TEXT(beginproblem());
 
 #### Identify the contexts for this question
 Context("Numeric");
-Context()->texStrings;  # will automaticallly format math objexts using tex
-Context()->noreduce('(-x)+y','(-x)-y');  # Formula will keep initial negatives
+uwlAlgMacros::initialize_Context();
 
-#($var) = rserve_eval('sample(x = letters, size = 1, replace = FALSE)');
+## Set the problem variable(s)
+#$var = 'x';
 $var = uwlAlgMacros::random_variable();
-uwlAlgMacros::add_variable_to_Context(
-  variables => [$var],
-);
+uwlAlgMacros::add_variable_to_Context(variables => [$var]);
+
+$solcol = "OrangeRed";
+$clt = "Combine like terms";
 
 # @vars = uwlAlgMacros::random_variable(2);
 # uwlAlgMacros::add_variable_to_Context(
@@ -42,14 +43,9 @@ uwlAlgMacros::add_variable_to_Context(
 # );
 # Context()->variables->add($var => 'Real');
 
-#$clt = "Combine like terms";
-#$solcol = "OrangeRed";
-
 #### Build the question and get the answer
-rserve_eval('possible <- c(seq(-8, -2), seq(2, 8))
-             offsets <- c(seq(-5, -2), seq(2, 5))');
-($a,$b) = rserve_eval('sample(x = possible, size = 2, replace = FALSE)');
-($offset) = rserve_eval('sample(x = offsets, size = 1, replace = FALSE)');
+($a,$b) = uwlAlgMacros::random_number(n => 2, min => -8, max => 8, zero => FALSE, one => FALSE, replace => FALSE);
+$offset = uwlAlgMacros::random_number(n => 1, min => -5, max => 5, zero => FALSE, one => FALSE, replace => FALSE, exclude => $a);
 $x = random(3,10,1); # the answers
 $c = Compute("$a - $offset");
 $d = Compute("$offset * $x + $b");
@@ -67,8 +63,8 @@ Solve the equation \[$lhs = $rhs.\]
 $PAR
 \($var = \) \{ans_rule(15)\}
 \{
-knowlLink("Click for a hint",
-value=>'Move any term with $var to the left, and any term without $var to the right.')
+knowlLink("strategy",
+  value => 'Isolate terms with $var on the left, and terms without $var to the right.')
 \}
 END_TEXT
 
@@ -77,21 +73,8 @@ ANS($answer->cmp);
 #### Intermediate quantities to create the solution
 $h = Formula("$c $var + $e")->reduce;
 
-if ($b < 0) {
-  $moveb  = "Add " . abs($b);
-  $invopb = " + " . abs($b);
-} else {
-  $moveb  = "Subtract " . $b;
-  $invopb = " - " . $b;
-}
-
-if ($c < 0) {
-  $movec  = "Add " . abs($c) . $var;
-  $invopc = "\ + " . abs($c) . $var;
-} else {
-  $movec  = "Subtract " . $c . $var;
-  $invopc = "\ - " . $c . $var;
-}
+($moveb, $invopb) = uwlAlgMacros::solution_addsub_move_format(value => $b);
+($movec, $invopc) = uwlAlgMacros::solution_addsub_move_format(value => $c, variable => $var);
 
 #### Text for the solution
 BEGIN_SOLUTION
@@ -99,7 +82,7 @@ BEGIN_SOLUTION
 $lhs &= $rhs \\
 $lhs \color{$solcol}{$invopb} &= $rhs \color{$solcol}{$invopb} \tag*{$moveb}\\
 $a $var &= $h \tag*{$clt}\\
-$a $var {\color{$solcol}{$invopc}} &= $h {\color{$solcol}{$invopc}} \tag*{$movec} \\
+$a $var \color{$solcol}{$invopc} &= $h \color{$solcol}{$invopc} \tag*{$movec} \\
 $offset $var &= $e \tag*{$clt}\\
 \frac{$offset $var}{\color{$solcol}{$offset}} &= \frac{$e}{\color{$solcol}{$offset}} \tag*{Divide by $offset}\\
 \color{$solcol}{$var} &\color{$solcol}{=} \color{$solcol}{$answer}
