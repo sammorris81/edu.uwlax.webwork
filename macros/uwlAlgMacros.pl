@@ -9,7 +9,8 @@ package uwlAlgMacros;
 @ISA = qw(Exporter);
 
 @EXPORT_OK = qw(random_variable, random_number, add_variable_to_Context,
-                initialize_Context, solution_addsub_move_format);
+                initialize_Context, solution_addsub_move_format,
+                common_factors);
 
 ##
  # Macros for writing Solution section
@@ -85,6 +86,11 @@ sub random_number {
     my $exclude = $options{'exclude'};
     main::rserve_eval('possible <- possible[abs(possible) != ' . $exclude . ']');
   }
+
+  if (defined($options{'mult_of'})) {
+    main::rserve_eval('possible <- possible[possible %%' . $options{'mult_of'} . ' == 0]');
+  }
+
   @numbers = main::rserve_eval('sample(x = possible, size = ' . $n . ', replace = ' . $replace . ')');
 
   if ($n == 1) {
@@ -128,6 +134,15 @@ sub solution_addsub_move_format {
   $invop = $symbol . $text;
 
   return ($move, $invop);
+}
+
+sub GCD {
+  my $term1 = main::abs(shift); my $term2 = main::abs(shift);
+  @common = main::rserve_eval('library(DescTools)
+    GCD(' . $term1 . ', ' . $term2 . ')'
+  );
+
+  return @common;
 }
 
 1; #required at end of file - a perl thing
