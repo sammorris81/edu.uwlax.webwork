@@ -78,8 +78,6 @@ foreach $i (0..($giveMe-1)) {
   # update the index
   $idx = $i + 1;
 
-  $d = Compute("$offset[$i] * $x[$i] + $b[$i]");
-
   $f = Formula("$a[$i] x + $b[$i]")->reduce;
   $g = Formula("$c[$i] x + $d[$i]")->reduce;
 
