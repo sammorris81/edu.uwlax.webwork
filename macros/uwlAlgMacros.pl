@@ -16,6 +16,7 @@ package uwlAlgMacros;
  ##
 $main::clt = "Combine like terms";
 $main::solcol = "OrangeRed";
+$main::dist = "Distributive property";
 
 ##
  # Consistant formatting of MathObjects
