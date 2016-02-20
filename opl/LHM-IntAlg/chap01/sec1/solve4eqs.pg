@@ -20,6 +20,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "uwlAlgMacros.pl"
 );
 
 TEXT(beginproblem());
@@ -33,18 +34,39 @@ Context()->texStrings;  # will automatically format math objects using tex
 $giveMe = 4;
 
 ## Get the parts that will make the equations
-rserve_eval('possible <- c(seq(-8, -2), seq(2, 8))');
-@a = rserve_eval('sample(x = possible[possible > 0], size = ' . $giveMe . ', replace = FALSE)');
-@b = rserve_eval('sample(x = possible, size = ' . $giveMe . ', replace = FALSE)');
-@x = rserve_eval('sample(x = 3:10, size = ' . $giveMe . ', replace = TRUE)'); # the answers
+@a = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 8,
+  replace => "FALSE",
+);
+
+@b = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => -8,
+  max => 8,
+  zero => "FALSE",
+  one => "FALSE",
+  replace => "FALSE"
+);
+
+# the answers
+@x = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 10,
+  replace => "TRUE",
+);
+
+@c;
+foreach $i (0..($giveMe - 1)) {
+  push(@c, $a[$i] * $x[$i] + $b[$i]);
+}
 
 foreach $i (0..($giveMe-1)) {
   # update the index
   $idx = $i + 1;
   $f = Formula("$a[$i] x + $b[$i]")->reduce;  # Numeric context includes x
-
-  ## Find the RHS of equation
-  $c = Compute("$f", x => $x[$i]);  # evaluate the function to get RHS of equation
 
   ## Tell WeBWorK how to evaluate the answer that the student should enter
   $answer = Compute("$x[$i]");
@@ -52,7 +74,7 @@ foreach $i (0..($giveMe-1)) {
   #### Text for the question
   BEGIN_TEXT
   $PAR
-  $idx. Solve the equation \[$f = $c.\]
+  $idx. Solve the equation \[$f = $c[$i].\]
   $PAR
   \(x = \) \{ans_rule(15)\}
   END_TEXT
@@ -60,16 +82,18 @@ foreach $i (0..($giveMe-1)) {
   ANS($answer->cmp);
 
   ##### Intermediate quantities to create the solution
-  $d = Compute("$c - $b[$i]");
+  $d = Compute("$c[$i] - $b[$i]");
+
+  ($moveb, $invopb) = uwlAlgMacros::solution_addsub_move_format(value => $b[$i]);
 
   #### Text for the solution
   BEGIN_SOLUTION
   \begin{align}
-  $a[$i] x + $b[$i] &= $c \\
-  $a[$i] x + $b[$i] \color{green}{-$b[$i]} &= $c \color{green}{-$b[$i]} \tag*{Subtract $b[$i]}\\
-  $a[$i] x &= $d \tag*{Combine like terms}\\
-  \frac{$a[$i] x}{\color{green}{$a[$i]}} &= \frac{$d}{\color{green}{$a[$i]}} \tag*{Divide by $a[$i]}\\
-  \color{green}{x} &\color{green}{=} \color{green}{$answer}
+  $a[$i] x + $b[$i] &= $c[$i] \\
+  $a[$i] x + $b[$i] \color{$solcol}{$invopb} &= $c[$i] \color{$solcol}{$invopb} \tag*{$moveb}\\
+  $a[$i] x &= $d \tag*{$clt}\\
+  \frac{$a[$i] x}{\color{$solcol}{$a[$i]}} &= \frac{$d}{\color{$solcol}{$a[$i]}} \tag*{Divide by $a[$i]}\\
+  \color{$solcol}{x} &\color{$solcol}{=} \color{$solcol}{$answer}
   \end{align}
   END_SOLUTION
 }
