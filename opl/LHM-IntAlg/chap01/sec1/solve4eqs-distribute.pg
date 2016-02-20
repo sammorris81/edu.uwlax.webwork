@@ -1,0 +1,281 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Algebra)
+## DBchapter(Algebra of real numbers and simplying equations)
+## DBsection(Solving linear equations in one variable)
+## KEYWORDS('solving linear equations')
+## TitleText1('Intermediate Algebra')
+## EditionText1('12')
+## AuthorText1('Lial, Hornsby, McGinnis')
+## Chapter1('1')
+## Section1('1.1')
+## Problem1('Solve Equation 1')
+## Author('Sam Morris, Robert Allen')
+## Institution('University of Wisconsin-La Crosse')
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "uwlAlgMacros.pl"
+);
+
+TEXT(beginproblem());
+
+#### Identify the contexts for this question
+Context("Numeric");
+Context()->texStrings;                   # will automatically format math objects using tex
+
+#### Build the question and get the answer
+## How many different equations do we want
+$giveMe = 4;
+
+## Get the parts that will make the equations
+@a = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 8,
+  replace => "FALSE",
+);
+
+@b = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => -5,
+  max => 5,
+  zero => "FALSE",
+  one => "FALSE",
+  replace => "FALSE"
+);
+
+# the answers
+@x = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => 3,
+  max => 10,
+  replace => "TRUE",
+);
+
+@offset = uwlAlgMacros::random_number(
+  n => $giveMe,
+  min => -3,
+  max => 3,
+  zero => "FALSE",
+  one => "FALSE",
+  replace => "TRUE",
+);
+
+@c; @d; @e;
+foreach $i (0..($giveMe - 1)) {
+  push(@d, $offset[$i] * $x[$i] + $b[$i]);
+  push(@c, $a[$i] - $offset[$i]);
+  push(@e, $d[$i] - $b[$i]);
+}
+
+
+foreach $i (0..($giveMe - 1)) {
+  # update the index
+  $idx = $i + 1;
+
+  # we have form of $ax + $b = $cx + $d
+  # see if there are any common factors between a and b ; c and d to factor out
+  ($common_l) = uwlAlgMacros::GCD($a[$i], $b[$i]);
+  ($common_r) = uwlAlgMacros::GCD($c[$i], $d[$i]);
+
+  # if the greatest common factor is 1, generate a distributive coefficient
+  # and make sure that we incorporate it on both the lhs and rhs. otherwise
+  # we can just take the common factor out.
+  if ($common_l == 1 && $common_r == 1) {
+    ($dist_l, $dist_r) = uwlAlgMacros::random_number(
+      n => 2, min => 2, max => 4, replace => "FALSE"
+    );
+    $a[$i] = $a[$i] * $dist_r;
+    $b[$i] = $b[$i] * $dist_r;
+    $c[$i] = $c[$i] * $dist_l;
+    $d[$i] = $d[$i] * $dist_l;
+  } elsif ($common_l == 1 && $common_r > 1) {
+    ($dist_l) = uwlAlgMacros::random_number(
+      n => 2, min => 2, max => 4, replace => "FALSE", exclude => $common_r[0]
+    );
+    $dist_r = $common_r;
+    $c[$i] = $dist_l * $c[$i] / $dist_r;
+    $d[$i] = $dist_l * $d[$i] / $dist_r;
+  } elsif ($common_l > 1 && $common_r == 1) {
+    ($dist_r) = uwlAlgMacros::random_number(
+      n => 2, min => 2, max => 4, replace => "FALSE", exclude => $common_l[0]
+    );
+    $dist_l = $common_l;
+    $a[$i] = $dist_r * $a[$i] / $dist_l;
+    $b[$i] = $dist_r * $b[$i] / $dist_l;
+  } else {
+    $dist_l = $common_l;
+    $dist_r = $common_r;
+    $a[$i] = $a[$i] / $dist_l;
+    $b[$i] = $b[$i] / $dist_l;
+    $c[$i] = $c[$i] / $dist_r;
+    $d[$i] = $d[$i] / $dist_r;
+  }
+
+  # now generate an offset for each side of the equation
+  if ($c[$i] < 0) {
+    ($add_x) = uwlAlgMacros::random_number(
+      n => 1, min => 1, max => 5, replace => "FALSE", exclude => -$c[$i]
+    );
+  } else {
+    ($add_x) = uwlAlgMacros::random_number(
+      n => 1, min => -5, max => -1, replace => "FALSE", exclude => -$c[$i]
+    );
+  }
+
+  if ($b[$i] < 0) {
+    ($add_const) = uwlAlgMacros::random_number(
+      n => 1, min => 1, max => 5, replace => "FALSE", exclude => -$b[$i]
+    );
+  } else {
+    ($add_const) = uwlAlgMacros::random_number(
+      n => 1, min => -5, max => -1, replace => "FALSE", exclude => -$b[$i]
+    );
+  }
+
+  # equation will now be in the form
+  # $dist_l($dist_a x + $dist_b) + $add_lhs x = $dist_r($dist_c x + $dist_d) + $add_rhs
+  $dist_a  = $a[$i];
+  $dist_b  = $b[$i] + $add_const;
+  $add_lhs = $add_x * $dist_r;
+  $dist_c  = $c[$i] + $add_x;
+  $dist_d  = $d[$i];
+  $add_rhs = $add_const * $dist_l;
+
+  $lhs = Formula("$dist_l($dist_a x + $dist_b) + $add_lhs x")->reduce;
+  $rhs = Formula("$dist_r($dist_c x + $dist_d) + $add_rhs")->reduce;
+
+  ## Tell WeBWorK how to evaluate the answer that the student should enter
+  $answer = Compute("$x[$i]");
+
+  #### Text for the question
+  BEGIN_TEXT
+  $PAR
+  $idx. Solve the equation \[$lhs = $rhs.\]
+  $PAR
+  \(x = \) \{ans_rule(15)\}
+
+  END_TEXT
+
+  ANS($answer->cmp());
+
+  ##### Intermediate quantities to create the solution
+  ## Step 1: Distribute on both sides
+  if ($add_lhs < 0) {
+    $add_lhs_sol = " - " . abs($add_lhs) . "x";
+  } else {
+    $add_lhs_sol = " + " . abs($add_lhs) . "x";
+  }
+  if ($add_rhs < 0) {
+    $add_rhs_sol = " - " . abs($add_rhs);
+  } else {
+    $add_rhs_sol = " + " . abs($add_rhs);
+  }
+  $dist_l_sym = $dist_l < 0 ? " - " : " + ";
+  $dist_r_sym = $dist_r < 0 ? " - " : " + ";
+
+  if ($dist_a < 0 && $dist_b > 0) {  # we need to switch the ordering to match reduce
+    $line1lhs = "\color{$solcol}{$dist_l} ($dist_b) $dist_l_sym \color{$solcol}{$dist_l}($dist_a x) $add_lhs_sol";
+  } else {
+    $line1lhs = "\color{$solcol}{$dist_l}($dist_a x) $dist_l_sym \color{$solcol}{$dist_l} ($dist_b) $add_lhs_sol";
+  }
+
+  if ($dist_c < 0 && $dist_d > 0) {
+    $line1rhs = "\color{$solcol}{$dist_r} ($dist_d) $dist_r_sym \color{$solcol}{$dist_r}($dist_c x) $add_rhs_sol";
+  } else {
+    $line1rhs = "\color{$solcol}{$dist_r}($dist_c x) $dist_r_sym \color{$solcol}{$dist_r} ($dist_d) $add_rhs_sol";
+  }
+
+  $line1 = "$line1lhs &= $line1rhs";
+
+  ## Step 2: Multiply to simplify
+  $a_sol = $dist_l * $dist_a;
+  $a_sym = $a_sol < 0 ? " - " : " + ";
+  $b_sol = $dist_l * $dist_b;
+  $b_sym = $b_sol < 0 ? " - " : " + ";
+  $c_sol = $dist_r * $dist_c;
+  $c_sym = $c_sol < 0 ? " - " : " + ";
+  $d_sol = $dist_r * $dist_d;
+  $d_sym = $d_sol < 0 ? " - " : " + ";
+
+  if ($dist_a < 0 && $dist_b > 0) {  # order need to be switched
+    $line2lhs = "$b_sol $a_sym " . abs($a_sol) . " x $add_lhs_sol";
+  } else {
+    $line2lhs = "$a_sol x $b_sym " . abs($b_sol) . " $add_lhs_sol";
+  }
+
+  if ($dist_c < 0 && $dist_d > 0) {
+    $line2rhs = "$d_sol $c_sym " . abs($c_sol) . " x $add_rhs_sol";
+  } else {
+    $line2rhs = "$c_sol x $d_sym " . abs($d_sol) . " x $add_rhs_sol";
+  }
+
+  $line2 = "$line2lhs &= $line2rhs";
+
+  ## Step 3: Combine like terms
+  $a_sol = $a_sol + $add_lhs;
+  $line3lhs = $a_sol . " x + $b_sol";
+  $line3lhs = Formula($line3lhs)->reduce('(-x)+y' => 0, '(-x)-y' => 0);
+  $d_sol = $d_sol + $add_rhs;
+  $line3rhs = $c_sol . " x + " . $d_sol;
+  $line3rhs = Formula($line3rhs)->reduce('(-x)+y' => 0, '(-x)-y' => 0);
+  $line3 = "$line3lhs &= $line3rhs";
+
+  ## Step 4: Move b over
+  ($moveb, $invopb) = uwlAlgMacros::solution_addsub_move_format(value => $b_sol);
+  $line4lhs = "$line3lhs \color{$solcol}{$invopb}";
+  $line4rhs = "$line3rhs \color{$solcol}{$invopb}";
+  $line4 = "$line4lhs &= $line4rhs";
+
+  ## Step 5: Combine like terms
+  $line5lhs = Formula("$a_sol x")->reduce;
+  $d_sol = $d_sol - $b_sol;
+  $line5rhs = Formula("$c_sol x + $d_sol")->reduce('(-x)+y' => 0, '(-x)-y' => 0);
+  $line5 = "$line5lhs &= $line5rhs";
+
+  ## Step 6: Move c over
+  ($movec, $invopc) = uwlAlgMacros::solution_addsub_move_format(value => $c_sol);
+  $line6lhs = "$line5lhs \color{$solcol}{$invopc x}";
+  $line6rhs = "$line5rhs \color{$solcol}{$invopc x}";
+  $line6 = "$line6lhs &= $line6rhs";
+
+  ## Step 7: Combine like terms
+  $a_sol = $a_sol - $c_sol;
+  $line7lhs = Formula("$a_sol x") -> reduce;
+  $line7rhs = "$d_sol";
+  $line7 = "$line7lhs &= $line7rhs";
+
+  ## Step 8: Divide by a
+  $line8lhs = "\frac{$a_sol x}{\color{$solcol}{$a_sol}}";
+  $line8rhs = "\frac{$d_sol}{\color{$solcol}{$a_sol}}";
+  $line8 = "$line8lhs &= $line8rhs";
+
+  ## Step 9: Finally the solution
+  $line9 = "\color{$solcol}{x} &\color{$solcol}{=} \color{$solcol}{$answer}";
+
+  #### Text for the solution
+  BEGIN_SOLUTION
+  $dist_c_sol2
+  \begin{align}
+  $lhs &= $rhs \\
+  $line1 \tag*{$dist}\\
+  $line2 \tag*{Multiply}\\
+  $line3 \tag*{$clt}\\
+  $line4 \tag*{$moveb}\\
+  $line5 \tag*{$clt}\\
+  $line6 \tag*{$movec}\\
+  $line7 \tag*{$clt}\\
+  $line8 \tag*{Divide by $a_sol}\\
+  $line9
+  \end{align}
+
+  END_SOLUTION
+}
+
+ENDDOCUMENT();  #This MUST be the final line of the file.
