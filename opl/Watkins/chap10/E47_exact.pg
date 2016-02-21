@@ -13,7 +13,7 @@
 ## AuthorText1('Watkins, Scheaffer, Cobb')
 ## Chapter1('10')
 ## Section1('10.3')
-## Problem1('E46')
+## Problem1('E47')
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
@@ -32,36 +32,31 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 
 $submission = $inputs_ref->{previewAnswers};
-
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
 }
 
 Context("Numeric");
 
-$nullval=Real( random(16, 20, 0.1) );
-$n = 64;
-$quant = new DataGenUWL(
-    datatype => 'single_quant',
-    n => $n,
-    skew => 0,
-    mean => ($nullval - 1),
-    sd => 3,
-    round => 1,
-    randomsummary => 'T',
-);
-$xbar  = sprintf("%.1f", $quant->{mean});
-$sd = sprintf("%.2f", $quant->{sd});
-@x  = @{$quant->{x}};
+$n = Real(10);
+rserve_eval('x <- sample(5:10, ' . $n . ', replace = TRUE)');
+@x = rserve_eval('x');
+($xbar) = rserve_eval('mean(x)');
+($s) = rserve_eval('sd(x)');
 
-$se = $sd / sqrt($n);
+$xbar = Real($xbar);
+$s    = Real($s);
+$nullval = Real(8);
 
-$ts = Real( sprintf("%.3f", ($xbar-$nullval) / $se ));
-$pval = Real( sprintf("%.3f", (2 * tprob(($n - 1), abs($ts)) ) ) );
+$ts=Real(($xbar-$nullval)/($s/sqrt($n)));
+$pval = Real(2*tprob($n-1,abs($ts)));
+
 
 @params = ( # choices
   ' \( p \)',
@@ -75,7 +70,7 @@ $param = RadioButtons(
   ' \( \mu \)',
   order => [@params],
   labels => ['i', 'ii', 'iii', 'iv'],
-  separator => $tab
+  separator => $tab,
 );
 
 @hyps = ( # choices
@@ -93,14 +88,15 @@ $alt = RadioButtons(
     separator => $tab
 );
 
-$rejinterp = "We have significant evidence to suggest that the dean's claim is ".
-             "correct.";
+$rejinterp = "We have statistically significant evidence to suggest that highly ".
+             "trained athletes do not get an average of 8 hours of sleep per night.";
 
-$f2rinterp = "We do not have significant evidence to suggest that the dean's claim is ".
-             "correct.";
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "highly trained athletes do not get an average of 8 hours of sleep per ".
+             "night.";
 
-$accinterp = "We have significant evidence to suggest that average amount of time ".
-             "students study is $nullval hours.";
+$accinterp = "We have statistically significant evidence to suggest that highly ".
+             "trained athletes get the recommended 8 hours of sleep per night.";
 
 @dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
 @interps     = ($rejinterp, $f2rinterp, $accinterp);
@@ -159,27 +155,29 @@ $errortype = RadioButtons(
 $showPartialCorrectAnswers = 1;
 
 
-BEGIN_TEXT
 
-A book about different universities reports that the average amount of time students
-at a particular university study each week is $nullval hours. One of the deans at the
-university says that she believes that the amount of time the students study is
-different from $nullval hours. To test her claim, she asks $n randomly selected
-students how much they study and finds that the sample mean is $xbar hours, with
-a standard deviation of $sd hours.
+BEGIN_TEXT
+In a study to understand sleeping habits of highly trained athletes, a researcher
+randomly selected $n highly trained athletes and asks each one how many hours of
+sleep he or she gets each night. The results are given below $PAR
+$BCENTER
+\{join("$tab", @x) \}
+$ECENTER
 $PAR
-Do the data suggest that the dean is correct?
+Assuming that sleep times are normally distributed, is there evidence to suggest
+that the average hours of sleep for highly trained athletes differs from the
+generally recommended average of 8 hours of sleep per night.
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the parameter of interest? $BR
-  \{ $param->buttons( separator => "") \}
+  \{ $param->buttons( ) \}
   $PAR
   $ITEM What is the correct null value for this test? $BR
   \{ ans_rule(10) \}
   $PAR
   $ITEM What sign should appear in the alternative hypothesis? $BR
-  \{ $alt -> buttons( separator => "" ) \}
+  \{ $alt -> buttons( ) \}
   $PAR
   $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
   $PAR
@@ -206,6 +204,5 @@ ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp());
 ANS($mcdec->cmp());
 ANS($mcinterp->cmp());
 ANS($errortype->cmp());
-
 
 ENDDOCUMENT();

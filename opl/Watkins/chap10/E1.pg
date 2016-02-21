@@ -31,13 +31,14 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 
 $submission = $inputs_ref->{previewAnswers};
-
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
 }
 
 Context("Numeric");
@@ -147,7 +148,7 @@ pages were judged for readability, using standard readability tests. The reading
 grade levels are given below.
 $extrasep
 $BCENTER
-\{ join(", ", @x3) \}
+\{ join("$tab", @x3) \}
 $ECENTER
 $extrasep
 Construct a \{$s3 * 100\}$PERCENT confidence interval for the population mean
@@ -161,7 +162,7 @@ They bought $n4 bags during two different time periods on two consecutive days
 at the same Burger King and weighed the fries. The results are shown below.
 $extrasep
 $BCENTER
-\{ join(", ", @x4) \}
+\{ join("$tab", @x4) \}
 $ECENTER
 $extrasep
 Find a \{ $s4 * 100 \}$PERCENT confidence interval for the population mean

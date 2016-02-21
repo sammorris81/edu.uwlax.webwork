@@ -37,11 +37,11 @@ Context("Numeric");
 ###########################
 
 @options = (
-  "The fraction of times the confidence interval will capture the parameter it " .
+  "The proportion of times the confidence interval will capture the parameter it " .
   "is estimating in repeated use of the procedure on different samples.",
-  "The fraction of times the confidence interval will fail to capture the " .
+  "The proportion of times the confidence interval will fail to capture the " .
   "parameter it is estimating in repeated use of the procedures on different samples.",
-  "The fraction of times the confidence interval captures the sample statistic ".
+  "The proportion of times the confidence interval captures the sample statistic ".
   "on which it is based.",
   "None of the above is a good interpretation."
 );
@@ -52,12 +52,6 @@ $mc = RadioButtons(
   last => [$options[3]],
   labels => ['a', 'b', 'c', 'd'],
 );
-
-$radio = new_multiple_choice();
-$radio->qa( "Select the best answer. The confidence level measures", "");
-$radio->extra( '', '' );
-$radio->makeLast( '' );
-
 
 ###########################
 ## Problem Section
