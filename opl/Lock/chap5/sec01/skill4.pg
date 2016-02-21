@@ -94,8 +94,8 @@ Give your answers to 3 decimal places.
   $ITEM What \(x\) has $area2 to the left of it in a N($m2, $s2) distribution? \(x = \) \{ ans_rule(10) \}
   $ITEM What \(x\) has $area3 to the right of it in a N($m3, $s3) distribution? \(x = \) \{ ans_rule(10) \}
   $ITEM What \(x\) has $area4 to the right of it in a N($m4, $s4) distribution? \(x = \) \{ ans_rule(10) \}
-  $ITEM What interval covers $area5 in a N($m5, $s5) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
-  $ITEM What interval covers $area6 in a N($m6, $s6) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area5 in a N($m5, $s5) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area6 in a N($m6, $s6) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
 \{ EndList( "OL") \}
 END_TEXT
 ###########################
