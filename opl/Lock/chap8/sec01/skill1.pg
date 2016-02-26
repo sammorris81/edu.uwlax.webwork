@@ -113,8 +113,8 @@ if ($pval2 < 0.0001) {
 
 
 @options = (
-  " i. Reject \( H_0 \)",
-  " ii. Do not reject \( H_0 \)",
+  " Reject \( H_0 \)",
+  " Do not reject \( H_0 \)",
 );
 
 if ($pval1 < 0.05) {
@@ -127,7 +127,7 @@ $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -141,7 +141,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 

@@ -119,7 +119,7 @@ $output3 = QuantitativeUWL::simpRegTable(
   xlab => "Score",
 );
 
-@options = (' a. Reject \(H_0\)', ' b. Do not reject \(H_0\)');
+@options = (' Reject \(H_0\)', ' Do not reject \(H_0\)');
 $correct1 = ($b1pval1 < 0.05) ? $options[0] : $options[1];
 $correct2 = ($b1pval2 < 0.05) ? $options[0] : $options[1];
 $correct3 = ($b1pval3 < 0.05) ? $options[0] : $options[1];
@@ -128,7 +128,7 @@ $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['a', 'b'],
   separator => $tab,
 );
 
@@ -136,7 +136,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['a', 'b'],
   separator => $tab,
 );
 
@@ -144,7 +144,7 @@ $mc3 = RadioButtons(
   [@options],
   $correct3,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['a', 'b'],
   separator => $tab,
 );
 

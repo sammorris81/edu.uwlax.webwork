@@ -81,7 +81,7 @@ $ciupper2 = Real($yhat2 + $cime2);
 $pilower2 = Real($yhat2 - $pime2);
 $piupper2 = Real($yhat2 + $pime2);
 
-@options = (' a. Confidence Interval', ' b. Prediction Interval');
+@options = (' Confidence Interval', ' Prediction Interval');
 $correct1 = $options[1];
 $correct2 = $options[1];
 
@@ -89,7 +89,7 @@ $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['a', 'b'],
   separator => $tab,
 );
 
@@ -97,7 +97,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['a', 'b'],
   separator => $tab,
 );
 

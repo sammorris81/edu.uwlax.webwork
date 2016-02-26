@@ -49,11 +49,6 @@ $paorb = Real($pa + $pb - $paandb);
 $paifb = Real($paandb / $pb);
 $pbifa = Real($paandb / $pa);
 
-@options = (
-  ' i. Yes',
-  ' ii. No',
-);
-
 $showHint = 3;
 BEGIN_HINT
 To get started on this question, it may be helpful to know the following fact.

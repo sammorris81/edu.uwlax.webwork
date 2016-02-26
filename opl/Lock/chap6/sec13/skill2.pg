@@ -96,33 +96,33 @@ $pval2 = ($random2 == 2) ? 2 * tprob($df2, abs($t2)) : tprob($df2, abs($t2));
 
 if ($pval1 < 0.0001) {
   $pval1 = "\( < 0.0001 \)";
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = " Reject \(H_0\)";
 } elsif ($pval1 < 0.05) {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = " Reject \(H_0\)";
 } else {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " b. Fail to reject \(H_0\)";
+  $correct1 = " Fail to reject \(H_0\)";
 }
 
 if ($pval2 < 0.0001) {
   $pval2 = "\( < 0.0001 \)";
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = " Reject \(H_0\)";
 } elsif ($pval2 < 0.05) {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = " Reject \(H_0\)";
 } else {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " b. Fail to reject \(H_0\)";
+  $correct2 = " Fail to reject \(H_0\)";
 }
 
-@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+@options = (" Reject \(H_0\)", " Fail to reject \(H_0\)");
 
 $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -130,7 +130,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -140,16 +140,15 @@ $mc2 = RadioButtons(
 
 
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 $showHint = 3;
 BEGIN_HINT
-$BBOLD Test statistic:$EBOLD $BR
-The formula for the test statistic for a hypothesis test for a difference in
-means with paired datais given by
-$BCENTER
-\(t = \displaystyle \frac{\overline{x}_d}{s_d / \sqrt{n_d}}\)
-$ECENTER
+$BBOLD Hypothesis test for an average of differences using the CLT:$EBOLD $BR
+If you are having trouble with these questions, take a look at the
+${BITALIC}Inference for a Difference in Means with Paired Data${EITALIC} box on
+p. 430 of your book. The decision to reject or fail to reject is the same as
+before. We look to see how the p-value compares to \(\alpha\).
 END_HINT
 
 ###########################

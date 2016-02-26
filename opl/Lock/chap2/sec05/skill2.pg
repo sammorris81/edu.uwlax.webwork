@@ -39,30 +39,30 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 @vartype = ( # choices
-  ' a. Negative',
-  ' b. Positive'
+  ' Negative',
+  ' Positive'
 );
 
 $exercisea = 'Size of a house and Cost to heat the house';
-$correcta = ' b. Positive';
+$correcta = ' Positive';
 
 $exerciseb = 'Distance driven since the last fill-up of the gas tank and Amount '.
              'of gas left in the tank';
-$correctb = ' a. Negative';
+$correctb = ' Negative';
 
 $exercisec = 'Outside temperature and Amount of clothes worn';
-$correctc = ' b. Positive';
+$correctc = ' Positive';
 
 $exercised = 'Number of text messages sent on a cell phone and Number of text '.
              'messages received on the phone';
-$correctd = ' b. Positive';
+$correctd = ' Positive';
 
 $exercisee = 'Number of people in a square mile and Number of trees in the square '.
              'mile';
-$correcte = ' a. Negative';
+$correcte = ' Negative';
 
 $exercisef = 'Amount of time spent studying and Grade on the exam';
-$correctf = ' b. Positive';
+$correctf = ' Positive';
 
 ###########################
 ## Initialization
@@ -106,14 +106,14 @@ $mc1 = RadioButtons(
  [@vartype],
  $right1,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 $mc2 = RadioButtons(
  [@vartype],
  $right2,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 Context()->normalStrings;

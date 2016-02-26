@@ -101,7 +101,7 @@ $p2c = Real(uprob($z2cl) - uprob($z2cu));
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-$showHint = 0;
+$showHint = -1;
 BEGIN_HINT
 $BBOLD Accessing the normal distribution:$EBOLD $BR
 You can use

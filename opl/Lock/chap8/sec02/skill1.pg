@@ -113,10 +113,10 @@ if ($pval2 < 0.0001) {
 }
 
 @options = (
-  " a. Yes, we rejected \( H_0 \)",
-  " b. Yes, we failed to reject \( H_0 \)",
-  " c. No, we rejected \( H_0 \)",
-  " d. No, we failed to reject \( H_0 \)",
+  " Yes, we rejected \( H_0 \)",
+  " Yes, we failed to reject \( H_0 \)",
+  " No, we rejected \( H_0 \)",
+  " No, we failed to reject \( H_0 \)",
 );
 
 if ($pval1 < 0.05) {
@@ -129,7 +129,7 @@ $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.', 'c.', 'd.'],
+  labels => ['i', 'ii', 'iii', 'iv'],
 );
 
 if ($pval2 < 0.05) {
@@ -142,7 +142,7 @@ $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.', 'c.', 'd.'],
+  labels => ['i', 'ii', 'iii', 'iv'],
 );
 
 $showHint = 3;

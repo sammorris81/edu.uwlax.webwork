@@ -56,23 +56,23 @@ $paifb = Real($paandb / $pb);
 $pbifa = Real($paandb / $pa);
 
 @options = (
-  ' i. Yes',
-  ' ii. No',
+  ' Yes',
+  ' No',
 );
 
 $mcdis = RadioButtons(
   [@options],
-  ' ii. No',
+  ' No',
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
 $mcind = RadioButtons(
   [@options],
-  ' ii. No',
+  ' No',
   order => [@options],
-  labels => ['i.', 'ii.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
