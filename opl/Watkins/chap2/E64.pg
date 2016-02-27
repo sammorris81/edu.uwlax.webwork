@@ -31,25 +31,38 @@ $showPartialCorrectAnswers = 1;
 
 Context("Numeric");
 
-$mm=random(485,520,1);
-$sm=random(100,130,1);
-$p1m=random(20,35,1);
-$p2m=random(10,19,1);
-$v1m=udistr($p1m / 100);
-$an1m=Real(sprintf("%.2f", $v1m * $sm + $mm));
-$v2m=udistr($p2m / 100);
-$an2m=Real(sprintf("%.2f", $v2m * $sm + $mm));
+$mm = random(485, 520, 1);
+$sm = random(100, 130, 1);
+$p1m = random(20, 35, 1);
+$p2m = random(10, 19, 1);
+$v1m = udistr($p1m / 100);
+$an1m = Real(sprintf("%.2f", $v1m * $sm + $mm));
+$v2m = udistr($p2m / 100);
+$an2m = Real(sprintf("%.2f", $v2m * $sm + $mm));
 
-$mv=random(485,520,1);
-$sv=random(100,130,1);
-$x1v=sprintf("%0.2f",(600-$mv)/$sv);
-$x2v=sprintf("%0.2f",(400-$mv)/$sv);
-$x3v=sprintf("%0.2f",(700-$mv)/$sv);
-$x4v=sprintf("%0.2f",(450-$mv)/$sv);
+$mv = random(485, 520, 1);
+$sv = random(100, 130, 1);
+$x1v = sprintf("%0.2f", (600 - $mv) / $sv);
+$x2v = sprintf("%0.2f", (400 - $mv) / $sv);
+$x3v = sprintf("%0.2f", (700 - $mv) / $sv);
+$x4v = sprintf("%0.2f", (450 - $mv) / $sv);
 
-$an3v = Real(1-sprintf("%0.4f",uprob($x4v)));
-$an2v = Real(sprintf("%0.4f",uprob($x3v)));
-$an1v = Real(sprintf("%.4f", -uprob($x1v) + uprob($x2v)));
+$x1act = Real((600 - $mv) / $sv);
+$x2act = Real((400 - $mv) / $sv);
+$x3act = Real((700 - $mv) / $sv);
+$x4act = Real((450 - $mv) / $sv);
+
+$an1v = Real(sprintf("%.4f", uprob($x2v) - uprob($x1v)));
+$an1vact = Real(sprintf("%.4f", uprob($x2act) - uprob($x1act)));
+$an1tol = max(0.001, abs($an1v - $an1vact));
+
+$an2v = Real(sprintf("%0.4f", uprob($x3v)));
+$an2vact = Real(sprintf("%.4f", uprob($x3act)));
+$an2tol = max(0.001, abs($an2v - $an2vact));
+
+$an3v = Real(1 - sprintf("%0.4f", uprob($x4v)));
+$an3vact = Real(sprintf("%.4f", 1 - uprob($x4act)));
+$an3tol = max(0.001, abs($an3v - $an3vact));
 
 BEGIN_TEXT
 For each of the following questions, give your answers to 4 decimal places.
@@ -80,9 +93,8 @@ Context()->normalStrings;
 ANS($an1m->with(tolerance=>1, tolType=>"Absolute")->cmp);
 ANS($an2m->with(tolerance=>1, tolType=>"Absolute")->cmp);
 
-ANS($an1v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
-ANS($an2v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
-ANS($an3v->with(tolerance=>.001, tolType=>"Absolute")->cmp);
-
+ANS($an1vact->with(tolerance=>$an1tol, tolType=>"Absolute")->cmp);
+ANS($an2vact->with(tolerance=>$an2tol, tolType=>"Absolute")->cmp);
+ANS($an3vact->with(tolerance=>$an3tol, tolType=>"Absolute")->cmp);
 
 ENDDOCUMENT();
