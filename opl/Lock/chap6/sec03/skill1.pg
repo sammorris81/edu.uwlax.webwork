@@ -150,10 +150,10 @@ $z3u = Real(($p3u - $nullp3) / sqrt($nullp3 * (1 - $nullp3) / $n3));
 $z4l = Real(($p4l - $nullp4) / sqrt($nullp4 * (1 - $nullp4) / $n4));
 $z4u = Real(($p4u - $nullp4) / sqrt($nullp4 * (1 - $nullp4) / $n4));
 
-$tol1 = max(abs($z1 - $z1l), abs($z1 - $z1u)) + 0.001;
-$tol2 = max(abs($z2 - $z2l), abs($z2 - $z2u)) + 0.001;
-$tol3 = max(abs($z3 - $z3l), abs($z3 - $z3u)) + 0.001;
-$tol4 = max(abs($z4 - $z4l), abs($z4 - $z4u)) + 0.001;
+$tol1 = max(max(abs($z1 - $z1l), abs($z1 - $z1u)) + 0.001, 0.01);
+$tol2 = max(max(abs($z2 - $z2l), abs($z2 - $z2u)) + 0.001, 0.01);
+$tol3 = max(max(abs($z3 - $z3l), abs($z3 - $z3u)) + 0.001, 0.01);
+$tol4 = max(max(abs($z4 - $z4l), abs($z4 - $z4u)) + 0.001, 0.01);
 
 $pval1 = ($random1 == 2) ? 2 * uprob(abs($z1)) : uprob(abs($z1));
 $pval2 = ($random2 == 2) ? 2 * uprob(abs($z2)) : uprob(abs($z2));

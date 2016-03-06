@@ -48,19 +48,39 @@ $n2 = random(200, 500, 50);
 $se1 = Real(sqrt($p1 * (1 - $p1) / $n1));
 $se2 = Real(sqrt($p2 * (1 - $p2) / $n2));
 
+$se1low = floor($se1 * 1000) / 1000;
+$se1high = ceil($se1 * 1000) / 1000;
+$se2low = floor($se2 * 1000) / 1000;
+$se2high = ceil($se2 * 1000) / 1000;
+
 $z1 = non_zero_random(1, 2);  # looking for within interval
 $z2 = non_zero_random(-2, 2); # looking for above or below
 
-$compare = $z2 < 0 ? "below" : "above";
+$compare = $z2 < 0 ? "at most" : "at least";
 
 $mag1 = sprintf("%.2f", $z1 * $se1);
 $phat2 = sprintf("%.2f", $p2 + $z2 * $se2);
 
-$z1 = sprintf("%.4f", ($mag1 - $p1) / $se1);
+$z1 = sprintf("%.4f", $mag1 / $se1);
 $z2 = sprintf("%.4f", ($phat2 - $p2) / $se2);
+
+$z1low = sprintf("%.4f", $mag1 / $se1low);
+$z1high = sprintf("%.4f", $mag1 / $se1high);
+$z2low = sprintf("%.4f", ($phat2 - $p2) / $se2low);
+$z2high = sprintf("%.4f", ($phat2 - $p2) / $se2high);
 
 $prob1 = Real(uprob(-$z1) - uprob($z1));
 $prob2 = Real(uprob(abs($z2)));  # we want in the tail area
+
+$prob1low = Real(uprob(-$z1low) - uprob($z1low));
+$prob1high = Real(uprob(-$z1high) - uprob($z1high));
+$prob2low = Real(uprob(abs($z2low)));  # we want in the tail area
+$prob2high = Real(uprob(abs($z2high)));  # we want in the tail area
+
+$prob1mid = Real(($prob1high + $prob1low) / 2);
+$prob1tol = Real(max(abs($prob1high - $prob1low) / 2, 0.001));
+$prob2mid = Real(($prob2high + $prob2low) / 2);
+$prob2tol = Real(max(abs($prob2high - $prob2low) / 2, 0.001));
 
 ###########################
 ## Initialization
@@ -86,7 +106,7 @@ Give your answers to 4 decimal places.
   $ITEM The percent of free throws made in the NBA (National Basketball
   Association) has been about \{$p2 * 100\}${PERCENT} for the last 50 years.
   If we take a random sample of $n2, what is the probability that
-  the sample proportion will be $comare $phat2?$BR
+  the sample proportion will be $compare $phat2?$BR
   \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
@@ -94,7 +114,7 @@ END_TEXT
 ## Answer Section
 ###########################
 
-ANS($prob1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($prob2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($prob1mid->with(tolerance=>$prob1tol, tolType=>"Absolute")->cmp());
+ANS($prob2mid->with(tolerance=>$prob2tol, tolType=>"Absolute")->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

@@ -70,7 +70,7 @@ $a4 = ($t4 < 0) ? Real(1 - $a4) : Real($a4);
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-$showHint = 0;
+$showHint = -1;
 BEGIN_HINT
 $BBOLD Accessing the ${BITALIC}t${EITALIC}-distribution:$EBOLD $BR
 You can use

@@ -31,20 +31,39 @@ $showPartialCorrectAnswers = 1;
 
 Context("Numeric");
 
-$m1=random(68,72,.1);
-$s1=random(2,4,.1);
-$m2=random(63,67,.1);
-$s2=random(2,3,.1);
+$m1 = random(68, 72, .1);
+$s1 = random(2, 4, .1);
+$m2 = random(63, 67, .1);
+$s2 = random(2, 3, .1);
 
-$x1=sprintf("%0.2f",(62-$m1)/$s1);
-$x2=sprintf("%0.2f",(72-$m1)/$s1);
-$x3=sprintf("%0.2f",(62-$m2)/$s2);
-$x4=sprintf("%0.2f",(72-$m2)/$s2);
+$x1 = (62 - $m1) / $s1;
+$x2 = (72 - $m1) / $s1;
+$x3 = (62 - $m2) / $s2;
+$x4 = (72 - $m2) / $s2;
 
 $an1 = Real(-sprintf("%0.4f",uprob($x2))+sprintf("%0.4f",uprob($x1)));
 $an2 = Real(-sprintf("%0.4f",uprob($x4))+sprintf("%0.4f",uprob($x3)));
 
+$x1low = floor($x1 * 100) / 100;
+$x1high = ceil($x1 * 100) / 100;
+$x2low = floor($x2 * 100) / 100;
+$x2high = ceil($x2 * 100) / 100;
+$x3low = floor($x3 * 100) / 100;
+$x3high = ceil($x3 * 100) / 100;
+$x4low = floor($x4 * 100) / 100;
+$x4high = ceil($x4 * 100) / 100;
 
+$an1low = Real(sprintf("%0.4f",uprob($x1high)) - sprintf("%0.4f",uprob($x2low)));
+$an1high = Real(sprintf("%0.4f",uprob($x1low)) - sprintf("%0.4f",uprob($x2high)));
+
+$an2low = Real(sprintf("%0.4f",uprob($x3high)) - sprintf("%0.4f",uprob($x4low)));
+$an2high = Real(sprintf("%0.4f",uprob($x3low)) - sprintf("%0.4f",uprob($x4high)));
+
+$an1mid = Real(($an1low + $an1high) / 2);
+$an2mid = Real(($an2low + $an2high) / 2);
+
+$an1tol = Real(max(abs(($an1low - $an1high) / 2), 0.001));
+$an2tol = Real(max(abs(($an2low - $an2high) / 2), 0.001));
 
 BEGIN_TEXT
 
@@ -66,8 +85,8 @@ United's height limitation. \{ans_rule(8)\}
 END_TEXT
 Context()->normalStrings;
 
-ANS($an1->with(tolerance=>.001, tolType=>"Absolute")->cmp);
-ANS($an2->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($an1mid->with(tolerance=>$an1tol, tolType=>"Absolute")->cmp);
+ANS($an2mid->with(tolerance=>$an2tol, tolType=>"Absolute")->cmp);
 
 
 ENDDOCUMENT();

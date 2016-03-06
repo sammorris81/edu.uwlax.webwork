@@ -68,7 +68,10 @@ $se = sqrt($nullval * (1 - $nullval) / $n);
 
 $ts = Real( sprintf("%.4f", ($p - $nullval) / $se) );
 
-$pval = Real(2 * uprob(abs(sprintf("%0.2f",$ts))));
+$pval_table = Real(2 * uprob(abs(sprintf("%0.2f",$ts))));
+$pval = Real(2 * uprob(abs($ts)));
+$pvaltol = Real(max(abs($pval - $pval_table), 0.001));
+
 $pvalans = Real( sprintf("%0.4f",$pval) );
 
 $rejinterp = "We have statistically significant evidence that the proportion of ".
@@ -170,7 +173,7 @@ END_TEXT
 ANS($nullval->with(tolerance=>0, tolType=>"Absolute")->cmp);
 ANS( $alt->cmp() );
 ANS($ts->with(tolerance=>.001, tolType=>"Absolute")->cmp);
-ANS( $pvalans->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS( $pvalans->with(tolerance=>$pvaltol, tolType=>"Absolute")->cmp);
 ANS($mcdec->cmp());
 ANS($mcinterp->cmp());
 ANS($errortype->cmp());
