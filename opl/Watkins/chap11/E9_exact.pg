@@ -1,0 +1,255 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Independent samples - t)
+## KEYWORDS('Hypothesis test', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('E9')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$submission = $inputs_ref->{previewAnswers};
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+
+$f = random( 1, 3, 1 );
+
+$n1 = Real( 5 );
+$n2 = Real( 5 );
+@a; @b;
+for my $i (1..$n1){
+    push(@a, sprintf("%.3f", random( 9.238, 9.3, 0.001 )));
+    push(@b, sprintf("%.3f", random( 9.2, 9.3, 0.001)));
+}
+
+$m1 = usefulstatUWL::mean(@a);
+$m2 = usefulstatUWL::mean(@b);
+$sd1 = usefulstatUWL::sd(@a);
+$sd2 = usefulstatUWL::sd(@b);
+
+if ($f == 1) {
+  $s = Real( .90 );
+  $alpha = sprintf("%.2f", 0.10);
+} elsif ($f == 2) {
+  $s = Real( .95 );
+  $alpha = sprintf("%.2f", 0.05);
+} elsif ($f == 3) {
+  $s = Real( .99 );
+  $alpha = sprintf("%.2f", 0.01)
+}
+
+$se = sqrt($sd1**2 / $n1 + $sd2**2 / $n2);
+
+# workaround for no partial degrees of freedom
+# basically take the
+$df = (($sd1**2 / $n1) + ($sd2**2 / $n2))**2 / (
+    ($sd1**4 / ($n1**2 * ($n1 - 1))) + ($sd2**4 / ($n2**2 * ($n2 - 1)))
+);
+
+
+($tstar) = rserve_eval('abs(qt((1 - ' . $s . ') / 2, df = ' . $df . '))');
+
+$lower = Real(sprintf("%.3f", ($m1 - $m2) - $tstar * $se));
+
+$upper = Real(sprintf("%.3f", ($m1 - $m2) + $tstar * $se));
+
+$nullval = Real(0);
+$ts = Real(sprintf("%.3f", ($m1 - $m2) / $se));
+
+($pval) = rserve_eval('pt(' . $ts .', df = ' . $df . ', lower.tail = FALSE)');
+$pval = Real(sprintf("%.3f", $pval));
+
+@params = ( # choices
+  ' \( p \)',
+  ' \( \mu \)',
+  ' \( p_1 - p_2 \)',
+  ' \( \mu_1 - \mu_2 \)',
+  ' \( \mu_d \)',
+);
+
+$param = RadioButtons(
+  [@params],
+  ' \( \mu_1 - \mu_2 \)',
+  order => [@params],
+  labels => ['i', 'ii', 'iii', 'iv', 'v'],
+);
+
+@hyps = ( # choices
+  ' \( = \)',
+  ' \( < \)',
+  ' \( > \)',
+  ' \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' \( > \)',
+    order => [@hyps],
+    labels => ['i', 'ii', 'iii', 'iv'],
+    separator => $tab,
+);
+
+$rejinterp = "We have statistically significant evidence to suggest that the ".
+             "average heat flow is lower in period 2 than 1.";
+
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "the average heat flow is lower in period 2 than 1.";
+
+$accinterp = "We have statistically significant evidence to suggest that the ".
+             "average heat flow is the same in period 2 and period 1.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+
+BEGIN_TEXT
+Heat flow is the passage of thermal energy from a hot to a cold body. This
+phenomenon is of particular interest to engineers, who attempt to understand and
+control the flow of heat through the use of thermal insulation and other devices.
+The data below were taken from heat flow gauge readings for an industrial process
+over 10 equally spaced time intervals. A concern is that the process may be cooling
+down as time progresses. One way to check this statistically is to compare the
+measurements for the first 5 time periods to the measurements for the last 5 time
+periods.
+$PAR
+You may assume that heat flow is approximately normal for each group.
+$PAR
+Time period 1 (Group 1): \{ join(", ", @a) \}
+$BR
+Time period 2 (Group 2): \{ join(", ", @b) \}
+$PAR
+Unless otherwise stated, give your answers to three decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Construct a \{$s * 100\}$PERCENT confidence interval for the difference in
+  mean heat flow. Give your answers to three decimal places. $BR
+  ( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+  $PAR
+  $ITEM Conduct a hypothesis test to determine whether the average heat flow is
+  higher in period 1 than period 2.
+  \{ BeginList( "OL", type=>"a") \}
+    $PAR
+    $ITEM What is the parameter of interest? $BR
+    \{ $param->buttons( separator => "") \}
+    $PAR
+    $ITEM What is the correct null value for this test? \{ ans_rule(10) \}
+    $PAR
+    $ITEM What sign should appear in the alternative hypothesis? $BR
+    \{ $alt -> buttons( separator => "" ) \}
+    $PAR
+    $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
+    $PAR
+    $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+    enter 0)
+    $PAR
+    $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+    \{ $mcdec -> buttons() \} $PAR
+    $ITEM Select the appropriate interpretation for this hypothesis test
+    (use \(\alpha = $alpha\)). $BR
+    \{ $mcinterp -> buttons() \} $PAR
+    $ITEM If an error had been made on this test, what kind of error would it have been?
+    $BR
+    \{ $errortype -> buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($lower->with(tolerance=>0.01, tolType=>"absolute")->cmp);
+ANS($upper->with(tolerance=>0.01, tolType=>"absolute")->cmp);
+ANS($param->cmp());
+ANS($nullval->with(tolerance=>0, tolType=>"absolute")->cmp());
+ANS($alt->cmp());
+ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($pval->with(tolerance=>0.01, tolType=>"absolute")->cmp);
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+
+
+ENDDOCUMENT();

@@ -1,0 +1,176 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Paired samples)
+## KEYWORDS('Hypothesis test', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.3')
+## Problem1('E31')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+Context("Numeric");
+$x1= Real( 31.25 );
+$x2= Real( 26.63 );
+$x3= Real( 24.87 );
+$x4= Real( 28.75 );
+$x5= Real( 28.63 );
+$x6= Real( 30.63 );
+$x7= Real( 24 );
+$x8= Real( 30.12 );
+$x9= Real( 25.13 );
+
+$y1= Real( 33.12 );
+$y2= Real( 26 );
+$y3= Real( 26.13 );
+$y4= Real( 29.63 );
+$y5= Real( 28.37 );
+$y6= Real( 31.25 );
+$y7= Real( 25.5 );
+$y8= Real( 28.5 );
+$y9= Real( 27 );
+
+$c1= Real( 31.25 );
+$c2= Real( 25.87 );
+$c3= Real( 23.75 );
+$c4= Real( 29.87 );
+$c5= Real( 24.5 );
+$c6= Real( 29.37 );
+$c7= Real( 23.87 );
+$c8= Real( 27.87 );
+$c9= Real( 24.63 );
+
+$n = Real(9);
+
+$z1 = Real( $x1-$y1 );
+$z2 = Real( $x2-$y2 );
+$z3 = Real( $x3-$y3 );
+$z4 = Real( $x4-$y4 );
+$z5 = Real( $x5-$y5 );
+$z6 = Real( $x6-$y6 );
+$z7 = Real( $x7-$y7 );
+$z8 = Real( $x8-$y8 );
+$z9 = Real( $x9-$y9 );
+
+$b1 = Real( $y1-$c1 );
+$b2 = Real( $y2-$c2 );
+$b3 = Real( $y3-$c3 );
+$b4 = Real( $y4-$c4 );
+$b5 = Real( $y5-$c5 );
+$b6 = Real( $y6-$c6 );
+$b7 = Real( $y7-$c7 );
+$b8 = Real( $y8-$c8 );
+$b9 = Real( $y9-$c9 );
+
+$g1 = Real( $x1-$c1 );
+$g2 = Real( $x2-$c2 );
+$g3 = Real( $x3-$c3 );
+$g4 = Real( $x4-$c4 );
+$g5 = Real( $x5-$c5 );
+$g6 = Real( $x6-$c6 );
+$g7 = Real( $x7-$c7 );
+$g8 = Real( $x8-$c8 );
+$g9 = Real( $x9-$c9 );
+
+
+$sumz = ($z1)+($z2)+($z3)+($z4)+$z5+($z6)+($z7)+($z8)+($z9);
+$sumz2= $z1**2+$z2**2+$z3**2+$z4**2+$z5**2+$z6**2+$z7**2+$z8**2+$z9**2;
+$sz= sqrt(($sumz2-($sumz**2)/$n)/($n-1));
+$zbar= $sumz/$n;
+
+
+$low1=Real( $zbar - 2.896*($sz/sqrt($n)) );
+$up1=Real( $zbar + 2.896*($sz/sqrt($n)) );
+
+$sumb = ($b1)+($b2)+($b3)+($b4)+$b5+($b6)+($b7)+($b8)+($b9);
+$sumb2= $b1**2+$b2**2+$b3**2+$b4**2+$b5**2+$b6**2+$b7**2+$b8**2+$b9**2;
+$sb= sqrt(($sumb2-($sumb**2)/$n)/($n-1));
+$bbar= $sumb/$n;
+
+
+$low2=Real( $bbar - 2.896*($sb/sqrt($n)) );
+$up2=Real( $bbar + 2.896*($sb/sqrt($n)) );
+
+$sumg = ($g1)+($g2)+($g3)+($g4)+$g5+($g6)+($g7)+($g8)+($g9);
+$sumg2= $g1**2+$g2**2+$g3**2+$g4**2+$g5**2+$g6**2+$g7**2+$g8**2+$g9**2;
+$sg= sqrt(($sumg2-($sumg**2)/$n)/($n-1));
+$gbar= $sumg/$n;
+
+
+$low3=Real( $gbar - 2.896*($sg/sqrt($n)) );
+$up3=Real( $gbar + 2.896*($sg/sqrt($n)) );
+
+
+
+
+BEGIN_TEXT
+
+An undesirable side effect of some antihistamines is drowsiness, which can be measured by the flicker frequency of patients (number of flicks of the eyelids per minute). Low flicker frequency is related to drowsiness because the eyes stay shut too long. One study reported data for nine subjects each given meclastine(A), a placebo(B), and promethazine(C), in random order. At the same time of the study, A was a new drug and C was a standard drug known to cause drowsiness.
+$PAR
+
+\{ begintable(4) \}
+\{ row( "Patient", "Drug A", "Drug B", "Drug C" ) \}
+\{ row( "1", "$x1", "$y1", "$c1" ) \}
+\{ row( "2", "$x2", "$y2", "$c2" ) \}
+\{ row( "3", "$x3", "$y3", "$c3" ) \}
+\{ row( "4", "$x4", "$y4", "$c4" ) \}
+\{ row( "5", "$x5", "$y5", "$c5" ) \}
+\{ row( "6", "$x6", "$y6", "$c6" ) \}
+\{ row( "7", "$x7", "$y7", "$c7" ) \}
+\{ row( "8", "$x8", "$y8", "$c8" ) \}
+\{ row( "9", "$x9", "$y9", "$c9" ) \}
+\{ endtable() \}
+$PAR
+
+Using a 98$PERCENT confidence interval, estimate the mean of the differences between drugs A and B.
+$BR
+(\{ ans_rule(15) \}, \{ ans_rule(15) \})
+
+$PAR
+Using a 98$PERCENT confidence interval, estimate the mean of the differences between drugs B and C.
+$BR
+(\{ ans_rule(15) \}, \{ ans_rule(15) \})
+
+$PAR
+Using a 98$PERCENT confidence interval, estimate the mean of the differences between drugs A and C.
+$BR
+(\{ ans_rule(15) \}, \{ ans_rule(15) \})
+
+
+
+
+END_TEXT
+
+
+ANS($low1->with(tolerance=>.07)->cmp);
+ANS($up1->with(tolerance=>.07)->cmp);
+
+ANS($low2->with(tolerance=>.07)->cmp);
+ANS($up2->with(tolerance=>.07)->cmp);
+
+ANS($low3->with(tolerance=>.07)->cmp);
+ANS($up3->with(tolerance=>.07)->cmp);
+
+
+
+ENDDOCUMENT();

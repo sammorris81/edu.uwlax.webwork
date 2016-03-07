@@ -1,0 +1,250 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Sam Morris at <smorris@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject(Statistics)
+## DBchapter(Confidence intervals)
+## DBsection(Independent samples - t)
+## KEYWORDS('Confidence intervals', 'Mean - t')
+## TitleText1('Statistics: From Data to Decision')
+## EditionText1('2')
+## AuthorText1('Watkins, Scheaffer, Cobb')
+## Chapter1('11')
+## Section1('11.1')
+## Problem1('E5')
+## Author('Blake Huebner')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+);
+
+TEXT(beginproblem());
+
+$submission = $inputs_ref->{previewAnswers};
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+Context("Numeric");
+$f = random( 1, 3, 1 );
+
+
+$n1 = Real( 7 );
+$n2 = Real( 23 );
+$m1 = random( 59, 60, .01 );
+$m2 = random( 58, 59, .01 );
+$sd1 = random( 14, 15, .01 );
+$sd2 = random( 15, 16, .01 );
+
+if ($f == 1) {
+  $s = Real( .90 );
+  $alpha = sprintf("%.2f", 0.10);
+} elsif ($f == 2) {
+  $s = Real( .95 );
+  $alpha = sprintf("%.2f", 0.05);
+} elsif ($f == 3) {
+  $s = Real( .99 );
+  $alpha = sprintf("%.2f", 0.01)
+}
+
+$se = sqrt($sd1**2 / $n1 + $sd2**2 / $n2);
+
+# workaround for no partial degrees of freedom
+# basically take the
+$df = (($sd1**2 / $n1) + ($sd2**2 / $n2))**2 / (
+    ($sd1**4 / ($n1**2 * ($n1 - 1))) + ($sd2**4 / ($n2**2 * ($n2 - 1)))
+);
+
+
+($tstar) = rserve_eval('abs(qt((1 - ' . $s . ') / 2, df = ' . $df . '))');
+
+$lower = Real(sprintf("%.3f", ($m1 - $m2) - $tstar * $se));
+
+$upper = Real(sprintf("%.3f", ($m1 - $m2) + $tstar * $se));
+
+$nullval = Real(0);
+$ts = Real(sprintf("%.3f", ($m1 - $m2) / $se));
+
+($pval) = rserve_eval('pt(' . $ts .', df = ' . $df . ', lower.tail = FALSE)');
+$pval = Real(sprintf("%.3f", 2 * $pval));
+
+@params = ( # choices
+  ' \( p \)',
+  ' \( \mu \)',
+  ' \( p_1 - p_2 \)',
+  ' \( \mu_1 - \mu_2 \)',
+  ' \( \mu_d \)',
+);
+
+$param = RadioButtons(
+  [@params],
+  ' \( \mu_1 - \mu_2 \)',
+  order => [@params],
+  labels => ['i', 'ii', 'iii', 'iv', 'v'],
+);
+
+@hyps = ( # choices
+  ' \( = \)',
+  ' \( < \)',
+  ' \( > \)',
+  ' \( \neq \)'
+);
+
+$alt = RadioButtons(
+    [@hyps],
+    ' \( \neq \)',
+    order => [@hyps],
+    labels => ['i', 'ii', 'iii', 'iv'],
+    separator => $tab,
+);
+
+$rejinterp = "We have statistically significant evidence to suggest that the ".
+             "average distance walked before crossing the sideline is different ".
+             "for the left-handed and right-handed volunteers.";
+
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "the average distance walked before crossing the sideline is different ".
+             "for the left-handed and right-handed volunteers.";
+
+$accinterp = "We have statistically significant evidence to suggest that the ".
+             "average distance walked before crossing the sideline is the same ".
+             "for the left-handed and right-handed volunteers.";
+
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
+);
+
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+
+
+BEGIN_TEXT
+Some students recruited 30 volunteers to attempt to walk the length of a
+football field while blindfolded. Each volunteer began at the middle of one goal
+line and was asked to walk in the direction of the opposite goal line.
+The students measured the distance the volunteer walked before crossing the
+sideline of the field and whether the volunteer was left-handed or right-handed.
+$PAR
+The summary for the distances walked for left-handed and right-handed volunteers
+is given below. You may assume that the distances walked are approximately normal
+for each group.
+$PAR
+Left-handed (Group 1):  \(\overline{x} \) = $m1,  \(s\) = $sd1, \( n\) = $n1
+$BR
+Right-handed (Group 2):  \(\overline{x} \) = $m2,  \(s\) = $sd2, \( n\) = $n2
+$PAR
+Unless otherwise stated, give your answers to three decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Construct a \{$s * 100\}$PERCENT confidence interval for the difference in
+  average distance walked between left-handed and right-handed volunteers.
+  Give your answers to two decimal places. $BR
+  ( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
+  $PAR
+  $ITEM Conduct a hypothesis test to determine whether the average distance walked
+  between left-handed and right-handed volunteers is different.
+  \{ BeginList( "OL", type=>"a") \}
+    $PAR
+    $ITEM What is the parameter of interest? $BR
+    \{ $param->buttons( separator => "") \}
+    $PAR
+    $ITEM What is the correct null value for this test? \{ ans_rule(10) \}
+    $PAR
+    $ITEM What sign should appear in the alternative hypothesis? $BR
+    \{ $alt -> buttons( separator => "" ) \}
+    $PAR
+    $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
+    $PAR
+    $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+    enter 0)
+    $PAR
+    $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+    \{ $mcdec -> buttons() \} $PAR
+    $ITEM Select the appropriate interpretation for this hypothesis test
+    (use \(\alpha = $alpha\)). $BR
+    \{ $mcinterp -> buttons() \} $PAR
+    $ITEM If an error had been made on this test, what kind of error would it have been?
+    $BR
+    \{ $errortype -> buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS($lower->with(tolerance=>0.1, tolType=>"absolute")->cmp);
+ANS($upper->with(tolerance=>0.1, tolType=>"absolute")->cmp);
+ANS($param->cmp());
+ANS($nullval->with(tolerance=>0, tolType=>"absolute")->cmp());
+ANS($alt->cmp());
+ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp());
+ANS($pval->with(tolerance=>0.01, tolType=>"absolute")->cmp);
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
+
+ENDDOCUMENT();
