@@ -32,8 +32,9 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 Context("Numeric");
 # trying to deal with rounding issues
-$nullval = Real(0.6667);
+$nullvalhigh = Real(0.6667);
 $nullvalact = Real(2/3);
+$nullvallow = Real(0.6666);
 
 $a1 = random(832, 863, 1);
 
@@ -55,22 +56,27 @@ $alt = RadioButtons(
     separator => $tab,
 );
 
-$se = sqrt($nullval * (1 - $nullval) / $n);
-$ts = Real(sprintf("%.4f", ($p - $nullval) / $se));
+$selow = sqrt($nullvallow * (1 - $nullvallow) / $n);
+$tslow = Real(sprintf("%.4f", ($p - $nullvallow) / $selow));
 
 $seact = sqrt($nullvalact * (1 - $nullvalact) / $n);
-$tsact = Real(sprintf("%.4f", ($p - $nullvalact) / $se));
+$tsact = Real(sprintf("%.4f", ($p - $nullvalact) / $seact));
 
-$pval = Real(uprob(sprintf("%0.2f",$ts)));
-$pvalans = Real(sprintf("%0.4f", 2 * $pval));
+$sehigh = sqrt($nullvalhigh * (1 - $nullvalhigh) / $n);
+$tshigh = Real(sprintf("%.4f", ($p - $nullvalhigh) / $sehigh));
 
-$pvalact = Real(uprob(sprintf("%0.2f", $tsact)));
+$pvalact = Real(uprob($tsact));
 $pvalansact = Real(sprintf("%0.4f", 2 * $pvalact));
 
-$tsmid = Real(($ts + $tsact) / 2);
-$tstol = Real(max((abs(($ts - $tsact) / 2)), 0.001) + 0.0005);
-$pvalmid = Real(($pvalans + $pvalansact) / 2);
-$pvaltol = Real(max(abs(($pvalans - $pvalansact) / 2), 0.001));
+$tsmid = Real(($tslow + $tshigh) / 2);
+$tstol = Real(max((abs(($tshigh - $tslow) / 2)), 0.001) + 0.0005);
+
+# basically accept all pvalues when the test statistic is in the correct range.
+$pvallow = Real(2 * uprob($tslow));
+$pvalhigh = Real(2 * uprob($tshigh));
+
+$pvalmid = Real(($pvallow + $pvalhigh) / 2);
+$pvaltol = Real(max(abs(($pvallow - $pvalhigh) / 2), 0.001));
 
 $rejinterp = "We have statistically significant evidence that the proportion of ".
              "US adults who agree with the statement is different from two-thirds.";
@@ -91,7 +97,7 @@ $accinterp = "We have statistically significant evidence that the proportion of 
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
-if ($pvalans < $alpha) {
+if ($pvalansact < $alpha) {
   $correct_dec = $dec_options[0];
   $correct_interp = $rejinterp;
   $correct_err    = "Type I error";
@@ -172,7 +178,7 @@ END_TEXT
 
 
 
-ANS($nullval->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($nullvalact->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 ANS($alt->cmp() );
 ANS($tsmid->with(tolerance=>$tstol, tolType=>"Absolute")->cmp);
 ANS($pvalmid->with(tolerance=>$pvaltol, tolType=>"Absolute")->cmp);
