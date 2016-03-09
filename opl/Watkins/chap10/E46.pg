@@ -62,6 +62,10 @@ $se = $sd / sqrt($n);
 
 $ts = Real( sprintf("%.3f", ($xbar-$nullval) / $se ));
 $pval = Real( sprintf("%.3f", (2 * tprob(($n - 1), abs($ts)) ) ) );
+if ($pval < 0.001) {
+  $pval = Real(0);
+}
+
 
 @params = ( # choices
   ' \( p \)',
@@ -111,7 +115,7 @@ $accinterp = "We have significant evidence to suggest that average amount of tim
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
-if ($pvalans < $alpha) {
+if ($pval < $alpha) {
   $correct_dec = $dec_options[0];
   $correct_interp = $rejinterp;
   $correct_err    = "Type I error";

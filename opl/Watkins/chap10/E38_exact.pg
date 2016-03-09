@@ -44,13 +44,16 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$nullval=Real(120);
+$nullval = Real(120);
 $n = random(11,13,1);
-$sd= random( 1.20, 1.26, .01);
-$xbar= random( 116.5, 117.5, .1);
+$sd = random( 1.20, 1.26, .01);
+$xbar = random( 116.5, 117.5, .1);
 
-$ts=Real(($xbar-$nullval)/($sd/sqrt($n)));
-$pval=Real(tprob($n-1,abs($ts)));
+$ts = Real(($xbar - $nullval) / ($sd / sqrt($n)));
+$pval = Real(tprob($n - 1, abs($ts)));
+if ($pval < 0.001) {
+  $pval = Real(0);
+}
 
 @params = ( # choices
   ' \( p \)',
@@ -100,7 +103,7 @@ $accinterp = "We have statistically significant evidence to suggest that the ".
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
-if ($pvalans < $alpha) {
+if ($pval < $alpha) {
   $correct_dec = $dec_options[0];
   $correct_interp = $rejinterp;
   $correct_err    = "Type I error";

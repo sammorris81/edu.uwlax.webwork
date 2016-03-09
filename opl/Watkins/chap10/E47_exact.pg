@@ -55,8 +55,10 @@ $s    = Real($s);
 $nullval = Real(8);
 
 $ts=Real(($xbar-$nullval)/($s/sqrt($n)));
-$pval = Real(2*tprob($n-1,abs($ts)));
-
+$pval = Real(2 * tprob($n - 1, abs($ts)));
+if ($pval < 0.001) {
+  $pval = Real(0);
+}
 
 @params = ( # choices
   ' \( p \)',
@@ -107,7 +109,7 @@ $accinterp = "We have statistically significant evidence to suggest that highly 
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
-if ($pvalans < $alpha) {
+if ($pval < $alpha) {
   $correct_dec = $dec_options[0];
   $correct_interp = $rejinterp;
   $correct_err    = "Type I error";

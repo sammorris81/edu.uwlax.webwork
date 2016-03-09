@@ -59,6 +59,10 @@ $sd = sprintf("%.3f", $se * sqrt($n));
 
 $ts = Real(sprintf("%.3f", ($xbar - $nullval) / ($sd/sqrt($n))));
 
+if ($pval < 0.001) {
+  $pval = Real(0);
+}
+
 @params = ( # choices
   ' \( p \)',
   ' \( \mu \)',
@@ -107,7 +111,7 @@ $accinterp = "We have statistically significant evidence to suggest that the ".
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
 
-if ($pvalans < $alpha) {
+if ($pval < $alpha) {
   $correct_dec = $dec_options[0];
   $correct_interp = $rejinterp;
   $correct_err    = "Type I error";
