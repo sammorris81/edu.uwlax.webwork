@@ -93,7 +93,11 @@ $upper = Real(sprintf("%.3f", ($m1 - $m2) + $tstar * $se));
 $nullval = Real(0);
 $ts = Real(sprintf("%.3f", ($m1 - $m2) / $se));
 
-($pval) = rserve_eval('pt(' . $ts .', df = ' . $df . ', lower.tail = FALSE)');
+if ($ts < 0) {
+  ($pval) = rserve_eval('pt(' . $ts .', df = ' . $df . ', lower.tail = TRUE)');
+} else {
+  ($pval) = rserve_eval('pt(' . $ts .', df = ' . $df . ', lower.tail = FALSE)');
+}
 $pval = Real(sprintf("%.3f", 2 * $pval));
 
 @params = ( # choices
