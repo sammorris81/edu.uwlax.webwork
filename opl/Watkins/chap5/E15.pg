@@ -54,71 +54,73 @@ $rand1 = random(1, 2, 1);
 $rand2 = random(1, 2, 1);
 $rand3 = random(1, 2, 1);
 
-@options = (" a. Disjoint", " b. Not Disjoint");
+@options = (" Disjoint", " Not Disjoint");
 
 if ($rand1 == 1) {
   $A1 = "You get five heads";
   $B1 = "You get four heads and one tail";
-  $correct1 = " a. Disjoint";
+  $correct1 = $options[0];
 } else {
   $A1 = "The first flip is heads";
   $B1 = "The second flip is heads";
-  $correct1 = " b. Not Disjoint";
+  $correct1 = $options[1];
 }
+
+@labels = ('a', 'b');
 
 $mc1 = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
 if ($rand2 == 1) {
   $A2 = "You get five heads";
   $B2 = "The second flip is tails";
-  $correct2 = " a. Disjoint";
+  $correct2 = $options[0];
 } else {
   $A2 = "You get three heads and two tails";
   $B2 = "The second flip is tails";
-  $correct2 = " b. Not Disjoint";
+  $correct2 = $options[1];
 }
 
 $mc2 = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
 if ($rand3 == 1) {
   $A3 = "The first four flips are heads";
   $B3 = "The first three flips are heads";
-  $correct3 = " b. Not Disjoint";
+  $correct3 = $options[1];
 } else {
   $A3 = "Heads first occurs on the third flip";
   $B3 = "The fourth flip is heads";
-  $correct3 = " b. Not Disjoint";
+  $correct3 = $options[1];
 }
 
 $mc3 = RadioButtons(
   [@options],
   $correct3,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 
 $A4 = "Heads first occurs on the third flip";
 $B4 = "Three of the flips are heads";
-$correct4 = " b. Not Disjoint";
+$correct4 = $options[1];
 
 $mc4 = RadioButtons(
   [@options],
   $correct4,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => [@labels],
   separator => $tab,
 );
 

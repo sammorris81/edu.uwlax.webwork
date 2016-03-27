@@ -28,6 +28,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 # make sure we're in the context we want
@@ -81,14 +82,18 @@ BEGIN_TEXT
 
 The table below gives the handedness and eyedness of a group of 100 people.
 $PAR
-\(
-\begin{array}{l|cc|c}
- & \text{Right-Eyed} & \text{Left-Eyed} & \text{Total} \\ \hline
-\text{Right-Handed} & 57 & 31 & 88 \\
-\text{Left-Handed}   & 6 & 6 & 12 \\ \hline
-\text{Total}         & 63 & 37 & 100 \\
-\end{array}
-\)
+\{
+ LayoutTable(
+  [
+    [[' ', midrule => 1], 'Right-Eyed', 'Left-Eyed', 'Total'],
+    ['Right-Handed', '57', '31', '88'],
+    [['Left-Handed', midrule => 1], '6', '6', '12'],
+    ['Total', '63', '37', '100']
+  ],
+  align => 'l | c c | c',
+);
+\}
+
 
 $PAR
 Suppose you select a person from this group at random.

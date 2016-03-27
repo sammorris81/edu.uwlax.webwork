@@ -53,7 +53,7 @@ As of July 1 of a recent season, the Los Angeles Dodgers had won 53$PERCENT of t
 Eighteen percent of their games had been played against left-handed starting pitchers.
 The Dodgers won 36$PERCENT of the games played against left-handed starting pitchers.
 What percentage of their games against right-handed starting pitchers did they win?
-Enter your answer as a decimal.
+Give your answers to four decimal places.
 $PAR
 \{ans_rule(15)\}
 
@@ -65,7 +65,7 @@ Context()->normalStrings;
 ## Answer Section
 ###########################
 
-ANS( $answer->with(tolerance=>.005)->cmp );
+ANS( $answer->with(tolerance=>.001)->cmp );
 
 
 
@@ -73,14 +73,7 @@ ANS( $answer->with(tolerance=>.005)->cmp );
 ## Solution Section
 ###########################
 Context()->texStrings;
-SOLUTION(EV3(<<'ENDSOLUTION'));
-$PAR
-Solution:
-$PAR
 
-
-
-ENDSOLUTION
 Context()->normalStrings;
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

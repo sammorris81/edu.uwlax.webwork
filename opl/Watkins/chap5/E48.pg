@@ -28,6 +28,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 # make sure we're in the context we want
@@ -79,14 +80,17 @@ BEGIN_TEXT
 
 The table below gives the decisions on all applications to two of the largest graduate programs at the University of California, Berkeley, by gender of the applicant.
 $PAR
-\(
-\begin{array}{l|cc|c}
- & \text{Admit} & \text{Deny} & \text{Total} \\ \hline
-\text{Man}     & 650 & 592 & 1242 \\
-\text{Woman}   & 220 & 263 & 483 \\ \hline
-\text{Total}   & 870 & 855 & 1725 \\
-\end{array}
-\)
+\{
+ LayoutTable(
+  [
+    [[' ', midrule => 1], 'Admit', 'Deny', 'Total'],
+    ['Man', '650', '592', '1242'],
+    [['Woman', midrule => 1], '220', '263', '483'],
+    ['Total', '870', '855', '1725']
+  ],
+  align => 'l | c c | c',
+);
+\}
 
 $PAR
 Suppose you select a person from this group at random.
