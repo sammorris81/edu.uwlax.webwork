@@ -38,8 +38,24 @@ Context("Numeric");
 ###########################
 
 ## Set up variables and functions for problem.
+$win = random(50, 55, 1);
+$left = random(16, 20, 1);
+$wingiveleft = random(17, 20, 1);
 
-$answer = Real(".5673")->reduce;
+if ($left == 16) {
+  $lefttext = "Sixteen";
+} elsif ($left == 17) {
+  $lefttext = "Seventeen";
+} elsif ($left == 18) {
+  $lefttext = "Eighteen";
+} elsif ($left == 19) {
+  $lefttext = "Nineteen";
+} else {
+  $lefttext = "Twenty";
+  $left = 20;
+}
+
+$answer = Real($win/100 - $wingiveleft/100 * $left/100);
 
 
 ###########################
@@ -49,10 +65,11 @@ TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
 
-As of July 1 of a recent season, the Los Angeles Dodgers had won 53$PERCENT of their games.
-Eighteen percent of their games had been played against left-handed starting pitchers.
-The Dodgers won 36$PERCENT of the games played against left-handed starting pitchers.
-What percentage of their games against right-handed starting pitchers did they win?
+As of July 1 of a recent season, a baseball team had won ${win}${PERCENT}
+of their games. ${lefttext} percent of their games had been played
+against left-handed starting pitchers. The Dodgers won ${wingiveleft}${PERCENT}
+of the games played against left-handed starting pitchers. What percentage of
+their games against right-handed starting pitchers did they win?
 Give your answers to four decimal places.
 $PAR
 \{ans_rule(15)\}

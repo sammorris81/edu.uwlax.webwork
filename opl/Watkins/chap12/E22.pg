@@ -27,6 +27,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 
@@ -84,52 +85,69 @@ $df = Real(1);
 $pval = Real(sprintf("%.4f", chisqrprob($df,$ts)));
 
 
-$rejinterp = "We have significant evidence that there is a relationship between ".
-             "having the surgery and developing diabetes.";
+$rejinterp = "We have statistically significant evidence that there is a ".
+             "relationship between having the surgery and developing diabetes.";
 
-$f2rinterp = "We do not have significant evidence that there is a relationship between ".
-             "having the surgery and developing diabetes.";
+$f2rinterp = "We do not have statistically significant evidence that there is a ".
+             "relationship between having the surgery and developing diabetes.";
 
 $accinterp = "We have significant evidence that there is no relationship between ".
              "having the surgery and developing diabetes.";
 
-$f = random( 1, 3, 1 );
-if ($f == 1) {
-  $alpha = sprintf("%.2f", 0.10);
-} elsif ($f == 2) {
-  $alpha = sprintf("%.2f", 0.05);
-} elsif ($f == 3) {
-  $alpha = sprintf("%.2f", 0.01)
-}
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
 
-if ($pval < $alpha){
-    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
 );
 
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
+);
 
 BEGIN_TEXT
-
 Obesity is associated with many long-term illnesses, such as diabetes and hypertension.
 In a Swedish study, a group of subjects who had undergone surgery for obesity
 were followed over a 10-year period and compared, over that time, to a sample of
@@ -137,32 +155,46 @@ conventionally treated control subjects.
 The table below gives the summary counts from the study.
 
 $PAR
-\{ begintable(4) \}
-\{ row( "", "Developed Diabetes", "No Diabetes", "Total" ) \}
-\{ row( "Surgery", "$o1", "$o2", "$r1" ) \}
-\{ row( "Control Group", "$o3", "$o4", "$r2" ) \}
-\{ row( "Total", "$c1", "$c2", "$total" ) \}
-\{ endtable() \}
+\{
+  LayoutTable(
+    [
+      [[' ', midrule => 1], 'Developed Diabetes', 'No Diabetes', 'Total'],
+      ['Surgery', "$o1", "$o2", "$r1"],
+      [['Control Group', midrule => 1], "$o3", "$o4", "$r2"],
+      ['Total', "$c1", "$c2", "$total"]
+    ],
+    align => 'l | c c | c',
+    allcellcss => 'padding:3pt;'
+  );
+\}
+
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What is the expected count of those patients who $group? \{ans_rule(10)\}
-$ITEM What is the test statistic to determine if the surgery has an impact on the diabetes status?
-\{ ans_rule(10) \}.
-$ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
-$ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
-enter 0)
-$ITEM Select the appropriate conclusion for this test statistic at a significance level of \( \alpha = $alpha \). $BR
-\{ $conclusion -> buttons() \}
+  $ITEM What is the expected count of those patients who $group? \{ans_rule(10)\}
+  $ITEM What is the test statistic to determine if the surgery has an impact on the diabetes status?
+  \{ ans_rule(10) \}.
+  $ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
+  $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+  enter 0)
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
 \{EndList( "OL" )\}
-
 
 END_TEXT
 ANS($exp->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $df->cmp );
+ANS($df->cmp );
 ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $conclusion->cmp );
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
 
 
 ENDDOCUMENT();

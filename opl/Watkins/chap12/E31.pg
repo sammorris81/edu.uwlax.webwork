@@ -26,6 +26,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 TEXT(beginproblem());
@@ -80,47 +81,66 @@ $ts = Real( sprintf("%.2f", ($o1 - $e1)**2 / ($e1) + ($o2 - $e2)**2 / $e2 + ($o3
 $df = Real(1);
 $pval = Real(sprintf("%.4f", chisqrprob($df,$ts)));
 
-$rejinterp = "We have significant evidence that there is a relationship between ".
-             "muscularity and romantic status.";
+$rejinterp = "We have statistically significant evidence that there is a ".
+             "relationship between muscularity and romantic status.";
 
-$f2rinterp = "We do not have significant evidence that there is a relationship between ".
-             "muscularity and romantic status.";
+$f2rinterp = "We do not have statistically significant evidence that there is ".
+             "a relationship between muscularity and romantic status.";
 
-$accinterp = "We have significant evidence that there is no relationship between ".
-             "muscularity and romantic status.";
+$accinterp = "We have statistically significant evidence that there is no ".
+             "relationship between muscularity and romantic status.";
 
-$f = random( 1, 3, 1 );
-if ($f == 1) {
-  $alpha = sprintf("%.2f", 0.10);
-} elsif ($f == 2) {
-  $alpha = sprintf("%.2f", 0.05);
-} elsif ($f == 3) {
-  $alpha = sprintf("%.2f", 0.01)
-}
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
 
-if ($pval < $alpha){
-    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
 );
 
 BEGIN_TEXT
@@ -132,32 +152,46 @@ be in a romantic relationship than nonmuscular characters. The data is given in 
 You may assume any necessary conditions for inference.
 
 $PAR
-\{ begintable(4) \}
-\{ row( "Relationship?", "Muscular", "Nonmuscular", "Total" ) \}
-\{ row( "Yes", "$o1", "$o2", "$r1" ) \}
-\{ row( "No", "$o3", "$o4", "$r2" ) \}
-\{ row( "Total", "$c1", "$c2", "$total" ) \}
-\{ endtable() \}
+\{
+  LayoutTable(
+    [
+      [['Relationship?', midrule => 1], 'Muscular', 'Nonmuscular', 'Total'],
+      ['Yes', "$o1", "$o2", "$r1"],
+      [['No', midrule => 1], "$o3", "$o4", "$r2"],
+      ['Total', "$c1", "$c2", "$total"]
+    ],
+    align => 'l | c c | c',
+    allcellcss => 'padding:3pt;'
+  );
+\}
+
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What is the expected count of those males who $group? \{ans_rule(10)\}
-$ITEM What is the test statistic to determine if the muscularity is independent from relationship status?
-\{ ans_rule(10) \}.
-$ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
-$ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
-enter 0)
-$ITEM Select the appropriate conclusion for this test statistic at a significance level of \( \alpha = $alpha \). $BR
-\{ $conclusion -> buttons() \}
+  $ITEM What is the expected count of those males who $group? \{ans_rule(10)\}
+  $ITEM What is the test statistic to determine if the muscularity is independent from relationship status?
+  \{ ans_rule(10) \}.
+  $ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
+  $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+  enter 0)
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
 \{EndList( "OL" )\}
-
 
 END_TEXT
 ANS($exp->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $df->cmp );
+ANS($df->cmp );
 ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $conclusion->cmp );
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
 
 
 ENDDOCUMENT();

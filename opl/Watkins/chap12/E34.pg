@@ -26,6 +26,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 TEXT(beginproblem());
@@ -91,38 +92,69 @@ if ($f == 1) {
   $alpha = sprintf("%.2f", 0.01)
 }
 
-$rejinterp = "We have significant evidence that age of the mother at the birth of ".
-             "her first child and developing breast cancer are not independent.";
+$rejinterp = "We have statistically significant evidence that age of the mother ".
+             "at the birth of her first child and developing breast cancer are ".
+             "not independent.";
 
-$f2rinterp = "We do not have significant evidence that age of the mother at the birth of ".
-             "her first child and developing breast cancer are not independent.";
+$f2rinterp = "We do not have statistically significant evidence that age of the ".
+             "mother at the birth of her first child and developing breast cancer ".
+             "are not independent.";
 
-$accinterp = "We have significant evidence that the age of the mother at the birth of ".
-             "her first child and developing breast cancer are independent.";
+$accinterp = "We have statisitcally significant evidence that the age of the ".
+             "mother at the birth of her first child and developing breast cancer ".
+             "are independent.";
 
-if ($pval < $alpha){
-    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
+);
+
+$errortype = RadioButtons(
+  [ #choices
+    "Type I error",
+    "Type II error",
+  ],
+  $correct_err,
+  order => [
+    "Type I error",
+    "Type II error",
+  ],
+  labels => [
+    "i",
+    "ii"
+  ],
+  separator => $tab,
 );
 
 BEGIN_TEXT
@@ -132,33 +164,46 @@ on the age of a mother at the birth of her first child and whether the mother ev
 developed breast cancer. The counts are shown in the table below.
 
 $PAR
-\{ begintable(4) \}
-\{ row( "Developed Breast Cancer?", "Younger Than 25", "25 or Older", "Total" ) \}
-\{ row( "No", "$o1", "$o2", "$r1" ) \}
-\{ row( "Yes", "$o3", "$o4", "$r2" ) \}
-\{ row( "Total", "$c1", "$c2", "$total" ) \}
-\{ endtable() \}
+\{
+  LayoutTable(
+    [
+      [['Breast Cancer?', midrule => 1], 'Younger than 25', '25 or Older', 'Total'],
+      ['No', "$o1", "$o2", "$r1"],
+      [['Yes', midrule => 1], "$o3", "$o4", "$r2"],
+      ['Total', "$c1", "$c2", "$total"]
+    ],
+    align => 'l | c c | c',
+    allcellcss => 'padding:3pt;'
+  );
+\}
+
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What is the expected count of those women who $group? \{ans_rule(10)\}
-$ITEM What is the test statistic to determine if age of the mother and developing breast cancer are independent?
-\{ ans_rule(10) \}
-$ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
-$ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
-enter 0)
-$ITEM Select the appropriate conclusion for this test statistic at a significance level of \( \alpha = $alpha \). $BR
-\{ $conclusion -> buttons() \}
+  $ITEM What is the expected count of those women who $group? \{ans_rule(10)\}
+  $ITEM What is the test statistic to determine if age of the mother and developing breast cancer are independent?
+  \{ ans_rule(10) \}
+  $ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
+  $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+  enter 0)
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
 \{EndList( "OL" )\}
-
 
 END_TEXT
 ANS($exp->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($ts->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $df->cmp );
+ANS($df->cmp );
 ANS($pval->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS( $conclusion->cmp );
-
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
+ANS($errortype->cmp());
 
 ENDDOCUMENT();
 

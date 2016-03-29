@@ -27,6 +27,7 @@
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
+           "niceTables.pl"
 );
 
 TEXT(beginproblem());
@@ -138,30 +139,37 @@ below. His experiment resulted in $o1 smooth yellow peas, $o2 wrinkled yellow pe
 $o3 smooth green peas, and $o4 wrinkled green peas.
 
 $PAR
-\{ begintable(2) \}
-\{ row( "Pea Type", "Ratio" ) \}
-\{ row( "Smooth Yellow", "9/16" ) \}
-\{ row( "Wrinkled Yellow", "3/16" ) \}
-\{ row( "Smooth Green", "3/16" ) \}
-\{ row( "Wrinkled Green", "1/16" ) \}
-\{ endtable() \}
+\{
+  LayoutTable(
+    [
+      [['Pea Type', midrule => 1], "Ratio"],
+      ['Smooth Yellow', '9/16'],
+      ['Wrinkled Yellow', '3/16'],
+      ['Smooth Green', '3/16'],
+      ['Wrinkled Green', '1/16']
+    ],
+    align => 'l r',
+    allcellcss => 'padding:3pt;',
+  );
+\}
+
 $PAR
 Give your answers to three decimal places.
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What is the test statistic for determining if the observed counts match the expected
-counts predicted by Mendel's theory?
-\{ ans_rule(10) \}
-$ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
-$ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
-    enter 0)
-$ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
-\{ $mcdec -> buttons() \} $PAR
-$ITEM Select the appropriate interpretation for this hypothesis test
-(use \(\alpha = $alpha\)). $BR
-\{ $mcinterp -> buttons() \} $PAR
-$ITEM If an error had been made on this test, what kind of error would it have been?
-$BR
-\{ $errortype -> buttons() \}
+  $ITEM What is the test statistic for determining if the observed counts match the expected
+  counts predicted by Mendel's theory?
+  \{ ans_rule(10) \}
+  $ITEM What are the appropriate degrees of freedom for this test statistic? \{ ans_rule(10) \}
+  $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
+      enter 0)
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have been?
+  $BR
+  \{ $errortype -> buttons() \}
 \{EndList( "OL" )\}
 
 END_TEXT

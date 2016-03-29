@@ -89,6 +89,7 @@ $PAR
     ['Total', '870', '855', '1725']
   ],
   align => 'l | c c | c',
+  allcellcss => 'padding:3pt;'
 );
 \}
 
