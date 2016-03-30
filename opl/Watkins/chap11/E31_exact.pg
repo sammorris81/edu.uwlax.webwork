@@ -164,14 +164,14 @@ $BR
 END_TEXT
 
 
-ANS($lower1->with(tolerance=>.01)->cmp);
-ANS($upper1->with(tolerance=>.01)->cmp);
+ANS($lower1->with(tolerance=>.005, tolType=>"absolute")->cmp);
+ANS($upper1->with(tolerance=>.005, tolType=>"absolute")->cmp);
 
-ANS($lower2->with(tolerance=>.01)->cmp);
-ANS($upper2->with(tolerance=>.01)->cmp);
+ANS($lower2->with(tolerance=>.005, tolType=>"absolute")->cmp);
+ANS($upper2->with(tolerance=>.005, tolType=>"absolute")->cmp);
 
-ANS($lower3->with(tolerance=>.01)->cmp);
-ANS($upper3->with(tolerance=>.01)->cmp);
+ANS($lower3->with(tolerance=>.005, tolType=>"absolute")->cmp);
+ANS($upper3->with(tolerance=>.005, tolType=>"absolute")->cmp);
 
 
 
