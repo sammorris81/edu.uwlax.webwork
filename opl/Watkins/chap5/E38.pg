@@ -55,7 +55,10 @@ if ($left == 16) {
   $left = 20;
 }
 
-$answer = Real($win/100 - $wingiveleft/100 * $left/100);
+$right = 100 - $left;
+$leftandwin = $left * $wingiveleft / 100;
+
+$answer = Real(($win - $leftandwin) / $right);
 
 
 ###########################
@@ -64,10 +67,10 @@ $answer = Real($win/100 - $wingiveleft/100 * $left/100);
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-
+$left, $right, $leftandwin
 As of July 1 of a recent season, a baseball team had won ${win}${PERCENT}
 of their games. ${lefttext} percent of their games had been played
-against left-handed starting pitchers. The Dodgers won ${wingiveleft}${PERCENT}
+against left-handed starting pitchers. The team won ${wingiveleft}${PERCENT}
 of the games played against left-handed starting pitchers. What percentage of
 their games against right-handed starting pitchers did they win?
 Give your answers to four decimal places.
