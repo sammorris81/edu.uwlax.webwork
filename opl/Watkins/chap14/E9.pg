@@ -244,6 +244,7 @@ ANS($dfa->with(tolerance=>0)->cmp());
 ANS($dfe->with(tolerance=>0)->cmp());
 ANS($mcdec->cmp());
 ANS($mcinterp->cmp());
+ANS($overall->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($pairwise->cmp() );
 
 ENDDOCUMENT();
