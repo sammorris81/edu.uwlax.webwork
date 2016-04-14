@@ -67,7 +67,6 @@ $answer = Real(($win - $leftandwin) / $right);
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-$left, $right, $leftandwin
 As of July 1 of a recent season, a baseball team had won ${win}${PERCENT}
 of their games. ${lefttext} percent of their games had been played
 against left-handed starting pitchers. The team won ${wingiveleft}${PERCENT}

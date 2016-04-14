@@ -99,70 +99,81 @@ if ($f == 1) {
 $ncompare = C($a, 2);
 $overall = Real( sprintf("%.4f", 1 - (1 - $alpha)**($ncompare) ));
 
-if ($pval < $alpha){
-    $corconcl = " a. Reject \(H_0\). ". $rejinterp;
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+@alphas = (0.01, 0.05, 0.10);
+$random = random(0, 2, 1);
+$alpha = $alphas[$random];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-    $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
 );
 
 $bon_alpha = sprintf("%.4f", $alpha / $ncompare);
 $bon_alpha_w = sprintf("%.4f", $alpha / $a);
 if ($bon_alpha == $bon_alpha_w) {
   @options = (
-    " a. Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.",
-    " b. Yes, and we should use \( \alpha = $alpha \) for the pairwise comparisons.",
-    " c. No, it is not appropriate to conduct pairwise comparisons here because ".
+    " Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.",
+    " Yes, and we should use \( \alpha = $alpha \) for the pairwise comparisons.",
+    " No, it is not appropriate to conduct pairwise comparisons here because ".
     "the results do not provide evidence that any of the levels of $factor has a ".
     "different average $response.",
-    " d. No, we do not need to conduct pairwise comparisons here because the ANOVA ".
+    " No, we do not need to conduct pairwise comparisons here because the ANOVA ".
     "test clearly tells us which level of $factor has a different average $response."
   );
 
-  @labels = ( 'a.', 'b.', 'c.', 'd.');
+  @labels = ( 'a', 'b', 'c', 'd');
 
   if ($pval < $alpha) {
-    $cormult = " a. Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.";
+    $cormult = " Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.";
   } else {
-    $cormult = " c. No, it is not appropriate to conduct pairwise comparisons here because ".
+    $cormult = " No, it is not appropriate to conduct pairwise comparisons here because ".
     "the results do not provide evidence that any of the levels of $factor has a ".
     "different average $response.";
   }
 } else {
   @options = (
-    " a. Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.",
-    " b. Yes, and we should use \( \alpha = $bon_alpha_w \) for the pairwise comparisons.",
-    " c. Yes, and we should use \( \alpha = $alpha \) for the pairwise comparisons.",
-    " d. No, it is not appropriate to conduct pairwise comparisons here because ".
+    " Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.",
+    " Yes, and we should use \( \alpha = $bon_alpha_w \) for the pairwise comparisons.",
+    " Yes, and we should use \( \alpha = $alpha \) for the pairwise comparisons.",
+    " No, it is not appropriate to conduct pairwise comparisons here because ".
     "the results do not provide evidence that any of the levels of $factor has a ".
     "different average $response.",
-    " e. No, we do not need to conduct pairwise comparisons here because the ANOVA ".
+    " No, we do not need to conduct pairwise comparisons here because the ANOVA ".
     "test clearly tells us which level of $factor has a different average $response."
   );
-  @labels = ( 'a.', 'b.', 'c.', 'd.', 'e.' );
+  @labels = ( 'a', 'b', 'c', 'd', 'e' );
 
   if ($pval < $alpha) {
-    $cormult = " a. Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.";
+    $cormult = " Yes, and we should use \( \alpha = $bon_alpha \) for the pairwise comparisons.";
   } else {
-    $cormult = " d. No, it is not appropriate to conduct pairwise comparisons here because ".
+    $cormult = " No, it is not appropriate to conduct pairwise comparisons here because ".
     "the results do not provide evidence that any of the levels of $factor has a ".
     "different average $response.";
   }
@@ -199,22 +210,24 @@ $PAR
 $PAR
 
 \{ BeginList( "OL", type=>"a") \}
-$ITEM What are the appropriate degrees of freedom for this test statistic?
+  $ITEM What are the appropriate degrees of freedom for this test statistic?
   \{ BeginList( "OL", type=>"i") \}
-  $ITEM Numerator: \{ ans_rule(5) \}
-  $ITEM Denominator: \{ ans_rule(5) \}
+    $ITEM Numerator: \{ ans_rule(5) \}
+    $ITEM Denominator: \{ ans_rule(5) \}
   \{ EndList( "OL" )\}
-$ITEM Using the information in the table above, select the appropriate conclusion
-for this test statistic at a significance level of \( \alpha = $alpha \). $BR
-\{ $conclusion -> buttons() \}
-$ITEM If we conduct pairwise comparisons for the $a different $factor types
-using \( \alpha = $alpha \) for each comparison, what would the overall Type I Error
-rate be? \{ ans_rule(10) \}
-$ITEM Should we do pairwise comparisons to determine which level of $factor is different?
-If yes, what significance level should we use to control the overall Type-I error rate
-at \(\alpha = $alpha\)?
-If no, why not? $BR
-\{ $pairwise -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If we conduct pairwise comparisons for the $a different $factor types
+  using \( \alpha = $alpha \) for each comparison, what would the overall Type I Error
+  rate be? \{ ans_rule(10) \}
+  $ITEM Should we do pairwise comparisons to determine which level of $factor is different?
+  If yes, what significance level should we use to control the overall Type-I error rate
+  at \(\alpha = $alpha\)?
+  If no, why not? $BR
+  \{ $pairwise -> buttons() \}
 \{ EndList( "OL" )\}
 
 END_TEXT
@@ -230,7 +243,8 @@ ANS($SSTot->with(tolerance=>1, tolType=>"absolute")->cmp());
 # actual questions
 ANS($dfa->with(tolerance=>0)->cmp());
 ANS($dfe->with(tolerance=>0)->cmp());
-ANS( $conclusion->cmp() );
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
 ANS($overall->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($pairwise->cmp() );
 
