@@ -1,0 +1,697 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Ted Wendt at <twendt@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject('Statistics')
+## DBchapter('')
+## DBsection('')
+## KEYWORDS('')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+
+Context("Numeric");
+
+# If the student used the preview button, then there will be a value
+# in the hash here. Using to keep the checkers from actually assigning
+# messages and scores when previewing a response.
+$isPreview = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $BR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+$resp = " cognition z-score";
+$pred = " alcohol use";
+
+$response = RadioButtons(
+  [ # choices
+    $resp,
+    $pred
+  ],
+  $resp,     # correct answer
+  order => [
+    $resp,
+    $pred
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$responsetype = RadioButtons(
+  [ # choices
+  ' Quantitative',
+  ' Categorical'
+  ],
+  ' Quantitative',     # correct answer
+  order => [
+  ' Quantitative',
+  ' Categorical'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$predictor = RadioButtons(
+  [ # choices
+    $resp,
+    $pred
+  ],
+  $pred,     # correct answer
+  order => [
+    $resp,
+    $pred
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$predictortype = RadioButtons(
+  [ # choices
+  ' Quantitative',
+  ' Categorical'
+  ],
+  ' Categorical',     # correct answer
+  order => [
+  ' Quantitative',
+  ' Categorical'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$whichproc = RadioButtons(
+  [ # choices
+  ' One-Way ANOVA',
+  ' Simple Linear Regression'
+  ],
+  ' One-Way ANOVA',     # correct answer
+  order => [
+  ' One-Way ANOVA',
+  ' Simple Linear Regression'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+# output values
+$levels = Real(4);
+$n = Real(253);
+$dfa = Real($levels - 1);
+$dfe = Real($n - $levels);
+$dft = Real($n - 1);
+
+$SSA = Real(3.183);
+$SSE = Real(122.718);
+$SST = Real($SSA + $SSE);
+
+$MSA = Real(1.061);
+$MSE = Real(0.493);
+
+$f =  Real(2.153);
+
+$pval = fprob($dfa, $dfe, $f);
+
+$rej = "Reject \(H_0\).";
+$f2r = "Fail to reject \(H_0\).";
+
+$rejinterp = "We do have significant evidence to suggest that at least one of the ".
+                "averages for ". $pred ." is different from the others.";
+
+$f2rinterp = "We do not have significant evidence to suggest that at least one ".
+                "of the averages for ". $pred ." is different from the others.";
+
+$accinterp = "We do have significant evidence to suggest that none of the ".
+              "averages for ". $pred ." is different from the others.";
+
+$alpha = 0.05;
+$overall = Real(1 - (1 - $alpha)**6);
+
+if($pval < $alpha){
+  $corconcl = " a. ". $rej ." ". $rejinterp;
+} else {
+  $corconcl = " f. ". $f2r ." ". $f2rinterp;
+}
+
+@conc_options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+  [@conc_options],
+  $corconcl,
+  order => [@conc_options],
+  labels => [
+  'a.',
+  'b.',
+  'c.',
+  'd.',
+  'e.',
+  'f.',
+  'g.',
+  'h.',
+  'i.'
+  ],
+  separator => $BR,
+);
+
+$output = MultiAnswer( $SSA, $dfa, $MSA, $f, $pval,
+                       $SSE, $dfe, $MSE,
+                       $SST, $dft, $levels) -> with(
+  singleResult => 0,
+  allowBlankAnswers => 1,
+  checker => sub {
+    my ( $correct, $student, $self ) = @_;
+    my ( $stSSA, $stdfa, $stMSA, $stf, $stpval,
+         $stSSE, $stdfe, $stMSE,
+         $stSST, $stdft, $stlevels ) = @{$student};
+    my ( $cSSA, $cdfa, $cMSA, $cf, $cpval,
+         $cSSE, $cdfe, $cMSE,
+         $cSST, $cdft, $clevels ) = @{$correct};
+    my @ret = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0); # Score vector to return
+
+    if( $isPreview ){
+      return [ @ret ];
+    }
+
+    # tolerances
+    my $toldfa = 0;
+    my $toldfe = 0;
+    my $toldft = 0;
+    my $tollevels = 0;
+    my $tolSSA = 0.001;
+    my $tolSSE = 0.001;
+    my $tolSST = 0.001;
+    my $tolMSA = 0.001;
+    my $tolMSE = 0.001;
+    my $tolf = 0.001;
+    my $tolpval = 0.001;
+
+    my $i = 0;
+
+    if( $stSSA ne '' ){
+      my $compSSA = abs( $stSSA - $cSSA );
+      if ( $compSSA <= $tolSSA ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stdfa ne '' ){
+      my $compdfa = abs( $stdfa - $cdfa );
+      if ( $compdfa <= $toldfa ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } elsif ( $stdfa == $levels ){
+        $self -> setMessage( $i + 1, 'Make sure to subtract 1 from the number '.
+                            'of levels.');
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stMSA ne '' ){
+      my $compMSA = abs( $stMSA - $cMSA );
+      if ( $compMSA <= $tolMSA ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stf ne '' ){
+      my $compf = abs( $stf - $cf );
+      if( $compf <= $tolf ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stpval ne '' ){
+      my $comppval = abs( $stpval - $cpval );
+      if( $comppval <= $tolpval ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stSSE ne '' ){
+      my $compSSE = abs( $stSSE - $cSSE );
+      if( $compSSE <= $tolSSE ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stdfe ne '' ){
+      my $compdfe = abs( $stdfe - $cdfe );
+      if( $compdfe <= $toldfe ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'Remember your degrees of freedom for '.
+                            $pred .' and degrees of freedom for error should add '.
+                            'to the total degrees of freedom.' );
+      }
+    }
+
+    $i++;
+
+    if ($stMSE ne '' ){
+      my $compMSE = abs( $stMSE - $cMSE );
+      if( $compMSE <= $tolMSE ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if ($stSST ne '' ){
+      my $compSST = abs( $stSST - $cSST );
+      if( $compSST <= $tolSST ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect. What relationship exists '.
+                            'between SSA, SSE, and SSTotal?' );
+      }
+    }
+
+    $i++;
+
+    if ($stdft ne '' ){
+      my $compdft = abs( $stdft - $cdft );
+      if( $compdft <= $toldft ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } elsif ( abs($stdft - $cdft) == 1) {
+        $self -> setMessage( $i + 1, 'Make sure you subtract 1 from the total '.
+                            'number of observations.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if ($stlevels ne '' ){
+      my $complevels = abs( $stlevels - $clevels );
+      if( $complevels <= $tollevels ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'The number of levels is the number of '.
+                            'groups for the categorical variable.' );
+      }
+    }
+
+    return [ @ret ];
+
+  } # end checker
+
+);
+
+$bonferdiff = RadioButtons(
+  [
+  " a. Abstain",
+  " b. Heavy",
+  " c. Light",
+  " d. Moderate",
+  " e. None of the three groups are different"
+  ],
+  " e. None of the three groups are different",
+  order => [
+  " a. Abstain",
+  " b. Heavy",
+  " c. Light",
+  " d. Moderate",
+  " e. None of the three groups are different"
+  ],
+  labels => [
+  'a.',
+  'b.',
+  'c.',
+  'd.',
+  'e.'
+  ],
+  separator => $anssep,
+);
+
+# originally set this up as a compound problem, but changed back to a single
+# problem setup. did not like that students had to use a submission in order
+# to go from part 1 to part 2.
+# $cp = new compoundProblem(
+#   parts => 3,
+#   weights => [1,1,1],
+#   nextStyle => 'Checkbox',
+#   nextLabel => 'Proceed to next part',
+#   nextVisible => 'ifCorrect',
+#   saveAllAnswers => 0,
+# );
+
+#listVariables();
+
+BEGIN_TEXT
+$BBOLD Alcohol Use and Cognition z-score $EBOLD
+$PAR
+The following questions should be answered using the $BBOLD sleep.sav $EBOLD
+dataset which can be found along with a description of the data on the course D2L
+site. Answer the following questions using the dataset with SPSS.
+$PAR
+In this question, you will be exploring how $pred impacts $resp.
+$PAR
+$BBOLD Part 1. $EBOLD Describe the model.
+$PAR
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM Response Variable:
+  \{ BeginList( "OL", type=>"i" ) \}
+    $ITEM What is the response variable?
+    $anssep \{ $response -> buttons() \} $anssep
+    $ITEM What kind of variable is the response variable?
+    $anssep \{ $responsetype -> buttons() \} $anssep
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Predictor Variable:
+  \{ BeginList( "OL", type=>"i" ) \}
+    $ITEM What is the predictor variable?
+    $anssep \{ $predictor -> buttons() \} $anssep
+    $ITEM What kind of variable is the predictor variable?
+    $anssep \{ $predictortype -> buttons() \} $anssep
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Which procedure would be most appropriate to see if there is a
+  relationship between $pred and $resp?
+  $anssep \{ $whichproc -> buttons() \} $anssep
+\{ EndList( "OL") \}
+
+$PAR
+$BBOLD Part 2. $EBOLD Fill in the missing blanks in the following table and use
+it to answer the following questions.
+$PAR
+$BBOLD One-Way ANOVA Table:$EBOLD
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+AlignedRow(["Source", "SS", "df", "MS", "F", "p-value"],
+            align=>"CENTER", valign=>"MIDDLE", separation=>0).
+AlignedRow(["Between Groups", $output->ans_rule(10), $output->ans_rule(10), $output->ans_rule(10),
+            $output->ans_rule(10), $output->ans_rule(10)],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+AlignedRow(["Within Groups", $output->ans_rule(10), $output->ans_rule(10),
+            $output->ans_rule(10), "", ""],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+AlignedRow(["Total", $output->ans_rule(10), $output->ans_rule(10), "", "", ""],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+EndTable()
+\}
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM How many levels does $pred have? \{ $output->ans_rule(10) \}
+  $PAR
+  $ITEM Conduct the hypothesis test for
+  $PAR
+  \( H_0: \mu_{ \text{abstain} } = \mu_{ \text{heavy} } = \mu_{ \text{light} } = \mu_{ \text{moderate} } \)
+  $BR
+  \( H_A: \) at least one average is different.
+  $PAR
+  $ITEM What are the appropriate degrees of freedom to use for the f statistic?
+  $BR
+  Numerator: \{ ans_rule(10) \} $BR
+  Denominator: \{ ans_rule(10) \}
+  $PAR
+  $ITEM Select the appropriate conclusion for this test at a significance level
+  of \( \alpha = $alpha \). $BR
+  \{ $conclusion -> buttons() \}
+  $PAR
+  $ITEM If we were to conduct pairwise comparisons between the different groups,
+  what would the overall type-I error rate be? \{ ans_rule(10) \}
+  $PAR
+  $ITEM Using \{(1 - $alpha)*100\}$PERCENT Bonferroni confidence intervals,
+  are there any averages that are significantly different from the others? $BR
+  \{ $bonferdiff -> buttons() \} $anssep
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+
+
+ANS( $response -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you trying to predict ". $resp ." with ". $pred .
+        " or ". $pred ." with ". $resp ."?");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $responsetype -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Think about the type of variable that ". $resp ." is. ".
+        "If you were recording ". $resp .", would you write numbers or ".
+        "categories?");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $predictor -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you trying to predict ". $resp ." with ". $pred .
+        " or ". $pred ." with ". $resp ."?");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $predictortype -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Think about the type of variable that ". $pred ." is. ".
+        "If you were recording ". $pred .", would you write numbers or ".
+        "categories?");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $whichproc -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you sure this is the best method for two quantitative ".
+        "variables?");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $output -> cmp( ) );
+
+ANS( $dfa -> cmp( #CHECK
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    if( $student ne $correct ){
+      Value->Error("This is incorrect.");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $dfe -> cmp( #CHECK
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    if( $student ne $correct ){
+      Value->Error("This is incorrect.");
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $conclusion->cmp() );
+
+ANS( $overall->cmp( #CHECK
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $toloverall = 0.0001;
+    my $wrongoverall = 1 - (1-$alpha)**$levels;
+    my $compoverall = abs( $student - $correct );
+    if( $compoverall <= $toloverall ){
+      $self->{ans_message} = ('This is correct.' );
+      return 1;
+    } elsif ( abs($student - $wrongoverall) <= $toloverall ){
+      Value->Error('Be sure that you are using the number of '.
+                   'comparisons and not the number of groups when '.
+                   'finding the overall type-I error.');
+    } else {
+      Value->Error('This is incorrect.' );
+    }
+
+  }
+  )
+);
+
+ANS( $bonferdiff->cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    if( $student ne $correct ){
+      Value->Error("This is incorrect. Look at the output given from the pairwise ".
+                   "comparisons. Are any of the letters different?")
+    } else {
+      $self->{ans_message} = ("This is correct.");
+      return 1;
+    }
+  }
+ )
+);
+
+ENDDOCUMENT();

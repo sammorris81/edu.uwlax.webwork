@@ -1,0 +1,728 @@
+## DESCRIPTION
+## University of Wisconsin-La Crosse Problem Library Template
+## For assistance, contact Ted Wendt at <twendt@uwlax.edu>
+## or Robert Allen at <rallen@uwlax.edu>
+## ENDDESCRIPTION
+
+## DBsubject('Statistics')
+## DBchapter('')
+## DBsection('')
+## KEYWORDS('')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+## Author('Sam Morris')
+## Institution('University of Wisconsin-La Crosse')
+
+
+## PROBLEM DESCRIPTION
+##
+##
+##
+## ENDPROBLEMDESCRIPTION
+
+DOCUMENT();
+
+loadMacros("uwlLoadWWMacros.pl",
+           "uwlLoadMacros.pl",
+           "parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+
+Context("Numeric");
+
+# If the student used the preview button, then there will be a value
+# in the hash here. Using to keep the checkers from actually assigning
+# messages and scores when previewing a response.
+$isPreview = $inputs_ref->{previewAnswers};
+
+if($displayMode eq "TeX"){
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+} else {
+  $extrasep = $PAR;
+  $anssep = $BR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+}
+
+$resp = "GPA";
+$pred = "number of classes missed";
+
+$response = RadioButtons(
+  [ # choices
+  ' a. '. $resp,
+  ' b. '. $pred
+  ],
+  ' a. '. $resp,     # correct answer
+  order => [
+  ' a. '. $resp,
+  ' b. '. $pred
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$responsetype = RadioButtons(
+  [ # choices
+  ' a. Quantitative',
+  ' b. Categorical'
+  ],
+  ' a. Quantitative',     # correct answer
+  order => [
+  ' a. Quantitative',
+  ' b. Categorical'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$predictor = RadioButtons(
+  [ # choices
+  ' a. '. $resp,
+  ' b. '. $pred
+  ],
+  ' b. '. $pred,     # correct answer
+  order => [
+  ' a. '. $resp,
+  ' b. '. $pred
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$predictortype = RadioButtons(
+  [ # choices
+  ' a. Quantitative',
+  ' b. Categorical'
+  ],
+  ' a. Quantitative',     # correct answer
+  order => [
+  ' a. Quantitative',
+  ' b. Categorical'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$whichproc = RadioButtons(
+  [ # choices
+  ' a. One-Way ANOVA',
+  ' b. Simple Linear Regression'
+  ],
+  ' b. Simple Linear Regression',     # correct answer
+  order => [
+  ' a. One-Way ANOVA',
+  ' b. Simple Linear Regression'
+  ],
+  labels => [ # gives labels to use in correct and incorrect
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+# output values
+$n = Real( 253 );
+$df = $n - 2;
+
+$b0 = Real( 3.294 );
+$b0se = Real( 0.030 );
+$b0t = Real( 108.594 );
+$b0pval = Real(0.000);
+
+$b1 = Real( -0.023 );
+$b1se = Real( 0.008 );
+$b1t = Real( -2.925 );
+$b1pval = Real(0.004);
+
+$rsq = 0.033;
+$r = sprintf("%.3f", sgn($b1) * sqrt($rsq));
+
+$conflevel = random(0, 2, 1);
+@alpha = (0.01, 0.05, 0.10);
+$alpha = $alpha[$conflevel];
+$tstar = Real( tdistr( $df, ($alpha/2) ) );
+$moe = Real( sprintf("%.3f", $tstar * $b1se) );
+$upper = sprintf("%.3f", $b1 + $moe);
+$lower = sprintf("%.3f", $b1 - $moe);
+
+if(0 > $lower && 0 < $upper){
+  $correlyn = " b. No";
+} else {
+  $correlyn = " a. Yes";
+}
+$relationshipyn = RadioButtons(
+  [
+  ' a. Yes',
+  ' b. No'
+  ],     # choices
+  $correlyn,     # correct answer
+  order => [
+  ' a. Yes',
+  ' b. No'
+  ],
+  labels => [
+  'a.',
+  'b.'
+  ],
+  separator => $tab,
+);
+
+$param = '\beta_1';
+$nullval = 0;
+$type = 'NEQ';
+
+$nullhyp = hyptestProblemUWL::selectnull(
+  nullval => $nullval,
+  param => $param,
+);
+
+$althyp = hyptestProblemUWL::selectalt(
+  nullval => $nullval,
+  param => $param,
+  type => $type,
+);
+
+$rej = "Reject \(H_0\).";
+$f2r = "Fail to reject \(H_0\).";
+
+$rejinterp = "We do have significant evidence to suggest that there is a ".
+             "linear relationship between ". $resp ." and ". $pred .".";
+
+$f2rinterp = "We do not have significant evidence to suggest that there is a ".
+             "linear relationship between ". $resp ." and ". $pred .".";
+
+$accinterp = "We do have significant evidence to suggest that there is not a ".
+             "linear relationship between ". $resp ." and ". $pred .".";
+
+
+if($b1pval < $alpha){
+  $corconcl = " a. ". $rej ." ". $rejinterp;
+} else {
+  $corconcl = " f. ". $f2r ." ". $f2rinterp;
+}
+
+@conc_options = (
+  " a. Reject \(H_0\). ". $rejinterp,
+  " b. Reject \(H_0\). ". $accinterp,
+  " c. Reject \(H_0\). ". $f2rinterp,
+  " d. Fail to reject \(H_0\). ". $rejinterp,
+  " e. Fail to reject \(H_0\). ". $accinterp,
+  " f. Fail to reject \(H_0\). ". $f2rinterp,
+  " g. Accept \(H_0\). ". $rejinterp,
+  " h. Accept \(H_0\). ". $accinterp,
+  " i. Accept \(H_0\). ". $f2rinterp,
+);
+
+$conclusion = RadioButtons(
+  [@conc_options],
+  $corconcl,
+  order => [@conc_options],
+  labels => [
+  'a.',
+  'b.',
+  'c.',
+  'd.',
+  'e.',
+  'f.',
+  'g.',
+  'h.',
+  'i.'
+  ],
+  separator => $BR,
+);
+
+$xpred = 5;
+$yactual = 3;
+$yhat = Real(sprintf("%.4f", $b0 + $b1 * $xpred));
+$res = Real($yactual - $yhat);
+
+$output = MultiAnswer($n, $r, $rsq, $b1, $b1se, $df, $b1t, $b1pval) -> with(
+  singleResult => 0,
+  allowBlankAnswers => 1,
+  checker => sub {
+    my ( $correct, $student, $self ) = @_;
+    my ( $stn, $str, $strsq, $stb1, $stb1se, $stdf, $stb1t, $stb1pval ) = @{$student};
+    my ( $cn, $cr, $crsq, $cb1, $cb1se, $cdf, $cb1t, $cb1pval ) = @{$correct};
+    my @ret = (0, 0, 0, 0, 0, 0, 0, 0); # Score vector to return
+
+    if( $isPreview){
+      return [ @ret ];
+    }
+
+    # tolerances
+    my $toln = 0;
+    my $tolr = 0.001;
+    my $tolrsq = 0.001;
+    my $tolb1 = 0.001;
+    my $tolb1se = 0.001;
+    my $toldf = 0;
+    my $tolb1t = 0.001;
+    my $tolb1pval = 0.001;
+
+    my $i = 0;
+    if( $stn ne '' ){
+      my $compn = abs( $stn - $cn );
+      if ( $compn <= $toln ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $str ne '' ){
+      my $compr = abs( $str - $cr );
+      if ( $compr <= $tolr ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } elsif ( abs( -$str - $cr ) <= $tolr ) {
+        $ret[$i] += 0.5;
+        $self -> setMessage( $i + 1, 'Are you sure this is the correct sign for '.
+                            'the correlation coefficient?');
+      } elsif ( $str == $crsq**2 ) {
+        $self -> setMessage( $i + 1, 'Make sure you take the square root of R-sq.');
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $strsq ne '' ){
+      my $comprsq = abs( $strsq - $crsq );
+      if ( $comprsq <= $tolrsq ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect. Make sure you use the Multiple '.
+                            'R-squared value from R commander.' );
+      }
+    }
+
+    $i++;
+
+    if( $stb1 ne '' ){
+      my $compb1 = abs( $stb1 - $cb1 );
+      if( $compb1 <= $tolb1 ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stb1se ne '' ){
+      my $compb1se = abs( $stb1se - $cb1se );
+      if( $compb1se <= $tolb1se ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stdf ne '' ){
+      my $compdf = abs( $stdf - $cdf );
+      if( $compdf <= $toldf ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } elsif ( $stdf == $cdf + 1 ) {
+        $self -> setMessage( $i + 1, 'Remember for linear regression we need to '.
+                            'subtract 2 from our sample size for degrees of freedom.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stb1t ne '' ){
+      my $compb1t = abs( $stb1t - $cb1t );
+      if( $compb1t <= $tolb1t ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    $i++;
+
+    if( $stb1pval ne '' ){
+      my $compb1pval = abs( $stb1pval - $cb1pval );
+      if( $compb1pval <= $tolb1pval ){
+        $ret[$i] += 1;
+        $self -> setMessage( $i + 1, 'This is correct.' );
+      } else {
+        $self -> setMessage( $i + 1, 'This is incorrect.' );
+      }
+    }
+
+    return [ @ret ];
+
+  } # end checker
+
+);
+
+# originally set this up as a compound problem, but changed back to a single
+# problem setup. did not like that students had to use a submission in order
+# to go from part 1 to part 2.
+# $cp = new compoundProblem(
+#   parts => 3,
+#   weights => [1,1,1],
+#   nextStyle => 'Checkbox',
+#   nextLabel => 'Proceed to next part',
+#   nextVisible => 'ifCorrect',
+#   saveAllAnswers => 0,
+# );
+
+#listVariables();
+
+BEGIN_TEXT
+$BBOLD GPA and Classes Missed $EBOLD
+$PAR
+The following questions should be answered using the $BBOLD sleep.sav $EBOLD
+dataset which can be found along with a description of the data on the course D2L
+site. Answer the following questions using the dataset with the statistical software
+of your choice.
+$PAR
+In this question, you will be exploring how the $pred impacts $resp.
+$PAR
+$BBOLD Part 1. $EBOLD Describe the model.
+$PAR
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM Response Variable:
+  \{ BeginList( "OL", type=>"i" ) \}
+    $ITEM What is the response variable? $BR
+    \{ $response -> buttons() \} $anssep
+    $ITEM What kind of variable is the response variable? $BR
+    \{ $responsetype -> buttons() \} $anssep
+  \{ EndList( "OL" ) \}
+  $ITEM Predictor Variable:
+  \{ BeginList( "OL", type=>"i") \}
+    $ITEM What is the predictor variable? $BR
+    \{ $predictor -> buttons() \} $anssep
+    $ITEM What kind of variable is the predictor variable? $BR
+    \{ $predictortype -> buttons() \} $anssep
+  \{ EndList( "OL" ) \}
+  $ITEM Which procedure would be most appropriate to see if there is a
+  relationship between $pred and $resp? $BR
+  \{ $whichproc -> buttons() \} $anssep
+  $ITEM A \{ (1 - $alpha)*100 \}$PERCENT confidence interval for \( \beta_1 \) is
+  \( ($lower, $upper) \).
+  \{ BeginList( "OL", type=>"i" ) \}
+    $ITEM Does this interval suggest that there is a $relationship relationship
+    between $pred and $resp? $BR
+    \{ $relationshipyn -> buttons() \} $anssep
+    $ITEM What is the margin of error for this confidence interval? \{ ans_rule() \}
+  \{ EndList("OL") \}
+\{ EndList( "OL") \}
+
+$PAR
+$BBOLD Part 2. $EBOLD Fill in the missing blanks in the following output and use
+it to answer the following questions.
+$PAR
+$BBOLD Simple linear regression results:$EBOLD $BR
+Dependent Variable: $resp $BR
+Independent Variable: $pred $BR
+Sample size: \{ ans_rule(10) \} $BR
+R (correlation coefficient) = \{ ans_rule(10) \} $BR
+R-sq = \{ ans_rule(10) \}
+$PAR
+$BBOLD Parameter Estimates:$EBOLD
+\{
+BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+AlignedRow(["Parameter", "Estimate", "Std. Err.", "DF", "t-stat", "p-value"],
+            align=>"CENTER", valign=>"MIDDLE", separation=>0).
+AlignedRow(["Intercept", "\( $b0 \)", "\( $b0se \)", "\( $df \)", "\( $b0t \)", "\($b0pval\)"],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+AlignedRow(["classesmissed", $output->ans_rule(10), $output->ans_rule(10),
+            $output->ans_rule(10), $output->ans_rule(10), $output->ans_rule(10) ],
+            align=>"RIGHT", valign=>"MIDDLE", separation=>0).
+EndTable()
+\}
+\{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
+  $ITEM What is the null hypothesis for this hypothesis test? $BR
+  \{ $nullhyp -> buttons() \}
+  $PAR
+  $ITEM What is the alternative hypothesis for this hypothesis test? $BR
+  \{ $althyp -> buttons() \}
+  $PAR
+  $ITEM Select the appropriate conclusion for this test at a significance level
+  of \( \alpha = $alpha \). $BR
+  \{ $conclusion -> buttons() \} $anssep
+  $ITEM One of the students in the dataset had $xpred $pred.
+  \{ BeginList( "OL", type=>"i" ) \}
+    $ITEM What is the predicted $resp for this student? \{ $output -> ans_rule(10) \}
+    $ITEM If the actual $resp for this student was $yactual, what is the residual?
+    \{ $output -> ans_rule(10) \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL" ) \}
+
+END_TEXT
+
+ANS( $response -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you trying to predict ". $resp ." with ". $pred .
+        " or ". $pred ." with ". $resp ."?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $responsetype -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Think about the type of variable that ". $resp ." is. ".
+        "If you were recording ". $resp .", would you write numbers or ".
+        "categories?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $predictor -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you trying to predict ". $resp ." with ". $pred .
+        " or ". $pred ." with ". $resp ."?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $predictortype -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Think about the type of variable that ". $pred ." is. ".
+        "If you were recording ". $pred .", would you write numbers or ".
+        "categories?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $whichproc -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you sure this is the best method for two quantitative ".
+        "variables?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $relationshipyn -> cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("This confidence interval gives a range of reasonable values ".
+                   "for \( \beta_1 \). Is zero a reasonable value, or are all ".
+                   "of the values either positive or negative?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $moe -> cmp(
+    checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $tolmoe = 0.001;
+    my $compmoe = abs( $student - $correct );
+    if( $compmoe <= $tolmoe ){
+      $self->{ans_message} = ('This is correct.' );
+      return 1;
+    } elsif ( abs(-$student - $correct) <= $tolmoe ){
+      Value->Error('Are your upper and lower endpoints for the interval correct, '.
+                   'or have you switched them?');
+    } else {
+      Value->Error('This is incorrect.' );
+    }
+
+  }
+  )
+);
+
+ANS( $output -> cmp( ) );
+
+ANS( $nullhyp->cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you sure this is the correct alternative?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $althyp->cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+    if( $student ne $correct ){
+      Value->Error("Are you sure this is the correct alternative?");
+    } else {
+      $self->{ans_message} = ("This is correct");
+      return 1;
+    }
+  }
+  )
+);
+
+ANS( $conclusion->cmp() );
+
+
+ANS( $yhat->cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $tolyhat = 0.01;
+    my $yhatwrong1 = ($b0 + $b1) * $xpred;
+    my $yhatwrong2 = $b0t + $b1t * $xpred;
+    my $compyhat = abs( $student - $correct );
+    if( $compyhat <= $tolyhat ){
+      $self->{ans_message} = ('This is correct.' );
+      return 1;
+    } elsif ( abs($student - $yhatwrong1) <= $tolyhat ){
+      Value->Error("Check the order of operations for your formula. You should ".
+                   "only multiply the slope by \(x\).");
+    } elsif ( abs( $student - $yhatwrong2 ) <= $tolyhat ){
+      Value->Error('Make sure that you are using the estimates for the slope and '.
+                   'intercept, not the t-statistics.');
+    } else {
+      Value->Error('This is incorrect.' );
+    }
+
+  }
+
+  )
+);
+
+ANS( $res->cmp(
+  checker=>sub {
+    my( $correct, $student, $self ) = @_;
+
+    if( ($student eq '' || $isPreview) ){
+      # Don't give a message if not answered.
+      return 0;
+    }
+
+    my $tolres = 0.01;
+    my $compres = abs( $student - $correct );
+    if( $compres <= $tolres ){
+      $self->{ans_message} = ('This is correct.' );
+      return 1;
+    } elsif ( abs( -$stres - $cres ) <= $tolres ){
+      Value->Error("Did you use \( ( \)actual \(-\) observed\( ) \) or ".
+                   "\( ( \)observed \(-\) actual\( ) \)?" );
+    } else {
+      Value->Error('This is incorrect.' );
+    }
+
+  }
+
+  )
+);
+
+
+ENDDOCUMENT();
