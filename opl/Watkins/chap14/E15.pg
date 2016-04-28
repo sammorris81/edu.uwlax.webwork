@@ -133,18 +133,6 @@ $f2rinterp = "We do not have significant evidence of a difference in mean $respo
 $accinterp = "We have significant evidence that there is no difference in mean $response ".
              "for any of the $groups different levels of $factor.";
 
-$f = random( 1, 3, 1 );
-if ($f == 1) {
-  $alpha = sprintf("%.2f", 0.10);
-} elsif ($f == 2) {
-  $alpha = sprintf("%.2f", 0.05);
-} elsif ($f == 3) {
-  $alpha = sprintf("%.2f", 0.01)
-}
-
-$ncompare = C($a, 2);
-$overall = Real( sprintf("%.4f", 1 - (1 - $alpha)**($ncompare) ));
-
 @dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
 @interps     = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
@@ -153,6 +141,9 @@ $overall = Real( sprintf("%.4f", 1 - (1 - $alpha)**($ncompare) ));
 @alphas = (0.01, 0.05, 0.10);
 $random = random(0, 2, 1);
 $alpha = $alphas[$random];
+
+$ncompare = C($a, 2);
+$overall = Real( sprintf("%.4f", 1 - (1 - $alpha)**($ncompare) ));
 
 if ($pval < $alpha) {
   $correct_dec = $dec_options[0];
