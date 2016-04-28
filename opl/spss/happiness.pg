@@ -54,85 +54,85 @@ $pred = "poor sleep quality";
 
 $response = RadioButtons(
   [ # choices
-  ' a. '. $resp,
-  ' b. '. $pred
+    $resp,
+    $pred
   ],
-  ' a. '. $resp,     # correct answer
+  $resp,     # correct answer
   order => [
-  ' a. '. $resp,
-  ' b. '. $pred
+    $resp,
+    $pred
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
 
 $responsetype = RadioButtons(
   [ # choices
-  ' a. Quantitative',
-  ' b. Categorical'
+  ' Quantitative',
+  ' Categorical'
   ],
-  ' a. Quantitative',     # correct answer
+  ' Quantitative',     # correct answer
   order => [
-  ' a. Quantitative',
-  ' b. Categorical'
+  ' Quantitative',
+  ' Categorical'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
 
 $predictor = RadioButtons(
   [ # choices
-  ' a. '. $resp,
-  ' b. '. $pred
+    $resp,
+    $pred
   ],
-  ' b. '. $pred,     # correct answer
+  $pred,     # correct answer
   order => [
-  ' a. '. $resp,
-  ' b. '. $pred
+    $resp,
+    $pred
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
 
 $predictortype = RadioButtons(
   [ # choices
-  ' a. Quantitative',
-  ' b. Categorical'
+  ' Quantitative',
+  ' Categorical'
   ],
-  ' a. Quantitative',     # correct answer
+  ' Quantitative',     # correct answer
   order => [
-  ' a. Quantitative',
-  ' b. Categorical'
+  ' Quantitative',
+  ' Categorical'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
 
 $whichproc = RadioButtons(
   [ # choices
-  ' a. One-Way ANOVA',
-  ' b. Simple Linear Regression'
+  ' One-Way ANOVA',
+  ' Simple Linear Regression'
   ],
-  ' b. Simple Linear Regression',     # correct answer
+  ' Simple Linear Regression',     # correct answer
   order => [
-  ' a. One-Way ANOVA',
-  ' b. Simple Linear Regression'
+  ' One-Way ANOVA',
+  ' Simple Linear Regression'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -163,23 +163,23 @@ $upper = sprintf("%.3f", $b1 + $moe );
 $lower = sprintf("%.3f", $b1 - $moe );
 
 if(0 > $lower && 0 < $upper){
-  $correlyn = " b. No";
+  $correlyn = " No";
 } else {
-  $correlyn = " a. Yes";
+  $correlyn = " Yes";
 }
 $relationshipyn = RadioButtons(
   [
-  ' a. Yes',
-  ' b. No'
+  ' Yes',
+  ' No'
   ],     # choices
   $correlyn,     # correct answer
   order => [
-  ' a. Yes',
-  ' b. No'
+  ' Yes',
+  ' No'
   ],
   labels => [
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -202,50 +202,45 @@ $althyp = hyptestProblemUWL::selectalt(
 $rej = "Reject \(H_0\).";
 $f2r = "Fail to reject \(H_0\).";
 
-$rejinterp = "We do have significant evidence to suggest that there is a ".
-                "linear relationship between ". $resp ." and ". $pred .".";
+$rejinterp = "We have statistically significant evidence to suggest that there ".
+             "is a linear relationship between ". $resp ." and ". $pred .".";
 
-$f2rinterp = "We do not have significant evidence to suggest that there is a ".
-                "linear relationship between ". $resp ." and ". $pred .".";
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "there is a linear relationship between ". $resp ." and ". $pred .".";
 
-$accinterp = "We do have significant evidence to suggest that there is not a ".
-             "linear relationship between ". $resp ." and ". $pred .".";
+$accinterp = "We have statistically significant evidence to suggest that there ".
+             "is not a linear relationship between ". $resp ." and ". $pred .".";
 
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
 
-if($b1pval < $alpha){
-  $corconcl = " a. ". $rej ." ". $rejinterp;
+if ($b1pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-  $corconcl = " f. ". $f2r ." ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@conc_options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-  [@conc_options],
-  $corconcl,
-  order => [@conc_options],
-  labels => [
-  'a.',
-  'b.',
-  'c.',
-  'd.',
-  'e.',
-  'f.',
-  'g.',
-  'h.',
-  'i.'
-  ],
-  separator => $BR,
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
 );
 
 $xpred = 6;
@@ -391,20 +386,20 @@ $rsqDAS = Real(0.2314);
 
 $modelcomp = RadioButtons(
   [
-  ' a. Poor sleep quality.',
-  ' b. DAS score.',
-  ' c. There is not enough information to tell.'
+  ' Poor sleep quality.',
+  ' DAS score.',
+  ' There is not enough information to tell.'
   ],
-  ' b. DAS score.',
+  ' DAS score.',
   order => [
-  ' a. Poor sleep quality.',
-  ' b. DAS score.',
-  ' c. There is not enough information to tell.'
+  ' Poor sleep quality.',
+  ' DAS score.',
+  ' There is not enough information to tell.'
   ],
   labels => [
-  'a.',
-  'b.',
-  'c.'
+  'a',
+  'b',
+  'c'
   ],
   separator => $BR,
 );
@@ -468,7 +463,8 @@ $PAR
 
 $PAR
 $BBOLD Part 2. $EBOLD Fill in the missing blanks in the following output and use
-it to answer the following questions.
+it to conduct a hypothesis test to look for evidence of a linear relationship
+between $resp and $pred.
 $PAR
 $BBOLD Simple linear regression results:$EBOLD $BR
 Dependent Variable: $resp $BR
@@ -496,9 +492,11 @@ EndTable()
   $ITEM What is the alternative hypothesis for this hypothesis test? $BR
   \{ $althyp -> buttons() \}
   $PAR
-  $ITEM Select the appropriate conclusion for this test at a significance level
-  of \( \alpha = $alpha \). $BR
-  \{ $conclusion -> buttons() \} $anssep
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
   $ITEM One of the students in the dataset had a $pred value of $xpred.
   \{ BeginList( "OL", type=>"i" ) \}
     $ITEM What is the predicted $resp for this student? \{ $output -> ans_rule(10) \}
@@ -521,6 +519,8 @@ END_TEXT
 ANS( $response -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -540,6 +540,8 @@ ANS( $response -> cmp(
 ANS( $responsetype -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -560,6 +562,8 @@ ANS( $responsetype -> cmp(
 ANS( $predictor -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -579,6 +583,8 @@ ANS( $predictor -> cmp(
 ANS( $predictortype -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -599,6 +605,8 @@ ANS( $predictortype -> cmp(
 ANS( $whichproc -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -618,6 +626,8 @@ ANS( $whichproc -> cmp(
 ANS( $relationshipyn -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -638,6 +648,8 @@ ANS( $relationshipyn -> cmp(
 ANS( $moe -> cmp(
     checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -660,11 +672,13 @@ ANS( $moe -> cmp(
   )
 );
 
-ANS( $output -> cmp( ) );
+ANS($output -> cmp());
 
 ANS( $nullhyp->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -683,6 +697,8 @@ ANS( $nullhyp->cmp(
 ANS( $althyp->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -698,11 +714,14 @@ ANS( $althyp->cmp(
   )
 );
 
-ANS( $conclusion->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
 
 ANS( $yhat->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -734,6 +753,8 @@ ANS( $yhat->cmp(
 ANS( $res->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -760,6 +781,8 @@ ANS( $res->cmp(
 ANS( $rsqDAS->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -782,6 +805,8 @@ ANS( $rsqDAS->cmp(
 ANS( $modelcomp->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.

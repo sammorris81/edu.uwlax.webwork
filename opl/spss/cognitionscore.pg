@@ -63,8 +63,8 @@ $response = RadioButtons(
     $pred
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -80,8 +80,8 @@ $responsetype = RadioButtons(
   ' Categorical'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -97,8 +97,8 @@ $predictor = RadioButtons(
     $pred
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -114,8 +114,8 @@ $predictortype = RadioButtons(
   ' Categorical'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -131,8 +131,8 @@ $whichproc = RadioButtons(
   ' Simple Linear Regression'
   ],
   labels => [ # gives labels to use in correct and incorrect
-  'a.',
-  'b.'
+  'a',
+  'b'
   ],
   separator => $tab,
 );
@@ -158,52 +158,50 @@ $pval = fprob($dfa, $dfe, $f);
 $rej = "Reject \(H_0\).";
 $f2r = "Fail to reject \(H_0\).";
 
-$rejinterp = "We do have significant evidence to suggest that at least one of the ".
-                "averages for ". $pred ." is different from the others.";
+$rejinterp = "We have statistically significant evidence to suggest that ".
+             "at least one of the averages for ". $pred ." is different from ".
+             "the others.";
 
-$f2rinterp = "We do not have significant evidence to suggest that at least one ".
-                "of the averages for ". $pred ." is different from the others.";
+$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+             "at least one of the averages for ". $pred ." is different from the ".
+             "others.";
 
-$accinterp = "We do have significant evidence to suggest that none of the ".
-              "averages for ". $pred ." is different from the others.";
+$accinterp = "We have stastically significant evidence to suggest that none ".
+             "of the averages for ". $pred ." is different from the others.";
 
-$alpha = 0.05;
+$alpha = Real(0.05);
 $overall = Real(1 - (1 - $alpha)**6);
 
-if($pval < $alpha){
-  $corconcl = " a. ". $rej ." ". $rejinterp;
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+if ($pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
 } else {
-  $corconcl = " f. ". $f2r ." ". $f2rinterp;
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
 }
 
-@conc_options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-  [@conc_options],
-  $corconcl,
-  order => [@conc_options],
-  labels => [
-  'a.',
-  'b.',
-  'c.',
-  'd.',
-  'e.',
-  'f.',
-  'g.',
-  'h.',
-  'i.'
-  ],
-  separator => $BR,
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
 );
 
 $output = MultiAnswer( $SSA, $dfa, $MSA, $f, $pval,
@@ -388,26 +386,26 @@ $output = MultiAnswer( $SSA, $dfa, $MSA, $f, $pval,
 
 $bonferdiff = RadioButtons(
   [
-  " a. Abstain",
-  " b. Heavy",
-  " c. Light",
-  " d. Moderate",
-  " e. None of the three groups are different"
+  " Abstain",
+  " Heavy",
+  " Light",
+  " Moderate",
+  " None of the three groups are different"
   ],
-  " e. None of the three groups are different",
+  " None of the three groups are different",
   order => [
-  " a. Abstain",
-  " b. Heavy",
-  " c. Light",
-  " d. Moderate",
-  " e. None of the three groups are different"
+  " Abstain",
+  " Heavy",
+  " Light",
+  " Moderate",
+  " None of the three groups are different"
   ],
   labels => [
-  'a.',
-  'b.',
-  'c.',
-  'd.',
-  'e.'
+  'a',
+  'b',
+  'c',
+  'd',
+  'e'
   ],
   separator => $anssep,
 );
@@ -461,9 +459,14 @@ $PAR
 
 $PAR
 $BBOLD Part 2. $EBOLD Fill in the missing blanks in the following table and use
-it to answer the following questions.
+it to conduct the hypothesis test for
 $PAR
-$BBOLD One-Way ANOVA Table:$EBOLD
+  \( H_0: \mu_{ \text{abstain} } = \mu_{ \text{heavy} } = \mu_{ \text{light} } = \mu_{ \text{moderate} } \)
+  $BR
+  \( H_A: \) at least one average is different.
+$PAR
+$BBOLD One-Way ANOVA Table:$EBOLD (Note the SS and df columns of the table are
+  switched to match the SPSS output)
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
 AlignedRow(["Source", "SS", "df", "MS", "F", "p-value"],
@@ -481,20 +484,16 @@ EndTable()
 \{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
   $ITEM How many levels does $pred have? \{ $output->ans_rule(10) \}
   $PAR
-  $ITEM Conduct the hypothesis test for
-  $PAR
-  \( H_0: \mu_{ \text{abstain} } = \mu_{ \text{heavy} } = \mu_{ \text{light} } = \mu_{ \text{moderate} } \)
-  $BR
-  \( H_A: \) at least one average is different.
-  $PAR
-  $ITEM What are the appropriate degrees of freedom to use for the f statistic?
+  $ITEM What are the appropriate degrees of freedom to use for the F statistic?
   $BR
   Numerator: \{ ans_rule(10) \} $BR
   Denominator: \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate conclusion for this test at a significance level
-  of \( \alpha = $alpha \). $BR
-  \{ $conclusion -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
   $PAR
   $ITEM If we were to conduct pairwise comparisons between the different groups,
   what would the overall type-I error rate be? \{ ans_rule(10) \}
@@ -511,6 +510,8 @@ END_TEXT
 ANS( $response -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -518,7 +519,7 @@ ANS( $response -> cmp(
     }
     if( $student ne $correct ){
       Value->Error("Are you trying to predict ". $resp ." with ". $pred .
-        " or ". $pred ." with ". $resp ."?");
+        " or ". $pred ." with ". $resp ." $student $correct?");
     } else {
       $self->{ans_message} = ("This is correct.");
       return 1;
@@ -530,6 +531,8 @@ ANS( $response -> cmp(
 ANS( $responsetype -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -550,6 +553,8 @@ ANS( $responsetype -> cmp(
 ANS( $predictor -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -569,6 +574,8 @@ ANS( $predictor -> cmp(
 ANS( $predictortype -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -589,14 +596,16 @@ ANS( $predictortype -> cmp(
 ANS( $whichproc -> cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
       return 0;
     }
     if( $student ne $correct ){
-      Value->Error("Are you sure this is the best method for two quantitative ".
-        "variables?");
+      Value->Error("Are you sure this is the best method to find a relationship ".
+        "between a categorical and quantitative variable?");
     } else {
       $self->{ans_message} = ("This is correct.");
       return 1;
@@ -610,6 +619,8 @@ ANS( $output -> cmp( ) );
 ANS( $dfa -> cmp( #CHECK
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -629,6 +640,8 @@ ANS( $dfa -> cmp( #CHECK
 ANS( $dfe -> cmp( #CHECK
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -645,11 +658,14 @@ ANS( $dfe -> cmp( #CHECK
   )
 );
 
-ANS( $conclusion->cmp() );
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
 
 ANS( $overall->cmp( #CHECK
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -677,6 +693,8 @@ ANS( $overall->cmp( #CHECK
 ANS( $bonferdiff->cmp(
   checker=>sub {
     my( $correct, $student, $self ) = @_;
+    $correct = $self->{correct_ans};
+    $student = $self->{student_ans};
 
     if( ($student eq '' || $isPreview) ){
       # Don't give a message if not answered.
@@ -685,7 +703,7 @@ ANS( $bonferdiff->cmp(
 
     if( $student ne $correct ){
       Value->Error("This is incorrect. Look at the output given from the pairwise ".
-                   "comparisons. Are any of the letters different?")
+                   "comparisons. Are any of the averages different?")
     } else {
       $self->{ans_message} = ("This is correct.");
       return 1;
