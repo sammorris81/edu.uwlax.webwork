@@ -38,6 +38,7 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+$n = 40;
 @sigs = (0, 0, 5, 5);
 @slopes = (-5, 5);
 push(@slopes, random(-1, 1, 2) * 5);
@@ -51,85 +52,43 @@ $xmin = 0;
 $xmax = 20;
 $xticklength = 5;
 
-$quantx = new DataGenUWL(
-  datatype => 'single_quant',
-  n => 40,
-  mean => 10,
-  sd => 3.3,
-  skew => 0,
-  randomsummary => "F",
-  round => 2,
-);
+rserve_eval('x <- rnorm(' . $n . ', 10, 3.3)');
 
-@x = @{$quantx->{x}};
+# generate y1
+rserve_eval('y <- 19 + ' . $slopes[0] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[0] .')');
+$scatter = rserve_start_plot('png');
+rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
+             plot(x, y, ylab = "", xlab = "")');
+$scatter1 = rserve_finish_plot($scatter);
+($r1) = rserve_eval('cor(x, y)');
+$r1 = sprintf("%.3f", $r1);
 
-$quant1 = new DataGenUWL(
-  datatype => 'simp_reg',
-  x => [@x],
-  int => 19,
-  slope => $slopes[0],
-  sig => $sigs[0],
-);
+# generate y2
+rserve_eval('y <- 19 + ' . $slopes[1] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[1] .')');
+$scatter = rserve_start_plot('png');
+rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
+             plot(x, y, ylab = "", xlab = "")');
+$scatter2 = rserve_finish_plot($scatter);
+($r2) = rserve_eval('cor(x, y)');
+$r2 = sprintf("%.3f", $r2);
 
-$r1 = $quant1->{r};
+# generate y3
+rserve_eval('y <- 19 + ' . $slopes[2] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[2] .')');
+$scatter = rserve_start_plot('png');
+rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
+             plot(x, y, ylab = "", xlab = "")');
+$scatter3 = rserve_finish_plot($scatter);
+($r3) = rserve_eval('cor(x, y)');
+$r3 = sprintf("%.3f", $r3);
 
-$scatter1 = StatGraphicsUWL::scatterplot(
-  data => $quant1,
-  xmin => $xmin,
-  xmax => $xmax,
-  xticklength => $xticklength,
-);
-
-$quant2 = new DataGenUWL(
-  datatype => 'simp_reg',
-  x => [@x],
-  int => 19,
-  slope => $slopes[1],
-  sig => $sigs[1],
-);
-
-$r2 = $quant2->{r};
-
-$scatter2 = StatGraphicsUWL::scatterplot(
-  data => $quant2,
-  xmin => $xmin,
-  xmax => $xmax,
-  xticklength => $xticklength,
-);
-
-$quant3 = new DataGenUWL(
-  datatype => 'simp_reg',
-  x => [@x],
-  int => 19,
-  slope => $slopes[2],
-  sig => $sigs[2],
-);
-
-$r3 = $quant3->{r};
-
-$scatter3 = StatGraphicsUWL::scatterplot(
-  data => $quant3,
-  xmin => $xmin,
-  xmax => $xmax,
-  xticklength => $xticklength,
-);
-
-$quant4 = new DataGenUWL(
-  datatype => 'simp_reg',
-  x => [@x],
-  int => 19,
-  slope => $slopes[3],
-  sig => $sigs[3],
-);
-
-$r4 = $quant4->{r};
-
-$scatter4 = StatGraphicsUWL::scatterplot(
-  data => $quant4,
-  xmin => $xmin,
-  xmax => $xmax,
-  xticklength => $xticklength,
-);
+# generate y4
+rserve_eval('y <- 19 + ' . $slopes[3] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[3] .')');
+$scatter = rserve_start_plot('png');
+rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
+             plot(x, y, ylab = "", xlab = "")');
+$scatter4 = rserve_finish_plot($scatter);
+($r4) = rserve_eval('cor(x, y)');
+$r4 = sprintf("%.3f", $r4);
 
 @options = usefulstatUWL::sortarray($r1, $r2, $r3, $r4);
 unshift(@options, '?');
@@ -175,8 +134,8 @@ $PAR
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
 AlignedRow([
-      image( insertGraph($scatter1), width=>300, height=>300, tex_size=>"400" ),
-      image( insertGraph($scatter2), width=>300, height=>300, tex_size=>"400" )
+      image($scatter1, width=>300, height=>300, tex_size=>"400"),
+      image($scatter2, width=>300, height=>300, tex_size=>"400")
       ],
       align=>"LEFT", valign=>"TOP", separation=>0
       ).
@@ -187,8 +146,8 @@ AlignedRow([
             align=>"LEFT", valign=>"TOP", separation=>0
            ).
 AlignedRow([
-      image( insertGraph($scatter3), width=>300, height=>300, tex_size=>"400" ),
-      image( insertGraph($scatter4), width=>300, height=>300, tex_size=>"400" )
+      image($scatter3, width=>300, height=>300, tex_size=>"400"),
+      image($scatter4, width=>300, height=>300, tex_size=>"400")
       ],
       align=>"LEFT", valign=>"TOP", separation=>0
       ).

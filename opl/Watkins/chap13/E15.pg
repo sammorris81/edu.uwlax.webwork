@@ -86,35 +86,35 @@ if($displayMode eq "TeX"){
 
 $alternative = RadioButtons(
   [ # choices
-    " a. \( H_A: \beta_1 < 0 \)",
-    " b. \( H_A: \beta_1 > 0 \)",
-    " c. \( H_A: \beta_1 \neq 0 \)"
+    " \( \beta_1 < 0 \)",
+    " \( \beta_1 > 0 \)",
+    " \( \beta_1 \neq 0 \)"
   ],
-  " c. \( H_A: \beta_1 \neq 0 \)",  #correct answer
+  " \( \beta_1 \neq 0 \)",  #correct answer
   order => [
-    " a. \( H_A: \beta_1 < 0 \)",
-    " b. \( H_A: \beta_1 > 0 \)",
-    " c. \( H_A: \beta_1 \neq 0 \)"
+    " \( \beta_1 < 0 \)",
+    " \( \beta_1 > 0 \)",
+    " \( \beta_1 \neq 0 \)"
   ],
   labels => [
-    'a.',
-    'b.',
-    'c.'
+    'a',
+    'b',
+    'c'
   ],
   separator => $anssep,
 );
 
-$rejinterp = "We do have significant evidence to suggest there is a ".
-    "non-zero correlation between passenger compartment size and greenhouse gas ".
-    "emissions.";
+$rejinterp = "We have statistically significant evidence to suggest there is a ".
+             "linear relationship between passenger compartment size and ".
+             "greenhouse gas emissions.";
 
-$f2rinterp = "We do not have significant evidence to suggest there is a ".
-    "non-zero correlation between passenger compartment size and greenhouse gas ".
-    "emissions.";
+$f2rinterp = "We do not have statistically significant evidence to suggest there ".
+             "is a linear relationship between passenger compartment size and ".
+             "greenhouse gas emissions.";
 
-$accinterp = "We do have significant evidence to suggest that there is no ".
-    "correlation between passenger compartment size and greenhouse gas ".
-    "emissions.";
+$accinterp = "We have statistically significant evidence to suggest that there ".
+             "is not a linear relationship between passenger compartment size ".
+             "and greenhouse gas emissions.";
 
 $f = random( 1, 3, 1 );
 if ($f == 1) {
@@ -131,41 +131,54 @@ if ($b1pval < $alpha){
     $corconcl = " f. Fail to reject \(H_0\). ". $f2rinterp;
 }
 
-@options = (
-  " a. Reject \(H_0\). ". $rejinterp,
-  " b. Reject \(H_0\). ". $accinterp,
-  " c. Reject \(H_0\). ". $f2rinterp,
-  " d. Fail to reject \(H_0\). ". $rejinterp,
-  " e. Fail to reject \(H_0\). ". $accinterp,
-  " f. Fail to reject \(H_0\). ". $f2rinterp,
-  " g. Accept \(H_0\). ". $rejinterp,
-  " h. Accept \(H_0\). ". $accinterp,
-  " i. Accept \(H_0\). ". $f2rinterp,
+@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@order = NchooseK(3, 3);
+@interps = @interps[@order];
+
+if ($b1pval < $alpha) {
+  $correct_dec = $dec_options[0];
+  $correct_interp = $rejinterp;
+  $correct_err    = "Type I error";
+} else {
+  $correct_dec = $dec_options[1];
+  $correct_interp = $f2rinterp;
+  $correct_err    = "Type II error";
+}
+
+@labels = ("i", "ii", "iii");
+
+$mcdec = RadioButtons(
+  [@dec_options],
+  $correct_dec,
+  order => [@dec_options],
+  labels => [@labels],
+  separator => $tab
 );
 
-$conclusion = RadioButtons(
-    [@options],
-    $corconcl,
-    order => [@options],
-    labels => ['a.', 'b.', 'c.', 'd.', 'e.', 'f.', 'g.', 'h.', 'i'],
+$mcinterp = RadioButtons(
+  [@interps],
+  $correct_interp,
+  order => [@interps],
+  labels => [@labels],
 );
 
 $preferred = RadioButtons(
   [ # choices
-    " a. Greenhouse gas emissions and highway gas mileage",
-    " b. Greenhouse gas emissions and passenger compartment size",
-    " c. There is not enough information to make this decision"
+    " Greenhouse gas emissions and highway gas mileage",
+    " Greenhouse gas emissions and passenger compartment size",
+    " There is not enough information to make this decision"
   ],
-  " a. Greenhouse gas emissions and highway gas mileage",
+  " Greenhouse gas emissions and highway gas mileage",
   order => [
-    " a. Greenhouse gas emissions and highway gas mileage",
-    " b. Greenhouse gas emissions and passenger compartment size",
-    " c. There is not enough information to make this decision"
+    " Greenhouse gas emissions and highway gas mileage",
+    " Greenhouse gas emissions and passenger compartment size",
+    " There is not enough information to make this decision"
   ],
   labels => [
-    "a.",
-    "b.",
-    "c."
+    "a",
+    "b",
+    "c"
   ]
 );
 
@@ -182,7 +195,7 @@ $PAR
 $BBOLD Simple linear regression results:$EBOLD $BR
 Dependent Variable: gge $BR
 Independent Variable: pcs $BR
-\( \text{gge} = $b0 + \underline{\phantom{xxxxxxxxxxxx}} * \text{pcs} \) $BR
+gge = $b0 + \(\underline{\phantom{xxxxxxxxxxxx}}\) * pcs $BR
 Sample size: $n $BR
 R (correlation coefficient) = $rround $BR
 R-sq = \{ ans_rule(10) \}
@@ -192,9 +205,9 @@ $BBOLD Parameter Estimates:$EBOLD
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
 AlignedRow(["Parameter", "Estimate", "Std. Err.", "DF", "t-stat", "p-value"],
             align=>"CENTER", valign=>"MIDDLE", separation=>0).
-AlignedRow(["Intercept", "\( $b0 \)", "\( $b0se \)", "\( $df \)", "\( $b0t \)", "\( $b0pvalround \)"],
+AlignedRow(["Intercept", "$b0", "$b0se", "$df", "$b0t", "$b0pvalround"],
             align=>"RIGHT", valign=>"MIDDLE", separation=>0).
-AlignedRow(["pcs", "\( $b1round \)", "\( $b1se \)", "\( $df \)", ans_rule(10) , "\( $b1pvalround \)" ],
+AlignedRow(["pcs", "$b1round", "$b1se", "$df", ans_rule(10) , "$b1pvalround" ],
             align=>"RIGHT", valign=>"MIDDLE", separation=>0).
 EndTable()
 \}
@@ -211,12 +224,11 @@ $PAR
   $BR
   \{ $alternative -> buttons( separator => "" ) \}
   $PAR
-  $ITEM The p-value for this test statistic is given in the table above. Select
-  the appropriate conclusion for this test statistic at a significance level
-  of \( \alpha = 0.05 \).
-  $BR
-  \{ $conclusion -> buttons() \}
-  $PAR
+  $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
+  \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test
+  (use \(\alpha = $alpha\)). $BR
+  \{ $mcinterp -> buttons() \} $PAR
   $ITEM Suppose there is a car that has a passenger compartment size of $xpred
   cubic feet.
   \{BeginList( "OL", type=>"i" )\}
@@ -240,11 +252,12 @@ END_TEXT
 
 ANS($rsq->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($b1t->with(tolerance=>.01, tolType=>"absolute")->cmp);
-ANS($alternative->cmp() );
-ANS($conclusion->cmp() );
+ANS($alternative->cmp());
+ANS($mcdec->cmp());
+ANS($mcinterp->cmp());
 ANS($ypred->with(tolerance=>.01, tolType=>"absolute")->cmp);
 ANS($res->with(tolerance=>.1, tolType=>"absolute")->cmp);
 ANS($moe->with(tolerance=>.1, tolType=>"absolute")->cmp);
-ANS($preferred->cmp() );
+ANS($preferred->cmp());
 
 ENDDOCUMENT();

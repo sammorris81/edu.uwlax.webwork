@@ -441,12 +441,6 @@ You will be using the \{computer("sleep")\} dataset, to exploring how $pred impa
 You can find the description and copies of the dataset on D2L to download for the
 analysis.
 $PAR
-File download:
-\{BeginList("UL")\}
-  $ITEM SPSS: \{htmlLink("sleep.sav", "sleep.sav")\}
-  $ITEM JASP: \{htmlLink("sleep.csv", "sleep.csv")\}
-\{EndList("UL")\}
-$PAR
 $BBOLD Part 1. $EBOLD Describe the model.
 $PAR
 \{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
@@ -457,6 +451,7 @@ $PAR
     $ITEM What kind of variable is the response variable?
     $anssep \{ $responsetype -> buttons() \} $anssep
   \{ EndList( "OL" ) \}
+  $PAR
   $ITEM Predictor Variable:
   \{ BeginList( "OL", type=>"i" ) \}
     $ITEM What is the predictor variable?
@@ -464,6 +459,7 @@ $PAR
     $ITEM What kind of variable is the predictor variable?
     $anssep \{ $predictortype -> buttons() \} $anssep
   \{ EndList( "OL" ) \}
+  $PAR
   $ITEM Which procedure would be most appropriate to see if there is a
   relationship between $pred and $resp?
   $anssep \{ $whichproc -> buttons() \} $anssep

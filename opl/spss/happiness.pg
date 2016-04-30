@@ -382,7 +382,7 @@ $output = MultiAnswer($n, $r, $rsq, $b1, $b1se, $df, $b1t, $b1pval) -> with(
 
 );
 
-$rsqDAS = Real(0.2314);
+$rsqDAS = Real(0.231);
 
 $modelcomp = RadioButtons(
   [
@@ -424,13 +424,6 @@ ${BBOLD}Instructions:${EBOLD}${BR}
 You will be using the \{computer("sleep")\} dataset, to exploring how $pred impacts $resp.
 You can find the description and copies of the dataset on D2L to download for the
 analysis.
-$PAR
-File download:
-\{BeginList("UL")\}
-  $ITEM SPSS: \{htmlLink("sleep.sav", "sleep.sav")\}
-  $ITEM JASP: \{htmlLink("sleep.csv", "sleep.csv")\}
-\{EndList("UL")\}
-
 $PAR
 $BBOLD Part 1. $EBOLD Describe the model.
 $PAR
