@@ -1,0 +1,49 @@
+%% Basic template settings. Should not need to be edited
+
+\documentclass[twoside]{tufte-handout}
+
+\input{MTH145.sty}
+\input{classinfo.tex}
+\author[\semesterinfo]{\semesterinfo}
+\date{}  % if the \date{} command is left out, the current date will be used
+
+%% End template settings.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\booksection}{Software}      % Need to separately identify this for
+                                    % example labeling
+\title{\booksection \ Homework 8 \& 9}
+
+\begin{document}
+
+\maketitle% this prints the handout title, author, and date
+
+\section{Due Wednesday, 11 May, at 2:29pm}
+
+\section{Objective:}
+\begin{fullwidth}
+The goal of this assignment is to demonstrate your ability to use statistical software to conduct ANOVA and Regression.
+\end{fullwidth}
+
+\section{Dataset:}
+\begin{fullwidth}
+The file \texttt{sleep} contains data that were obtained from a sample of students who did skills tests to measure cognitive function, completed a survey that asked many questions about attitudes and habits, and kept a sleep diary to record time and quality of sleep over a two week period.
+It has a total of 253 observations with each observation have values for 12 variables.
+These variables are listed below.
+\begin{itemize}\setlength{\itemsep}{0em}
+  \item \texttt{AlcoholUse}: Self-reported (0: Abstain, 1: Light, 2: Moderate, or 3: Heavy)
+  \item \texttt{AnxietyScore}: Measure of amount of anxiety
+  \item \texttt{AverageSleep}: Average hours of sleep for all days
+  \item \texttt{ClassesMissed}: Number of classes missed in a semester
+  \item \texttt{CognitionZscore}: Z-score on a test of cognitive skills
+  \item \texttt{DASscore}: Combined score for depression, anxiety and stress
+  \item \texttt{DepressionScore}: Measure of degree of depression
+  \item \texttt{GPA}: Grade point average (0 -- 4 scale)
+  \item \texttt{Happiness}: Measure of degree of happiness
+  \item \texttt{LarkOwl}: Early riser or night owl? (1: Lark, 2: Owl, or 3: Neither)
+  \item \texttt{PoorSleepQuality}: Measure of sleep quality (higher values are poorer sleep)
+  \item \texttt{StressScore}: Measure of amount of stress
+\end{itemize}
+\end{fullwidth}
+
+\end{document}

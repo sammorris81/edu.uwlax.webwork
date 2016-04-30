@@ -69,4 +69,14 @@ if ($displayMode eq "TeX") {
   our $disp_amp  = '&amp;';
 }
 
+sub computer {
+  my $message = shift;
+  MODES(
+    TeX => '\hbox{\texttt{'.$message.'}}',
+    Latex2HTML =>
+       $bHTML.'<NOBR><TT>'.$eHTML.$message.$bHTML.'</TT></NOBR>'.$eHTML,
+    HTML => '<NOBR><TT>'.$message.'</TT></NOBR>'
+  );
+}
+
 1;

@@ -398,14 +398,18 @@ $output = MultiAnswer($n, $r, $rsq, $b1, $b1se, $df, $b1t, $b1pval) -> with(
 #listVariables();
 
 BEGIN_TEXT
-$BBOLD GPA and Classes Missed $EBOLD
 $PAR
-The following questions should be answered using the $BBOLD sleep.sav $EBOLD
-dataset which can be found along with a description of the data on the course D2L
-site. Answer the following questions using the dataset with the statistical software
-of your choice.
+${BBOLD}Instructions:${EBOLD}${BR}
+You will be using the \{computer("sleep")\} dataset, to exploring how $pred impacts $resp.
+You can find the description and copies of the dataset on D2L to download for the
+analysis.
 $PAR
-In this question, you will be exploring how the $pred impacts $resp.
+File download:
+\{BeginList("UL")\}
+  $ITEM SPSS: \{htmlLink("sleep.sav", "sleep.sav")\}
+  $ITEM JASP: \{htmlLink("sleep.csv", "sleep.csv")\}
+\{EndList("UL")\}
+
 $PAR
 $BBOLD Part 1. $EBOLD Describe the model.
 $PAR
