@@ -34,6 +34,7 @@ if ($displayMode eq "TeX") {
   our $disp_null = '\( H_0 \)';
   our $disp_alt  = '\( H_a \)';
   our $disp_amp  = '\( \& \)';
+  our $disp_rsq  = '\( R^2 \)';
 } else {
   our $extrasep = $PAR;
   our $anssep = $PAR;
@@ -47,26 +48,27 @@ if ($displayMode eq "TeX") {
   our $disp_mu  = '&mu;';
   our $disp_phat = '<span style = "font-family:serif; font-size:120%; font-style:oblique;">p&#770;</span>';
   our $disp_xbar = '<span style = "font-family:serif; font-size:120%; font-style:oblique;">x&#772;</span>';
-  our $disp_p1  = 'p<sub><span style = "font-size:80%">1</span></sub>';
-  our $disp_p2  = 'p<sub><span style = "font-size:80%">2</span></sub>';
-  our $disp_pf  = 'p<sub><span style = "font-size:80%">F</span></sub>';
-  our $disp_pm  = 'p<sub><span style = "font-size:80%">M</span></sub>';
-  our $disp_mu1 = '&mu;<sub><span style = "font-size:80%">1</span></sub>';
-  our $disp_mu2 = '&mu;<sub><span style = "font-size:80%">2</span></sub>';
-  our $disp_mua = '&mu;<sub><span style = "font-size:80%">A</span></sub>';
-  our $disp_mub = '&mu;<sub><span style = "font-size:80%">B</span></sub>';
-  our $disp_muf = '&mu;<sub><span style = "font-size:80%">F</span></sub>';
-  our $disp_mum = '&mu;<sub><span style = "font-size:80%">M</span></sub>';
-  our $disp_muu = '&mu;<sub><span style = "font-size:80%">U</span></sub>';
+  our $disp_p1  = 'p<sub><span style = "font-size:85%">1</span></sub>';
+  our $disp_p2  = 'p<sub><span style = "font-size:85%">2</span></sub>';
+  our $disp_pf  = 'p<sub><span style = "font-size:85%">F</span></sub>';
+  our $disp_pm  = 'p<sub><span style = "font-size:85%">M</span></sub>';
+  our $disp_mu1 = '&mu;<sub><span style = "font-size:85%">1</span></sub>';
+  our $disp_mu2 = '&mu;<sub><span style = "font-size:85%">2</span></sub>';
+  our $disp_mua = '&mu;<sub><span style = "font-size:85%">A</span></sub>';
+  our $disp_mub = '&mu;<sub><span style = "font-size:85%">B</span></sub>';
+  our $disp_muf = '&mu;<sub><span style = "font-size:85%">F</span></sub>';
+  our $disp_mum = '&mu;<sub><span style = "font-size:85%">M</span></sub>';
+  our $disp_muu = '&mu;<sub><span style = "font-size:85%">U</span></sub>';
   our $disp_mud = '&mu;<sub><span style = "font-size:90%">d</span></sub>';
   our $disp_lt  = '&lt;';
   our $disp_le  = '&le;';
   our $disp_gt  = '&gt;';
   our $disp_ge  = '&ge;';
   our $disp_ne  = '&ne;';
-  our $disp_null = 'H<sub><span style = "font-size:80%">0</span></sub>';
+  our $disp_null = 'H<sub><span style = "font-size:85%">0</span></sub>';
   our $disp_alt  = 'H<sub><span style = "font-size:90%">a</span></sub>';
   our $disp_amp  = '&amp;';
+  our $disp_rsq  = '<span style = "font-family:serif; font-size:120%; font-style:oblique;">R<sup><span style = "font-size:85%">2</span></sup></span>';
 }
 
 sub computer {
