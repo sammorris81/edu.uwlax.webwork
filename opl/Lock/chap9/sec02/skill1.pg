@@ -79,7 +79,7 @@ $rsq1 = Real($SSM1 / $SSTot1);
 
 $pval1 = fprob(1, $dfe1, $F1);
 if ($pval1 < 0.001) {
-  $pvaldisp1 = "\( < 0.001 \)";
+  $pvaldisp1 = "$disp_lt 0.001";
 } else {
   $pvaldisp1 = sprintf("%.3f", $pval1);
 }
@@ -117,7 +117,7 @@ $rsq2 = Real($SSM2 / $SSTot2);
 
 $pval2 = fprob(1, $dfe2, $F2);
 if ($pval2 < 0.001) {
-  $pvaldisp2 = "\( < 0.001 \)";
+  $pvaldisp2 = "$disp_lt 0.001";
 } else {
   $pvaldisp2 = sprintf("%.3f", $pval2);
 }
@@ -154,12 +154,12 @@ $rsq3 = Real($SSM3 / $SSTot3);
 
 $pval3 = fprob(1, $dfe3, $F3);
 if ($pval3 < 0.001) {
-  $pvaldisp3 = "\( < 0.001 \)";
+  $pvaldisp3 = "$disp_lt 0.001";
 } else {
   $pvaldisp3 = sprintf("%.3f", $pval3);
 }
 
-@options = (' Reject \(H_0\)', ' Do not reject \(H_0\)');
+@options = (' Reject $disp_null', ' Do not reject $disp_null');
 $correct1 = ($pval1 < 0.05) ? $options[0] : $options[1];
 $correct2 = ($pval2 < 0.05) ? $options[0] : $options[1];
 $correct3 = ($pval3 < 0.05) ? $options[0] : $options[1];
@@ -240,9 +240,9 @@ BEGIN_TEXT
 $PAR
 For each of the following questions, you are given a partial outline of the ANOVA
 table from a simple linear regression. In each question, a) complete the outline
-of the ANOVA table, b) give the sample size, c) calculate \(R^2\), and d) give
+of the ANOVA table, b) give the sample size, c) calculate $disp_rsq, and d) give
 the conclusion of the hypothesis test looking at whether the model is effective.
-Give your answers to 2 decimal places.
+Unless otherwise stated, give your answers to 2 decimal places.
 
 \{BeginList("OL", type=>"1") \}
   $ITEM
@@ -255,8 +255,8 @@ Give your answers to 2 decimal places.
     \{ row( "Total", "$dftot1", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
-    $ITEM What is \(R^2\)? \{ans_rule(10)\}
-    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
     \{ $mc1->buttons() \}
   \{ EndList("OL") \}
   $PAR
@@ -270,8 +270,8 @@ Give your answers to 2 decimal places.
     \{ row( "Total", "$dftot2", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
-    $ITEM What is \(R^2\)? \{ans_rule(10)\}
-    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
     \{ $mc1->buttons() \}
   \{ EndList("OL") \}
   $PAR
@@ -285,8 +285,8 @@ Give your answers to 2 decimal places.
     \{ row( "Total", ans_rule(10), "$SSTot3", "$SPACE", "$SPACE", "$SPACE", ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
-    $ITEM What is \(R^2\)? \{ans_rule(10)\}
-    $ITEM What is the conclusion of the test at \( \alpha = 0.05 \)? $BR
+    $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
+    $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
     \{ $mc1->buttons() \}
   \{ EndList("OL") \}
 
@@ -303,7 +303,7 @@ ANS($dfe1->with(tolerance=>0, tolType=>"Absolute")->cmp());
 ANS($MSE1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($SSTot1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($n1->with(tolerance=>0, tolType=>"Absolute")->cmp());
-ANS($rsq1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($rsq1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 
 ANS($dfm->with(tolerance=>0, tolType=>"Absolute")->cmp());
@@ -313,7 +313,7 @@ ANS($dfe2->with(tolerance=>0, tolType=>"Absolute")->cmp());
 ANS($SSE2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($SSTot2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($n2->with(tolerance=>0, tolType=>"Absolute")->cmp());
-ANS($rsq2->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($rsq2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($mc2->cmp());
 
 ANS($dfm->with(tolerance=>0, tolType=>"Absolute")->cmp());
@@ -323,7 +323,7 @@ ANS($F3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($SSE3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($dftot3->with(tolerance=>0, tolType=>"Absolute")->cmp());
 ANS($n3->with(tolerance=>0, tolType=>"Absolute")->cmp());
-ANS($rsq3->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
+ANS($rsq3->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($mc3->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.
