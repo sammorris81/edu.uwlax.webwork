@@ -51,7 +51,7 @@ $exerciseb = 'Distance driven since the last fill-up of the gas tank and Amount 
 $correctb = ' Negative';
 
 $exercisec = 'Outside temperature and Amount of clothes worn';
-$correctc = ' Positive';
+$correctc = ' Negative';
 
 $exercised = 'Number of text messages sent on a cell phone and Number of text '.
              'messages received on the phone';
