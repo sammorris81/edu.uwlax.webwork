@@ -37,26 +37,26 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 @vartype = ( # choices
-  ' a. Population',
-  ' b. Sample'
+  ' Population',
+  ' Sample'
 );
 
 $exercisea = 'To estimate size of trout in a lake, an angler records the weight '.
              'of 12 trout he catches over a weekend.';
-$correcta = ' b. Sample';
+$correcta = ' Sample';
 
 $exerciseb = 'A subscription-based music website tracks its total number of active '.
              'users.';
-$correctb = ' a. Population';
+$correctb = ' Population';
 
 $exercisec = 'The US Department of Transportation announces that of the 250 million '.
              'registered passenger vehicles in the US, 2.1'.$PERCENT.' are electro-gas '.
              'hybrids.';
-$correctc = ' a. Population';
+$correctc = ' Population';
 
 $exercised = 'A questionnaire to understand athletic participation on a college '.
              'campus is emailed to 50 college students, and all of them respond.';
-$correctd = ' b. Sample';
+$correctd = ' Sample';
 
 ###########################
 ## Initialization
@@ -90,14 +90,14 @@ $mc1 = RadioButtons(
  [@vartype],
  $correct1,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 $mc2 = RadioButtons(
  [@vartype],
  $correct2,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 Context()->normalStrings;

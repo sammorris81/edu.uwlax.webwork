@@ -156,7 +156,7 @@ interval. Assume the results come from random samples.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM A $confidences[$random1]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\widehat{p}_1 = $p1a\) with \(n_1=$n1a\) and \(\widehat{p}_2 = $p1b\) with \(n_2=$n1b\).
+  \(\hat{p}_1 = $p1a\) with \(n_1=$n1a\) and \(\hat{p}_2 = $p1b\) with \(n_2=$n1b\).
   Use \(z^* = $zstars[$random1]\).
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Point estimate: \{ ans_rule(10) \}
@@ -165,7 +165,7 @@ Give your answers to 4 decimal places.
   \{ EndList( "OL" ) \}
   $PAR
   $ITEM A $confidences[$random2]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\widehat{p}_1 = $p2a\) with \(n_1=$n2a\) and \(\widehat{p}_2 = $p2b\) with \(n_2=$n2b\).
+  \(\hat{p}_1 = $p2a\) with \(n_1=$n2a\) and \(\hat{p}_2 = $p2b\) with \(n_2=$n2b\).
   Use \(z^* = $zstars[$random2]\).
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Point estimate: \{ ans_rule(10) \}
@@ -174,7 +174,7 @@ Give your answers to 4 decimal places.
   \{ EndList( "OL" ) \}
   $PAR
   $ITEM A $confidences[$random3]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\widehat{p}_1 = $p3a\) with \(n_1=$n3a\) and \(\widehat{p}_2 = $p3b\) with \(n_2=$n3b\).
+  \(\hat{p}_1 = $p3a\) with \(n_1=$n3a\) and \(\hat{p}_2 = $p3b\) with \(n_2=$n3b\).
   Use \(z^* = $zstars[$random3]\).
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Point estimate: \{ ans_rule(10) \}

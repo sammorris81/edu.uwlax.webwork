@@ -37,32 +37,32 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 @vartype = ( # choices
-  ' a. Quantitative',
-  ' b. Categorical'
+  ' Quantitative',
+  ' Categorical'
 );
 
 $exercisea = 'People in a city are asked if they support a new recycling law.';
-$correcta = ' b. Categorical';
+$correcta = ' Categorical';
 
 $exerciseb = 'Record the percentage change in the price of a stock for 100 stocks '.
              'publicly traded on Wall Street.';
-$correctb = ' a. Quantitative';
+$correctb = ' Quantitative';
 
 $exercisec = 'Collect data from a sample of teenagers with a question that asks '.
              '"Do you eat at least five servings a day of fruits and vegetables?"';
-$correctc = ' b. Categorical';
+$correctc = ' Categorical';
 
 $exercised = 'Measure the shelf life of bunches of bananas (the number of days until '.
              'the bananas go bad) for a large sample.';
-$correctd = ' a. Quantitative';
+$correctd = ' Quantitative';
 
 $exercisee = 'Estimate the bending strength of beams by bending 10 beams until they '.
              'break and recording the force at which the beams broke.';
-$correcte = ' a. Quantitative';
+$correcte = ' Quantitative';
 
 $exercisef = 'Record whether or not the literacy rate is over 75'.$PERCENT.' for '.
              'each country in the world.';
-$correctf = ' b. Categorical';
+$correctf = ' Categorical';
 
 ###########################
 ## Initialization
@@ -106,14 +106,14 @@ $mc1 = RadioButtons(
  [@vartype],
  $right1,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 $mc2 = RadioButtons(
  [@vartype],
  $right2,
  order => [@vartype],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 Context()->normalStrings;

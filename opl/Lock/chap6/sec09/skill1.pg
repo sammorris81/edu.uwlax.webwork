@@ -126,45 +126,45 @@ $pval2 = 2 * uprob(abs($z2));
 
 if ($pval1 < 0.0001) {
   $pval1 = "\( < 0.0001 \)";
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = " Reject \(H_0\)";
 } elsif ($pval1 < 0.05) {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " a. Reject \(H_0\)";
+  $correct1 = " Reject \(H_0\)";
 } else {
   $pval1 = sprintf("%.4f", $pval1);
-  $correct1 = " b. Fail to reject \(H_0\)";
+  $correct1 = " Fail to reject \(H_0\)";
 }
 
 if ($pval2 < 0.0001) {
   $pval2 = "\( < 0.0001 \)";
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = " Reject \(H_0\)";
 } elsif ($pval2 < 0.05) {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " a. Reject \(H_0\)";
+  $correct2 = " Reject \(H_0\)";
 } else {
   $pval2 = sprintf("%.4f", $pval2);
-  $correct2 = " b. Fail to reject \(H_0\)";
+  $correct2 = " Fail to reject \(H_0\)";
 }
 
 @nulls = (
-  " a. \(H_0: p_A = p_B\)",
-  " b. \(H_0: p_A < p_B\)",
-  " c. \(H_0: p_A > p_B\)",
-  " d. \(H_0: p_A \neq p_B\)",
+  " \(H_0: p_A = p_B\)",
+  " \(H_0: p_A < p_B\)",
+  " \(H_0: p_A > p_B\)",
+  " \(H_0: p_A \neq p_B\)",
 );
 
 @alternatives = (
-  " a. \(H_a: p_A = p_B\)",
-  " b. \(H_a: p_A < p_B\)",
-  " c. \(H_a: p_A > p_B\)",
-  " d. \(H_a: p_A \neq p_B\)",
+  " \(H_a: p_A = p_B\)",
+  " \(H_a: p_A < p_B\)",
+  " \(H_a: p_A > p_B\)",
+  " \(H_a: p_A \neq p_B\)",
 );
 
 $mc1null = RadioButtons(
   [@nulls],
   $nulls[0],
   order => [@nulls],
-  labels => ['a.', 'b.', 'c.', 'd'],
+  labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
@@ -172,7 +172,7 @@ $mc1alt = RadioButtons(
   [@alternatives],
   $alternatives[2],
   order => [@alternatives],
-  labels => ['a.', 'b.', 'c.', 'd'],
+  labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
@@ -180,7 +180,7 @@ $mc2null = RadioButtons(
   [@nulls],
   $nulls[0],
   order => [@nulls],
-  labels => ['a.', 'b.', 'c.', 'd'],
+  labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
@@ -188,17 +188,17 @@ $mc2alt = RadioButtons(
   [@alternatives],
   $alternatives[3],
   order => [@alternatives],
-  labels => ['a.', 'b.', 'c.', 'd'],
+  labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
-@options = (" a. Reject \(H_0\)", " b. Fail to reject \(H_0\)");
+@options = (" Reject \(H_0\)", " Fail to reject \(H_0\)");
 
 $mc1dec = RadioButtons(
   [@options],
   $correct1,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 
@@ -206,7 +206,7 @@ $mc2dec = RadioButtons(
   [@options],
   $correct2,
   order => [@options],
-  labels => ['a.', 'b.'],
+  labels => ['i', 'ii'],
   separator => $tab,
 );
 

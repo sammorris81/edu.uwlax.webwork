@@ -106,21 +106,24 @@ $hist1 = StatGraphicsUWL::histogram(
   data => $quant1,
   xmin => $xmin,
   xmax => $xmax,
-  xticklength => 5,
+  # xticklength => 5,
+  main => "Histogram A"
 );
 
 $hist2 = StatGraphicsUWL::histogram(
   data => $quant2,
   xmin => $xmin,
   xmax => $xmax,
-  xticklength => 5
+  # xticklength => 5
+  main => "Histogram B"
 );
 
 $hist3 = StatGraphicsUWL::histogram(
   data => $quant3,
   xmin => $xmin,
   xmax => $xmax,
-  xticklength => 5,
+  # xticklength => 5,
+  main => "Histogram C"
 );
 
 @options = (
@@ -155,9 +158,9 @@ BEGIN_TEXT
 Use these histograms to answer the following questions.
 $PAR
 $BCENTER
-  \{ image(insertGraph($hist1), width=>300, height=>300, tex_size=>300) \}
-  \{ image(insertGraph($hist2), width=>300, height=>300, tex_size=>300) \}
-  \{ image(insertGraph($hist3), width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist1, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist2, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist3, width=>300, height=>300, tex_size=>300) \}
 $ECENTER
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Which histogram has a standard deviation closest to 1? \{ $q1->menu() \}

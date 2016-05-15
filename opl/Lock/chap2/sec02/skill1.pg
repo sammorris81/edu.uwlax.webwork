@@ -36,7 +36,7 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$skew1 = random(-10, 10, 5);
+$skew1 = random(-7, 7, 7);
 $quant1 = new DataGenUWL(
   datatype => 'single_quant',
   n => random(200, 300, 5),
@@ -47,6 +47,7 @@ $quant1 = new DataGenUWL(
 );
 $hist1 = StatGraphicsUWL::histogram(
   data => $quant1,
+  main => "Histogram A",
 );
 
 if ($skew1 < 0) {
@@ -56,7 +57,7 @@ if ($skew1 < 0) {
 } elsif ($skew1 == 0) {
   $correctskew1 = "Approximately symmetric";
   $meanmed1 = "approximately equal to the median";
-  $skew2 = random(5, 10, 5) * random(-1, 1, 2);
+  $skew2 = 7 * random(-1, 1, 2);
 } else {
   $correctskew1 = "Right-skewed";
   $meanmed1 = "larger than the median";
@@ -84,6 +85,7 @@ $quant2 = new DataGenUWL(
 );
 $hist2 = StatGraphicsUWL::histogram(
   data => $quant2,
+  main => "Histogram B"
 );
 
 if ($skew2 < 0) {
@@ -117,21 +119,27 @@ BEGIN_TEXT
 Use these histograms to answer the following questions.
 $PAR
 $BCENTER
-  \{ image(insertGraph($hist1), width=>300, height=>300, tex_size=>450) \}
-  \{ image(insertGraph($hist2), width=>300, height=>300, tex_size=>450) \}
+  \{image($hist1, width=>300, height=>300, tex_size=>450)\}
+  \{image($hist2, width=>300, height=>300, tex_size=>450)\}
 $ECENTER
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM How would you describe the shape of histogram A? $BR
-  \{ $skewdesc1->menu() \}
-  $ITEM Based upon histogram A, is the mean likely to be smaller than the median,
-  approximately equal to the median, or larger than the median? $BR
-  \{ $meanmedcomp1->menu() \}
-  $ITEM How would you describe the shape of histogram B? $BR
-  \{ $skewdesc2->menu() \}
-  $ITEM Based upon histogram B, is the mean likely to be smaller than the median,
-  approximately equal to the median, or larger than the median? $BR
-  \{ $meanmedcomp2->menu() \}
-\{ EndList( "OL") \}
+\{BeginList( "OL", type=>"1")\}
+  $ITEM Use histogram A to answer these questions: $BR
+  \{BeginList("OL", type=>"a")\}
+    $ITEM How would you describe the shape of this histogram $BR
+    \{ $skewdesc1->menu() \}
+    $ITEM Is the mean likely to be smaller than the median,
+    approximately equal to the median, or larger than the median? $BR
+    \{ $meanmedcomp1->menu() \}
+  \{EndList("OL")\}
+  $ITEM Use histogram B to answer these questions: $BR
+  \{BeginList("OL", type=>"a")\}
+    $ITEM How would you describe the shape of this histogram $BR
+    \{ $skewdesc2->menu() \}
+    $ITEM Is the mean likely to be smaller than the median,
+    approximately equal to the median, or larger than the median? $BR
+    \{ $meanmedcomp2->menu() \}
+  \{EndList("OL")\}
+\{EndList( "OL")\}
 END_TEXT
 ###########################
 ## Answer Section

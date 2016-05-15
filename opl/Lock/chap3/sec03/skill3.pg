@@ -60,26 +60,16 @@ $bsprops1 = new DataGenUWL(
 );
 
 $phat1 = Real($agree1 / $n1);
-$se1 = Real($bsprops1->{sd});
+$se1 = Real(sprintf("%.3f", $bsprops1->{sd}));
 $lower1 = Real($phat1 - 2 * $se1);
 $upper1 = Real($phat1 + 2 * $se1);
 
-$hist = rserve_start_plot('png', $width, $height);
-$data1 = QuantitativeUWL::disp_r(@{$bsprops1->{x}});
-
-rserve_eval('data1 <- ' . $data1 .'
-  xmax <- max(data1) + diff(range(data1)) * 0.4
-  xmin <- min(data1)
-  par(mar = c(2, 4, 2, 1) + 0.1)
-  data1.mean <- round(mean(data1), 4)
-  data1.sd   <- round(sd(data1), 4)
-  data1.n    <- length(data1)
-  hist(data1, main = "Histogram A", xlim = c(xmin, xmax), xlab = "")
-  legend("topright", legend = c(paste("mean =", data1.mean),
-                              paste("sd =", data1.sd),
-                              paste("n = ", data1.n)),
-       bty = "n")');
-$hist1 = rserve_finish_plot($hist);
+$hist1 = StatGraphicsUWL::histogram(
+  data => $bsprops1,
+  main => "Histogram A",
+  round => 3,
+  summaries => "T"
+);
 
 $agree2 = random(350, 400, 1);
 $disagree2 = random(550, 600, 1);
@@ -104,26 +94,16 @@ $bsprops2 = new DataGenUWL(
 );
 
 $phat2 = Real($agree2 / $n2);
-$se2 = Real($bsprops2->{sd});
+$se2 = Real(sprintf("%.3f", $bsprops2->{sd}));
 $lower2 = Real($phat2 - 2 * $se2);
 $upper2 = Real($phat2 + 2 * $se2);
 
-$hist = rserve_start_plot('png', $width, $height);
-$data2 = QuantitativeUWL::disp_r(@{$bsprops2->{x}});
-
-rserve_eval('data2 <- ' . $data2 .'
-  xmax <- max(data2) + diff(range(data2)) * 0.4
-  xmin <- min(data2)
-  par(mar = c(2, 4, 2, 1) + 0.1)
-  data2.mean <- round(mean(data2), 4)
-  data2.sd   <- round(sd(data2), 4)
-  data2.n    <- length(data2)
-  hist(data2, main = "Histogram B", xlim = c(xmin, xmax), xlab = "")
-  legend("topright", legend = c(paste("mean =", data2.mean),
-                              paste("sd =", data2.sd),
-                              paste("n = ", data2.n)),
-       bty = "n")');
-$hist2 = rserve_finish_plot($hist);
+$hist2 = StatGraphicsUWL::histogram(
+  data => $bsprops2,
+  main => "Histogram B",
+  round => 3,
+  summaries => "T"
+);
 
 ###########################
 ## Initialization

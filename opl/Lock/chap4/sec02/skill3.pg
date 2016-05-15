@@ -53,6 +53,7 @@ $quant = new DataGenUWL(
 
 $hist = StatGraphicsUWL::histogram(
   data => $quant,
+  main => "Randomization distribution"
 );
 
 $random1 = random(-1, 1, 2);
@@ -119,7 +120,7 @@ END_HINT
 ###########################
 BEGIN_TEXT
 $BCENTER
-  \{ image(insertGraph($hist), width=>300, height=>300, tex_size=>450) \}
+  \{ image($hist, width=>300, height=>300, tex_size=>450) \}
 $ECENTER
 $PAR
 The histogram above shows a randomization distribution based on $n simulated

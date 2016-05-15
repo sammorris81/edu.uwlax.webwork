@@ -83,6 +83,7 @@ $type = 'NEQ';
 $histrandom = StatGraphicsUWL::histogram(
   data => $bs_diffs,
   summaries => "F",
+  main => "Randomization distribution"
 );
 
 $nullhyp = hyptestProblemUWL::selectnull(
@@ -186,7 +187,7 @@ In $nextreme randomizations (out of $N) the randomization distribution resulted
 in values $compare the statistic for this data.
 $PAR
 $BCENTER
-\{ image( insertGraph($histrandom) , width=>300, height=>300,tex_size=>500 )
+\{ image( $histrandom , width=>300, height=>300,tex_size=>500 )
 \}
 $ECENTER
 $PAR

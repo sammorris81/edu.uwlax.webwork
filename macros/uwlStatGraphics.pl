@@ -25,6 +25,7 @@ loadMacros("PGgraphmacros.pl",
            "PGstandard.pl",
            "PGstatisticsmacros.pl",
            "PGunion.pl",
+           "RserveClient.pl"
 );
 
 sub _uwlStatGraphics_init {};
@@ -538,7 +539,7 @@ sub dotplot {  # not done yet - uninitialized nobs (line 471)
     return $gr;
 }
 
-sub histogram { # binrule => "sturges", summaries => "F", round=>3
+sub histogram_old { # binrule => "sturges", summaries => "F", round=>3
     my %options = @_;
 
     my $self = $options{'data'};
@@ -722,35 +723,82 @@ sub histogram { # binrule => "sturges", summaries => "F", round=>3
     return $gr;
 }
 
-# sub histogram { # binrule => "sturges", summaries => "F", round=>3
-#     my %options = @_;
+sub histogram { # binrule => "sturges", summaries => "F", round=>3
+    my %options = @_;
 
-#     my $self = $options{'data'};
-#     if ($self->{datatype} ne 'single_quant') {
-#         die 'Error: histogram is for a single quantitative variable only.';
-#     }
+    my $self = $options{'data'};
+    if ($self->{datatype} ne 'single_quant') {
+        die 'Error: histogram is for a single quantitative variable only.';
+    }
 
-#     my @x = @{$self->{x}};
-#     my $round = defined($options{'round'}) ? $options{'round'} : 3;
-#     my $summaryleg = defined($options{'summaries'}) ? uc($options{'summaries'}) : "F";
-#     my $xmin = defined($options{'xmin'}) ? $options{'xmin'} : "NULL";
-#     my $xmax = defined($options{'xmax'}) ? $options{'xmax'} : "NULL";
-#     my $width = defined($options{'width'}) ? $options{'width'} : 300;
-#     my $height = defined($options{'height'}) ? $options{'height'} : 300;
-
-#     my $xvec = "c(" . join(", ", @x) . ")";
-
-#     my $img = main::rserve_start_plot('png', $width, $height);
-#     main::rserve_eval("hist($xvec)");
-#     if ($summaryleg eq "T") {
-#       main::rserve_eval('legend("topright", legend = c(paste("mean = ", mean($xvec))')
-#     }
-
-#     $gr = rserve_finish_plot($img);
+    my @x = @{$self->{x}};
+    my $round = defined($options{'round'}) ? $options{'round'} : 3;
+    my $summaryleg = defined($options{'summaries'}) ? uc($options{'summaries'}) : "F";
+    my $xmin = defined($options{'xmin'}) ? $options{'xmin'} : "NULL";
+    my $xmax = defined($options{'xmax'}) ? $options{'xmax'} : "NULL";
 
 
-#     return $gr;
-# }
+    my $xvec = "c(" . join(", ", @x) . ")";
+    main::rserve_eval('xvec <- ' . $xvec);
+    if ($xmin eq "NULL") {
+        main::rserve_eval('xmin <- min(xvec)');
+    } else {
+        main::rserve_eval('xmin <- ' . $xmin);
+    }
+    if ($xmax eq "NULL") {
+        main::rserve_eval('xmax <- max(xvec)');
+    } else {
+        main::rserve_eval('xmax <- ' . $xmax);
+    }
+    main::rserve_eval('xmin <- xmin - (xmax - xmin) * 0.05');
+    main::rserve_eval('xmax <- xmax + (xmax - xmin) * 0.05');
+
+
+    my $width = defined($options{'width'}) ? $options{'width'} : 300;
+    my $height = defined($options{'height'}) ? $options{'height'} : 300;
+
+    my $title = defined($options{'main'}) ? $options{'main'} :
+                "Histogram of ". $self->{name};
+    my $xlab = defined($options{'xlab'}) ? $options{'xlab'} : "";
+    my $ylab = defined($options{'ylab'}) ? $options{'ylab'} : "";
+
+    my $img = main::rserve_start_plot('png', $width, $height);
+    if ($xlab eq "" && $ylab eq "" && $summaryleg eq "F") {
+        main::rserve_eval('par(mar = c(2.2, 2.2, 3, 1) + 0.1)');
+    } elsif ($xlab eq "" && $ylab eq "" && $summaryleg eq "T") {
+        main::rserve_eval('par(xpd = TRUE, mar = c(2.2, 2.2, 3, 1) + 0.1)');
+    }
+
+
+    if ($summaryleg eq "T") {
+        main::rserve_eval('xmax <- xmax + (xmax - xmin) * 0.4');
+    }
+
+    main::rserve_eval('hist(xvec, main = "' . $title . '",
+                       xlab = "' . $xlab . '", ylab = "' . $ylab . '",
+                       xlim = c(xmin, xmax))');
+    if ($summaryleg eq "T") {
+      main::rserve_eval('text(par("usr")[2], par("usr")[4],
+                        paste("\n \n",
+                            "# samples =", length(xvec), "\r
+                            mean =", round(mean(xvec), ' . $round . '), "\r
+                            st. dev =", round(sd(xvec), '  . $round . ')
+                        ),
+                        adj = 1)');
+      # main::rserve_eval('legend = c(paste("mean = ", round(mean(xvec), ' . $round . ')),
+      #              paste("st. dev. = ", round(sd(xvec), ' . $round . ')),
+      #              paste("# samples = ", length(xvec))
+      #              ),
+      #   xjust=1, yjust = 1, xpd = TRUE
+
+      #   )');
+    }
+
+    our $gr = main::rserve_finish_plot($img);
+
+
+    return $gr;
+}
 
 sub boxplot {
     my %options = @_;

@@ -304,7 +304,6 @@ $ECENTER
     $ITEM $notateb = $option3b \{ $q3b->menu() \} $BR
   \{ EndList( "OL") \}
 \{ EndList("OL") \}
-\{ localtime \}
 END_TEXT
 ###########################
 ## Answer Section

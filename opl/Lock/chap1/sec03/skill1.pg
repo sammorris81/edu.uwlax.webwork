@@ -37,30 +37,30 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 @options = ( # choices
-  ' a. Experiment',
-  ' b. Observational Study',
+  ' Experiment',
+  ' Observational Study',
 );
 
 $exercisea = 'To examine whether eating brown rice affects metabolism, we ask a '.
              'random sample of people whether they eat brown rice and we also measure '.
              'their metabolism rate.';
-$correcta = ' b. Observational Study';
+$correcta = ' Observational Study';
 
 $exerciseb = 'To examine whether playing music in a store increases the amount '.
              'customers spend, we randomly assign some stores to play music and '.
              'some to stay silent and compare the average amount spent by customers.';
-$correctb = ' a. Experiment';
+$correctb = ' Experiment';
 
 $exercisec = 'To examine whether planting trees reduces air pollution, we find a '.
              'sample of city blocks with similar levels of air pollution and we then '.
              'plant trees in half of the blocks in the sample. After waiting an '.
              'appropriate amount of time, we measure air pollution levels.';
-$correctc = ' a. Experiment';
+$correctc = ' Experiment';
 
 $exercised = 'To examine whether farm-grown salmon contain more omega-3 oils if '.
              'water is more acidic, we collect samples of salmon and water from '.
              'multiple fish farms to see if the two variables are related.';
-$correctd = ' b. Observational Study';
+$correctd = ' Observational Study';
 
 ###########################
 ## Initialization
@@ -94,14 +94,14 @@ $mc1 = RadioButtons(
  [@options],
  $correct1,
  order => [@options],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 $mc2 = RadioButtons(
  [@options],
  $correct2,
  order => [@options],
- labels => ['a.', 'b.']
+ labels => ['a', 'b']
 );
 
 Context()->normalStrings;
