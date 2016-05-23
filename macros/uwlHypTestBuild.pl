@@ -79,16 +79,16 @@ our @possible_procs = (
 );
 
 our @possible_labels = (
-  "i.", "ii.", "iii.", "iv.", "v.", "vi.", "vii.", "viii.", "ix."
+  "i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix"
 );
 
 if ($include[$type] <= 5) {
   our @params = (
-    " i. $disp_p",
-    " ii. $disp_mu",
-    " iii. $disp_p1 - $disp_p2",
-    " iv. $disp_mu1 - $disp_mu2",
-    " v. $disp_mud"
+    " $disp_p",
+    " $disp_mu",
+    " $disp_p1 - $disp_p2",
+    " $disp_mu1 - $disp_mu2",
+    " $disp_mud"
   );
 }
 
@@ -99,7 +99,7 @@ my $label_idx = 0;
 our @procs; our $proc;
 foreach $inc (@include) {
   # label should be consecutive
-  $proc = $possible_labels[$label_idx] . " " . $possible_procs[$inc - 1];
+  $proc = $possible_procs[$inc - 1];
 
   if ($inc == $include[$type]) {
     our $correct_proc = $proc;
