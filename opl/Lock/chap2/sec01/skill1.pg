@@ -36,65 +36,85 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$n1a = random(165, 175, 1);
-$n2a = random(190, 210, 1);
-$randoma = random(1, 2, 1);
-if ($randoma == 1) {
-  $gender = "female";
-  $ansa = Real($n1a / ($n1a + $n2a));
-} else {
-  $gender = "male";
-  $ansa = Real($n2a / ($n1a + $n2a));
-}
-$exercisea = "There are $n1a females and $n2a males. Find \( \widehat{p} \), ".
-             "the proportion who are $gender.";
-
-$n1b = random(40, 55, 1);
-$n2b = random(305, 325, 1);
-$randomb = random(1, 2, 1);
-if ($randomb == 1) {
-  $smokestat = "smoke";
-  $ansb = Real($n1b / ($n1b + $n2b));
-} else {
-  $smokestat = "do not smoke";
-  $ansb = Real($n2b / ($n1b + $n2b));
-}
-$exerciseb = "There are $n1b students who smoke and $n2b student who do not ".
-             "smoke. Find \( \widehat{p} \), the proportion who $smokestat.";
-
-$n1c = random(90, 100, 1);
-$n2c = random(190, 210, 1);
-$n3c = random(30, 40, 1);
-$n4c = random(30, 40, 1);
-$randomc = random(1, 2, 1);
-if ($randomc == 1) {
-  $class = "upperclass students (juniors or seniors)";
-  $ansc = Real(($n3c + $n4c) / ($n1c + $n2c + $n3c + $n4c));
-} else {
-  $class = "underclass students (first years or sophomores)";
-  $ansc = Real(($n1c + $n2c) / ($n1c + $n2c + $n3c + $n4c));
-}
-$exercisec = "There are $n1c first years, $n2c sophomores, $n3c juniors, and ".
-             "$n4c seniors. Find \( \widehat{p} \), the proportion who are $class.";
-
-
 ###########################
 ## Initialization
 ###########################
-
-$random = random(1, 2, 1);
-
-if ($random == 1) {
-  $text1 = $exercisea;
-  $ans1 = $ansa;
-  $text2 = $exercisec;
-  $ans2 = $ansc;
+$n1_a = random(165, 175, 1);
+$n2_a = random(190, 210, 1);
+$random_a = random(0, 1, 1);
+if ($random_a == 0) {
+  $gender = "female";
+  $answer_a = Real($n1_a / ($n1_a + $n2_a));
 } else {
-  $text1 = $exerciseb;
-  $ans1 = $ansb;
-  $text2 = $exercisec;
-  $ans2 = $ansc;
+  $gender = "male";
+  $answer_a = Real($n2_a / ($n1_a + $n2_a));
 }
+$exercise_a = "There are $n1_a females and $n2_a males. Find ".
+              "\( \widehat{p} \), the proportion who are $gender.";
+
+$n1_b = random(40, 55, 1);
+$n2_b = random(305, 325, 1);
+$random_b = random(0, 1, 1);
+if ($random_b == 0) {
+  $smoke_status = "smoke";
+  $answer_b = Real($n1_b / ($n1_b + $n2_b));
+} else {
+  $smoke_status = "do not smoke";
+  $answer_b = Real($n2_b / ($n1_b + $n2_b));
+}
+$exercise_b = "There are $n1_b students who smoke and $n2_b student who do ".
+              "not smoke. Find \( \widehat{p} \), the proportion who ".
+              "$smoke_status.";
+
+$n1_c = random(90, 100, 1);
+$n2_c = random(190, 210, 1);
+$n3_c = random(30, 40, 1);
+$n4_c = random(30, 40, 1);
+$random_c = random(0, 1, 1);
+if ($random_c == 0) {
+  $class = "upperclass students (juniors or seniors)";
+  $answer_c = Real(($n3_c + $n4_c) / ($n1_c + $n2_c + $n3_c + $n4_c));
+} else {
+  $class = "underclass students (first years or sophomores)";
+  $answer_c = Real(($n1_c + $n2_c) / ($n1_c + $n2_c + $n3_c + $n4_c));
+}
+$exercise_c = "There are $n1_c first years, $n2_c sophomores, $n3_c juniors, ".
+              "and $n4_c seniors. Find \( \widehat{p} \), the proportion who ".
+              "are $class.";
+
+$nhigher_d = random(200, 210, 1);
+$n2_d = random(350, 360, 1);
+$random_d = random(0, 1, 1);
+if ($random_d == 0) {
+  $sat_compare = "higher";
+  $n1_d = $nhigher_d;
+} else {
+  $sat_compare = "lower";
+  $n1_d = $n2_d - $nhigher_d;
+}
+$answer_d = Real($n1_d / $n2_d);
+$exercise_d = "The math SAT score is $sat_compare than the verbal SAT score ".
+              "for $n1_d of the $n2_d students who answered the questions ".
+              "about SAT scores. Find \( \widehat{p} \), the proportion for ".
+              "whom the math SAT score is $sat_compare.";
+
+# Arrays for the question options to make it easy to randomize. In this question
+# everyone will get question 3.
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
+);
+
+@answers = (
+  $answer_a,
+  $answer_b,
+  $answer_c,
+  $answer_d
+);
+
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
@@ -106,9 +126,9 @@ BEGIN_TEXT
 The following exercises provide information about data in a survey given to students.
 Find the sample proportion \( \widehat{p} \) requested. Give your answer to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 $BR
+  $ITEM $exercises[$random_1] $BR
   \{ ans_rule(10) \}
-  $ITEM $text2 $BR
+  $ITEM $exercises[$random_2] $BR
   \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
@@ -116,7 +136,7 @@ END_TEXT
 ## Answer Section
 ###########################
 
-ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($answers[$random_1]->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($answers[$random_2]->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

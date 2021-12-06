@@ -36,8 +36,12 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$random = random(1, 2, 1);
-if ($random == 1) {
+###########################
+## Question setup
+###########################
+
+$random = random(0, 1, 1);
+if ($random == 0) {
   $n = random(355, 370, 1);
   @nlevels = (3);
   @labels = ('None', 'One or two', 'More than 2');
@@ -52,8 +56,8 @@ if ($random == 1) {
     labels => [@labels],
   );
 
-  $text = "students were asked about the number of piercings they had in their ".
-          "body: None, one or two, or more than two";
+  $text = "about the number of piercings they had in their body: None, one or ".
+          "two, or more than two";
 
 } else {
   $n = random(355, 370, 1);
@@ -70,32 +74,53 @@ if ($random == 1) {
     labels => [@labels],
   );
 
-  $text = "students were asked which award they would prefer: an Academy Award, ".
-          "a Nobel Prize, or an Olympic gold medal";
+  $text = "swhich award they would prefer: an Academy Award, a Nobel Prize, ".
+          "or an Olympic gold medal";
 }
 
-###########################
-## Initialization
-###########################
+$answer_1 = Real($cat->{probs}[0]);
+$answer_2 = Real($cat->{probs}[1]);
+$answer_3 = Real($cat->{probs}[2]);
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-In a recent survey, $text. The results are given in the following table:
+In a recent survey, students were asked $text. The results are given in the 
+following table:
 \{ CategoricalUWL::freqtable(data=>$cat) \}
 $PAR
-Fill in the following table with the relative frequencies for each response. Give
-your answer to 4 decimal places.
+Fill in the following table with the relative frequencies for each response. 
+Give your answer to 4 decimal places.
 \{
-  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-  AlignedRow(["", "Relative Freq"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-  AlignedRow(["$cat->{labels}[0]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
-  AlignedRow(["$cat->{labels}[1]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
-  AlignedRow(["$cat->{labels}[2]", ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+  AlignedRow(
+    ["", "Relative Freq"], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ) .
+  AlignedRow(
+    ["$cat->{labels}[0]", ans_rule(10)], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ) .
+  AlignedRow(
+    ["$cat->{labels}[1]", ans_rule(10)], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ).
+  AlignedRow(
+    ["$cat->{labels}[2]", ans_rule(10)], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ).
   EndTable()
 \}
 END_TEXT
@@ -103,12 +128,8 @@ END_TEXT
 ## Answer Section
 ###########################
 
-$ans1 = Real($cat->{probs}[0]);
-$ans2 = Real($cat->{probs}[1]);
-$ans3 = Real($cat->{probs}[2]);
-
-ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($ans3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($answer_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($answer_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($answer_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.
