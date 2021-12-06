@@ -36,135 +36,129 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$exercisea = 'Lung capacity and number of years smoking cigarettes';
-@optionsa = (
+###########################
+## Question setup
+###########################
+$exercise_a = 'Lung capacity and number of years smoking cigarettes';
+@options_a = (
   '?',
   'Lung capacity',
   'Number of years smoking'
 );
-$explana = 'Number of years smoking';
-$respona = 'Lung capacity';
+$explanatory_var_a = 'Number of years smoking';
+$response_var_a = 'Lung capacity';
 
-$exerciseb = 'Amount of fertilizer used and the yield of a crop';
-@optionsb = (
+$exercise_b = 'Amount of fertilizer used and the yield of a crop';
+@options_b = (
   '?',
   'Amount of fertilizer used',
   'Yield of a crop'
 );
-$explanb = 'Amount of fertilizer used';
-$responb = 'Yield of a crop';
+$explanatory_var_b = 'Amount of fertilizer used';
+$response_var_b = 'Yield of a crop';
 
-$exercisec = 'Blood alcohol content (BAC) and number of alcoholic drinks consumed';
-@optionsc = (
+$exercise_c = 'Blood alcohol content (BAC) and number of alcoholic drinks '.
+              'consumed';
+@options_c = (
   '?',
   'Blood alcohol content (BAC)',
   'Number of alcoholic drinks consumed'
 );
-$explanc = 'Number of alcoholic drinks consumed';
-$responc = 'Blood alcohol content (BAC)';
+$explanatory_var_c = 'Number of alcoholic drinks consumed';
+$response_var_c = 'Blood alcohol content (BAC)';
 
-$exercised = 'Weekly hours spent exercising and body mass.';
-@optionsd = (
+$exercise_d = 'Weekly hours spent exercising and body mass.';
+@options_d = (
   '?',
   'Weekly hours spent exercising',
   'Body mass'
 );
-$expland = 'Weekly hours spent exercising';
-$respond = 'Body mass';
+$explanatory_var_d = 'Weekly hours spent exercising';
+$response_var_d = 'Body mass';
 
-
-###########################
-## Initialization
-###########################
-
-$random = random(1, 4, 1);
-
-if ($random == 1) {
-  $text1 = $exercisea;
-  @options1 = @optionsa;
-  $explan1 = $explana;
-  $respon1 = $respona;
-  $text2 = $exerciseb;
-  @options2 = @optionsb;
-  $explan2 = $explanb;
-  $respon2 = $responb;
-} elsif ($random == 2) {
-  $text1 = $exercisec;
-  @options1 = @optionsc;
-  $explan1 = $explanc;
-  $respon1 = $responc;
-  $text2 = $exercised;
-  @options2 = @optionsd;
-  $explan2 = $expland;
-  $respon2 = $respond;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  @options1 = @optionsd;
-  $explan1 = $expland;
-  $respon1 = $respond;
-  $text2 = $exercisea;
-  @options2 = @optionsa;
-  $explan2 = $explana;
-  $respon2 = $respona;
-} else {
-  $text1 = $exerciseb;
-  @options1 = @optionsb;
-  $explan1 = $explanb;
-  $respon1 = $responb;
-  $text2 = $exercisec;
-  @options2 = @optionsc;
-  $explan2 = $explanc;
-  $respon2 = $responc;
-}
-
-$ex1 = PopUp(
-  [@options1],
-  $explan1,
-);
-$re1 = PopUp(
-  [@options1],
-  $respon1,
+# Arrays for the question options to make it easy to randomize
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
 );
 
-$ex2 = PopUp(
-  [@options2],
-  $explan2,
+# Note: This creates an array of array pointers. So to dereference
+# we need to use the syntax @{$options[0]}
+@options = (
+  [@options_a],
+  [@options_b],
+  [@options_c],
+  [@options_d]
 );
-$re2 = PopUp(
-  [@options2],
-  $respon2,
+
+@explanatory_vars = (
+  $explanatory_var_a,
+  $explanatory_var_b,
+  $explanatory_var_c,
+  $explanatory_var_d
+);
+
+@response_vars = (
+  $response_var_a,
+  $response_var_b,
+  $response_var_c,
+  $response_var_d
+);
+
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+
+# Generate the questions
+$explanatory_1 = PopUp(
+  [@{$options[$random_1]}],
+  $explanatory_vars[$random_1],
+);
+$response_1 = PopUp(
+  [@{$options[$random_1]}],
+  $response_vars[$random_1],
+);
+
+$explanatory_2 = PopUp(
+  [@{$options[$random_2]}],
+  $explanatory_vars[$random_2],
+);
+$response_2 = PopUp(
+  [@{$options[$random_2]}],
+  $response_vars[$random_2],
 );
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-In the following situations, a relationship between two variables is described. In
-each case, we can think of one variable as helping to explain the other. Identify
-the explanatory variable and the response variable.
+In the following situations, a relationship between two variables is described. 
+In each case, we can think of one variable as helping to explain the other.
+Identify the explanatory variable and the response variable.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1
+  $ITEM $exercises[$random_1]
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Explanatory: \{ $ex1->menu() \}
-    $ITEM Response: \{ $re1->menu() \}
+    $ITEM Explanatory: \{ $explanatory_1->menu() \}
+    $ITEM Response: \{ $response_1->menu() \}
   \{ EndList( "OL" ) \}
-  $ITEM $text2
+  $ITEM $exercises[$random_2]
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Explanatory: \{ $ex2->menu() \}
-    $ITEM Response: \{ $re2->menu() \}
+    $ITEM Explanatory: \{ $explanatory_2->menu() \}
+    $ITEM Response: \{ $response_2->menu() \}
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($ex1->cmp());
-ANS($re1->cmp());
-ANS($ex2->cmp());
-ANS($re2->cmp());
+ANS($explanatory_1->cmp());
+ANS($response_1->cmp());
+ANS($explanatory_2->cmp());
+ANS($response_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

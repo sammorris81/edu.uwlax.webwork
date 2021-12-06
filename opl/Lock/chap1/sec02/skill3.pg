@@ -5,15 +5,15 @@
 ## ENDDESCRIPTION
 
 ## DBsubject(Statistics)
-## DBchapter(Exploratory data analysis/descriptive statistics)
-## DBsection(Classifying data)
+## DBchapter(Sample survey methods)
+## DBsection(Concepts)
 ## KEYWORDS('data')
 ## TitleText1('Statistics: Unlocking the Power of Data')
 ## EditionText1('1')
 ## AuthorText1('Lock, Lock, Lock, Lock, Lock')
 ## Chapter1('1')
-## Section1('1.1')
-## Problem1('Skill Builder 1')
+## Section1('1.2')
+## Problem1('Skill Builder 4')
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
@@ -39,30 +39,37 @@ Context("Numeric");
 ###########################
 ## Question setup
 ###########################
-$exercise_a = 'People in a city are asked if they support a new recycling law.';
-$correct_a = ' Categorical';
+$exercise_a = 'The population is incoming students at a particular '.
+              'university. The name of each incoming student is thrown into '.
+              'a hat, the names are mixed, and 20 names (each corresponding '.
+              'to a different student) are drawn from the hat.';
+$correct_a = ' True';
 
-$exercise_b = 'Record the percentage change in the price of a stock for 100 '.
-              'stocks publicly traded on Wall Street.';
-$correct_b = ' Quantitative';
+$exercise_b = 'The population is the approximately 25,000 protein-coding '.
+              'genes in human DNA. Each gene is assigned a number (from 1 '.
+              'to 25,000), and computer software is used to randomly select '.
+              '100 of these numbers yielding a sample of 100 genes.';
+$correct_b = ' True';
 
-$exercise_c = 'Collect data from a sample of teenagers with a question that '.
-              'asks "Do you eat at least five servings a day of fruits and '.
-              'vegetables?"';
-$correct_c = ' Categorical';
+$exercise_c = 'The population is all employees at a company. All employees '.
+              'are emailed a link to a survey.';
+$correct_c = ' False';
 
-$exercise_d = 'Measure the shelf life of bunches of bananas (the number of '.
-              'days until the bananas go bad) for a large sample.';
-$correct_d = ' Quantitative';
+$exercise_d = 'The population is adults between the ages of 18 and 22. A '.
+              'sample of 100 students is collected from a local university, '.
+              'and ecah student at the university had an equal chance of '.
+              'being selected for the sample.';
+$correct_d = ' False';
 
-$exercise_e = 'Estimate the bending strength of beams by bending 10 beams '.
-              'until they break and recording the force at which the beams '.
-              'broke.';
-$correct_e = ' Quantitative';
+$exercise_e = 'The population is all trees in a forest. We walk through the '.
+              'forest and pick out trees that appear to be representative of '.
+              'all the trees in the forest.';
+$correct_e = ' False';
 
-$exercise_f = 'Record whether or not the literacy rate is over 75'.$PERCENT.
-              ' for each country in the world.';
-$correct_f = ' Categorical';
+$exercise_f = 'The population is all people who visit the website CNN.com. '.
+              'All visitors to the website are invited to take part in the '.
+              'daily online poll.';
+$correct_f = ' False';
 
 # Arrays for the question options to make it easy to randomize
 @exercises = (
@@ -84,8 +91,8 @@ $correct_f = ' Categorical';
 );
 
 @options = ( # choices
-  ' Quantitative',
-  ' Categorical'
+  ' True',
+  ' False'
 );
 
 # Now select the exercise at random
@@ -113,15 +120,12 @@ $multiple_choice_3 = RadioButtons(
  labels => ['a', 'b']
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
 BEGIN_TEXT
-For the following situations, identify if the variable of interest would be 
-quantitative or categorical.
+For each of the following situations, indicate whether the sampling method
+described produces an randomly selected and unbiased sample.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM $exercises[$random_1] $BR
   \{ $multiple_choice_1->buttons( separator => "") \}

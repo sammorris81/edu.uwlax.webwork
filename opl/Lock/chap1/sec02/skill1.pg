@@ -36,67 +36,61 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-@vartype = ( # choices
+###########################
+## Question setup
+###########################
+$exercise_a = 'To estimate size of trout in a lake, an angler records the '.
+              'weight of 12 trout he catches over a weekend.';
+$correct_a = ' Sample';
+
+$exercise_b = 'A subscription-based music website tracks its total number of '.
+              'active users.';
+$correct_b = ' Population';
+
+$exercise_c = 'The US Department of Transportation announces that of the 250 '.
+              'million registered passenger vehicles in the US, 2.1'.$PERCENT.
+              ' are electro-gas hybrids.';
+$correct_c = ' Population';
+
+$exercise_d = 'A questionnaire to understand athletic participation on a '.
+              'college campus is emailed to 50 college students, and all ',
+              'of them respond.';
+$correct_d = ' Sample';
+
+# Arrays for the question options to make it easy to randomize
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
+);
+
+@correct_ans = (
+  $correct_a,
+  $correct_b,
+  $correct_c,
+  $correct_d
+);
+
+@options = ( # choices
   ' Population',
   ' Sample'
 );
 
-$exercisea = 'To estimate size of trout in a lake, an angler records the weight '.
-             'of 12 trout he catches over a weekend.';
-$correcta = ' Sample';
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
-$exerciseb = 'A subscription-based music website tracks its total number of active '.
-             'users.';
-$correctb = ' Population';
-
-$exercisec = 'The US Department of Transportation announces that of the 250 million '.
-             'registered passenger vehicles in the US, 2.1'.$PERCENT.' are electro-gas '.
-             'hybrids.';
-$correctc = ' Population';
-
-$exercised = 'A questionnaire to understand athletic participation on a college '.
-             'campus is emailed to 50 college students, and all of them respond.';
-$correctd = ' Sample';
-
-###########################
-## Initialization
-###########################
-
-$random = random(1, 4, 1);
-
-if ($random == 1) {
-  $text1 = $exercisea;
-  $correct1 = $correcta;
-  $text2 = $exerciseb;
-  $correct2 = $correctb;
-} elsif ($random == 2) {
-  $text1 = $exercisec;
-  $correct1 = $correctc;
-  $text2 = $exercised;
-  $correct2 = $correctd;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  $correct1 = $correctd;
-  $text2 = $exercisea;
-  $correct2 = $correcta;
-} else {
-  $text1 = $exerciseb;
-  $correct1 = $correctb;
-  $text2 = $exercisec;
-  $correct2 = $correctc;
-}
-
-$mc1 = RadioButtons(
- [@vartype],
- $correct1,
- order => [@vartype],
+$multiple_choice_1 = RadioButtons(
+ [@options],
+ $correct_ans[$random_1],
+ order => [@options],
  labels => ['a', 'b']
 );
 
-$mc2 = RadioButtons(
- [@vartype],
- $correct2,
- order => [@vartype],
+$multiple_choice_2 = RadioButtons(
+ [@options],
+ $correct_ans[$random_2],
+ order => [@options],
  labels => ['a', 'b']
 );
 
@@ -104,23 +98,24 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 For the following situations, identify whether the data are best described as a
 population or a sample.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 $BR
-  \{ $mc1->buttons( separator => "") \}
-  $ITEM $text2 $BR
-  \{ $mc2->buttons( separator => "") \}
+  $ITEM $exercises[$random_1] $BR
+  \{ $multiple_choice_1->buttons( separator => "") \}
+  $ITEM $exercises[$random_2] $BR
+  \{ $multiple_choice_2->buttons( separator => "") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
 
-ANS($mc1->cmp());
-ANS($mc2->cmp());
+ANS($multiple_choice_1->cmp());
+ANS($multiple_choice_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

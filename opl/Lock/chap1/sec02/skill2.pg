@@ -36,146 +36,138 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$exercisea = 'To estimate the proportion of Americans who support changing the '.
-             'drinking age from 21 to 18, a random sample of 100 college students '.
-             'are asked the question "Would you support a measure to lower the drinking '.
-             'age from 21 to 18?"';
-$samplea = 'The 100 selected college students';
-$popa = 'All Americans';
-$truepopa = 'All college students';
-
-$exerciseb = 'To investigate the growth of the canine population in New York City, '.
-             '100 dogs are randomly selected from a registry of licensed pets in '.
-             'the city, and the researchers record whether or not the dog is spayed '.
-             'or neutered.';
-$sampleb = 'The 100 selected dogs';
-$popb = 'The canine population in New York City';
-$truepopb = 'The registered canine population in New York City';
-
-$exercisec = 'To investigate interest across all residents of the US in a new type '.
-             'of ice skate, a random sample of 1500 people in Minnesota are asked '.
-             'about their interest in the product.';
-$samplec = 'The 1500 selected people';
-$popc = 'All residents of the US';
-$truepopc = 'All residents of Minnesota';
-
-$exercised = 'To determine the height distribution of female high school students, '.
-             'the rosters are collected from 20 randomly selected high school girls '.
-             'basketball teams.';
-$sampled = 'The 20 randomly selected high school girls';
-$popd = 'All female high school students';
-$truepopd = 'All female high school basketball players';
-
-
 ###########################
-## Initialization
+## Question setup
 ###########################
+$exercise_a = 'To estimate the proportion of Americans who support changing '.
+              'the drinking age from 21 to 18, a random sample of 100 college '.
+              'students are asked the question "Would you support a measure '.
+              'to lower the drinking age from 21 to 18?"';
+$sample_a = 'The 100 selected college students';
+$population_a = 'All Americans';
+$true_population_a = 'All college students';
 
-$random = random(1, 4, 1);
+$exercise_b = 'To investigate the growth of the canine population in New York '.
+              'City, 100 dogs are randomly selected from a registry of '.
+              'licensed pets in the city, and the researchers record whether '.
+              'or not the dog is spayed or neutered.';
+$sample_b = 'The 100 selected dogs';
+$population_b = 'The canine population in New York City';
+$true_population_b = 'The registered canine population in New York City';
 
-if ($random == 1) {
-  $text1 = $exercisea;
-  $sample1 = $samplea;
-  $pop1 = $popa;
-  $truepop1 = $truepopa;
-  $text2 = $exerciseb;
-  $sample2 = $sampleb;
-  $pop2 = $popb;
-  $truepop2 = $truepopb;
-} elsif ($random == 2) {
-  $text1 = $exercisec;
-  $sample1 = $samplec;
-  $pop1 = $popc;
-  $truepop1 = $truepopc;
-  $text2 = $exercised;
-  $sample2 = $sampled;
-  $pop2 = $popd;
-  $truepop2 = $truepopd;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  $sample1 = $sampled;
-  $pop1 = $popd;
-  $truepop1 = $truepopd;
-  $text2 = $exercisea;
-  $sample2 = $samplea;
-  $pop2 = $popa;
-  $truepop2 = $truepopa;
-} else {
-  $text1 = $exerciseb;
-  $sample1 = $sampleb;
-  $pop1 = $popb;
-  $truepop1 = $truepopb;
-  $text2 = $exercisec;
-  $sample2 = $samplec;
-  $pop2 = $popc;
-  $truepop2 = $truepopc;
-}
+$exercise_c = 'To investigate interest across all residents of the US in a '.
+              'new type of ice skate, a random sample of 1500 people in '.
+              'Minnesota are asked about their interest in the product.';
+$sample_c = 'The 1500 selected people';
+$population_c = 'All residents of the US';
+$true_population_c = 'All residents of Minnesota';
 
-$order = random(1, 6, 1);
-if ($order == 1) {
-  @options1 = ('?', $sample1, $pop1, $truepop1);  # 1 2 3
-  @options2 = ('?', $truepop2, $sample2, $pop2);  # 3 1 2
-} elsif ($order == 2) {
-  @options1 = ('?', $sample1, $truepop1, $pop1);  # 1 3 2
-  @options2 = ('?', $truepop2, $pop2, $sample2);  # 3 2 1
-} elsif ($order == 3) {
-  @options1 = ('?', $pop1, $sample1, $truepop1);  # 2 1 3
-  @options2 = ('?', $sample2, $truepop2, $pop2);  # 1 3 2
-} elsif ($order == 4) {
-  @options1 = ('?', $pop1, $truepop1, $sample1);  # 2 3 1
-  @options2 = ('?', $sample2, $pop2, $truepop2);  # 1 2 3
-} elsif ($order == 5) {
-  @options1 = ('?', $truepop1, $pop1, $sample1);  # 3 2 1
-  @options2 = ('?', $pop2, $sample2, $truepop2);  # 2 1 3
-} else {
-  @options1 = ('?', $truepop1, $sample1, $pop1);  # 3 1 2
-  @options2 = ('?', $pop2, $truepop2, $sample2);  # 2 3 1
-}
+$exercise_d = 'To determine the height distribution of female high school '.
+              'students, the rosters are collected from 20 randomly selected '.
+              'high school girls basketball teams.';
+$sample_d = 'The 20 randomly selected high school girls';
+$population_d = 'All female high school students';
+$true_population_d = 'All female high school basketball players';
+
+# Arrays for the question options to make it easy to randomize
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
+);
+
+@samples = (
+  $sample_a,
+  $sample_b,
+  $sample_c,
+  $sample_d
+);
+
+@populations = (
+  $population_a,
+  $population_b,
+  $population_c,
+  $population_d
+);
+
+@true_populations = (
+  $true_population_a,
+  $true_population_b,
+  $true_population_c,
+  $true_population_d
+);
+
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+
+$text_1 = $exercises[$random_1];
+$sample_1 = $samples[$random_1];
+$population_1 = $populations[$random_1];
+$true_population_1 = $true_populations[$random_1];
+
+$text_2 = $exercises[$random_2];
+$sample_2 = $samples[$random_2];
+$population_2 = $populations[$random_2];
+$true_population_2 = $true_populations[$random_2];
+
+# Get a randomly permuted order for the options
+@base_options_1 = ($sample_1, $population_1, $true_population_1);
+@base_options_2 = ($sample_2, $population_2, $true_population_2);
+
+# To fully permute the array, you need to 
+@order_1 = NchooseK(($#base_options_1 + 1), ($#base_options_1 + 1));
+do {
+  @order_2 = NchooseK(($#base_options_2 + 1), ($#base_options_2 + 1));
+} until ($order_1[0] != $order_2[0]);
+
+@options_1 = ('?', @base_options_1[@order_1]);
+@options_2 = ('?', @base_options_2[@order_2]);
 
 $s1 = PopUp(
-  [@options1],
-  $sample1,
+  [@options_1],
+  $sample_1,
 );
 $p1 = PopUp(
-  [@options1],
-  $pop1,
+  [@options_1],
+  $population_1,
 );
 $tp1 = PopUp(
-  [@options1],
-  $truepop1,
+  [@options_1],
+  $true_population_1,
 );
 
 $s2 = PopUp(
-  [@options2],
-  $sample2,
+  [@options_2],
+  $sample_2,
 );
 $p2 = PopUp(
-  [@options2],
-  $pop2,
+  [@options_2],
+  $population_2,
 );
 $tp2 = PopUp(
-  [@options2],
-  $truepop2,
+  [@options_2],
+  $true_population_2,
 );
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-In the following exercises, a biased sampling situation is described. In each case
-identify a) the sample, b) the desired population of interest, and c) the true population to which
-we can generalize based on the sample.
+In the following exercises, a biased sampling situation is described. In each 
+case identify a) the sample, b) the desired population of interest, and c) the 
+true population to which we can generalize based on the sample.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1
+  $ITEM $text_1
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Sample: \{ $s1->menu() \}
     $ITEM Desired population: \{ $p1->menu() \}
     $ITEM True population: \{ $tp1->menu() \}
   \{ EndList( "OL" ) \}
-  $ITEM $text2
+  $ITEM $text_2
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Sample: \{ $s2->menu() \}
     $ITEM Desired population: \{ $p2->menu() \}
@@ -183,10 +175,10 @@ we can generalize based on the sample.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($s1->cmp());
 ANS($p1->cmp());
 ANS($tp1->cmp());
