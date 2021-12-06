@@ -13,7 +13,7 @@
 ## AuthorText1('Lock, Lock, Lock, Lock, Lock')
 ## Chapter1('1')
 ## Section1('1.3')
-## Problem1('Skill Builder 1')
+## Problem1('Skill Builder 3')
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
@@ -36,70 +36,69 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 @options = ( # choices
   ' Experiment',
   ' Observational Study',
 );
 
-$exercisea = 'To examine whether eating brown rice affects metabolism, we ask a '.
-             'random sample of people whether they eat brown rice and we also measure '.
-             'their metabolism rate.';
-$correcta = ' Observational Study';
+$exercise_a = 'To examine whether eating brown rice affects metabolism, we '.
+              'ask a random sample of people whether they eat brown rice and '.
+              'we also measure their metabolism rate.';
+$correct_a = $options[1];
 
-$exerciseb = 'To examine whether playing music in a store increases the amount '.
-             'customers spend, we randomly assign some stores to play music and '.
-             'some to stay silent and compare the average amount spent by customers.';
-$correctb = ' Experiment';
+$exercise_b = 'To examine whether playing music in a store increases the '.
+              'amount customers spend, we randomly assign some stores to play '.
+              'music and some to stay silent and compare the average amount '.
+              'spent by customers.';
+$correct_b = $options[0];
 
-$exercisec = 'To examine whether planting trees reduces air pollution, we find a '.
-             'sample of city blocks with similar levels of air pollution and we then '.
-             'plant trees in half of the blocks in the sample. After waiting an '.
-             'appropriate amount of time, we measure air pollution levels.';
-$correctc = ' Experiment';
+$exercise_c = 'To examine whether planting trees reduces air pollution, we '.
+              'find a sample of city blocks with similar levels of air '.
+              'pollution and we then plant trees in half of the blocks in the '.
+              'sample. After waiting an appropriate amount of time, we '.
+              'measure air pollution levels.';
+$correct_c = $options[0];
 
-$exercised = 'To examine whether farm-grown salmon contain more omega-3 oils if '.
-             'water is more acidic, we collect samples of salmon and water from '.
-             'multiple fish farms to see if the two variables are related.';
-$correctd = ' Observational Study';
+$exercise_d = 'To examine whether farm-grown salmon contain more omega-3 oils '.
+              'if water is more acidic, we collect samples of salmon and '.
+              'water from multiple fish farms to see if the two variables are '.
+              'related.';
+$correct_d = $options[1];
 
 ###########################
 ## Initialization
 ###########################
 
-$random = random(1, 4, 1);
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
+);
 
-if ($random == 1) {
-  $text1 = $exercisea;
-  $correct1 = $correcta;
-  $text2 = $exerciseb;
-  $correct2 = $correctb;
-} elsif ($random == 2) {
-  $text1 = $exercisec;
-  $correct1 = $correctc;
-  $text2 = $exercised;
-  $correct2 = $correctd;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  $correct1 = $correctd;
-  $text2 = $exercisea;
-  $correct2 = $correcta;
-} else {
-  $text1 = $exerciseb;
-  $correct1 = $correctb;
-  $text2 = $exercisec;
-  $correct2 = $correctc;
-}
+@correct_ans = (
+  $correct_a,
+  $correct_b,
+  $correct_c,
+  $correct_d
+);
 
-$mc1 = RadioButtons(
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+
+$multiple_choice_1 = RadioButtons(
  [@options],
- $correct1,
+ $correct_ans[$random_1],
  order => [@options],
  labels => ['a', 'b']
 );
 
-$mc2 = RadioButtons(
+$multiple_choice_2 = RadioButtons(
  [@options],
- $correct2,
+ $correct_ans[$random_2],
  order => [@options],
  labels => ['a', 'b']
 );
@@ -108,23 +107,24 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 The following questions describe data collection methods to answer a question of
 interest. Are they describing an experiment or an observational study?
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 $BR
-  \{ $mc1->buttons( separator => "") \}
-  $ITEM $text2 $BR
-  \{ $mc2->buttons( separator => "") \}
+  $ITEM $exercises[$random_1] $BR
+  \{ $multiple_choice_1->buttons( separator => "") \}
+  $ITEM $exercises[$random_2] $BR
+  \{ $multiple_choice_2->buttons( separator => "") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
 
-ANS($mc1->cmp());
-ANS($mc2->cmp());
+ANS($multiple_choice_1->cmp());
+ANS($multiple_choice_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

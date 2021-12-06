@@ -39,37 +39,42 @@ Context("Numeric");
 ###########################
 ## Question setup
 ###########################
+@options = ( # choices
+  ' True',
+  ' False'
+);
+
 $exercise_a = 'The population is incoming students at a particular '.
               'university. The name of each incoming student is thrown into '.
               'a hat, the names are mixed, and 20 names (each corresponding '.
               'to a different student) are drawn from the hat.';
-$correct_a = ' True';
+$correct_a = $options[0];
 
 $exercise_b = 'The population is the approximately 25,000 protein-coding '.
               'genes in human DNA. Each gene is assigned a number (from 1 '.
               'to 25,000), and computer software is used to randomly select '.
               '100 of these numbers yielding a sample of 100 genes.';
-$correct_b = ' True';
+$correct_b = $options[0];
 
 $exercise_c = 'The population is all employees at a company. All employees '.
               'are emailed a link to a survey.';
-$correct_c = ' False';
+$correct_c = $options[1];
 
 $exercise_d = 'The population is adults between the ages of 18 and 22. A '.
               'sample of 100 students is collected from a local university, '.
               'and ecah student at the university had an equal chance of '.
               'being selected for the sample.';
-$correct_d = ' False';
+$correct_d = $options[1];
 
 $exercise_e = 'The population is all trees in a forest. We walk through the '.
               'forest and pick out trees that appear to be representative of '.
               'all the trees in the forest.';
-$correct_e = ' False';
+$correct_e = $options[1];
 
 $exercise_f = 'The population is all people who visit the website CNN.com. '.
               'All visitors to the website are invited to take part in the '.
               'daily online poll.';
-$correct_f = ' False';
+$correct_f = $options[1];
 
 # Arrays for the question options to make it easy to randomize
 @exercises = (
@@ -88,11 +93,6 @@ $correct_f = ' False';
   $correct_d,
   $correct_e,
   $correct_f
-);
-
-@options = ( # choices
-  ' True',
-  ' False'
 );
 
 # Now select the exercise at random

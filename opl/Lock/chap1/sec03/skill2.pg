@@ -5,14 +5,14 @@
 ## ENDDESCRIPTION
 
 ## DBsubject(Statistics)
-## DBchapter(Sample survey methods)
+## DBchapter(Experimental design)
 ## DBsection(Concepts)
 ## KEYWORDS('data')
 ## TitleText1('Statistics: Unlocking the Power of Data')
 ## EditionText1('1')
 ## AuthorText1('Lock, Lock, Lock, Lock, Lock')
 ## Chapter1('1')
-## Section1('1.2')
+## Section1('1.3')
 ## Problem1('Skill Builder 1')
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
@@ -40,29 +40,27 @@ Context("Numeric");
 ## Question setup
 ###########################
 @options = ( # choices
-  ' Population',
-  ' Sample'
+  ' Association and causation',
+  ' Association only',
 );
 
-$exercise_a = 'To estimate size of trout in a lake, an angler records the '.
-              'weight of 12 trout he catches over a weekend.';
-$correct_a = $options[1];
+$exercise_a = 'Daily exercise improves mental performance.';
+$correct_a = $options[0];
 
-$exercise_b = 'A subscription-based music website tracks its total number of '.
-              'active users.';
+$exercise_b = 'Cell phone radiation leads to deaths in honey bees.';
 $correct_b = $options[0];
 
-$exercise_c = 'The US Department of Transportation announces that of the 250 '.
-              'million registered passenger vehicles in the US, 2.1'.$PERCENT.
-              ' are electro-gas hybrids.';
-$correct_c = $options[0];
+$exercise_c = 'Wealthy people are more likely than other folks to lie, cheat, '.
+              'and steal';
+$correct_c = $options[1];
 
-$exercise_d = 'A questionnaire to understand athletic participation on a '.
-              'college campus is emailed to 50 college students, and all ',
-              'of them respond.';
+$exercise_d = 'Cat owners tend to be more educated than dog owners.';
 $correct_d = $options[1];
 
-# Arrays for the question options to make it easy to randomize
+###########################
+## Initialization
+###########################
+
 @exercises = (
   $exercise_a,
   $exercise_b,
@@ -101,8 +99,9 @@ $showPartialCorrectAnswers = 0;
 ## Question for display
 ###########################
 BEGIN_TEXT
-For the following situations, identify whether the data are best described as a
-population or a sample.
+The following questions give a headline that recently appeared online or in
+print. For each, state whether the claim is a) association and causation, or
+b) association only.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM $exercises[$random_1] $BR
   \{ $multiple_choice_1->buttons( separator => "") \}

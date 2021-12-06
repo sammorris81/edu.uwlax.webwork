@@ -39,30 +39,35 @@ Context("Numeric");
 ###########################
 ## Question setup
 ###########################
+@options = ( # choices
+  ' Quantitative',
+  ' Categorical'
+);
+
 $exercise_a = 'People in a city are asked if they support a new recycling law.';
-$correct_a = ' Categorical';
+$correct_a = $options[1];
 
 $exercise_b = 'Record the percentage change in the price of a stock for 100 '.
               'stocks publicly traded on Wall Street.';
-$correct_b = ' Quantitative';
+$correct_b = $options[0];
 
 $exercise_c = 'Collect data from a sample of teenagers with a question that '.
               'asks "Do you eat at least five servings a day of fruits and '.
               'vegetables?"';
-$correct_c = ' Categorical';
+$correct_c = $options[1];
 
 $exercise_d = 'Measure the shelf life of bunches of bananas (the number of '.
               'days until the bananas go bad) for a large sample.';
-$correct_d = ' Quantitative';
+$correct_d = $options[0];
 
 $exercise_e = 'Estimate the bending strength of beams by bending 10 beams '.
               'until they break and recording the force at which the beams '.
               'broke.';
-$correct_e = ' Quantitative';
+$correct_e = $options[0];
 
 $exercise_f = 'Record whether or not the literacy rate is over 75'.$PERCENT.
               ' for each country in the world.';
-$correct_f = ' Categorical';
+$correct_f = $options[1];
 
 # Arrays for the question options to make it easy to randomize
 @exercises = (
@@ -81,11 +86,6 @@ $correct_f = ' Categorical';
   $correct_d,
   $correct_e,
   $correct_f
-);
-
-@options = ( # choices
-  ' Quantitative',
-  ' Categorical'
 );
 
 # Now select the exercise at random
