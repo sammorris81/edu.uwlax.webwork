@@ -36,118 +36,134 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$skew1 = random(-7, 7, 7);
-$quant1 = new DataGenUWL(
+###########################
+## Question setup
+###########################
+@skew_descriptions = (
+  "?", 
+  "Left-skewed", 
+  "Approximately symmetric", 
+  "Right-skewed"
+);
+
+@mean_median_comparisons = (
+  "?", 
+  "smaller than the median", 
+  "approximately equal to the median", 
+  "larger than the median"
+);
+
+$skew_1 = random(-7, 7, 7);
+$quant_1 = new DataGenUWL(
   datatype => 'single_quant',
   n => random(200, 300, 5),
   mean => random(10, 20, 2),
   sd => 1,
-  skew => $skew1,
+  skew => $skew_1,
   name => "A",
 );
-$hist1 = StatGraphicsUWL::histogram(
-  data => $quant1,
+$hist_1 = StatGraphicsUWL::histogram(
+  data => $quant_1,
   main => "Histogram A",
 );
 
-if ($skew1 < 0) {
-  $correctskew1 = "Left-skewed";
-  $meanmed1 = "smaller than the median";
-  $skew2 = 0;
-} elsif ($skew1 == 0) {
-  $correctskew1 = "Approximately symmetric";
-  $meanmed1 = "approximately equal to the median";
-  $skew2 = 7 * random(-1, 1, 2);
+if ($skew_1 < 0) {
+  $correct_skew_1 = $skew_descriptions[1];
+  $correct_mean_median_compare_1 = $mean_median_comparisons[1];
+  $skew_2 = 0;
+} elsif ($skew_1 == 0) {
+  $correct_skew_1 = $skew_descriptions[2];
+  $correct_mean_median_compare_1 = $mean_median_comparisons[2];
+  $skew_2 = 7 * random(-1, 1, 2);
 } else {
-  $correctskew1 = "Right-skewed";
-  $meanmed1 = "larger than the median";
-  $skew2 = 0;
+  $correct_skew_1 = $skew_descriptions[3];
+  $correct_mean_median_compare_1 = $mean_median_comparisons[3];
+  $skew_2 = 0;
 }
 
-$skewdesc1 = PopUp(
-  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
-  $correctskew1,
-);
-
-$meanmedcomp1 = PopUp(
-  ["?", "smaller than the median", "approximately equal to the median", "larger than the median"],
-  $meanmed1,
-);
-
-
-$quant2 = new DataGenUWL(
+$quant_2 = new DataGenUWL(
   datatype => 'single_quant',
   n => random(200, 300, 5),
   mean => random(10, 20, 2),
   sd => 1,
-  skew => $skew2,
+  skew => $skew_2,
   name => "B",
 );
-$hist2 = StatGraphicsUWL::histogram(
-  data => $quant2,
+$hist_2 = StatGraphicsUWL::histogram(
+  data => $quant_2,
   main => "Histogram B"
 );
 
-if ($skew2 < 0) {
-  $correctskew2 = "Left-skewed";
-  $meanmed2 = "smaller than the median";
-} elsif ($skew2 == 0) {
-  $correctskew2 = "Approximately symmetric";
-  $meanmed2 = "approximately equal to the median";
+if ($skew_2 < 0) {
+  $correct_skew_2 = $skew_descriptions[1];
+  $correct_mean_median_compare_2 = $mean_median_comparisons[1];
+} elsif ($skew_2 == 0) {
+  $correct_skew_2 = $skew_descriptions[2];
+  $correct_mean_median_compare_2 = $mean_median_comparisons[2];
 } else {
-  $correctskew2 = "Right-skewed";
-  $meanmed2 = "larger than the median";
+  $correct_skew_2 = $skew_descriptions[3];
+  $correct_mean_median_compare_2 = $mean_median_comparisons[3];
 }
 
-$skewdesc2 = PopUp(
-  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
-  $correctskew2,
+$skew_description_1 = PopUp(
+  [@skew_descriptions],
+  $correct_skew_1,
 );
 
-$meanmedcomp2 = PopUp(
-  ["?", "smaller than the median", "approximately equal to the median", "larger than the median"],
-  $meanmed2,
+$mean_median_comparison_1 = PopUp(
+  [@mean_median_comparisons],
+  $correct_mean_median_compare_1,
+);
+
+$skew_description_2 = PopUp(
+  [@skew_descriptions],
+  $correct_skew_2,
+);
+
+$mean_median_comparison_2 = PopUp(
+  [@mean_median_comparisons],
+  $correct_mean_median_compare_2,
 );
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 Use these histograms to answer the following questions.
 $PAR
 $BCENTER
-  \{image($hist1, width=>300, height=>300, tex_size=>450)\}
-  \{image($hist2, width=>300, height=>300, tex_size=>450)\}
+  \{image($hist_1, width=>300, height=>300, tex_size=>450)\}
+  \{image($hist_2, width=>300, height=>300, tex_size=>450)\}
 $ECENTER
 \{BeginList( "OL", type=>"1")\}
   $ITEM Use histogram A to answer these questions: $BR
   \{BeginList("OL", type=>"a")\}
     $ITEM How would you describe the shape of this histogram $BR
-    \{ $skewdesc1->menu() \}
+    \{ $skew_description_1->menu() \}
     $ITEM Is the mean likely to be smaller than the median,
     approximately equal to the median, or larger than the median? $BR
-    \{ $meanmedcomp1->menu() \}
+    \{ $mean_median_comparison_1->menu() \}
   \{EndList("OL")\}
   $ITEM Use histogram B to answer these questions: $BR
   \{BeginList("OL", type=>"a")\}
     $ITEM How would you describe the shape of this histogram $BR
-    \{ $skewdesc2->menu() \}
+    \{ $skew_description_2->menu() \}
     $ITEM Is the mean likely to be smaller than the median,
     approximately equal to the median, or larger than the median? $BR
-    \{ $meanmedcomp2->menu() \}
+    \{ $mean_median_comparison_2->menu() \}
   \{EndList("OL")\}
 \{EndList( "OL")\}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($skewdesc1->cmp());
-ANS($meanmedcomp1->cmp());
-ANS($skewdesc2->cmp());
-ANS($meanmedcomp2->cmp());
+ANS($skew_description_1->cmp());
+ANS($mean_median_comparison_1->cmp());
+ANS($skew_description_2->cmp());
+ANS($mean_median_comparison_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

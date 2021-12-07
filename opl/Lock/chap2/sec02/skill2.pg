@@ -37,9 +37,8 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 ###########################
-## Initialization
+## Question setup
 ###########################
-
 $quant = new DataGenUWL(
   datatype => 'single_quant',
   n => random(5, 9, 2),
@@ -57,7 +56,7 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 For the following dataset, give the mean and median. Give your answer to 4 decimal places.
@@ -65,12 +64,11 @@ $PAR
 \{ join(", ", @{$quant->{x}}) \}
 $PAR
 Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
-
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mean->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($med->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 
