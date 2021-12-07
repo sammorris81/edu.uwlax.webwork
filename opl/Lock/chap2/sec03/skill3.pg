@@ -36,75 +36,73 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$skew1 = random(-20, 20, 20);
+###########################
+## Question setup
+###########################
+@skew_descriptions = (
+  "?", 
+  "Left-skewed", 
+  "Approximately symmetric", 
+  "Right-skewed"
+);
 
-$quant1 = new DataGenUWL(
+$skew_1 = random(-20, 20, 20);
+
+$quant_1 = new DataGenUWL(
   datatype => 'single_quant',
   n => 400,
   mean => 10,
   sd => 1,
-  skew => $skew1,
+  skew => $skew_1,
   name => "A",
   round => 1,
 );
 
-if ($skew1 < 0) {
-  $correctskew1 = "Left-skewed";
-  $skew2 = 0;
-} elsif ($skew1 == 0) {
-  $correctskew1 = "Approximately symmetric";
-  $skew2 = random(-20, 20, 40);
+if ($skew_1 < 0) {
+  $correct_skew_1 = $skew_descriptions[1];
+  $skew_2 = 0;
+} elsif ($skew_1 == 0) {
+  $correct_skew_1 = $skew_descriptions[2];
+  $skew_2 = 20 * random(-1, 1, 2);
 } else {
-  $correctskew1 = "Right-skewed";
-  $skew2 = 0;
+  $correct_skew_1 = $skew_descriptions[3];
+  $skew_2 = 0;
 }
-
-$skewdesc1 = PopUp(
-  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
-  $correctskew1,
-);
 
 $quant2 = new DataGenUWL(
   datatype => 'single_quant',
   n => 400,
   mean => random(10, 20, 2),
   sd => 1,
-  skew => $skew2,
+  skew => $skew_2,
   name => "B",
   round => 1,
 );
 
-if ($skew2 < 0) {
-  $correctskew2 = "Left-skewed";
-} elsif ($skew2 == 0) {
-  $correctskew2 = "Approximately symmetric";
+if ($skew_2 < 0) {
+  $correct_skew_2 = $skew_descriptions[1];
+} elsif ($skew_2 == 0) {
+  $correct_skew_2 = $skew_descriptions[2];
 } else {
-  $correctskew2 = "Right-skewed";
+  $correct_skew_2 = $skew_descriptions[3];
 }
 
-$skewdesc2 = PopUp(
-  ["?", "Left-skewed", "Approximately symmetric", "Right-skewed"],
-  $correctskew2,
+# Generate the questions
+$skew_description_1 = PopUp(
+  [@skew_descriptions],
+  $correct_skew_1,
 );
 
+$skew_description_2 = PopUp(
+  [@skew_descriptions],
+  $correct_skew_2,
+);
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-$showHint = 3;
-BEGIN_HINT
-${BBOLD}Determining the shape of a distribution from a five-number summary${EBOLD} $BR
-Remember that the quantiles and median of a dataset are used to divide the
-sorted list of observations into 4 groups of equal size. We can use this fact,
-along with the minimum and maximum of the dataset, to help determine the shape
-of the distribution.
-\{BeginList("UL")\}
-  $ITEM ${BITALIC}Symmetric distributions${EITALIC} wi
-\{EndList("OL")\}
-END_HINT
-
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 For these questions, indicate whether the five-number summary corresponds most
@@ -112,15 +110,39 @@ likely to a distribution that is skewed to the left, approximately symmetric, or
 skewed to the right.
 $PAR
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant1) \}) \{ $skewdesc1->menu() \}
-  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant2) \}) \{ $skewdesc2->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant_1) \}) 
+    \{ $skew_description_1->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data => $quant2) \}) 
+    \{ $skew_description_2->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+${BBOLD}Determining the shape of a distribution from a five-number 
+summary${EBOLD} $BR
+Remember that the quantiles and median of a dataset are used to divide the
+sorted list of observations into 4 groups of equal size. We can use this fact,
+along with the minimum and maximum of the dataset, to help determine the shape
+of the distribution.
+\{BeginList("UL")\}
+  $ITEM ${BITALIC}Symmetric distributions${EITALIC} will have medians that are
+    roughly halfway between the min and the max.
+  $ITEM ${BITALIC}Left-skewed distributions${EITALIC} will often have medians
+    that are closer to the max than the min.
+  $ITEM ${BITALIC}Right-skewed distributions${EITALIC} will often have medians
+    that are closer to the min than the max.
+\{EndList("OL")\}
+END_HINT
+
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($skewdesc1->cmp());
-ANS($skewdesc2->cmp());
+ANS($skew_description_1->cmp());
+ANS($skew_description_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

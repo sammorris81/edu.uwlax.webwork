@@ -36,6 +36,9 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 $sign1 = random(-1, 1, 2);
 $z1 = Real($sign1 * random(1.5, 3.0, 0.1));
 $sd1 = random(10, 20, 4);
@@ -48,28 +51,29 @@ $sd2 = random(1, 2, 0.1);
 $mean2 = random(10, 20, 2);
 $value2 = $z2 * $sd2 + $mean2;
 
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-For these questions, find the \(z\)-score for the data value given. Give your answers
-to 4 decimal places.
+For these questions, find the \(z\)-score for the data value given. Give your 
+answers to 4 decimal places.
 $PAR
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM The value $value1 in a dataset with mean $mean1 and standard deviation $sd1. $BR
-  \{ ans_rule(10) \}
-  $ITEM The value $value2 in a dataset with mean $mean2 and standard deviation $sd2. $BR
-  \{ ans_rule(10) \}
+  $ITEM The value $value1 in a dataset with mean $mean1 and standard deviation 
+    $sd1. $BR
+    \{ ans_rule(10) \}
+  $ITEM The value $value2 in a dataset with mean $mean2 and standard deviation 
+    $sd2. $BR
+    \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($z1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($z2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 

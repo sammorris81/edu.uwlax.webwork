@@ -105,6 +105,7 @@ if ($skew_2 < 0) {
   $correct_mean_median_compare_2 = $mean_median_comparisons[3];
 }
 
+# Generate the questions
 $skew_description_1 = PopUp(
   [@skew_descriptions],
   $correct_skew_1,

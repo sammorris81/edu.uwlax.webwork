@@ -36,6 +36,9 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 $sd1 = random(10, 20, 4);
 $mean1 = random(100, 200, 2);
 $lower1 = Real($mean1 - 2 * $sd1);
@@ -50,25 +53,27 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-For these questions, use the 95$PERCENT rule and the fact that summary statistics
-come from a distribution that is symmetric and bell-shaped to find an interval that
-is expected to contain about 95$PERCENT of the data values. Give your answers to
-4 decimal places.
+For these questions, use the 95$PERCENT rule and the fact that summary 
+statistics come from a distribution that is symmetric and bell-shaped to find an
+interval that is expected to contain about 95$PERCENT of the data values. Give 
+your answers to 4 decimal places.
 $PAR
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM A bell-shaped distribution with mean $mean1 and standard deviation $sd1 $BR
-  (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  $ITEM A bell-shaped distribution with mean $mean2 and standard deviation $sd2 $BR
-  (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $ITEM A bell-shaped distribution with mean $mean1 and standard deviation 
+    $sd1 $BR
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $ITEM A bell-shaped distribution with mean $mean2 and standard deviation 
+    $sd2 $BR
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \})
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

@@ -35,8 +35,10 @@ if($displayMode eq "TeX"){
 }
 
 Context("Numeric");
-
-$quant1 = new DataGenUWL(
+###########################
+## Question setup
+###########################
+$quant_1 = new DataGenUWL(
   datatype => 'single_quant',
   n => 11,
   mean => random(10, 20, 2),
@@ -46,15 +48,15 @@ $quant1 = new DataGenUWL(
   round => 0,
 );
 
-$mean1 = Real($quant1->{mean});
-$sd1 = Real($quant1->{sd});
-$min1 = Real($quant1->{min});
-$q11 = Real($quant1->{q1});
-$med1 = Real($quant1->{med});
-$q31 = Real($quant1->{q3});
-$max1 = Real($quant1->{max});
+$mean_1 = Real($quant_1->{mean});
+$sd_1 = Real($quant_1->{sd});
+$min_1 = Real($quant_1->{min});
+$q1_1 = Real($quant_1->{q1});
+$med_1 = Real($quant_1->{med});
+$q3_1 = Real($quant_1->{q3});
+$max_1 = Real($quant_1->{max});
 
-$quant2 = new DataGenUWL(
+$quant_2 = new DataGenUWL(
   datatype => 'single_quant',
   n => 15,
   mean => random(10, 20, 2),
@@ -64,60 +66,91 @@ $quant2 = new DataGenUWL(
   round => 0,
 );
 
-$mean2 = Real($quant2->{mean});
-$sd2 = Real($quant2->{sd});
-$min2 = Real($quant2->{min});
-$q12 = Real($quant2->{q1});
-$med2 = Real($quant2->{med});
-$q32 = Real($quant2->{q3});
-$max2 = Real($quant2->{max});
+$mean_2 = Real($quant_2->{mean});
+$sd_2 = Real($quant_2->{sd});
+$min_2 = Real($quant_2->{min});
+$q1_2 = Real($quant_2->{q1});
+$med_2 = Real($quant_2->{med});
+$q3_2 = Real($quant_2->{q3});
+$max_2 = Real($quant_2->{max});
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 For the following samples, use technology to find the mean, standard deviation,
 and five-number summary. Give your answers to 4 decimal places.
 $PAR
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM \{ join(", ", @{$quant1->{x}}) \} $PAR
+  $ITEM \{ join(", ", @{$quant_1->{x}}) \} $PAR
   \{
     BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-    AlignedRow(["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], align=>"CENTER", valign=>"MIDDLE", separation=>0).
-    AlignedRow([ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    AlignedRow(
+      ["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ).
+    AlignedRow(
+      [
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10)
+      ], align=>"CENTER", valign=>"MIDDLE", separation=>0).
     EndTable();
   \}
-  $ITEM \{ join(", ", @{$quant2->{x}}) \} $PAR
+  $ITEM \{ join(", ", @{$quant_2->{x}}) \} $PAR
   \{
     BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-    AlignedRow(["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], align=>"CENTER", valign=>"MIDDLE", separation=>0).
-    AlignedRow([ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10)], align=>"CENTER", valign=>"MIDDLE", separation=>0).
+    AlignedRow(
+      ["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ).
+    AlignedRow(
+      [
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10), 
+        ans_rule(10)
+      ], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0).
     EndTable();
   \}
 
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
+ANS($mean_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($sd_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($min_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q1_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($med_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q3_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($max_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 
-ANS($mean1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($sd1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($min1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($q11->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($med1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($q31->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($max1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-
-ANS($mean2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($sd2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($min2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($q12->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($med2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($q32->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($max2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($mean_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($sd_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($min_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q1_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($med_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($q3_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
+ANS($max_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

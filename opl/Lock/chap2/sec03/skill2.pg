@@ -36,144 +36,132 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$random = random(1, 6, 1);
-if ($random == 1) {
-  $sd1 = 1; $sd2 = 3; $sd3 = 5;
-  $correct1 = "Histogram A";
-  $correct2 = "Histogram B";
-  $correct3 = "Histogram C";
-} elsif ($random == 2) {
-  $sd1 = 1; $sd2 = 5; $sd3 = 3;
-  $correct1 = "Histogram A";
-  $correct2 = "Histogram C";
-  $correct3 = "Histogram B";
-} elsif ($random == 3) {
-  $sd1 = 3; $sd2 = 1; $sd3 = 5;
-  $correct1 = "Histogram B";
-  $correct2 = "Histogram A";
-  $correct3 = "Histogram C";
-} elsif ($random == 4) {
-  $sd1 = 3; $sd2 = 5; $sd3 = 1;
-  $correct1 = "Histogram C";
-  $correct2 = "Histogram A";
-  $correct3 = "Histogram B";
-} elsif ($random == 5) {
-  $sd1 = 5; $sd2 = 1; $sd3 = 3;
-  $correct1 = "Histogram B";
-  $correct2 = "Histogram C";
-  $correct3 = "Histogram A";
-} else {
-  $sd1 = 5; $sd2 = 3; $sd3 = 1;
-  $correct1 = "Histogram C";
-  $correct2 = "Histogram B";
-  $correct3 = "Histogram A";
-}
+###########################
+## Question setup
+###########################
+@options = ('?', 'Histogram A', 'Histogram B', 'Histogram C');
+@sds = (1, 3, 5);
 
-$quant1 = new DataGenUWL(
+# Now select the order at random
+($random_1, $random_2, $random_3) = NchooseK(($#options + 1), ($#options + 1));
+
+# The data sets are always ordered in A, B, C order no matter the SD.
+$quant_1 = new DataGenUWL(
   datatype => 'single_quant',
   n => 400,
   mean => 10,
-  sd => $sd1,
+  sd => $sds[$random_1],
   skew => 0,
   name => "A",
   randomsummary => "F",
 );
 
-$quant2 = new DataGenUWL(
+$quant_2 = new DataGenUWL(
   datatype => 'single_quant',
   n => 400,
   mean => 10,
-  sd => $sd2,
+  sd => $sds[$random_2],
   skew => 0,
   name => "B",
   randomsummary => "F",
 );
 
-$quant3 = new DataGenUWL(
+$quant_3 = new DataGenUWL(
   datatype => 'single_quant',
   n => 400,
   mean => 10,
-  sd => $sd3,
+  sd => $sds[$random_3],
   skew => 0,
   name => "C",
   randomsummary => "F",
 );
 
+# Histograms are also always ordered in A, B, C
 $xmin = -5;
 $xmax = 25;
 
-$hist1 = StatGraphicsUWL::histogram(
-  data => $quant1,
+$hist_1 = StatGraphicsUWL::histogram(
+  data => $quant_1,
   xmin => $xmin,
   xmax => $xmax,
-  # xticklength => 5,
-  main => "Histogram A"
+  main => $options[1]
 );
 
-$hist2 = StatGraphicsUWL::histogram(
-  data => $quant2,
+$hist_2 = StatGraphicsUWL::histogram(
+  data => $quant_2,
   xmin => $xmin,
   xmax => $xmax,
-  # xticklength => 5
-  main => "Histogram B"
+  main => $options[2]
 );
 
-$hist3 = StatGraphicsUWL::histogram(
-  data => $quant3,
+$hist_3 = StatGraphicsUWL::histogram(
+  data => $quant_3,
   xmin => $xmin,
   xmax => $xmax,
-  # xticklength => 5,
-  main => "Histogram C"
+  main => $options[3]
 );
 
-@options = (
-  '?',
-  'Histogram A',
-  'Histogram B',
-  'Histogram C',
-);
+# The questions are asked in the order of @sds -- 1, 3, 5. So, we need to loop
+# through the randomized sds to figure out how to order the histogram names.
+@correct_answer_idx = ();
+for (0..$#sds) {
+  if ($sds[$_] == $sds[$random_1]) {
+    push(@correct_answer_idx, 1);
+  } elsif ($sds[$_] == $sds[$random_2]) {
+    push(@correct_answer_idx, 2);
+  } else {
+    push(@correct_answer_idx, 3);
+  }
+}
 
-$q1 = PopUp(
+# In this case, the correct answer should be the histogram with sd = 1
+$q_1 = PopUp(
   [@options],
-  $correct1,
+  $options[$correct_answer_idx[0]],
 );
 
-$q2 = PopUp(
+# In this case, the correct answer should be the histogram with sd = 3
+$q_2 = PopUp(
   [@options],
-  $correct2,
+  $options[$correct_answer_idx[1]],
 );
 
-$q3 = PopUp(
+# In this case, the correct answer should be the histogram with sd = 5
+$q_3 = PopUp(
   [@options],
-  $correct3,
+  $options[$correct_answer_idx[2]],
 );
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 Use these histograms to answer the following questions.
 $PAR
 $BCENTER
-  \{ image($hist1, width=>300, height=>300, tex_size=>300) \}
-  \{ image($hist2, width=>300, height=>300, tex_size=>300) \}
-  \{ image($hist3, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist_1, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist_2, width=>300, height=>300, tex_size=>300) \}
+  \{ image($hist_3, width=>300, height=>300, tex_size=>300) \}
 $ECENTER
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM Which histogram has a standard deviation closest to 1? \{ $q1->menu() \}
-  $ITEM Which histogram has a standard deviation closest to 3? \{ $q2->menu() \}
-  $ITEM Which histogram has a standard deviation closest to 5? \{ $q3->menu() \}
+  $ITEM Which histogram has a standard deviation closest to 1? 
+    \{ $q_1->menu() \}
+  $ITEM Which histogram has a standard deviation closest to 3? 
+    \{ $q_2->menu() \}
+  $ITEM Which histogram has a standard deviation closest to 5? 
+    \{ $q_3->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
 
-ANS($q1->cmp());
-ANS($q2->cmp());
-ANS($q3->cmp());
+ANS($q_1->cmp());
+ANS($q_2->cmp());
+ANS($q_3->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.
