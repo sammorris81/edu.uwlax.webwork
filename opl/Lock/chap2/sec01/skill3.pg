@@ -39,7 +39,6 @@ Context("Numeric");
 ###########################
 ## Question setup
 ###########################
-
 $random = random(0, 1, 1);
 if ($random == 0) {
   $n = random(355, 370, 1);
@@ -124,10 +123,10 @@ Give your answer to 4 decimal places.
   EndTable()
 \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($answer_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($answer_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($answer_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

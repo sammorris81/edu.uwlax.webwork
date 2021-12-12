@@ -113,7 +113,7 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 In each of the following questions, identify if the proportion given is a sample
@@ -125,10 +125,10 @@ proportion or a population proportion.
   \{ $multiple_choice_2->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($multiple_choice_1->cmp());
 ANS($multiple_choice_2->cmp());
 

@@ -38,6 +38,9 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 $n = 40;
 @sigs = (0, 0, 5, 5);
 @slopes = (-5, 5);
@@ -55,7 +58,9 @@ $xticklength = 5;
 rserve_eval('x <- rnorm(' . $n . ', 10, 3.3)');
 
 # generate y1
-rserve_eval('y <- 19 + ' . $slopes[0] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[0] .')');
+rserve_eval(
+  'y <- 19 + ' . $slopes[0] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[0] .')'
+);
 $scatter = rserve_start_plot('png');
 rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
              plot(x, y, ylab = "", xlab = "")');
@@ -64,7 +69,9 @@ $scatter1 = rserve_finish_plot($scatter);
 $r1 = sprintf("%.3f", $r1);
 
 # generate y2
-rserve_eval('y <- 19 + ' . $slopes[1] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[1] .')');
+rserve_eval(
+  'y <- 19 + ' . $slopes[1] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[1] .')'
+);
 $scatter = rserve_start_plot('png');
 rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
              plot(x, y, ylab = "", xlab = "")');
@@ -73,7 +80,9 @@ $scatter2 = rserve_finish_plot($scatter);
 $r2 = sprintf("%.3f", $r2);
 
 # generate y3
-rserve_eval('y <- 19 + ' . $slopes[2] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[2] .')');
+rserve_eval(
+  'y <- 19 + ' . $slopes[2] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[2] .')'
+);
 $scatter = rserve_start_plot('png');
 rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
              plot(x, y, ylab = "", xlab = "")');
@@ -82,7 +91,9 @@ $scatter3 = rserve_finish_plot($scatter);
 $r3 = sprintf("%.3f", $r3);
 
 # generate y4
-rserve_eval('y <- 19 + ' . $slopes[3] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[3] .')');
+rserve_eval(
+  'y <- 19 + ' . $slopes[3] . ' * x + rnorm(' . $n . ', 0, ' . $sigs[3] .')'
+);
 $scatter = rserve_start_plot('png');
 rserve_eval('par(mar = c(2, 2, 1, 1) + 0.1)
              plot(x, y, ylab = "", xlab = "")');
@@ -117,11 +128,11 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-Match each of the following plots with the correct correlation from the list of following choices.
-Each answer will only be used $BBOLD one $EBOLD time.
+Match each of the following plots with the correct correlation from the list of 
+following choices. Each answer will only be used $BBOLD one $EBOLD time.
 $PAR
 \{BeginList( "OL", type=>"a") \}
   $ITEM $options[1]
@@ -130,44 +141,46 @@ $PAR
   $ITEM $options[4]
 \{EndList( "OL" )\}
 
-
 \{
-BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
-AlignedRow([
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+  AlignedRow(
+    [
       image($scatter1, width=>300, height=>300, tex_size=>"400"),
       image($scatter2, width=>300, height=>300, tex_size=>"400")
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
+    ],
+    align=>"LEFT", valign=>"TOP", separation=>0
+  ).
+  AlignedRow(
+    [
       "1. Pick the correct correlation. $BR" . $cor1 -> menu(),
       "2. Pick the correct correlation. $BR" . $cor2 -> menu()
-      ],
-            align=>"LEFT", valign=>"TOP", separation=>0
-           ).
-AlignedRow([
+    ],
+    align=>"LEFT", valign=>"TOP", separation=>0
+  ).
+  AlignedRow(
+    [
       image($scatter3, width=>300, height=>300, tex_size=>"400"),
       image($scatter4, width=>300, height=>300, tex_size=>"400")
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
+    ],
+    align=>"LEFT", valign=>"TOP", separation=>0
+  ).
+  AlignedRow(
+    [
       "3. Pick the correct correlation. $BR" . $cor3 -> menu(),
       "4. Pick the correct correlation. $BR" . $cor4 -> menu()
-      ],
-            align=>"LEFT", valign=>"TOP", separation=>0
-           ).
-EndTable()
+    ],
+    align=>"LEFT", valign=>"TOP", separation=>0
+  ).
+  EndTable()
 \}
-
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($cor1->cmp()) ;
-ANS($cor2->cmp()) ;
-ANS($cor3->cmp()) ;
-ANS($cor4->cmp()) ;
+ANS($cor1->cmp());
+ANS($cor2->cmp());
+ANS($cor3->cmp());
+ANS($cor4->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

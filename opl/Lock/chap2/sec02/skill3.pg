@@ -35,8 +35,9 @@ if($displayMode eq "TeX"){
 }
 
 Context("Numeric");
+
 ###########################
-## Initialization
+## Question setup
 ###########################
 @options = (
   '?',

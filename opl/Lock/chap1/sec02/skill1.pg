@@ -114,7 +114,6 @@ END_TEXT
 ###########################
 ## Answer Section
 ###########################
-
 ANS($multiple_choice_1->cmp());
 ANS($multiple_choice_2->cmp());
 

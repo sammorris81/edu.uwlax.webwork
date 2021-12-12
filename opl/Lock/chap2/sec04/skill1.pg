@@ -17,7 +17,6 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
@@ -37,96 +36,96 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-$random = random(1, 6, 1);
-$skew1 = -10;
-$skew2 = 0;
-$skew3 = 10;
-
-$quant1 = new DataGenUWL(
-  datatype => 'single_quant',
-  n => 40,
-  mean => 10,
-  sd => 3,
-  skew => $skew1,
-  randomsummary => "T",
-  round => 0,
-  name => "A",
-);
-
-$quant2 = new DataGenUWL(
-  datatype => 'single_quant',
-  n => 40,
-  mean => 10,
-  sd => 3,
-  skew => $skew2,
-  randomsummary => "T",
-  round => 0,
-  name => "B",
-);
-
-$quant3 = new DataGenUWL(
-  datatype => 'single_quant',
-  n => 40,
-  mean => 10,
-  sd => 3,
-  skew => $skew3,
-  randomsummary => "T",
-  round => 0,
-  name => "C",
-);
-
-$box = StatGraphicsUWL::boxplot(
-  data => [$quant1, $quant2, $quant3],
-);
-
+###########################
+## Question setup
+###########################
 @options = (
-  '?',
   'Boxplot A',
   'Boxplot B',
   'Boxplot C',
 );
 
+$skew_1 = -10;
+$skew_2 = 0;
+$skew_3 = 10;
 
-if ($random == 1) {
-  $correct1 = "Boxplot A"; $correct2 = "Boxplot B"; $correct3 = "Boxplot C";
-  $disp1 = $quant1; $disp2 = $quant2; $disp3 = $quant3;
-} elsif ($random == 2) {
-  $correct1 = "Boxplot A"; $correct2 = "Boxplot C"; $correct3 = "Boxplot B";
-  $disp1 = $quant1; $disp2 = $quant3; $disp3 = $quant2;
-} elsif ($random == 3) {
-  $correct1 = "Boxplot B"; $correct2 = "Boxplot A"; $correct3 = "Boxplot C";
-  $disp1 = $quant2; $disp2 = $quant1; $disp3 = $quant3;
-} elsif ($random == 4) {
-  $correct1 = "Boxplot B"; $correct2 = "Boxplot C"; $correct3 = "Boxplot A";
-  $disp1 = $quant2; $disp2 = $quant3; $disp3 = $quant1;
-} elsif ($random == 5) {
-  $correct1 = "Boxplot C"; $correct2 = "Boxplot A"; $correct3 = "Boxplot B";
-  $disp1 = $quant3; $disp2 = $quant1; $disp3 = $quant2;
-} else {
-  $correct1 = "Boxplot C"; $correct2 = "Boxplot B"; $correct3 = "Boxplot A";
-  $disp1 = $quant3; $disp2 = $quant2; $disp3 = $quant1;
-}
-
-$q1 = PopUp(
-  [@options],
-  $correct1,
+$quant_1 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 40,
+  mean => 10,
+  sd => 3,
+  skew => $skew_1,
+  randomsummary => "T",
+  round => 0,
+  name => "A",
 );
 
-$q2 = PopUp(
-  [@options],
-  $correct2,
+$quant_2 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 40,
+  mean => 10,
+  sd => 3,
+  skew => $skew_2,
+  randomsummary => "T",
+  round => 0,
+  name => "B",
 );
 
-$q3 = PopUp(
-  [@options],
-  $correct3,
+$quant_3 = new DataGenUWL(
+  datatype => 'single_quant',
+  n => 40,
+  mean => 10,
+  sd => 3,
+  skew => $skew_3,
+  randomsummary => "T",
+  round => 0,
+  name => "C",
+);
+
+# We always want the histograms to appear in A, B, C order
+$box = StatGraphicsUWL::boxplot(
+  data => [$quant_1, $quant_2, $quant_3],
+);
+
+# Arrays cannot hold arbitrary objects, but hashes can. Combine the 
+# quantitative data into a hash. 
+%quants = (
+  0 => $quant_1,
+  1 => $quant_2,
+  2 => $quant_3
+ );
+
+ $n_random = keys %quants;
+
+($random_1, $random_2, $random_3) = NchooseK($n_random, 3);
+
+$correct_1 = $options[$random_1];
+$correct_2 = $options[$random_2];
+$correct_3 = $options[$random_3];
+$disp_1 = $quants{$random_1};
+$disp_2 = $quants{$random_2};
+$disp_3 = $quants{$random_3};
+
+$q_1 = PopUp(
+  ['?', @options],
+  $correct_1,
+);
+
+$q_2 = PopUp(
+  ['?', @options],
+  $correct_2,
+);
+
+$q_3 = PopUp(
+  ['?', @options],
+  $correct_3,
 );
 
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 Match each five number summary with one of the boxplots.
@@ -135,17 +134,20 @@ $BCENTER
   \{ image(insertGraph($box), width=>300, height=>300, tex_size=>300) \}
 $ECENTER
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp1) \}) \{ $q1->menu() \}
-  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp2) \}) \{ $q2->menu() \}
-  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp3) \}) \{ $q3->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp_1) \}) 
+    \{ $q_1->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp_2) \}) 
+    \{ $q_2->menu() \}
+  $ITEM (\{ QuantitativeUWL::fivenum(data=>$disp_3) \}) 
+    \{ $q_3->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($q1->cmp());
-ANS($q2->cmp());
-ANS($q3->cmp());
+ANS($q_1->cmp());
+ANS($q_2->cmp());
+ANS($q_3->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

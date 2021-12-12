@@ -37,7 +37,7 @@ if($displayMode eq "TeX"){
 Context("Numeric");
 
 ###########################
-## Initialization
+## Question setup
 ###########################
 $n1_a = random(165, 175, 1);
 $n2_a = random(190, 210, 1);
@@ -98,8 +98,6 @@ $exercise_d = "The math SAT score is $sat_compare than the verbal SAT score ".
               "about SAT scores. Find \( \widehat{p} \), the proportion for ".
               "whom the math SAT score is $sat_compare.";
 
-# Arrays for the question options to make it easy to randomize. In this question
-# everyone will get question 3.
 @exercises = (
   $exercise_a,
   $exercise_b,
@@ -120,7 +118,7 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 The following exercises provide information about data in a survey given to students.
@@ -132,10 +130,10 @@ Find the sample proportion \( \widehat{p} \) requested. Give your answer to 4 de
   \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($answers[$random_1]->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($answers[$random_2]->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 

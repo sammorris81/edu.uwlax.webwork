@@ -38,81 +38,75 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-@vartype = ( # choices
+###########################
+## Question setup
+###########################
+@options = ( # choices
   ' Negative',
   ' Positive'
 );
 
-$exercisea = 'Size of a house and Cost to heat the house';
-$correcta = ' Positive';
+$exercise_a = 'Size of a house and Cost to heat the house';
+$correct_a = $options[1];
 
-$exerciseb = 'Distance driven since the last fill-up of the gas tank and Amount '.
-             'of gas left in the tank';
-$correctb = ' Negative';
+$exercise_b = 'Distance driven since the last fill-up of the gas tank and '.
+             'Amount of gas left in the tank';
+$correct_b = $options[0];
 
-$exercisec = 'Outside temperature and Amount of clothes worn';
-$correctc = ' Negative';
+$exercise_c = 'Outside temperature and Amount of clothes worn';
+$correct_c = $options[0];
 
-$exercised = 'Number of text messages sent on a cell phone and Number of text '.
+$exercise_d = 'Number of text messages sent on a cell phone and Number of text '.
              'messages received on the phone';
-$correctd = ' Positive';
+$correct_d = $options[1];
 
-$exercisee = 'Number of people in a square mile and Number of trees in the square '.
-             'mile';
-$correcte = ' Negative';
+$exercise_e = 'Number of people in a square mile and Number of trees in the ',
+             'square mile';
+$correct_e = $options[0];
 
-$exercisef = 'Amount of time spent studying and Grade on the exam';
-$correctf = ' Positive';
+$exercise_f = 'Amount of time spent studying and Grade on the exam';
+$correct_f = $options[1];
 
-###########################
-## Initialization
-###########################
+# Arrays for the question options to make it easy to randomize
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d,
+  $exercise_e,
+  $exercise_f
+);
 
-$random = random(1, 6, 1);
+@correct_ans = (
+  $correct_a,
+  $correct_b,
+  $correct_c,
+  $correct_d,
+  $correct_e,
+  $correct_f
+);
 
-if ($random == 1) {
-  $text1 = $exercisea;
-  $right1 = $correcta;
-  $text2 = $exercised;
-  $right2 = $correctd;
-} elsif ($random == 2) {
-  $text1 = $exerciseb;
-  $right1 = $correctb;
-  $text2 = $exercisee;
-  $right2 = $correcte;
-} elsif ($random == 3) {
-  $text1 = $exercisec;
-  $right1 = $correctc;
-  $text2 = $exercisef;
-  $right2 = $correctf;
-} elsif ($random == 4) {
-  $text1 = $exercised;
-  $right1 = $correctd;
-  $text2 = $exercisec;
-  $right2 = $correctc;
-} elsif ($random == 5) {
-  $text1 = $exercisef;
-  $right1 = $correctf;
-  $text2 = $exercisee;
-  $right2 = $correcte;
-} else {
-  $text1 = $exerciseb;
-  $right1 = $correctb;
-  $text2 = $exercisea;
-  $right2 = $correcta;
-}
+# Now select the exercise at random
+($random_1, $random_2, $random_3) = NchooseK(($#exercises + 1), 3);
 
-$mc1 = RadioButtons(
- [@vartype],
- $right1,
- order => [@vartype],
+$multiple_choice_1 = RadioButtons(
+ [@options],
+ $correct_ans[$random_1],
+ order => [@options],
  labels => ['a', 'b']
 );
 
-$mc2 = RadioButtons(
- [@vartype],
- $right2,
- order => [@vartype],
+$multiple_choice_2 = RadioButtons(
+ [@options],
+ $correct_ans[$random_2],
+ order => [@options],
+ labels => ['a', 'b']
+);
+
+$multiple_choice_3 = RadioButtons(
+ [@options],
+ $correct_ans[$random_3],
+ order => [@options],
  labels => ['a', 'b']
 );
 
@@ -120,23 +114,26 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
-In the following questions, two quantitative variables are described. Do you expect
-a positive or negative association between the two variables?
+In the following questions, two quantitative variables are described. Do you 
+expect a positive or negative association between the two variables?
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 $BR
-  \{ $mc1->buttons( separator => "") \}
-  $ITEM $text2 $BR
-  \{ $mc2->buttons( separator => "") \}
+  $ITEM $exercises[$random_1] $BR
+  \{ $multiple_choice_1->buttons( separator => "") \}
+  $ITEM $exercises[$random_2] $BR
+  \{ $multiple_choice_2->buttons( separator => "") \}
+  $ITEM $exercises[$random_3] $BR
+  \{ $multiple_choice_2->buttons( separator => "") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
-ANS($mc1->cmp());
-ANS($mc2->cmp());
+ANS($multiple_choice_1->cmp());
+ANS($multiple_choice_2->cmp());
+ANS($multiple_choice_3->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

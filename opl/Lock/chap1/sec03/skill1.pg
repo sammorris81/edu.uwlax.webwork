@@ -68,10 +68,6 @@ $exercise_d = 'To examine whether farm-grown salmon contain more omega-3 oils '.
               'related.';
 $correct_d = $options[1];
 
-###########################
-## Initialization
-###########################
-
 @exercises = (
   $exercise_a,
   $exercise_b,
@@ -123,7 +119,6 @@ END_TEXT
 ###########################
 ## Answer Section
 ###########################
-
 ANS($multiple_choice_1->cmp());
 ANS($multiple_choice_2->cmp());
 
