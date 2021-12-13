@@ -38,6 +38,9 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 @notation = ( # choices
   " \( p \)",
   " \( \widehat{p} \)",
@@ -45,84 +48,76 @@ Context("Numeric");
   " \( \overline{x} \)",
 );
 
-$counta = random(170, 200, 1);
-$na = random(75, 80, 1);
-$ansa = Real($counta * 1000 / ($na * 1000000));
-$exercisea = "The number of homeless families in 2010 was about $counta,000 while ".
-             "the total number of families is given in the 2010 Census at $na ".
-             "million. What proportion of families in the US were homeless in 2010?";
-$nota = " \( p \)";
+$count_a = random(170, 200, 1);
+$n_a = random(75, 80, 1);
+$correct_answer_a = Real($count_a * 1000 / ($n_a * 1000000));
+$exercise_a = "The number of homeless families in 2010 was about $count_a,000 ".
+              "while the total number of families is given in the 2010 Census ".
+              "at $n_a million. What proportion of families in the US were ".
+              "homeless in 2010?";
+$correct_notation_a = " \( p \)";
 
-$sumb = random(30750, 30800, 1);
-$nb = random(92, 100, 1);
-$ansb = Real($sumb / $nb);
-$exerciseb = "In 2010, there were $nb charter schools in the state of Illinois and ".
-             "the total number of students attending the charter schools was $sumb. ".
-             "What is the average enrollment at a charter schools in Illinois in 2010?";
-$notb = " \( \mu \)";
+$sum_b = random(30750, 30800, 1);
+$n_b = random(92, 100, 1);
+$correct_answer_b = Real($sum_b / $n_b);
+$exercise_b = "In 2010, there were $n_b charter schools in the state of ".
+              "Illinois and the total number of students attending the ".
+              "charter schools was $sum_b. What is the average enrollment at ".
+              "a charter schools in Illinois in 2010?";
+$correct_notation_b = " \( \mu \)";
 
-$countc = random(1800, 1900, 1);
-$nc = random(2200, 2300, 1);
-$ansc = Real($countc / $nc);
-$exercisec = "In a survey of $nc US adults, $countc said they had a cell phone. ".
-             "What proportion of US adults own a cell phone?";
-$notc = " \( \widehat{p} \)";
+$count_c = random(1800, 1900, 1);
+$n_c = random(2200, 2300, 1);
+$correct_answer_c = Real($count_c / $n_c);
+$exercise_c = "In a survey of $n_c US adults, $count_c said they had a cell ".
+              "phone. What proportion of US adults own a cell phone?";
+$correct_notation_c = " \( \widehat{p} \)";
 
-$sumd = random(25000, 26000, 1);
-$nd = random(1900, 2000, 1);
-$ansd = Real($sumd / $nd);
-$exercised = "In a survey of $nd cell phone users, the total number of phone calls ".
-             "made or received per day was $sumd. What is the average number of ".
-             "phone calls per day made or received by cell phone users?";
-$notd = " \( \overline{x} \)";
+$sum_d = random(25000, 26000, 1);
+$n_d = random(1900, 2000, 1);
+$correct_answer_d = Real($sum_d / $n_d);
+$exercise_d = "In a survey of $n_d cell phone users, the total number of ".
+              "phone calls made or received per day was $sum_d. What is the ".
+              "average number of phone calls per day made or received by cell ".
+              "phone users?";
+$correct_notation_d = " \( \overline{x} \)";
 
-###########################
-## Initialization
-###########################
+# Put them into an array for easier randomization
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
+);
 
-$random = random(1, 4, 1);
+@correct_answers = (
+  $correct_answer_a,
+  $correct_answer_b,
+  $correct_answer_c,
+  $correct_answer_d
+);
 
-if ($random == 1) {
-  $text1 = $exercisea;
-  $not1 = $nota;
-  $ans1 = $ansa;
-  $text2 = $exercisec;
-  $not2 = $notc;
-  $ans2 = $ansc;
-} elsif ($random == 2) {
-  $text1 = $exerciseb;
-  $not1 = $notb;
-  $ans1 = $ansb;
-  $text2 = $exercised;
-  $not2 = $notd;
-  $ans2 = $ansd;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  $not1 = $notd;
-  $ans1 = $ansd;
-  $text2 = $exercisea;
-  $not2 = $nota;
-  $ans2 = $ansa;
-} else {
-  $text1 = $exercisec;
-  $not1 = $notc;
-  $ans1 = $ansc;
-  $text2 = $exerciseb;
-  $not2 = $notb;
-  $ans2 = $ansb;
-}
+@correct_notations = (
+  $correct_notation_a,
+  $correct_notation_b,
+  $correct_notation_c,
+  $correct_notation_d
+);
 
-$notate1 = RadioButtons(
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+
+$notation_q_1 = RadioButtons(
   [@notation],
-  $not1,
+  $correct_notations[$random_1],
   order => [@notation],
   labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
-$notate2 = RadioButtons(
+$notation_q_2 = RadioButtons(
   [@notation],
-  $not2,
+  $correct_notations[$random_2],
   order => [@notation],
   labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
@@ -135,19 +130,19 @@ $showPartialCorrectAnswers = 0;
 ## Answer Section
 ###########################
 BEGIN_TEXT
-For the following questions, give an estimate of the quantity described and identify
-the proper notation.
+For the following questions, give an estimate of the quantity described and 
+identify the proper notation.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 Give your answer to 4 decimal places.$BR
+  $ITEM $exercises[$random_1] Give your answer to 4 decimal places.$BR
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Estimate: \{ ans_rule( 10 ) \} $BR
-    $ITEM Notation: \{ $notate1->buttons( ) \}
+    $ITEM Notation: \{ $notation_q_1->buttons( ) \}
   \{ EndList( "OL") \}
   $BR
-  $ITEM $text2 Give your answer to 4 decimal places.$BR
+  $ITEM $exercises[$random_2] Give your answer to 4 decimal places.$BR
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Estimate: \{ ans_rule( 10 ) \} $BR
-    $ITEM Notation: \{ $notate1->buttons( ) \}
+    $ITEM Notation: \{ $notation_q_1->buttons( ) \}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
@@ -155,9 +150,17 @@ END_TEXT
 ## Answer Section
 ###########################
 
-ANS($ans1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($notate1->cmp());
-ANS($ans2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-ANS($notate2->cmp());
+ANS(
+  $correct_answers[$random_1]->with(
+    tolerance=>0.001, tolType=>"Absolute"
+  )->cmp()
+);
+ANS($notation_q_1->cmp());
+ANS(
+  $correct_answers[$random_2]->with(
+    tolerance=>0.001, tolType=>"Absolute"
+  )->cmp()
+);
+ANS($notation_q_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

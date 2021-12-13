@@ -38,7 +38,10 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
-@vartype = ( # choices
+###########################
+## Question setup
+###########################
+@variable_type = ( # choices
   ' Parameter',
   ' Statistic'
 );
@@ -50,108 +53,125 @@ Context("Numeric");
   " \( \overline{x} \)",
 );
 
-$exercisea = 'Average household income for all houses in the US, using data from '.
+$exercise_a = 'Average household income for all houses in the US, using data from '.
              'the US Census.';
-$correcta = ' Parameter';
-$nota = " \( \mu \)";
+$correct_variable_type_a = $variable_type[0];
+$correct_notation_a = $notation[2];
 
-$exerciseb = 'Proportion of people who use an electric toothbrush, using data '.
+$exercise_b = 'Proportion of people who use an electric toothbrush, using data '.
              'from a sample of 100 adults';
-$correctb = ' Statistic';
-$notb = " \( \widehat{p} \)";
+$correct_variable_type_b = $variable_type[1];
+$correct_notation_b = $notation[1];
 
-$exercisec = 'Proportion of registered voters in a county who voted in the last '.
+$exercise_c = 'Proportion of registered voters in a county who voted in the last '.
              'election, using data from the county voting records';
-$correctc = ' Parameter';
-$notc = " \( p \)";
+$correct_variable_type_c = $variable_type[0];
+$correct_notation_c = $notation[0];
 
-$exercised = 'Average number of television sets per household in North Carolina, '.
+$exercise_d = 'Average number of television sets per household in North Carolina, '.
              'using data from a sample of 1000 households.';
-$correctd = ' Statistic';
-$notd = " \( \overline{x} \)";
+$correct_variable_type_d = $variable_type[1];
+$correct_notation_d = $notation[3];
 
-###########################
-## Initialization
-###########################
-
-$random = random(1, 4, 1);
-
-if ($random == 1) {
-  $text1 = $exercisea;
-  $right1 = $correcta;
-  $not1 = $nota;
-  $text2 = $exercisec;
-  $right2 = $correctc;
-  $not2 = $notc;
-} elsif ($random == 2) {
-  $text1 = $exerciseb;
-  $right1 = $correctb;
-  $not1 = $notb;
-  $text2 = $exercised;
-  $right2 = $correctd;
-  $not2 = $notd;
-} elsif ($random == 3) {
-  $text1 = $exercised;
-  $right1 = $correctd;
-  $not1 = $notd;
-  $text2 = $exercisea;
-  $right2 = $correcta;
-  $not2 = $nota;
-} else {
-  $text1 = $exercisec;
-  $right1 = $correctc;
-  $not1 = $notc;
-  $text2 = $exerciseb;
-  $right2 = $correctb;
-  $not2 = $notb;
-}
-
-$mc1 = RadioButtons(
- [@vartype],
- $right1,
- order => [@vartype],
- labels => ['i', 'ii'],
+# Put them into an array for easier randomization
+@exercises = (
+  $exercise_a,
+  $exercise_b,
+  $exercise_c,
+  $exercise_d
 );
 
-$notate1 = RadioButtons(
+@correct_variable_types = (
+  $correct_variable_type_a,
+  $correct_variable_type_b,
+  $correct_variable_type_c,
+  $correct_variable_type_d
+);
+
+@correct_notations = (
+  $correct_notation_a,
+  $correct_notation_b,
+  $correct_notation_c,
+  $correct_notation_d
+);
+
+# Now select the exercise at random
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+
+$variable_q_1 = RadioButtons(
+  [@variable_type],
+  $correct_variable_types[$random_1],
+  order => [@variable_type],
+  labels => ['i', 'ii'],
+);
+
+$notation_q_1 = RadioButtons(
   [@notation],
-  $not1,
+  $correct_notations[$random_1],
   order => [@notation],
   labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
-$mc2 = RadioButtons(
- [@vartype],
- $right2,
- order => [@vartype],
- labels => ['i', 'ii'],
+$variable_q_2 = RadioButtons(
+  [@variable_type],
+  $correct_variable_types[$random_2],
+  order => [@variable_type],
+  labels => ['i', 'ii'],
 );
 
-$notate2 = RadioButtons(
+$notation_q_2 = RadioButtons(
   [@notation],
-  $not2,
+  $correct_notations[$random_2],
   order => [@notation],
   labels => ['i', 'ii', 'iii', 'iv'],
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
+BEGIN_TEXT
+$PAR
+For the following questions, state whether the quantity described is a parameter
+or a statistic and give the correct notation.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $exercises[$random_1] $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Is the quantity described a parameter or a statistic? $BR
+    \{ $variable_q_1->buttons( ) \} $BR
+    $ITEM What is the proper notation for the quantity described? $BR
+    \{ $notation_q_1->buttons( ) \}
+  \{ EndList( "OL") \}
+  $BR
+  $ITEM $exercises[$random_2] $BR
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Is the quantity described a parameter or a statistic? $BR
+    \{ $variable_q_2->buttons( ) \} $BR
+    $ITEM What is the proper notation for the quantity described? $BR
+    \{ $notation_q_2->buttons( ) \}
+  \{ EndList( "OL") \}
+\{ EndList( "OL") \}
+END_TEXT
 
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Determining whether something is a parameter or statistic:$EBOLD $BR
 As your book mentions on p. 162, a quantity can only be a
-${BITALIC}parameter${EITALIC} if we include all cases in the population. If we are
-working with a subset of the population (or a sample), then the quantity is
+${BITALIC}parameter${EITALIC} if we include all cases in the population. If we 
+are working with a subset of the population (or a sample), then the quantity is
 a ${BITALIC}statisitc${EITALIC}.
 $PAR
 $BBOLD Deciding on notation:$EBOLD $BR
-Notation is important to make sure that you are clearly representing the quantity
-to a reader. Generally speaking, ${BITALIC}statistics${EITALIC} have some kind of
-${LQ}decoration${RQ} like a hat or a line, whereas ${BITALIC}parameters${EITALIC} do
-not. For example
+Notation is important to make sure that you are clearly representing the 
+quantity to a reader. Generally speaking, ${BITALIC}statistics${EITALIC} have 
+some kind of ${LQ}decoration${RQ} like a hat or a line, whereas 
+${BITALIC}parameters${EITALIC} do not. For example
 \{BeginList("UL")\}
   $ITEM When we have a proportion that is a parameter, we use \(p\) to represent
   it, but when the proportion is a statistic, we use \(\widehat{p}\).
@@ -164,35 +184,9 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-For the following questions, state whether the quantity described is a parameter
-or a statistic and give the correct notation.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM $text1 $BR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Is the quantity described a parameter or a statistic? $BR
-    \{ $mc1->buttons( ) \} $BR
-    $ITEM What is the proper notation for the quantity described? $BR
-    \{ $notate1->buttons( ) \}
-  \{ EndList( "OL") \}
-  $BR
-  $ITEM $text2 $BR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Is the quantity described a parameter or a statistic? $BR
-    \{ $mc2->buttons( ) \} $BR
-    $ITEM What is the proper notation for the quantity described? $BR
-    \{ $notate2->buttons( ) \}
-  \{ EndList( "OL") \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
-ANS($mc1->cmp());
-ANS($notate1->cmp());
-ANS($mc2->cmp());
-ANS($notate2->cmp());
+ANS($variable_q_1->cmp());
+ANS($notation_q_1->cmp());
+ANS($variable_q_2->cmp());
+ANS($notation_q_2->cmp());
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

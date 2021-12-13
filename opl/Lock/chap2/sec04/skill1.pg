@@ -23,7 +23,7 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$refreshCachedImages=0;
+$refreshCachedImages = 0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){

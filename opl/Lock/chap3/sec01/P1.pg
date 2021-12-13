@@ -23,7 +23,7 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$refreshCachedImages=0;
+$refreshCachedImages = 0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
@@ -36,129 +36,143 @@ if($displayMode eq "TeX"){
   $tab = '&nbsp; &nbsp; &nbsp;';
 }
 
-# Show which answers are correct and which ones are incorrect
-$showPartialCorrectAnswers = 1;
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 $N = 500;
 $n = 40;
 
-$mean1 = random(0.30, 0.40, 0.02);
-$sd1 =  sqrt($mean1 * (1-$mean1) / $n);
-
-rserve_eval('z <- rnorm(' . $N .')
+# Generate the data
+$mean_1 = random(0.30, 0.40, 0.02);
+$sd_1 =  sqrt($mean_1 * (1 - $mean_1) / $n);
+rserve_eval('
+  z <- rnorm(' . $N .')
   z <- (z - mean(z)) / sd(z)
-  data1 <- z * ' . $sd1 . ' + ' . $mean1);
-
-($sd1) = rserve_eval('sd(data1)');
-($mean1) = rserve_eval('mean(data1)');
-
-$hist = rserve_start_plot('png', $width, $height);
-
-rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
-  hist(data1, main = "Sampling Distribution", xlab = "")');
-$disp1 = rserve_finish_plot($hist);
-
-$correct1 = sprintf("%.2f", $mean1);
-$wrong11 = sprintf("%.2f", $correct1 - 3 * $sd1);
-$wrong12 = sprintf("%.2f", $correct1 - 2 * $sd1);
-$wrong13 = sprintf("%.2f", $correct1 - 1 * $sd1);
-$wrong14 = sprintf("%.2f", $correct1 + 1 * $sd1);
-$wrong15 = sprintf("%.2f", $correct1 + 2 * $sd1);
-$wrong16 = sprintf("%.2f", $correct1 + 3 * $sd1);
-
-
-$order1 = random(1, 4, 1);
-if ($order1 == 1){
-  @labels1 = ("?", "$wrong11", "$wrong12", "$wrong13", "$correct1");
-  $correct1 = "$correct1";
-} elsif ($order1 == 2){
-  @labels1 = ("?", "$wrong12", "$wrong13", "$correct1", "$wrong14");
-  $correct1 = "$correct1";
-} elsif ($order1 == 3){
-  @labels1 = ("?", "$wrong13", "$correct1", "$wrong14", "$wrong15");
-  $correct1 = "$correct1";
-} elsif ($order1 == 4){
-  @labels1 = ("?", "$correct1", "$wrong14", "$wrong15", "$wrong16");
-  $correct1 = "$correct1";
-}
-
-$param1 = PopUp(
-  [@labels1],
-  $correct1
+  data_1 <- z * ' . $sd_1 . ' + ' . $mean_1
 );
 
-$mean2 = random(0.60, 0.70, 0.02);
-$sd2 =  sqrt($mean2 * (1-$mean2) / $n);
+($sd_1) = rserve_eval('sd(data_1)');
+($mean_1) = rserve_eval('mean(data_1)');
 
-rserve_eval('data2 <- z * ' . $sd2 . ' + ' . $mean2);
+$mean_2 = random(0.60, 0.70, 0.02);
+$sd_2 =  sqrt($mean_2 * (1-$mean_2) / $n);
+rserve_eval('
+  data_2 <- z * ' . $sd_2 . ' + ' . $mean_2
+);
 
-($sd2) = rserve_eval('sd(data2)');
-($mean2) = rserve_eval('mean(data2)');
+($sd_2) = rserve_eval('sd(data_2)');
+($mean_2) = rserve_eval('mean(data_2)');
+
+# Make the plots
+$hist = rserve_start_plot('png', $width, $height);
+rserve_eval('
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data_1, main = "Sampling Distribution", xlab = "")
+');
+$hist_1 = rserve_finish_plot($hist);
 
 $hist = rserve_start_plot('png', $width, $height);
+rserve_eval('
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data_2, main = "Sampling Distribution", xlab = "")
+');
+$hist_2 = rserve_finish_plot($hist);
 
-rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
-  hist(data2, main = "Sampling Distribution", xlab = "")');
-$disp2 = rserve_finish_plot($hist);
+# Set up the answer arrays for the questions
+$correct_1 = sprintf("%.2f", $mean_1);
+$wrong_1_1 = sprintf("%.2f", $correct_1 - 3 * $sd_1);
+$wrong_1_2 = sprintf("%.2f", $correct_1 - 2 * $sd_1);
+$wrong_1_3 = sprintf("%.2f", $correct_1 - 1 * $sd_1);
+$wrong_1_4 = sprintf("%.2f", $correct_1 + 1 * $sd_1);
+$wrong_1_5 = sprintf("%.2f", $correct_1 + 2 * $sd_1);
+$wrong_1_6 = sprintf("%.2f", $correct_1 + 3 * $sd_1);
 
-$correct2 = sprintf("%.2f", $mean2);
-$wrong21 = sprintf("%.2f", $correct2 - 3 * $sd2);
-$wrong22 = sprintf("%.2f", $correct2 - 2 * $sd2);
-$wrong23 = sprintf("%.2f", $correct2 - 1 * $sd2);
-$wrong24 = sprintf("%.2f", $correct2 + 1 * $sd2);
-$wrong25 = sprintf("%.2f", $correct2 + 2 * $sd2);
-$wrong26 = sprintf("%.2f", $correct2 + 3 * $sd2);
+$correct_2 = sprintf("%.2f", $mean_2);
+$wrong_2_1 = sprintf("%.2f", $correct_2 - 3 * $sd_2);
+$wrong_2_2 = sprintf("%.2f", $correct_2 - 2 * $sd_2);
+$wrong_2_3 = sprintf("%.2f", $correct_2 - 1 * $sd_2);
+$wrong_2_4 = sprintf("%.2f", $correct_2 + 1 * $sd_2);
+$wrong_2_5 = sprintf("%.2f", $correct_2 + 2 * $sd_2);
+$wrong_2_6 = sprintf("%.2f", $correct_2 + 3 * $sd_2);
 
-
-$order2 = random(1, 4, 1);
-if ($order2 == 1){
-  @labels2 = ("?", "$wrong21", "$wrong22", "$wrong23", "$correct2");
-  $correct2 = "$correct2";
-} elsif ($order2 == 2){
-  @labels2 = ("?", "$wrong22", "$wrong23", "$correct2", "$wrong24");
-  $correct2 = "$correct2";
-} elsif ($order2 == 3){
-  @labels2 = ("?", "$wrong23", "$correct2", "$wrong24", "$wrong25");
-  $correct2 = "$correct2";
-} elsif ($order2 == 4){
-  @labels2 = ("?", "$correct2", "$wrong24", "$wrong25", "$wrong26");
-  $correct2 = "$correct2";
+$order_1 = random(1, 4, 1);
+if ($order_1 == 1){
+  @labels_1 = ("?", "$wrong_1_1", "$wrong_1_2", "$wrong_1_3", "$correct_1");
+  $correct_1 = "$correct_1";
+} elsif ($order_1 == 2){
+  @labels_1 = ("?", "$wrong_1_2", "$wrong_1_3", "$correct_1", "$wrong_1_4");
+  $correct_1 = "$correct_1";
+} elsif ($order_1 == 3){
+  @labels_1 = ("?", "$wrong_1_3", "$correct_1", "$wrong_1_4", "$wrong_1_5");
+  $correct_1 = "$correct_1";
+} elsif ($order_1 == 4){
+  @labels_1 = ("?", "$correct_1", "$wrong_1_4", "$wrong_1_5", "$wrong_1_6");
+  $correct_1 = "$correct_1";
 }
+
+$order_2 = random(1, 4, 1);
+if ($order_2 == 1){
+  @labels_2 = ("?", "$wrong_2_1", "$wrong_2_2", "$wrong_2_3", "$correct_2");
+  $correct_2 = "$correct_2";
+} elsif ($order_2 == 2){
+  @labels_2 = ("?", "$wrong_2_2", "$wrong_2_3", "$correct_2", "$wrong_2_4");
+  $correct_2 = "$correct_2";
+} elsif ($order_2 == 3){
+  @labels_2 = ("?", "$wrong_2_3", "$correct_2", "$wrong_2_4", "$wrong_2_5");
+  $correct_2 = "$correct_2";
+} elsif ($order_2 == 4){
+  @labels_2 = ("?", "$correct_2", "$wrong_2_4", "$wrong_2_5", "$wrong_2_6");
+  $correct_2 = "$correct_2";
+}
+
+# Create the questions
+$param1 = PopUp(
+  [@labels_1],
+  $correct_1
+);
 
 $param2 = PopUp(
-  [@labels2],
-  $correct2
+  [@labels_2],
+  $correct_2
 );
 
-
+###########################
+## Question for display
+###########################
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
 Context()->texStrings;
 BEGIN_TEXT
 $BBOLD Sampling distribution for proportions: $EBOLD
 $BR
-The following sampling distributions represent the proportions from $N samples of
-size $n. For each of the sampling distributions, estimate the value of the population
-parameter \(p\).
+The following sampling distributions represent the proportions from $N samples 
+of size $n. For each of the sampling distributions, estimate the value of the 
+population parameter \(p\).
 $PAR
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
 AlignedRow([
-      image( $disp1, width=>300, height=>300, tex_size=>"400" ),
+      image($hist_1, width=>300, height=>300, tex_size=>"400" ),
       "a. ".$param1 -> menu()
       ],
       align=>"LEFT", valign=>"TOP", separation=>0
       ).
 AlignedRow([
-      image( $disp2, width=>300, height=>300, tex_size=>"400" ),
+      image($hist_2, width=>300, height=>300, tex_size=>"400" ),
       "b. ".$param2 -> menu()
       ],
       align=>"LEFT", valign=>"TOP", separation=>0
       ).
 EndTable()
 \}
-
 END_TEXT
 
-ANS( $param1 -> cmp() );
-ANS( $param2 -> cmp() );
+###########################
+## Answer Section
+###########################
+ANS($param1->cmp());
+ANS($param2->cmp());
+
 ENDDOCUMENT();

@@ -23,7 +23,7 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$refreshCachedImages=0;
+$refreshCachedImages = 0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
@@ -36,149 +36,144 @@ if($displayMode eq "TeX"){
   $tab = '&nbsp; &nbsp; &nbsp;';
 }
 
-# Show which answers are correct and which ones are incorrect
-$showPartialCorrectAnswers = 0;
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 $N = 500;
 $sd = 120.5;
 
 @ns = (50, 100, 1000);
-$random1 = random(0, 2, 1);
-do {$random2 = random(0, 2, 1);} until ($random2 != $random1);
-do {$random3 = random(0, 2, 1);} until (($random3 != $random2) && ($random3 != $random1));
+($random_1, $random_2, $random_3) = NchooseK(($#ns + 1), 3);
 
-$n1 = $ns[$random1];
-$mean1 = random(70, 90, 5);
-$sd1 =  $sd / sqrt($n1);
-
-rserve_eval('z <- rnorm(' . $N .')
+# Generate the data
+$n_1 = $ns[$random_1];
+$mean_1 = random(70, 90, 5);
+$sd_1 = $sd / sqrt($n_1);
+rserve_eval('
+  z <- rnorm(' . $N .')
   z <- (z - mean(z)) / sd(z)
-  data1 <- z * ' . $sd1 . ' + ' . $mean1);
+  data_1 <- z * ' . $sd_1 . ' + ' . $mean_1
+);
 
-($se) = rserve_eval('sd(data1)');
-$sd = $se * sqrt($n1);
-($mean1) = rserve_eval('mean(data1)');
+($se) = rserve_eval('sd(data_1)');
+$sd = $se * sqrt($n_1);
+($mean_1) = rserve_eval('mean(data_1)');
 
-$n2 = $ns[$random2];
-$mean2 = $mean1;
-$sd2 =  $sd / sqrt($n2);
+$n_2 = $ns[$random_2];
+$mean_2 = $mean_1;
+$sd_2 = $sd / sqrt($n_2);
+rserve_eval('
+  data_2 <- z * ' . $sd_2 . ' + ' . $mean_2
+);
 
-rserve_eval('data2 <- z * ' . $sd2 . ' + ' . $mean2);
+$n_3 = $ns[$random_3];
+$mean_3 = $mean_1;
+$sd_3 = $sd / sqrt($n_3);
+rserve_eval('
+  data_3 <- z * ' . $sd_3 . ' + ' . $mean_3
+);
 
-$n3 = $ns[$random3];
-$mean3 = $mean1;
-$sd3 =  $sd / sqrt($n3);
-rserve_eval('data3 <- z * ' . $sd3 . ' + ' . $mean3);
-
-($xmin, $xmax) = rserve_eval('range(c(data1, data2, data3))');
+# Make the plots.
+($xmin, $xmax) = rserve_eval('range(c(data_1, data_2, data_3))');
 $range = $xmax - $xmin;
 $nudge = $range * 0.1;
 $xmin = $xmin - $nudge;
 $xmax = $xmax + $nudge;
 
 $hist = rserve_start_plot('png', $width, $height);
-
-rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
-  hist(data1, xlim = c('. $xmin .', ' . $xmax .'),
-       main = "Sampling Distribution", xlab = "")');
-$hist1 = rserve_finish_plot($hist);
-
-$hist = rserve_start_plot('png', $width, $height);
-
-rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
-  hist(data2, xlim = c('. $xmin .', ' . $xmax .'),
-       main = "Sampling Distribution", xlab = "")');
-$hist2 = rserve_finish_plot($hist);
+rserve_eval('
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data_1, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")
+');
+$hist_1 = rserve_finish_plot($hist);
 
 $hist = rserve_start_plot('png', $width, $height);
+rserve_eval('
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data_2, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")
+');
+$hist_2 = rserve_finish_plot($hist);
 
-rserve_eval('par(mar = c(2, 4, 2, 1) + 0.1)
-  hist(data3, xlim = c('. $xmin .', ' . $xmax .'),
-       main = "Sampling Distribution", xlab = "")');
-$hist3 = rserve_finish_plot($hist);
+$hist = rserve_start_plot('png', $width, $height);
+rserve_eval('
+  par(mar = c(2, 4, 2, 1) + 0.1)
+  hist(data_3, xlim = c('. $xmin .', ' . $xmax .'),
+       main = "Sampling Distribution", xlab = "")
+');
+$hist_3 = rserve_finish_plot($hist);
 
-@labels = ("?", "$n1", "$n2", "$n3");
-$order = random(1, 4, 1);
-if ($order == 1){
-  $disp1 = $hist1;
-  $disp2 = $hist2;
-  $disp3 = $hist3;
-  $correct1 = "$n1";
-  $correct2 = "$n2";
-  $correct3 = "$n3";
-} elsif ($order == 2){
-  $disp1 = $hist3;
-  $disp2 = $hist2;
-  $disp3 = $hist1;
-  $correct1 = "$n3";
-  $correct2 = "$n2";
-  $correct3 = "$n1";
-} elsif ($order == 3){
-  $disp1 = $hist2;
-  $disp2 = $hist3;
-  $disp3 = $hist1;
-  $correct1 = "$n2";
-  $correct2 = "$n3";
-  $correct3 = "$n1";
-} elsif ($order == 4){
-  $disp1 = $hist1;
-  $disp2 = $hist3;
-  $disp3 = $hist2;
-  $correct1 = "$n1";
-  $correct2 = "$n3";
-  $correct3 = "$n2";
-}
+# Set up the PopUp and @options
+@options = ("$ns[0]", "$ns[1]", "$ns[2]");
 
-$size1 = PopUp(
-  [@labels],
-  $correct1
+$correct_1 = $options[$random_1];
+$correct_2 = $options[$random_2];
+$correct_3 = $options[$random_3];
+
+$size_1 = PopUp(
+  ['?', @options],
+  $correct_1
 );
 
-$size2 = PopUp(
-  [@labels],
-  $correct2
+$size_2 = PopUp(
+  ['?', @options],
+  $correct_2
 );
 
-$size3 = PopUp(
-  [@labels],
-  $correct3
+$size_3 = PopUp(
+  ['?', @options],
+  $correct_3
 );
 
+###########################
+## Question for display
+###########################
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 0;
 Context()->texStrings;
 BEGIN_TEXT
 $BBOLD Sampling distribution for averages: $EBOLD
 $BR
-Each of the following sampling distributions represent $N sample averages from the same
-population, but have differing sample sizes. Match the sampling distribution to
-the most appropriate sample size \{ join(", ", @ns) \}. Each answer is used only once.
+Each of the following sampling distributions represent $N sample averages from 
+the same population, but have differing sample sizes. Match the sampling 
+distribution to the most appropriate sample size \{ join(", ", @ns) \}. 
+Each answer is used only once.
 $PAR
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
-AlignedRow([
-      image( $disp1, width=>300, height=>300, tex_size=>"400" ),
-      "a. ".$size1 -> menu()
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
-      image( $disp2, width=>300, height=>300, tex_size=>"400" ),
-      "b. ".$size2 -> menu()
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
-      image( $disp3, width=>300, height=>300, tex_size=>"400" ),
-      "c. ".$size3 -> menu()
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
+AlignedRow(
+  [
+    image($hist_1, width=>300, height=>300, tex_size=>"400"),
+    "a. ".$size_1 -> menu()
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
+AlignedRow(
+  [
+    image($hist_2, width=>300, height=>300, tex_size=>"400"),
+    "b. ".$size_2 -> menu()
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
+AlignedRow(
+  [
+    image($hist_3, width=>300, height=>300, tex_size=>"400"),
+    "c. ".$size_3 -> menu()
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
 EndTable()
 \}
-
 END_TEXT
 
-ANS( $size1 -> cmp() );
-ANS( $size2 -> cmp() );
-ANS( $size3 -> cmp() );
+###########################
+## Answer Section
+###########################
+ANS($size_1->cmp());
+ANS($size_2->cmp());
+ANS($size_3->cmp());
+
 ENDDOCUMENT();
