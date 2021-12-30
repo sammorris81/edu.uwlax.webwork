@@ -38,6 +38,9 @@ if($displayMode eq "TeX"){
 
 Context("Numeric");
 
+###########################
+## Question setup
+###########################
 @inequality = (
   "<",
   ">",
@@ -59,15 +62,15 @@ $se2 = Real(sqrt($p2 * (1 - $p2) / $n2));
 $se3 = Real(sqrt($p3 * (1 - $p3) / $n3));
 $se4 = Real(sqrt($p4 * (1 - $p4) / $n4));
 
-$random1 = random(0, 2, 1);
-$random2 = random(0, 2, 1);
+# Since $p1 can be close to 0, make sure that the alt hyp is <
+$random1 = 0;
+# Since $p2 can be close to 1, make sure that the alt hyp is >
+$random2 = 1;
 $random3 = random(0, 2, 1);
-if ($random1 == 2 && $random2 == 2 && $random3 == 2) {
-  $random4 = random(0, 1, 1);
-} elsif (($random1 == 0 || $random1 == 1) && ($random2 == 0 || $random2 == 1) && ($random3 == 0 || $random3 == 1)) {
+if ($random3 == 0 || $random3 == 1) {
   $random4 = 2;
 } else {
-  $random4 = random(0, 2, 1);
+  $random4 = random(0, 1, 1);
 }
 
 do { $mult1 = random(0.3, 4, 0.01); } until ($mult1 != 1.96);
@@ -79,21 +82,8 @@ if (($mult1 + $mult2 + $mult3) > (3 * 1.96)) {
   $mult4 = random(1.98, 4, 0.01);
 }
 
-if ($random1 == 0) {
-  $zsign1 = 1;
-} elsif ($random1 == 1) {
-  $zsign1 = -1;
-} else {
-  $zsign1 = random(-1, 1, 2);
-}
-
-if ($random2 == 0) {
-  $zsign2 = 1;
-} elsif ($random2 == 1) {
-  $zsign2 = -1;
-} else {
-  $zsign2 = random(-1, 1, 2);
-}
+$zsign1 = 1;
+$zsign2 = -1;
 
 if ($random3 == 0) {
   $zsign3 = 1;
@@ -240,25 +230,10 @@ $mc4 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
-
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Hypothesis test for a single proportion using the CLT:$EBOLD $BR
-If you are having trouble with these questions, take a look at the
-${BITALIC}Test for Single Proportion${EITALIC} box on p. 366 of your book.
-The decision to reject or fail to reject is the same as before. We look to see
-how the p-value compares to \(\alpha\).
-END_HINT
-
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 In the following questions, find the test statistic and give the appropriate
@@ -303,10 +278,22 @@ Give your answers to 4 decimal places.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Hypothesis test for a single proportion using the CLT:$EBOLD $BR
+If you are having trouble with these questions, take a look at the
+${BITALIC}Test for Single Proportion${EITALIC} box on p. 414 of your book.
+The decision to reject or fail to reject is the same as before. We look to see
+how the p-value compares to \(\alpha\).
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($z1->with(tolerance=>$tol1, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 ANS($z2->with(tolerance=>$tol2, tolType=>"Absolute")->cmp());
@@ -315,6 +302,5 @@ ANS($z3->with(tolerance=>$tol3, tolType=>"Absolute")->cmp());
 ANS($mc3->cmp());
 ANS($z4->with(tolerance=>$tol4, tolType=>"Absolute")->cmp());
 ANS($mc4->cmp());
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

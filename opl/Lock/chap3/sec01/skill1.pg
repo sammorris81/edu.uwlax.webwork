@@ -162,7 +162,7 @@ END_TEXT
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Determining whether something is a parameter or statistic:$EBOLD $BR
-As your book mentions on p. 162, a quantity can only be a
+As your book mentions on p. 196, a quantity can only be a
 ${BITALIC}parameter${EITALIC} if we include all cases in the population. If we 
 are working with a subset of the population (or a sample), then the quantity is
 a ${BITALIC}statisitc${EITALIC}.
@@ -178,7 +178,7 @@ ${BITALIC}parameters${EITALIC} do not. For example
   $ITEM When we have an average that is a parameter, we use \(\mu\) to represent
   it, but when the average is a statistic, we use \(\overline{x}\).
 \{EndList("UL")\}
-See Table 3.1 (p. 162) for more examples.
+See Table 3.1 (p. 196) for more examples.
 END_HINT
 
 ###########################

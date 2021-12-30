@@ -191,50 +191,8 @@ $mc3 = RadioButtons(
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-$showHint = 3;
-BEGIN_HINT
-$PAR
-$BBOLD Completing the ANOVA table: $EBOLD $BR
-For help to fill out the ANOVA table, take a look at p. 542 in your book.
-$PAR
-$BBOLD Estimating the sample size: $EBOLD $BR
-In the ANOVA table for a simple linear regression, the total degrees of freedom
-is always \(n - 1\).
-$PAR
-$BBOLD Finding \(R^2\): $EBOLD $BR
-\(R^2\) tells us the percentage of the variability in our response that can be
-explained by the explanatory variable. For a regression model, the $BITALIC Sum
-of Squares Total $EITALIC gives to variability of the response, and the
-$BIATLIC Sum of Squares Regression $EITALIC gives the variability of the
-response variable that can be explained by the model. So to find \(R^2\) we need
-take
-$PAR
-$BCENTER
-\(
-  R^2 = \displaystyle\frac{\text{SS}_\text{Regression}}{\text{SS}_\text{Model}}.
-\)
-$ECENTER
-$PAR
-$BBOLD Hypothesis test decision: $EBOLD $BR
-As explained on p. 541 in your book, we can use the ANOVA table to see how well
-our model explains the variability in the response variable. The ANOVA table
-gives a way to test the following hypotheses:
-$PAR
-$BCENTER
-\(
-  \begin{align}
-  H_0: &\text{The model is ineffective (i.e. } \beta_1 = 0\text{)}\\
-  H_a: &\text{The model is effective (i.e. } \beta_1 \neq 0\text{)}
-  \end{align}
-\)
-$PAR
-So, to make your decision, just compare the p-value in the ANOVA table to the
-significance level given in the question.
-$ECENTER
-END_HINT
-
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 $PAR
@@ -293,6 +251,51 @@ Unless otherwise stated, give your answers to 2 decimal places.
 \{EndList("OL")\}
 
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$PAR
+$BBOLD Completing the ANOVA table: $EBOLD $BR
+For help to fill out the ANOVA table, take a look at p. 594 in your book.
+$PAR
+$BBOLD Estimating the sample size: $EBOLD $BR
+In the ANOVA table for a simple linear regression, the total degrees of freedom
+is always \(n - 1\).
+$PAR
+$BBOLD Finding \(R^2\): $EBOLD $BR
+\(R^2\) tells us the percentage of the variability in our response that can be
+explained by the explanatory variable. For a regression model, the $BITALIC Sum
+of Squares Total $EITALIC gives to variability of the response, and the
+$BIATLIC Sum of Squares Regression $EITALIC gives the variability of the
+response variable that can be explained by the model. So to find \(R^2\) we need
+take
+$PAR
+$BCENTER
+\(
+  R^2 = \displaystyle\frac{\text{SS}_\text{Regression}}{\text{SS}_\text{Model}}.
+\)
+$ECENTER
+$PAR
+$BBOLD Hypothesis test decision: $EBOLD $BR
+As explained on p. 593 in your book, we can use the ANOVA table to see how well
+our model explains the variability in the response variable. The ANOVA table
+gives a way to test the following hypotheses:
+$PAR
+$BCENTER
+\(
+  \begin{align}
+  H_0: &\text{The model is ineffective (i.e. } \beta_1 = 0\text{)}\\
+  H_a: &\text{The model is effective (i.e. } \beta_1 \neq 0\text{)}
+  \end{align}
+\)
+$PAR
+So, to make your decision, just compare the p-value in the ANOVA table to the
+significance level given in the question.
+$ECENTER
+END_HINT
 
 ###########################
 ## Answer Section

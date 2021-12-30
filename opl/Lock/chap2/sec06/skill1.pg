@@ -142,7 +142,7 @@ To find the residual, take the observed value and subtract the predicted value.
 So, in this restaurant dataset, if we had a bill that was \{DOLLAR()\}50.00 with 
 a tip of \{DOLLAR()\}10.00, then the residual for the observation would be
 \{DOLLAR()\}10.00 - \{DOLLAR()\}8.808 = \{DOLLAR()\}1.192.
-For more examples of finding a residual, see example 2.42 on p. 123 in your
+For more examples of finding a residual, see example 2.42 on p. 126 in your
 textbook.
 END_HINT
 
