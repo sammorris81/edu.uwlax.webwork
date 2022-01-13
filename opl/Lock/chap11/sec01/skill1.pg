@@ -73,21 +73,7 @@ $mcind = RadioButtons(
   separator => $tab,
 );
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Basic rules of probability $EBOLD $BR
-For help with this question, take a look at p. 650 in your textbook for a list
-of basic rules that you can use to find the requested probabilities using the
-given information.
-$PAR
-$BBOLD Disjoint events $EBOLD $BR
-Events A and B are said to be disjoint \{BITALIC()\}only if\{EITALIC()\}
-P(A and B) = 0.
-$PAR
-$BBOLD Independent events $EBOLD $BR
-Events A and B are said to be independent \{BITALIC()\}only if\{EITALIC()\}
-P(A and B) = P(A) \(\cdot\) P(B).
-END_HINT
+
 ###########################
 ## Initialization
 ###########################
@@ -95,7 +81,7 @@ END_HINT
 Context()->normalStrings;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 $PAR
@@ -113,6 +99,26 @@ P(A) = $pa, P(B) = $pb, and P(A and B) = $paandb. Give your answers to 4 decimal
   \{ $mcind->buttons() \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Basic rules of probability $EBOLD $BR
+For help with this question, take a look at p. 698 in your textbook for a list
+of basic rules that you can use to find the requested probabilities using the
+given information.
+$PAR
+$BBOLD Disjoint events $EBOLD $BR
+Events A and B are said to be disjoint \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = 0.
+$PAR
+$BBOLD Independent events $EBOLD $BR
+Events A and B are said to be independent \{BITALIC()\}only if\{EITALIC()\}
+P(A and B) = P(A) \(\cdot\) P(B).
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################

@@ -49,14 +49,6 @@ $paorb = Real($pa + $pb - $paandb);
 $paifb = Real($paandb / $pb);
 $pbifa = Real($paandb / $pa);
 
-$showHint = 3;
-BEGIN_HINT
-To get started on this question, it may be helpful to know the following fact.
-When events A and B are independent, P(A and B) = P(A) \(\cdot\) P(B). If you
-need some additional guidance on this question, take a look at the basic probability
-rules given on p. 650.
-END_HINT
-
 ###########################
 ## Initialization
 ###########################
@@ -64,7 +56,7 @@ END_HINT
 Context()->normalStrings;
 
 ###########################
-## Answer Section
+## Question for display
 ###########################
 BEGIN_TEXT
 $PAR
@@ -77,6 +69,18 @@ with P(A) = $pa, P(B) = $pb. Give your answers to 4 decimal places.
   $ITEM Find P(B if A) \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+To get started on this question, it may be helpful to know the following fact.
+When events A and B are independent, P(A and B) = P(A) \(\cdot\) P(B). If you
+need some additional guidance on this question, take a look at the basic probability
+rules given on p. 698.
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
