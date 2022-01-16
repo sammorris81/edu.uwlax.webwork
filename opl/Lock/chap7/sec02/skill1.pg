@@ -23,7 +23,6 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -31,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @freqs1 = (56, 44, 132, 68, 72, 28);
@@ -152,57 +158,51 @@ and \(c\) is the number of columns (excluding the \{BITALIC()\}Total\{EITALIC()\
 END_HINT
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 The following questions give a two-way table and specify a particular cell for
-that table. In each case a) find the expected count for the cell and b) give the degrees
-of freedom for the chi-square test based on the two-way table.
-Give your answers to 2 decimal places.
-
+that table. In each case a) find the expected count for the cell and b) give the
+degrees of freedom for the chi-square test based on the two-way table. Give your 
+answers to 2 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM \{ $table1 \}
-  $PAR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM What is the expected count for the ($rowlabs1[$randomrow1],
-    $collabs1[$randomcol1]) cell?
-    \{ans_rule(10)\}
-    $ITEM What are the degrees of freedom for the chi-square distribution for this
-    table? \{ans_rule(10)\}
-  \{ EndList("OL") \}
+    $PAR
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM What is the expected count for the ($rowlabs1[$randomrow1],
+        $collabs1[$randomcol1]) cell?
+        \{ans_rule(10)\}
+      $ITEM What are the degrees of freedom for the chi-square distribution for 
+        this table? \{ans_rule(10)\}
+    \{ EndList("OL") \}
   $PAR
   $ITEM \{ $table2 \}
-  $PAR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM What is the expected count for the ($rowlabs2[$randomrow2],
-    $collabs2[$randomcol2]) cell?
-    \{ans_rule(10)\}
-    $ITEM What are the degrees of freedom for the chi-square distribution for this
-    table? \{ans_rule(10)\}
-  \{ EndList("OL") \}
+    $PAR
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM What is the expected count for the ($rowlabs2[$randomrow2],
+        $collabs2[$randomcol2]) cell? \{ans_rule(10)\}
+      $ITEM What are the degrees of freedom for the chi-square distribution for 
+        this table? \{ans_rule(10)\}
+    \{ EndList("OL") \}
   $PAR
   $ITEM \{ $table3 \}
-  $PAR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM What is the expected count for the ($rowlabs3[$randomrow3],
-    $collabs3[$randomcol3]) cell?
-    \{ans_rule(10)\}
-    $ITEM What are the degrees of freedom for the chi-square distribution for this
-    table? \{ans_rule(10)\}
-  \{ EndList("OL") \}
+    $PAR
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM What is the expected count for the ($rowlabs3[$randomrow3],
+        $collabs3[$randomcol3]) cell? \{ans_rule(10)\}
+      $ITEM What are the degrees of freedom for the chi-square distribution for 
+        this table? \{ans_rule(10)\}
+    \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($df1->with(tolerance=>0, tolType=>"Absolute")->cmp());
 

@@ -30,14 +30,20 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
 
 $p2 = Real(random(0.15, 0.25, 0.05));
 $p3 = Real(random(0.15, 0.20, 0.05));
@@ -70,44 +76,53 @@ if ($random1 == 0) {
 }
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-The following probability function reflects the possible lifetimes (in months after
-emergence) for fruit flies.
+The following probability function reflects the possible lifetimes (in months 
+after emergence) for fruit flies.
 $PAR
 $BCENTER
 \{
   BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-  AlignedRow(["\(x\)", "1", "2", "3", "4", "5", "6"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-  AlignedRow(["\(p(x)\)", "$p1", "?", "$p3", "$p4", "$p5", "$p6"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(
+    ["\(x\)", "1", "2", "3", "4", "5", "6"], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ) .
+  AlignedRow(
+    ["\(p(x)\)", "$p1", "?", "$p3", "$p4", "$p5", "$p6"], 
+    align=>"CENTER", 
+    valign=>"MIDDLE", 
+    separation=>0
+  ) .
   EndTable()
 \}
 $ECENTER
 $BR
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"a") \}
-  $ITEM What proportion of fruit flies die in their second month? \{ ans_rule(10) \}
-  $ITEM What is the probability that a fruit fly lives more than four months? \{ ans_rule(10) \}
+  $ITEM What proportion of fruit flies die in their second month? 
+    \{ ans_rule(10) \}
+  $ITEM What is the probability that a fruit fly lives more than four months? 
+    \{ ans_rule(10) \}
   $ITEM What is the mean lifetime for a fruit fly? \{ ans_rule(10) \}
-  $ITEM What is the standard deviation of fruit fly lifetimes? \{ ans_rule(10) \}
-  $ITEM If we know a fruit fly died before the end of its $cond1 month, what is the probability
-  it died in its $die1 month? \{ ans_rule(10) \}
-  $ITEM If a fruit fly makes it past its $cond2 month, what is the probability it
-  will live more than $die2 months? \{ ans_rule(10) \}
+  $ITEM What is the standard deviation of fruit fly lifetimes? 
+    \{ ans_rule(10) \}
+  $ITEM If we know a fruit fly died before the end of its $cond1 month, what is 
+    the probability it died in its $die1 month? \{ ans_rule(10) \}
+  $ITEM If a fruit fly makes it past its $cond2 month, what is the probability 
+    it will live more than $die2 months? \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pmorethan4->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($m->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

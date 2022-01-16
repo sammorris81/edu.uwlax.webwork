@@ -24,19 +24,25 @@ loadMacros("uwlLoadWWMacros.pl",
 
 TEXT(beginproblem());
 $refreshCachedImages=0;
-$showPartialCorrectAnswers = 1;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $ngroups1 = random(4, 5, 1);
@@ -61,22 +67,12 @@ $expect2b = Real($n2 * $p2b);
 $expect2c = Real($n2 * $p2c);
 $expect2d = Real($n2 * $p2d);
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Finding the expected count:$EBOLD $BR
-The expected count for the \(i\)th group is given by \(n \cdot p_i\) where \(n\)
-is the sample size, and \(p_i\) is the hypothesized proportion in the null hypothesis.
-END_HINT
-
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 For the following questions, find the expected counts in each category using the
@@ -102,10 +98,21 @@ Give your answers to 2 decimal places.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Finding the expected count:$EBOLD $BR
+The expected count for the \(i\)th group is given by \(n \cdot p_i\) where \(n\)
+is the sample size, and \(p_i\) is the hypothesized proportion in the null 
+hypothesis.
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());

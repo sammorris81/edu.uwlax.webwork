@@ -17,14 +17,12 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-
 DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -32,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $nreps1 = 5;
@@ -51,7 +56,8 @@ if ($a1 == 3) {
   $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1, n_4 = $nreps1";
 } elsif ($a1 == 5) {
   $groups1 = "five";
-  $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1, n_4 = $nreps1, n_5 = $nreps1";
+  $ns1 = "n_1 = $nreps1, n_2 = $nreps1, n_3 = $nreps1, n_4 = $nreps1, ".
+         "n_5 = $nreps1";
 }
 $ntot1 = $nreps1 * $a1;
 $dfa1 = Real($a1 - 1);
@@ -145,25 +151,12 @@ $mc2 = RadioButtons(
   labels => ['i', 'ii', 'iii', 'iv'],
 );
 
-$showHint = 3;
-BEGIN_HINT
-A significant one-way ANOVA hypothesis test suggests that at least one of the
-\(k\) population means \((\mu_1, \mu_2, \ldots, \mu_k)\) is different from the others.
-
-As stated in your book on p. 513, one of the conditions for the ANOVA is that the
-standard deviation is the same in all groups. So we estimate the
-\{BITALIC()\}pooled standard deviation\{EITALIC()\} with \(\sqrt{\text{MSE}}\).
-END_HINT
-
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 The following questions give the sample sizes for the groups in a dataset and an
@@ -179,10 +172,18 @@ places.
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Find the F-statistic and enter it in the table $BR
     \{ begintable(6) \}
-    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
-    \{ row( "Groups", "$dfa1", "$SSA1", "$MSA1", ans_rule(10), "$pvaldisp1", ) \}
-    \{ row( "Error", "$dfe1", "$SSE1", "$MSE1", "$SPACE", "$SPACE",) \}
-    \{ row( "Total", "$dftot1", "$SSTot1",  "$SPACE", "$SPACE", "$SPACE",) \}
+    \{ row(
+      "Source", "df", "SS", "MS", "F-statistic", "p-value" 
+    ) \}
+    \{ row(
+      "Groups", "$dfa1", "$SSA1", "$MSA1", ans_rule(10), "$pvaldisp1",
+    ) \}
+    \{ row(
+      "Error", "$dfe1", "$SSE1", "$MSE1", "$SPACE", "$SPACE",
+    ) \}
+    \{ row(
+      "Total", "$dftot1", "$SSTot1",  "$SPACE", "$SPACE", "$SPACE",
+    ) \}
     \{ endtable() \}
     $ITEM How many groups are there? \{ans_rule(10)\}
     $ITEM Is there sufficient evidence of a difference in the population means
@@ -195,19 +196,42 @@ places.
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Find the F-statistic and enter it in the table $BR
     \{ begintable(6) \}
-    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
-    \{ row( "Groups", "$dfa2", "$SSA2", "$MSA2", ans_rule(10), "$pvaldisp2", ) \}
-    \{ row( "Error", "$dfe2", "$SSE2", "$MSE2", "$SPACE", "$SPACE",) \}
-    \{ row( "Total", "$dftot2", "$SSTot2",  "$SPACE", "$SPACE", "$SPACE",) \}
+    \{ row(
+      "Source", "df", "SS", "MS", "F-statistic", "p-value"
+    ) \}
+    \{ row(
+      "Groups", "$dfa2", "$SSA2", "$MSA2", ans_rule(10), "$pvaldisp2",
+    ) \}
+    \{ row(
+      "Error", "$dfe2", "$SSE2", "$MSE2", "$SPACE", "$SPACE",
+    ) \}
+    \{ row(
+      "Total", "$dftot2", "$SSTot2",  "$SPACE", "$SPACE", "$SPACE",
+    ) \}
     \{ endtable() \}
     $ITEM How many groups are there? \{ans_rule(10)\}
     $ITEM Is there sufficient evidence of a difference in the population means
-    of these groups at \( \alpha = 0.05 \)? $BR
-    \{ $mc2->buttons() \}
+      of these groups at \( \alpha = 0.05 \)? $BR
+      \{ $mc2->buttons() \}
     $ITEM What is the pooled standard deviation? \{ans_rule(10)\}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+A significant one-way ANOVA hypothesis test suggests that at least one of the
+\(k\) population means \((\mu_1, \mu_2, \ldots, \mu_k)\) is different from the 
+others.
+
+As stated in your book on p. 513, one of the conditions for the ANOVA is that 
+the standard deviation is the same in all groups. So we estimate the
+\{BITALIC()\}pooled standard deviation\{EITALIC()\} with \(\sqrt{\text{MSE}}\).
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################

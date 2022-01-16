@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n1 = Real(random(25, 40, 1));
@@ -65,11 +72,19 @@ $yhat2 = Real($int2 + $slope2 * $x2);
 $tstar1 = sprintf("%.3f", tdistr(($n1 - 2), 0.025));
 $tstar2 = sprintf("%.3f", tdistr(($n2 - 2), 0.025));
 
-$cime1 = $tstar1 * $sr1 * sqrt(1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2));
-$cime2 = $tstar2 * $sr2 * sqrt(1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2));
+$cime1 = $tstar1 * $sr1 * sqrt(
+  1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2)
+);
+$cime2 = $tstar2 * $sr2 * sqrt(
+  1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2)
+);
 
-$pime1 = $tstar1 * $sr1 * sqrt(1 + 1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2));
-$pime2 = $tstar2 * $sr2 * sqrt(1 + 1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2));
+$pime1 = $tstar1 * $sr1 * sqrt(
+  1 + 1 / $n1 + ($x1 - $xbar1)**2 / (($n1 - 1) * $sx1**2)
+);
+$pime2 = $tstar2 * $sr2 * sqrt(
+  1 + 1 / $n2 + ($x2 - $xbar2)**2 / (($n2 - 1) * $sx2**2)
+);
 
 $cilower1 = Real($yhat1 - $cime1);
 $ciupper1 = Real($yhat1 + $cime1);
@@ -101,60 +116,65 @@ $mc2 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+For each of the following questions, use the given summary information from a 
+simple linear regression to find a confidence interval and prediction interval 
+when the predictor is \(x^*\). Give your answers to 3 decimal places.
+
+\{BeginList("OL", type=>"1") \}
+  $ITEM We performed a linear regression using $n1 observations. From the 
+  regression output we find that \(b_0 = $int1\), \(b_1 = $slope1\), 
+  \(\overline{x} = $xbar1\), \(s_x = $sx1\) and \(s_\epsilon = $sr1\).
+  \{BeginList("OL", type=>"a") \}
+    $ITEM From the least squares line, what is the predicted response when 
+      \(x^* = $x1\)?$BR
+      \(\widehat{y} =\) \{ans_rule(10)\}
+    $ITEM What is the 95$PERCENT confidence interval for the mean response when
+      \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
+      (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the 95$PERCENT prediction interval for an individual response 
+      when \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
+      (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM Which interval is wider? The confidence interval or the prediction 
+      interval? $BR
+      \{$mc1->buttons()\}
+  \{EndList("OL")\}
+  $PAR
+  $ITEM We performed a linear regression using $n2 observations. From the 
+    regression output we find that \(b_0 = $int2\), \(b_1 = $slope2\), 
+    \(\overline{x} = $xbar2\), \(s_x = $sx2\) and \(s_\epsilon = $sr2\).
+  \{BeginList("OL", type=>"a") \}
+    $ITEM From the least squares line, what is the predicted response when 
+      \(x^* = $x2\)?$BR
+      \(\widehat{y} =\) \{ans_rule(10)\}
+    $ITEM What is the 95$PERCENT confidence interval for the mean response when
+      \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
+      (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM What is the 95$PERCENT prediction interval for an individual response 
+      when \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
+      (\{ans_rule(10)\}, \{ans_rule(10)\})
+    $ITEM Which interval is wider? The confidence interval or the prediction 
+      interval? $BR \{$mc2->buttons()\}
+  \{EndList("OL")\}
+\{EndList("OL")\}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 The formulas for the confidence intervals and predictions are given on p. 553
 of the text book.
 END_HINT
 
-###########################
-## Answer Section
-###########################
-BEGIN_TEXT
-$PAR
-For each of the following questions, use the given summary information from a simple
-linear regression to find a confidence interval and prediction interval when the
-predictor is \(x^*\)
-Give your answers to 3 decimal places.
-
-\{BeginList("OL", type=>"1") \}
-  $ITEM We performed a linear regression using $n1 observations. From the regression
-  output we find that \(b_0 = $int1\), \(b_1 = $slope1\), \(\overline{x} = $xbar1\),
-  \(s_x = $sx1\) and \(s_\epsilon = $sr1\).
-  \{BeginList("OL", type=>"a") \}
-    $ITEM From the least squares line, what is the predicted response when \(x^* = $x1\)?$BR
-    \(\widehat{y} =\) \{ans_rule(10)\}
-    $ITEM What is the 95$PERCENT confidence interval for the mean response when
-    \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
-    (\{ans_rule(10)\}, \{ans_rule(10)\})
-    $ITEM What is the 95$PERCENT prediction interval for an individual response when
-    \(x^* = $x1\)? Use \(t^* = $tstar1\). $BR
-    (\{ans_rule(10)\}, \{ans_rule(10)\})
-    $ITEM Which interval is wider? The confidence interval or the prediction interval? $BR
-    \{$mc1->buttons()\}
-  \{EndList("OL")\}
-  $PAR
-  $ITEM We performed a linear regression using $n2 observations. From the regression
-  output we find that \(b_0 = $int2\), \(b_1 = $slope2\), \(\overline{x} = $xbar2\),
-  \(s_x = $sx2\) and \(s_\epsilon = $sr2\).
-  \{BeginList("OL", type=>"a") \}
-    $ITEM From the least squares line, what is the predicted response when \(x^* = $x2\)?$BR
-    \(\widehat{y} =\) \{ans_rule(10)\}
-    $ITEM What is the 95$PERCENT confidence interval for the mean response when
-    \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
-    (\{ans_rule(10)\}, \{ans_rule(10)\})
-    $ITEM What is the 95$PERCENT prediction interval for an individual response when
-    \(x^* = $x2\)? Use \(t^* = $tstar2\). $BR
-    (\{ans_rule(10)\}, \{ans_rule(10)\})
-    $ITEM Which interval is wider? The confidence interval or the prediction interval? $BR
-    \{$mc2->buttons()\}
-  \{EndList("OL")\}
-\{EndList("OL")\}
-
-END_TEXT
 ###########################
 ## Answer Section
 ###########################

@@ -23,7 +23,6 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -31,14 +30,20 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
 
 $pa = Real(random(0.1, 0.5, 0.02));
 $pb = Real(random(0.1, 0.5, 0.02));
@@ -76,6 +81,41 @@ $mcind = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+BEGIN_TEXT
+$PAR
+The following table gives probabilities for various combinations of events
+A, B, and their complements. Use the information from this table in the following
+questions. Give your answers to 4 decimal places.
+\{
+  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+  AlignedRow(["", "A", "not A"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["B", "$paandb", "$pbnota"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  AlignedRow(["not B", "$panotb", "$pnotanotb"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+  EndTable()
+\}
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find P(A) \{ ans_rule(10) \}
+  $ITEM Find P(not B) \{ ans_rule(10) \}
+  $ITEM Find P(A and B) \{ ans_rule(10) \}
+  $ITEM Find P(A or B) \{ ans_rule(10) \}
+  $ITEM Find P(A if B) \{ ans_rule(10) \}
+  $ITEM Find P(B if A) \{ ans_rule(10) \}
+  $ITEM Are events A and B disjoint? $BR
+  \{ $mcdis->buttons() \}
+  $ITEM Are events A and B independent? $BR
+  \{ $mcind->buttons() \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Finding the probability using the table $EBOLD $BR
@@ -109,43 +149,8 @@ P(A and B) = P(A) \(\cdot\) P(B).
 END_HINT
 
 ###########################
-## Initialization
-###########################
-
-Context()->normalStrings;
-
-###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-The following table gives probabilities for various combinations of events
-A, B, and their complements. Use the information from this table in the following
-questions. Give your answers to 4 decimal places.
-\{
-  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-  AlignedRow(["", "A", "not A"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-  AlignedRow(["B", "$paandb", "$pbnota"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-  AlignedRow(["not B", "$panotb", "$pnotanotb"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-  EndTable()
-\}
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Find P(A) \{ ans_rule(10) \}
-  $ITEM Find P(not B) \{ ans_rule(10) \}
-  $ITEM Find P(A and B) \{ ans_rule(10) \}
-  $ITEM Find P(A or B) \{ ans_rule(10) \}
-  $ITEM Find P(A if B) \{ ans_rule(10) \}
-  $ITEM Find P(B if A) \{ ans_rule(10) \}
-  $ITEM Are events A and B disjoint? $BR
-  \{ $mcdis->buttons() \}
-  $ITEM Are events A and B independent? $BR
-  \{ $mcind->buttons() \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($pa->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pnotb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($paandb->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

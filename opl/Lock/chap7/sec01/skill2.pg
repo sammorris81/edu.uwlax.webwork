@@ -24,19 +24,25 @@ loadMacros("uwlLoadWWMacros.pl",
 
 TEXT(beginproblem());
 $refreshCachedImages=0;
-$showPartialCorrectAnswers = 1;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $ngroups1 = random(4, 5, 1);
@@ -69,7 +75,6 @@ $observed1 = ${$cat1->{freqs}}[$randomgroup1];
 $cont1 = Real(($observed1 - $expect1)**2 / $expect1);
 $df1 = Real($ngroups1 - 1);
 
-
 $p2a = Real(random(0.15, 0.25, 0.05));
 $p2b = Real(random(0.15, 0.20, 0.05));
 $p2c = Real(random(0.10, 0.15, 0.05));
@@ -95,62 +100,62 @@ $observed2 = ${$cat2->{freqs}}[$randomgroup2];
 $cont2 = Real(($observed2 - $expect2)**2 / $expect2);
 $df2 = Real(3);
 
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
+BEGIN_TEXT
+$PAR
+The following questions give a null hypothesis for a goodness-of-fit test and a
+frequency table from a sample. For each table, find a) the expected count for 
+the specified group and b) the degrees of freedom for the chi-square 
+distribution for that table. Give your answers to 2 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $null1 $BR
+    \(H_a:\) Some \(p_i \neq $p1\) $PAR
+    \{ $table1 \}
+    $PAR
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM What is the expected count for the category labeled $groupletter1?
+        \{ans_rule(10)\}
+      $ITEM What are the degrees of freedom for the chi-square distribution for 
+        this table? \{ans_rule(10)\}
+    \{ EndList("OL") \}
+  $PAR
+  $ITEM \(H_0: p_A = $p2a, p_B = $p2b, p_C = $p2c, p_D = $p2d\) $BR
+    \(H_a:\) Some \(p_i\) is wrong $PAR
+    \{ $table2 \}
+    $PAR
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM What is the expected count for the category labeled $groupletter2?
+        \{ans_rule(10)\}
+      $ITEM What are the degrees of freedom for the chi-square distribution for
+        this table? \{ans_rule(10)\}
+    \{ EndList("OL") \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Finding the expected count:$EBOLD $BR
 The expected count for the \(i\)th group is given by \(n \cdot p_i\) where \(n\)
-is the sample size, and \(p_i\) is the hypothesized proportion in the null hypothesis.
+is the sample size, and \(p_i\) is the hypothesized proportion in the null 
+hypothesis.
 $PAR
 $BBOLD Finding the degrees of freedom:$EBOLD $BR
 To find the degrees of freedom for the chi-square distribution, take \(k - 1\)
-where \(k\) is the number of groups (excluding the \{BITALIC()\}Total\{EITALIC()\}).
+where \(k\) is the number of groups (excluding the 
+\{BITALIC()\}Total\{EITALIC()\}).
 END_HINT
 
 ###########################
-## Initialization
-###########################
-
-Context()->normalStrings;
-
-###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-The following questions give a null hypothesis for a goodness-of-fit test and a
-frequency table from a sample. For each table, find a) the expected count for the
-specified group and b) the degrees of freedom for the chi-square distribution
-for that table.
-Give your answers to 2 decimal places.
-
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM $null1 $BR
-  \(H_a:\) Some \(p_i \neq $p1\) $PAR
-  \{ $table1 \}
-  $PAR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM What is the expected count for the category labeled $groupletter1?
-    \{ans_rule(10)\}
-    $ITEM What are the degrees of freedom for the chi-square distribution for this
-    table? \{ans_rule(10)\}
-  \{ EndList("OL") \}
-  $PAR
-  $ITEM \(H_0: p_A = $p2a, p_B = $p2b, p_C = $p2c, p_D = $p2d\) $BR
-  \(H_a:\) Some \(p_i\) is wrong $PAR
-  \{ $table2 \}
-  $PAR
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM What is the expected count for the category labeled $groupletter2?
-    \{ans_rule(10)\}
-    $ITEM What are the degrees of freedom for the chi-square distribution for this
-    table? \{ans_rule(10)\}
-  \{ EndList("OL") \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($expect1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($df1->with(tolerance=>0, tolType=>"Absolute")->cmp());
 

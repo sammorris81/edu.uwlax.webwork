@@ -168,15 +168,15 @@ $showHint = 3;
 
 BEGIN_HINT
 $BBOLD Determining whether something is a parameter or statistic:$EBOLD $BR
-As your book mentions on p. 196, a quantity can only be a
-${BITALIC}parameter${EITALIC} if we include all cases in the population. If we 
-are working with a subset of the population (or a sample), then the quantity is
-a ${BITALIC}statisitc${EITALIC}.
+In order for a quantity to be a ${BITALIC}parameter${EITALIC}, we must take a
+measurement from all cases in the population. If we are working with a subset of 
+the population (or a sample), then the quantity is called a 
+${BITALIC}statisitc${EITALIC}.
 $PAR
 $BBOLD Deciding on notation:$EBOLD $BR
 Notation is important to make sure that you are clearly representing the 
-quantity to a reader. Generally speaking, ${BITALIC}statistics${EITALIC} have 
-some kind of ${LQ}decoration${RQ} like a hat or a line, whereas 
+quantity. Generally speaking, ${BITALIC}statistics${EITALIC} have some kind of 
+${LQ}decoration${RQ} like a hat or a line, whereas 
 ${BITALIC}parameters${EITALIC} do not. For example
 \{BeginList("UL")\}
   $ITEM When we have a proportion that is a parameter, we use \(p\) to represent
@@ -184,7 +184,7 @@ ${BITALIC}parameters${EITALIC} do not. For example
   $ITEM When we have an average that is a parameter, we use \(\mu\) to represent
   it, but when the average is a statistic, we use \(\overline{x}\).
 \{EndList("UL")\}
-See Table 3.1 (p. 196) for more examples.
+See Table 3.1 in your book for more examples.
 END_HINT
 
 ###########################

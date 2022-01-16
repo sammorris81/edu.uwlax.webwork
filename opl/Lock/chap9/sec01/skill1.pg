@@ -30,14 +30,20 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
 
 $quantx = new DataGenUWL(
   datatype => 'single_quant',
@@ -148,49 +154,18 @@ $mc3 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-$showHint = 3;
-BEGIN_HINT
-Take a look at example 9.2 on p.527 in your textbook.
-$PAR
-$BBOLD Estimating slope and intercept: $EBOLD $BR
-In the inkjet printer example, the estimate for the intercept is
-\(b_0\) = -94.22 and the estimate for the slope is
-\(b_1\) = 90.88. These estimates are given in the Estimate column
-of the output.
-$PAR
-$BBOLD Finding the confidence interval: $EBOLD $BR
-In the inkjet printer example, the standard error for the slope is 19.49. This
-is given in the $BITALIC Std. Error$EITALIC column of the output in the row that corresponds to
-the slope (PPM). You use this standard error with the formula given on p. 527 to
-find the confidence interval.
-$PAR
-$BBOLD Hypothesis test decision: $EBOLD $BR
-To test for a linear association between \(x\) and \(y\), we need to test the
-following hypotheses:
-$PAR
-$BCENTER
-\(H_0: \beta_1 = 0\) $BR
-\(H_0: \beta_1 \neq 0\)
-$ECENTER
-$PAR
-In the inkjet printer example, the p-value for this test is 0.000193. This
-is given in the Pr(\(> |t|\)) column of the output in the row that corresponds
-to the slope (PPM). To make your decision, just compare this p-value to the
-significance level given in the question.
-END_HINT
-
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
-For each of the following questions, use the computer output to a) estimate the intercept
-\(\beta_0\), b) estimate the slope \(\beta_1\), c) find a 95$PERCENT confidence interval
-for \(\beta_1\), and d) give the conclusion of the test for a linear association.
-Give your answers to 3 decimal places.
+For each of the following questions, use the computer output to a) estimate the 
+intercept \(\beta_0\), b) estimate the slope \(\beta_1\), c) find a 95$PERCENT 
+confidence interval for \(\beta_1\), and d) give the conclusion of the test for 
+a linear association. Give your answers to 3 decimal places.
 
 \{BeginList("OL", type=>"1") \}
   $ITEM \{$output1\}
@@ -225,10 +200,43 @@ Give your answers to 3 decimal places.
     $ITEM What is the conclusion at \(\alpha=0.05\)? $BR
     \{$mc3->buttons()\}
   \{EndList("OL")\}
-
 \{EndList("OL")\}
-
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+Take a look at example 9.2 on p.527 in your textbook.
+$PAR
+$BBOLD Estimating slope and intercept: $EBOLD $BR
+In the inkjet printer example, the estimate for the intercept is
+\(b_0\) = -94.22 and the estimate for the slope is
+\(b_1\) = 90.88. These estimates are given in the Estimate column
+of the output.
+$PAR
+$BBOLD Finding the confidence interval: $EBOLD $BR
+In the inkjet printer example, the standard error for the slope is 19.49. This
+is given in the $BITALIC Std. Error$EITALIC column of the output in the row that
+corresponds to the slope (PPM). You use this standard error with the formula 
+given on p. 527 to find the confidence interval.
+$PAR
+$BBOLD Hypothesis test decision: $EBOLD $BR
+To test for a linear association between \(x\) and \(y\), we need to test the
+following hypotheses:
+$PAR
+$BCENTER
+\(H_0: \beta_1 = 0\) $BR
+\(H_0: \beta_1 \neq 0\)
+$ECENTER
+$PAR
+In the inkjet printer example, the p-value for this test is 0.000193. This
+is given in the Pr(\(> |t|\)) column of the output in the row that corresponds
+to the slope (PPM). To make your decision, just compare this p-value to the
+significance level given in the question.
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################

@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $p1 = Real(random(0.05, 0.40, 0.02));
@@ -57,17 +64,14 @@ $p3a = Real($p3 * $pagive3);
 $p3b = Real($p3 * $pbgive3);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-In a store, merchandise is classified by a number (1, 2, or 3) and a letter (A or B).
+In a store, merchandise is classified by a number (1, 2, or 3) and a letter 
+(A or B).
 $PAR
 The probability an item is classified as type 2 is P(type 2) = $p2 $BR
 The probability an item is classified as type 3 is P(type 3) = $p3 $BR
@@ -91,10 +95,10 @@ Give your answers to 4 decimal places.
   $ITEM Find P(type 3 and type A) \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($p1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pagive2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($p3a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

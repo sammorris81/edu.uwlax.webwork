@@ -23,7 +23,6 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -31,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $pa = Real(random(0.1, 0.5, 0.02));
@@ -50,14 +56,11 @@ $paifb = Real($paandb / $pb);
 $pbifa = Real($paandb / $pa);
 
 ###########################
-## Initialization
-###########################
-
-Context()->normalStrings;
-
-###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 $PAR
 In the following questions, use the fact that we have independent events A and B
@@ -77,8 +80,8 @@ $showHint = 3;
 BEGIN_HINT
 To get started on this question, it may be helpful to know the following fact.
 When events A and B are independent, P(A and B) = P(A) \(\cdot\) P(B). If you
-need some additional guidance on this question, take a look at the basic probability
-rules given on p. 698.
+need some additional guidance on this question, take a look at the basic 
+probability rules given on p. 698.
 END_HINT
 
 ###########################

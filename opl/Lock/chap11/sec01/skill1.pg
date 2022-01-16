@@ -17,13 +17,12 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -31,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $pa = Real(random(0.1, 0.5, 0.02));
@@ -75,14 +81,11 @@ $mcind = RadioButtons(
 
 
 ###########################
-## Initialization
-###########################
-
-Context()->normalStrings;
-
-###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = \1;
+
 BEGIN_TEXT
 $PAR
 In the following questions, use the information that, for events A and B, we have

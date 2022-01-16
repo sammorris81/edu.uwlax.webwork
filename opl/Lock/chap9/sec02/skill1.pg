@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n1 = Real(random(25, 40, 1));
@@ -188,68 +195,90 @@ $mc3 = RadioButtons(
   separator => $tab,
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 1;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 $PAR
-For each of the following questions, you are given a partial outline of the ANOVA
-table from a simple linear regression. In each question, a) complete the outline
-of the ANOVA table, b) give the sample size, c) calculate $disp_rsq, and d) give
-the conclusion of the hypothesis test looking at whether the model is effective.
-Unless otherwise stated, give your answers to 2 decimal places.
+For each of the following questions, you are given a partial outline of the 
+ANOVA table from a simple linear regression. In each question, a) complete the 
+outline of the ANOVA table, b) give the sample size, c) calculate $disp_rsq, and 
+d) give the conclusion of the hypothesis test looking at whether the model is 
+effective. Unless otherwise stated, give your answers to 2 decimal places.
 
 \{BeginList("OL", type=>"1") \}
   $ITEM
   \{BeginList("OL", type=>"a") \}
     $ITEM Fill in the missing parts of the ANOVA table $BR
     \{ begintable(6) \}
-    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
-    \{ row( "Regression", ans_rule(10), ans_rule(10), "$MSM1", ans_rule(10), "$pvaldisp1", ) \}
-    \{ row( "Residual Error", ans_rule(10), "$SSE1", ans_rule(10), "$SPACE", "$SPACE", ) \}
-    \{ row( "Total", "$dftot1", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ row(
+      "Source", "df", "SS", "MS", "F-statistic", "p-value" 
+    ) \}
+    \{ row(
+      "Regression", ans_rule(10), ans_rule(10), "$MSM1", ans_rule(10), "$pvaldisp1",
+    ) \}
+    \{ row(
+      "Residual Error", ans_rule(10), "$SSE1", ans_rule(10), "$SPACE", "$SPACE", 
+    ) \}
+    \{ row(
+      "Total", "$dftot1", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", 
+    ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
     $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
     $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
-    \{ $mc1->buttons() \}
+      \{ $mc1->buttons() \}
   \{ EndList("OL") \}
   $PAR
   $ITEM
   \{BeginList("OL", type=>"a") \}
     $ITEM Fill in the missing parts of the ANOVA table $BR
     \{ begintable(6) \}
-    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
-    \{ row( "Regression", ans_rule(10), ans_rule(10), "$MSM2", ans_rule(10), "$pvaldisp2", ) \}
-    \{ row( "Residual Error", ans_rule(10), ans_rule(10), "$MSE2", "$SPACE", "$SPACE",) \}
-    \{ row( "Total", "$dftot2", ans_rule(10), "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ row(
+      "Source", "df", "SS", "MS", "F-statistic", "p-value"
+    ) \}
+    \{ row(
+      "Regression", ans_rule(10), ans_rule(10), "$MSM2", ans_rule(10), "$pvaldisp2",
+    ) \}
+    \{ row(
+      "Residual Error", ans_rule(10), ans_rule(10), "$MSE2", "$SPACE", "$SPACE",
+    ) \}
+    \{ row(
+      "Total", "$dftot2", ans_rule(10), "$SPACE", "$SPACE", "$SPACE",
+    ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
     $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
     $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
-    \{ $mc1->buttons() \}
+      \{ $mc1->buttons() \}
   \{ EndList("OL") \}
   $PAR
   $ITEM
   \{BeginList("OL", type=>"a") \}
     $ITEM Fill in the missing parts of the ANOVA table $BR
     \{ begintable(6) \}
-    \{ row( "Source", "df", "SS", "MS", "F-statistic", "p-value" ) \}
-    \{ row( "Regression", ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), "$pvaldisp3", ) \}
-    \{ row( "Residual Error", "$dfe3", ans_rule(10), "$MSE3", "$SPACE", "$SPACE",) \}
-    \{ row( "Total", ans_rule(10), "$SSTot3", "$SPACE", "$SPACE", "$SPACE", ) \}
+    \{ row(
+      "Source", "df", "SS", "MS", "F-statistic", "p-value"
+    ) \}
+    \{ row(
+      "Regression", ans_rule(10), ans_rule(10), ans_rule(10), ans_rule(10), "$pvaldisp3",
+    ) \}
+    \{ row(
+      "Residual Error", "$dfe3", ans_rule(10), "$MSE3", "$SPACE", "$SPACE",
+    ) \}
+    \{ row(
+      "Total", ans_rule(10), "$SSTot3", "$SPACE", "$SPACE", "$SPACE",
+    ) \}
     \{ endtable() \}
     $ITEM What is the sample size? \{ans_rule(10)\}
     $ITEM What is $disp_rsq (give your answer to 3 decimal places)? \{ans_rule(10)\}
     $ITEM What is the conclusion of the test at $disp_alpha = 0.05? $BR
-    \{ $mc1->buttons() \}
+      \{ $mc1->buttons() \}
   \{ EndList("OL") \}
-
 \{EndList("OL")\}
-
 END_TEXT
 
 ###########################

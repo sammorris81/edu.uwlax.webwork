@@ -30,14 +30,20 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
 
 $p1a = Real(random(0.15, 0.25, 0.05));
 $p1b = Real(random(0.15, 0.20, 0.05));
@@ -45,7 +51,12 @@ $p1c = Real(random(0.10, 0.15, 0.05));
 $p1d = Real(1 - ($p1a + $p1b + $p1c));
 
 $m1 = 1 * $p1a + 2 * $p1b + 3 * $p1c + 4 * $p1d;
-$s1 = Real(sqrt((1 - $m1)**2 * $p1a + (2 - $m1)**2 * $p1b + (3 - $m1)**2 * $p1c + (4 - $m1)**2 * $p1d));
+$s1 = Real(sqrt(
+  (1 - $m1)**2 * $p1a + 
+  (2 - $m1)**2 * $p1b + 
+  (3 - $m1)**2 * $p1c + 
+  (4 - $m1)**2 * $p1d
+));
 $random1 = random(0, 1, 1);
 if ($random1 == 0) {
   $x2a = 10;
@@ -65,18 +76,19 @@ $p2c = Real(random(0.10, 0.15, 0.05));
 $p2d = Real(1 - ($p2a + $p2b + $p2c));
 
 $m2 = $x2a * $p2a + $x2b * $p2b + $x2c * $p2c + $x2d * $p2d;
-$s2 = Real(sqrt(($x2a - $m2)**2 * $p2a + ($x2b - $m2)**2 * $p2b + ($x2c - $m2)**2 * $p2c + ($x2d - $m2)**2 * $p2d));
+$s2 = Real(sqrt(
+  ($x2a - $m2)**2 * $p2a + 
+  ($x2b - $m2)**2 * $p2b + 
+  ($x2c - $m2)**2 * $p2c + 
+  ($x2d - $m2)**2 * $p2d
+));
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, you will be given a partial probability function
 for a random variable \(X\). Find the missing value, and calculate the mean and
@@ -84,14 +96,24 @@ standard deviation of \(X\).
 Give your answers to 4 decimal places.
 
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM The probability function in the table below for a random variable \(X\) that takes
-  on the values 1, 2, 3, 4.
+  $ITEM The probability function in the table below for a random variable \(X\) 
+  that takes on the values 1, 2, 3, 4.
   $PAR
   $BCENTER
   \{
-    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-    AlignedRow(["\(x\)", "1", "2", "3", "4"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-    AlignedRow(["\(p(x)\)", "$p1a", "$p1b", "?", "$p1d"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+    AlignedRow(
+      ["\(x\)", "1", "2", "3", "4"], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ) .
+    AlignedRow(
+      ["\(p(x)\)", "$p1a", "$p1b", "?", "$p1d"], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ) .
     EndTable()
   \}
   $ECENTER
@@ -101,14 +123,24 @@ Give your answers to 4 decimal places.
     $ITEM What is the standard deviation of \(X\)? \{ ans_rule(10) \}
   \{ EndList( "OL" ) \}
   $PAR
-  $ITEM The probability function in the table below for a random variable \(X\) that takes
-  on the values $x2a, $x2b, $x2c, $x2d.
+  $ITEM The probability function in the table below for a random variable \(X\) 
+    that takes on the values $x2a, $x2b, $x2c, $x2d.
   $PAR
   $BCENTER
   \{
-    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
-    AlignedRow(["\(x\)", "$x2a", "$x2b", "$x2c", "$x2d"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
-    AlignedRow(["\(p(x)\)", "$p2a", "?", "$p2c", "$p2d"], align=>"CENTER", valign=>"MIDDLE", separation=>0) .
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
+    AlignedRow(
+      ["\(x\)", "$x2a", "$x2b", "$x2c", "$x2d"], 
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ).
+    AlignedRow(
+      ["\(p(x)\)", "$p2a", "?", "$p2c", "$p2d"],
+      align=>"CENTER", 
+      valign=>"MIDDLE", 
+      separation=>0
+    ).
     EndTable()
   \}
   $ECENTER
@@ -119,10 +151,10 @@ Give your answers to 4 decimal places.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($p1c->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($s1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
