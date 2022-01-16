@@ -158,13 +158,15 @@ $errortype = RadioButtons(
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+BEGIN_TEXT
 In the 2010 World Cup, Paul the Octopus (in a German aquarium) became famous for
 being correct in all eight of the predictions it made, including predicting 
 Spain over Germany in a semifinal match. Before each game, two containers of 
-food (mussels) were lowered into the tank. The containers were identical, except 
-for country flags of the opposing teams, one on each container. Whichever 
-container Paul opened was deemed his predicted winner. Does Paul have psychic 
-powers? In other words, is an 8-for-8 record significantly  better than just guessing?
+food (mussels) were lowered into the aquarium tank. The containers were 
+identical, except for country flags of the opposing teams, one on each 
+container. Whichever container Paul opened was deemed his predicted winner. 
+Does Paul have psychic powers? In other words, is an 8-for-8 record 
+significantly  better than just guessing?
 $PAR
 Use the information about the randomization distribution below to answer the 
 following questions about the hypothesis test we could use to test this 
@@ -201,9 +203,11 @@ $PAR
     been? $BR
     \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
