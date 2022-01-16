@@ -30,17 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @notation = ( # choices
   " \( p \)",
   " \( \widehat{p} \)",
@@ -123,12 +127,12 @@ $notation_q_2 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, give an estimate of the quantity described and 
 identify the proper notation.
@@ -146,10 +150,10 @@ identify the proper notation.
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS(
   $correct_answers[$random_1]->with(
     tolerance=>0.001, tolType=>"Absolute"

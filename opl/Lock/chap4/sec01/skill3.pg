@@ -23,8 +23,6 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-
-Scaffold::Begin();
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
@@ -42,7 +40,12 @@ if($displayMode eq "TeX"){
   $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
+
+Scaffold::Begin();
 
 $randomcompare = random(1, 3, 1);  # to facilitate correct answers later
 if ($randomcompare == 1) {
@@ -56,8 +59,8 @@ if ($randomcompare == 1) {
 $randomtext = random(1, 3, 1);
 
 if ($randomtext == 1) {
-  $text1 = "Testing to see if there is evidence that the proportion of males who ".
-           "smoke is $comparison the proportion of females who smoke.";
+  $text1 = "Testing to see if there is evidence that the proportion of males ".
+           "who smoke is $comparison the proportion of females who smoke.";
 
   @params1 = ( # choices
     " $disp_p",
@@ -78,8 +81,9 @@ if ($randomtext == 1) {
   $correctalt1 = $hyps1[$randomcompare];
 
 } elsif ($randomtext == 2) {
-  $text1 = "Testing to see if average sales in stores where customers are approached ".
-           "by salespeople (group 1) is $comparison in stores where they are not (group 2).";
+  $text1 = "Testing to see if average sales in stores where customers are ".
+           "approached by salespeople (group 1) is $comparison in stores ".
+           "where they are not (group 2).";
 
   @params1 = ( # choices
     " $disp_p",
@@ -100,8 +104,9 @@ if ($randomtext == 1) {
   $correctalt1 = $hyps1[$randomcompare];
 
 } else {
-  $text1 = "Testing to see if there is evidence that the mean time spent studying ".
-           "per week for first-year students is $comparison upperclass students.";
+  $text1 = "Testing to see if there is evidence that the mean time spent ".
+           "studying per week for first-year students is $comparison ".
+           "upperclass students.";
 
   @params1 = ( # choices
     " $disp_p",
@@ -125,8 +130,9 @@ if ($randomtext == 1) {
 
 $nullprop = random(0.15, 0.25, 0.02);
 $nullperc = $nullprop * 100;
-$text2 = "Testing to see if there is evidence that the percentage of a population who ".
-         "watch the Home Shopping Network is less than $nullperc$PERCENT";
+$text2 = "Testing to see if there is evidence that the percentage of a ".
+         "population who watch the Home Shopping Network is less than ".
+         "$nullperc$PERCENT";
 
 @params2 = ( # choices
     " $disp_p",
@@ -145,10 +151,6 @@ $correctparam2 = $params2[0];
 );
 
 $correctalt2 = $hyps2[1];
-
-###########################
-## Initialization
-###########################
 
 @labels = ('i', 'ii', 'iii', 'iv');
 $mcparam1 = RadioButtons(
@@ -199,12 +201,12 @@ $mcalt2 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 Consider the two statistical tests given below to answer the questions in parts
 1 and 2. Once you have answered the questions in Part 1 correctly, Part 2 will
@@ -223,7 +225,8 @@ Section::Begin("Part 1: Idenfity the relevant parameter(s)",
   is_open => "correct_or_first_incorrect"
 );
 BEGIN_TEXT
-For each of the statistical tests described above, select the relevant parameter(s).
+For each of the statistical tests described above, select the relevant 
+parameter(s).
 \{ BeginList("OL", type=>"1") \}
   $ITEM $text1 $BR
     $tab \{ $mcparam1->named_buttons("param1") \} $PAR
@@ -260,12 +263,11 @@ LABELED_ANS( "alt1", $mcalt1->cmp() );
 LABELED_ANS( "null2", $mcnull2->cmp() );
 LABELED_ANS( "alt2", $mcalt2->cmp() );
 Section::End();
-
-
+Scaffold::End();
 
 ###########################
 ## Answer Section
 ###########################
-Scaffold::End();
-
+# In order to facilitate the scaffolding, the answers are included in the 
+# Question for display section.
 ENDDOCUMENT();  #This MUST be the final line of the file.

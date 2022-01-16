@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $quant_1 = new DataGenUWL(
   datatype => 'single_quant',
   n => 11,
@@ -75,12 +81,12 @@ $med_2 = Real($quant_2->{med});
 $q3_2 = Real($quant_2->{q3});
 $max_2 = Real($quant_2->{max});
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 For the following samples, use technology to find the mean, standard deviation,
 and five-number summary. Give your answers to 4 decimal places.
@@ -88,7 +94,7 @@ $PAR
 \{ BeginList( "OL", type=>"1") \}
   $ITEM \{ join(", ", @{$quant_1->{x}}) \} $PAR
   \{
-    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
     AlignedRow(
       ["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], 
       align=>"CENTER", 
@@ -109,7 +115,7 @@ $PAR
   \}
   $ITEM \{ join(", ", @{$quant_2->{x}}) \} $PAR
   \{
-    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0) .
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>0).
     AlignedRow(
       ["Mean", "Std. Dev", "Min", "Q1", "Med", "Q3", "Max"], 
       align=>"CENTER", 

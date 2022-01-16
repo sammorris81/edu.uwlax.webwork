@@ -30,17 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $N = 500;
 
 @ns = (40, 80, 120);
@@ -135,15 +139,16 @@ $size_3 = PopUp(
 ###########################
 ## Question for display
 ###########################
-# Show which answers are correct and which ones are incorrect
+Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
-Context()->texStrings;
+
 BEGIN_TEXT
 $BBOLD Sampling distribution for proportions: $EBOLD
 $BR
-Each of the following sampling distributions represent $N sample proportions from the same
-population, but have differing sample sizes. Match the sampling distribution to
-the most appropriate sample size \{ join(", ", @ns) \}. Each answer is used only once.
+Each of the following sampling distributions represent $N sample proportions 
+from the same population, but have differing sample sizes. Match the sampling 
+distribution to the most appropriate sample size \{ join(", ", @ns) \}. Each 
+answer is used only once.
 $PAR
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).

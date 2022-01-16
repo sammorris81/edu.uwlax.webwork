@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @hyps1 = ( # choices
@@ -106,9 +113,6 @@ if ($random3 == 1) {
   $correctalt3 = $hyps3[$random3];
 }
 
-###########################
-## Initialization
-###########################
 @labels = ('i', 'ii', 'iii', 'iv');
 $mcnull1 = RadioButtons(
   [@hyps1],
@@ -158,12 +162,12 @@ $mcalt3 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, select the appropriate null and alternative hypotheses for the
 statistical test described.
@@ -182,10 +186,10 @@ statistical test described.
   $disp_alt : \{ $mcalt3->buttons() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mcnull1->cmp());
 ANS($mcalt1->cmp());
 ANS($mcnull2->cmp());

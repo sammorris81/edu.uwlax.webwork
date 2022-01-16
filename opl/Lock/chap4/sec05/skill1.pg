@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $random1 = random(0, 1, 1);
@@ -51,10 +58,18 @@ if ($random1 == 0) {
   $null1 = $disp_null . ":" . $disp_p . "=" . $nullprop;
   $alt1 = $disp_alt . ":" . $disp_p . $disp_ne . $nullprop;
   $param1 = $disp_p;
-  do { $lower1a = random(0.25, ($nullprop + .05), 0.02); } until ($lower1a != $nullprop);
-  do { $upper1a = $lower1a + random(0.1, 0.3, 0.02); } until ($upper1a != $nullprop);
-  do { $upper1b = random(($nullprop - 0.05), 0.85, 0.02); } until ($upper1b != $nullprop);
-  do { $lower1b = $upper1b - random(0.1, 0.3, 0.02); } until ($lower1b != $nullprop);
+  do { $lower1a = random(0.25, ($nullprop + .05), 0.02); } until (
+    $lower1a != $nullprop
+  );
+  do { $upper1a = $lower1a + random(0.1, 0.3, 0.02); } until (
+    $upper1a != $nullprop
+  );
+  do { $upper1b = random(($nullprop - 0.05), 0.85, 0.02); } until (
+    $upper1b != $nullprop
+  );
+  do { $lower1b = $upper1b - random(0.1, 0.3, 0.02); } until (
+    $lower1b != $nullprop
+  );
   if ($nullprop > $lower1a && $nullprop < $upper1a) {
     $correct1a = $options[1];
   } else {
@@ -70,9 +85,13 @@ if ($random1 == 0) {
   $null1 = "$disp_null : $disp_mu = $nullmean";
   $alt1 = "$disp_alt : $disp_mu $disp_ne $nullmean";
   $param1 = $disp_mu;
-  do { $lower1a = random(4, ($nullmean + 2), 1); } until ($lower1a != $nullmean);
+  do { $lower1a = random(4, ($nullmean + 2), 1); } until (
+    $lower1a != $nullmean
+  );
   do { $upper1a = $lower1a + random(5, 8, 1); } until ($upper1a != $nullmean);
-  do { $upper1b = random(($nullmean - 2), 26, 1); } until ($upper1b != $nullmean);
+  do { $upper1b = random(($nullmean - 2), 26, 1); } until (
+    $upper1b != $nullmean
+  );
   do { $lower1b = $upper1b - random(5, 8, 1); } until ($lower1b != $nullmean);
   if ($nullmean > $lower1a && $nullmean < $upper1a) {
     $correct1a = $options[1];
@@ -159,43 +178,47 @@ $mc2b = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-For the following questions, hypotheses for a statistical test are given, followed
-by two possible confidence intervals for different samples. In each case, use the
-confidence interval to state a conclusion of the test for that sample and give
-the significance level used.
+For the following questions, hypotheses for a statistical test are given, 
+followed by two possible confidence intervals for different samples. In each 
+case, use the confidence interval to state a conclusion of the test for that 
+sample and give the significance level used.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Hypotheses: $null1 vs $alt1 $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM $conflevel1a$PERCENT confidence interval for $param1 is ($lower1a, $upper1a) $BR
-    Conclusion: \{ $mc1a->buttons() \} $BR
-    Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
-    $ITEM $conflevel1b$PERCENT confidence interval for $param1 is ($lower1b, $upper1b) $BR
-    Conclusion: \{ $mc1b->buttons() \} $BR
-    Significance level: $disp_alpha = \{ ans_rule(10) \}
+    $ITEM $conflevel1a$PERCENT confidence interval for $param1 is 
+      ($lower1a, $upper1a) $BR
+      Conclusion: \{ $mc1a->buttons() \} $BR
+      Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
+    $ITEM $conflevel1b$PERCENT confidence interval for $param1 is 
+      ($lower1b, $upper1b) $BR
+      Conclusion: \{ $mc1b->buttons() \} $BR
+      Significance level: $disp_alpha = \{ ans_rule(10) \}
   \{ EndList("OL") \}
   $PAR
   $ITEM Hypotheses: $null2 vs $alt2 $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM $conflevel2a$PERCENT confidence interval for $param2 is ($lower2a, $upper2a) $BR
-    Conclusion: \{ $mc2a->buttons() \} $BR
-    Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
-    $ITEM $conflevel2b$PERCENT confidence interval for $param2 is ($lower2b, $upper2b) $BR
-    Conclusion: \{ $mc2b->buttons() \} $BR
-    Significance level: $disp_alpha = \{ ans_rule(10) \}
+    $ITEM $conflevel2a$PERCENT confidence interval for $param2 is 
+      ($lower2a, $upper2a) $BR
+      Conclusion: \{ $mc2a->buttons() \} $BR
+      Significance level: $disp_alpha = \{ ans_rule(10) \} $BR
+    $ITEM $conflevel2b$PERCENT confidence interval for $param2 is 
+      ($lower2b, $upper2b) $BR
+      Conclusion: \{ $mc2b->buttons() \} $BR
+      Significance level: $disp_alpha = \{ ans_rule(10) \}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mc1a->cmp());
 ANS($sig1a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1b->cmp());

@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,17 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @variable_type = ( # choices
   ' Parameter',
   ' Statistic'
@@ -133,6 +137,7 @@ $notation_q_2 = RadioButtons(
 ###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 $PAR
 For the following questions, state whether the quantity described is a parameter
@@ -160,6 +165,7 @@ END_TEXT
 ## Hint for display
 ###########################
 $showHint = 3;
+
 BEGIN_HINT
 $BBOLD Determining whether something is a parameter or statistic:$EBOLD $BR
 As your book mentions on p. 196, a quantity can only be a

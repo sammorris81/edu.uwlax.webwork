@@ -25,16 +25,24 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
-$showPartialCorrectAnswers = 1;
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = Real(169);
@@ -53,13 +61,19 @@ $cat1 = new DataGenUWL(
 
 $p_rel = CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>1);
 $p_rel = Real($p_rel / $n);
-$p_male_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>2, index=>2);
+$p_male_rel = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>2, index=>2
+);
 $p_male_rel = Real($p_male_rel);
-$p_female_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>2);
+$p_female_rel = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>1, index=>2
+);
 $p_female_rel = Real($p_female_rel);
 
 $p_diff = Real($p_female_rel - $p_male_rel);
-$p_rel_female = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>1);
+$p_rel_female = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>1, index=>1
+);
 $p_rel_female = Real($p_rel_female);
 
 $female_and_rel = CategoricalUWL::jointprop(data=>$cat1, row=>1, col=>1);
@@ -71,9 +85,15 @@ $female_and_single = Real($female_and_single);
 $n_single_and_male = CategoricalUWL::singlefreq(data=>$cat1, row=>3, col=>1);
 $p_male_single = sprintf("%.4f", $n_single_and_male / $n);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
-${BBOLD}Notes Example:${EBOLD} ${BITALIC}Relationship status and Gender${EITALIC} $BR
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Relationship status and 
+Gender${EITALIC} $BR
 $n college students were asked about relationship status and gender. The results
 are summarized in the following table:
 $PAR
@@ -88,9 +108,9 @@ For a joint proportion, we calculate the proportion of the people in the sample
 that satisfy both conditions. For example, if we wanted to know the proportion
 of the people in the sample who were male and single, we would take
 \[
-\displaystyle \frac{\text{Single and male}}{\text{Total total}} =
-\frac{$n_single_and_male}{$n} =
-$p_male_single
+  \displaystyle \frac{\text{Single and male}}{\text{Total total}} =
+  \frac{$n_single_and_male}{$n} =
+  $p_male_single
 \]
 \{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
   $ITEM What proportion of the people in this sample are female and in a
@@ -100,7 +120,9 @@ $p_male_single
 \{ EndList( "OL" ) \}
 END_TEXT
 
-
+###########################
+## Answer Section
+###########################
 ANS($female_and_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($female_and_single->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ENDDOCUMENT();

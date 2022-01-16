@@ -26,16 +26,24 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
-$showPartialCorrectAnswers = 1;
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = Real(2000);
@@ -55,7 +63,12 @@ $rel_never_round = sprintf("%.4f", $rel_never);
 $once_plus = Real($rel_once_a_week + $rel_every_day);
 $rare_min  = Real($rel_rarely + $rel_never);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 ${BBOLD}Notes Example:${EBOLD} ${BITALIC}Talking about sports${EITALIC} $BR
 A survey in November 2012 asked a random sample of 2,000 US adults ${LQ}How
@@ -80,8 +93,8 @@ $ECENTER
 $PAR
 For each of the following questions, give your answer to 4 decimal places.
 $PAR
-As described on p. 47 of your book, the ${BITALIC}relative frequency${EITALIC}
-of a group is the proportion of observations in that group. For example, the
+As described in your book, the ${BITALIC}relative frequency${EITALIC} of a 
+group is the proportion of observations in that group. For example, the
 relative proportion of people who never talk about sports is given by
 \[
    \displaystyle \frac{$never}{$n} = $rel_never_round
@@ -90,6 +103,9 @@ $PAR
 Fill in the remaining relative frequencies for this table.
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($rel_every_day->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($rel_once_a_week->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($rel_occasionally->with(tolerance=>0.001, tolType=>"Absolute")->cmp);

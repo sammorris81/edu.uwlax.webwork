@@ -29,11 +29,20 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = random(350, 370, 1);
@@ -82,7 +91,6 @@ $cat4 = new DataGenUWL(
   labels => [@labels],
   random => "F",
 );
-
 
 $roworder = random(1, 4, 1);
 if($roworder == 1){
@@ -147,7 +155,6 @@ $bar2col = StatGraphicsUWL::barchart( data=>$cat2c, index=>2 );
 $bar3col = StatGraphicsUWL::barchart( data=>$cat3c, index=>2 );
 $bar4col = StatGraphicsUWL::barchart( data=>$cat4c, index=>2 );
 
-
 $rowcharts = PopUp(
   ["?", "a. ", "b. ", "c. ", "d. "],
   $correctrow
@@ -158,73 +165,89 @@ $colcharts = PopUp(
   $correctcol
 );
 
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
 
-Context()->texStrings;
 BEGIN_TEXT
-In a classroom survey similar to the one we gave at the beginning of the semester,
-students were asked their gender and if they were a smoker. The survey results are
-summarized in the following table.
+In a classroom survey similar to the one we gave at the beginning of the 
+semester, students were asked their gender and if they were a smoker. The survey
+results are summarized in the following table.
 
 $PAR
 \{ CategoricalUWL::freqtable(data=>$cat1) \}
 $PAR
 \{ BeginList( "OL", type=>"a" ) \}
-  $ITEM Which of the following bar chart most accurately summarizes the counts of
-  non-smokers vs smokers in the sample? \{ $rowcharts -> menu() \}
+  $ITEM Which of the following bar chart most accurately summarizes the counts
+  of non-smokers vs smokers in the sample? \{ $rowcharts -> menu() \}
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
-AlignedRow([
-      "a.". image( insertGraph($bar1row), width=>300, height=>300, tex_size=>"400" ),
-      "b.". image( insertGraph($bar2row), width=>300, height=>300, tex_size=>"400" )
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
-      "c.". image( insertGraph($bar3row), width=>300, height=>300, tex_size=>"400" ),
-      "d.". image( insertGraph($bar4row), width=>300, height=>300, tex_size=>"400" )
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
+AlignedRow(
+  [
+    "a.". image(
+      insertGraph($bar1row), width=>300, height=>300, tex_size=>"400"
+    ),
+    "b.". image(
+      insertGraph($bar2row), width=>300, height=>300, tex_size=>"400"
+    )
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
+AlignedRow(
+  [
+    "c.". image(
+      insertGraph($bar3row), width=>300, height=>300, tex_size=>"400" 
+    ),
+    "d.". image(
+      insertGraph($bar4row), width=>300, height=>300, tex_size=>"400"
+    )
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
 EndTable()
 \}
 $anssep
-
 $anssep
 $anssep
-  $ITEM Which of the following bar charts most accurately summarizes the counts of
-  females vs males in the sample? \{ $colcharts -> menu() \}
+  $ITEM Which of the following bar charts most accurately summarizes the counts 
+  of females vs males in the sample? \{ $colcharts -> menu() \}
 \{
 BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
-AlignedRow([
-      "a.". image( insertGraph($bar1col), width=>300, height=>300, tex_size=>"400" ),
-      "b.". image( insertGraph($bar2col), width=>300, height=>300, tex_size=>"400" )
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-AlignedRow([
-      "c.". image( insertGraph($bar3col), width=>300, height=>300, tex_size=>"400" ),
-      "d.". image( insertGraph($bar4col), width=>300, height=>300, tex_size=>"400" )
-      ],
-      align=>"LEFT", valign=>"TOP", separation=>0
-      ).
+AlignedRow(
+  [
+    "a.". image(
+      insertGraph($bar1col), width=>300, height=>300, tex_size=>"400"
+    ),
+    "b.". image(
+      insertGraph($bar2col), width=>300, height=>300, tex_size=>"400"
+    )
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
+AlignedRow(
+  [
+    "c.". image(
+      insertGraph($bar3col), width=>300, height=>300, tex_size=>"400"
+    ),
+    "d.". image(
+      insertGraph($bar4col), width=>300, height=>300, tex_size=>"400"
+    )
+  ],
+  align=>"LEFT", valign=>"TOP", separation=>0
+).
 EndTable()
 \}
 $anssep
-
 $anssep
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS( $rowcharts -> cmp() );
 ANS( $colcharts -> cmp() );
-
-
-##############################################################
-#
-#  Answers
-#
-#
-
 
 ENDDOCUMENT();

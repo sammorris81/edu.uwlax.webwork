@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @skew_descriptions = (
   "?", 
   "Left-skewed", 
@@ -126,12 +132,12 @@ $mean_median_comparison_2 = PopUp(
   $correct_mean_median_compare_2,
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 Use these histograms to answer the following questions.
 $PAR

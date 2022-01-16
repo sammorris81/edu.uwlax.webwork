@@ -30,33 +30,43 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
-#ProblemRandomize(when=>"Always", onlyAfterDue=>0);
 
 $includeprobs = random(1, 5, 1);
 
-$prompt1 =  'Are the number of hours per day 16 year olds spent using electronic media '.
-            'greater in 2013 than in 2003?';
-$prompt2 =  'A researcher wants to know if those who work long hours have more trouble sleeping than '.
-            'those who work shorter hours. 1,501 workers that work over 40 hours per week, and 958 that work under 40 hours '.
-            'per week were sampled independently, and were asked if they have trouble sleeping.';
-$prompt3 =  'ITS says that computer labs are unnecessary on campus now since most students '.
-            'have their own computers.  The student newspaper wants to see if this claim is true, '.
-            'so they surveyed UW-L students to estimate the prevalence of personal computers.';
-$prompt4 =  'Wayne Gretzky played 41 games and missed 17 games due to injury in his last '.
-            'season with the Oilers.  Is the average number of goals scored lower for the Oilers '.
-            'when Gretzky was injured than when he was playing?';
-$prompt5 =  'The Dean of CLS at UW-L says decreasing the number of computer labs would disproportionately '.
-            'affect CLS students.  She sends a survey out to randomly selected students in CLS '.
-            'and SAH to see if fewer CLS students have their own computer compared '.
-            'to students in SAH.';
+$prompt1 =  'Are the number of hours per day 16 year olds spent using '.
+            'electronic media greater in 2013 than in 2003?';
+$prompt2 =  'A researcher wants to know if those who work long hours have '.
+            'more trouble sleeping than those who work shorter hours. 1,501 '.
+            'workers that work over 40 hours per week, and 958 that work '.
+            'under 40 hours per week were sampled independently, and were '.
+            'asked if they have trouble sleeping.';
+$prompt3 =  'ITS says that computer labs are unnecessary on campus now since '.
+            'most students have their own computers.  The student newspaper '.
+            'wants to see if this claim is true, so they surveyed UWL '.
+            'students to estimate the prevalence of personal computers.';
+$prompt4 =  'Wayne Gretzky played 41 games and missed 17 games due to injury '.
+            'in his last season with the Oilers. Is the average number of '.
+            'goals scored lower for the Oilers when Gretzky was injured than '.
+            'when he was playing?';
+$prompt5 =  'The Dean of CASSH at UWL says decreasing the number of computer '.
+            'labs would disproportionately affect CASSH students. She sends a '.
+            'survey out to randomly selected students in CASSH and CSH to see '.
+            'if fewer CASSH students have their own computer compared to '.
+            'students in CSH.';
 
 if ($includeprobs == 1){
     $question1 = $prompt1;
@@ -125,10 +135,11 @@ $pick3 = RadioButtons(
   labels => [ @labels ],
 );
 
-# Show which answers are correct and which ones are incorrect
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
-
-Context("Numeric");
 BEGIN_TEXT
 For each of the following scenarios, choose the most appropriate type of procedure.
 \{ BeginList( "OL", type=>"a") \}
@@ -144,6 +155,9 @@ $PAR
 \{ EndList( "OL" ) \}
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS( $pick1->cmp() );
 ANS( $pick2->cmp() );
 ANS( $pick3->cmp() );

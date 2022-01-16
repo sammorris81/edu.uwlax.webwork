@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @inequality = (
@@ -148,51 +155,57 @@ $mc4 = PopUp(
   $correct4,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-For the following questions, the null and alternative hypotheses for a test are given
-as well as some information about the actual sample(s). Indicate where the randomization distribution
-will be centered. In addition, indicate whether the test is a left-tailed, a right-tailed,
-or a two-tailed test.
+For the following questions, the null and alternative hypotheses for a test are
+given as well as some information about the actual sample(s). Indicate where the
+randomization distribution will be centered. In addition, indicate whether the 
+test is a left-tailed, a right-tailed, or a two-tailed test.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Hypotheses: $null1 vs $alt1 $BR
   Sample: \(\widehat{p} = $stat1\), \(n = $n1\) $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM Where will the randomization distribution be centered? 
+      \{ ans_rule(10) \}
     $ITEM What kind of test is this? \{ $mc1->menu() \}
   \{ EndList("OL") \}
   $PAR
   $ITEM Hypotheses: $null2 vs $alt2 $BR
   Sample: \(\overline{x} = $stat2\), \(n = $n2\) $BR
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM Where will the randomization distribution be centered? 
+      \{ ans_rule(10) \}
     $ITEM What kind of test is this? \{ $mc2->menu() \}
   \{ EndList("OL") \}
   $PAR
   $ITEM Hypotheses: $null3 vs $alt3 $BR
-  Sample: \(D = \widehat{p}_1 - \widehat{p}_2 = $stat3\), \(n_1 = $n31\), \(n_2 = $n32\)
+    Sample: \(D = \widehat{p}_1 - \widehat{p}_2 = $stat3\), 
+    \(n_1 = $n31\), \(n_2 = $n32\)
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM Where will the randomization distribution be centered? 
+      \{ ans_rule(10) \}
     $ITEM What kind of test is this? \{ $mc3->menu() \}
   \{ EndList("OL") \}
   $PAR
   $ITEM Hypotheses: $null4 vs $alt4 $BR
-  Sample: \(D = \overline{x}_1 - \overline{x}_2 = $stat4\), \(n_1 = $n41\), \(n_2 = $n42\)
+  Sample: \(D = \overline{x}_1 - \overline{x}_2 = $stat4\), 
+    \(n_1 = $n41\), \(n_2 = $n42\)
   \{ BeginList( "OL", type=>"a") \}
-    $ITEM Where will the randomization distribution be centered? \{ ans_rule(10) \}
+    $ITEM Where will the randomization distribution be centered? 
+      \{ ans_rule(10) \}
     $ITEM What kind of test is this? \{ $mc4->menu() \}
   \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($nullprop->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 ANS($nullmean->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

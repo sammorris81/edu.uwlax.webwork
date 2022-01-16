@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @inequality = (
@@ -50,7 +57,6 @@ Context("Numeric");
   "Right-tailed",
   "Two-tailed"
 );
-
 
 $random1 = random(0, 2, 1);
 $random2 = random(0, 2, 1);
@@ -85,11 +91,11 @@ if ($random1 == 0) {
   $pval1 = Real($extreme1 * 2 / $N1);  # for rounding
   $stat1 = sprintf("%.2f", $nullprop1 + random(-1, 1, 2) * $z1 * $se1);
   $correct1 = $sided[3];
-  $compare1 = $stat1 > $nullprop1 ? "as large or larger than" : "as smaller or smaller than";
+  $compare1 = $stat1 > $nullprop1 ? 
+    "as large or larger than" : 
+    "as smaller or smaller than";
 }
 $count1 = sprintf("%.0f", $stat1 * $n1);
-
-
 
 $nullprop2 = Real(random(0.3, 0.7, 0.1));
 $null2 = "\(H_0: p = $nullprop2\)";
@@ -116,10 +122,11 @@ if ($random2 == 0) {
   $pval2 = Real($extreme2 * 2 / $N2);  # for rounding
   $stat2 = sprintf("%.2f", $nullprop2 + random(-1, 1, 2) * $z2 * $se2);
   $correct2 = $sided[3];
-  $compare2 = $stat2 > $nullprop2 ? "as large or larger than" : "as smaller or smaller than";
+  $compare2 = $stat2 > $nullprop2 ? 
+    "as large or larger than" : 
+    "as smaller or smaller than";
 }
 $count2 = sprintf("%.0f", $stat2 * $n2);
-
 
 $nullprop3 = Real(random(0.3, 0.7, 0.1));
 $null3 = "\(H_0: p = $nullprop3\)";
@@ -150,44 +157,48 @@ if ($random3 == 0) {
   $pval3 = Real($extreme3 * 2 / $N3);  # for rounding
   $stat3 = sprintf("%.2f", $nullprop3 + random(-1, 1, 2) * $z3 * $se3);
   $correct3 = $sided[3];
-  $compare3 = $stat3 > $nullprop3 ? "as large or larger than" : "as smaller or smaller than";
+  $compare3 = $stat3 > $nullprop3 ? 
+    "as large or larger than" : 
+    "as smaller or smaller than";
 }
 $count3 = sprintf("%.0f", $stat3 * $n3);
 
-
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-For the following questions, the null and alternative hypotheses for a test are given
-as well as some information about the actual sample(s).
-Use the information to determine the p-value for the following observed sample proportion.
-Give your answers to 4 decimal places.
+For the following questions, the null and alternative hypotheses for a test are 
+given as well as some information about the actual sample(s). Use the 
+information to determine the p-value for the following observed sample 
+proportion. Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Hypotheses: $null1 vs $alt1 $BR
-  Sample: \(\widehat{p} = $stat1\) $BR
-  In $extreme1 out of $N1 randomizations, the randomization distribution resulted in sample
-  proportions $compare1 $stat1. What is the p-value? \{ ans_rule(10) \}
+    Sample: \(\widehat{p} = $stat1\) $BR
+    In $extreme1 out of $N1 randomizations, the randomization distribution 
+    resulted in sample proportions $compare1 $stat1. What is the p-value? 
+    \{ ans_rule(10) \}
   $PAR
   $ITEM Hypotheses: $null2 vs $alt2 $BR
-  Sample: \(\widehat{p} = $stat2\) $BR
-  In $extreme2 out of $N2 randomizations, the randomization distribution resulted in sample
-  proportions $compare2 $stat2. What is the p-value? \{ ans_rule(10) \}
+    Sample: \(\widehat{p} = $stat2\) $BR
+    In $extreme2 out of $N2 randomizations, the randomization distribution 
+    resulted in sample proportions $compare2 $stat2. What is the p-value? 
+    \{ ans_rule(10) \}
   $PAR
   $ITEM Hypotheses: $null3 vs $alt3 $BR
-  Sample: \(\widehat{p} = $stat3\) $BR
-  In $extreme3 out of $N3 randomizations, the randomization distribution resulted in sample
-  proportions $compare3 $stat3. What is the p-value? \{ ans_rule(10) \}
+    Sample: \(\widehat{p} = $stat3\) $BR
+    In $extreme3 out of $N3 randomizations, the randomization distribution 
+    resulted in sample proportions $compare3 $stat3. What is the p-value? 
+    \{ ans_rule(10) \}
   $PAR
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($pval1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pval2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pval3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

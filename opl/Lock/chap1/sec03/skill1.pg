@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @options = ( # choices
   ' Experiment',
   ' Observational Study',
@@ -99,12 +105,12 @@ $multiple_choice_2 = RadioButtons(
  labels => ['a', 'b']
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 The following questions describe data collection methods to answer a question of
 interest. Are they describing an experiment or an observational study?

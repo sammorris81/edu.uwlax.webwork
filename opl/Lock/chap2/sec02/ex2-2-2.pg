@@ -27,12 +27,22 @@ $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
-  $anssep = "";
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
-  $anssep = $BR;
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-$showPartialCorrectAnswers = 1;
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @x_1 = (43, 59, 22, 25, 36, 47, 19);
@@ -58,12 +68,16 @@ $mc = PopUp(
     "Mean"
 );
 
-
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
 
 BEGIN_TEXT
 The number of ants climbing on a piece of a peanut butter sandwich left on the
-ground near an anthill for a few minutes was measured $n_1 different times, and the
-results are: \{ join(", ", @x_1) \}.
+ground near an anthill for a few minutes was measured $n_1 different times, and 
+the results are: \{ join(", ", @x_1) \}.
 $PAR
 Give your answers to 4 decimal places.
 $PAR
@@ -73,20 +87,19 @@ $PAR
   $ITEM Calculate the median number of ants. \{ ans_rule(10) \}
   $PAR
   $ITEM Suppose one of the sandwich bits was extremely appealing to the ants,
-  and instead of $x_1[1], the number of ants for that bit was actually $x_2[1],
-  giving the $n_2 values as: \{join(", ", @x_2)\}. Compute the mean and median
-  for this new dataset. $BR
-  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+    and instead of $x_1[1], the number of ants for that bit was actually 
+    $x_2[1], giving the $n_2 values as: \{join(", ", @x_2)\}. Compute the mean 
+    and median for this new dataset. $BR
+    Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
   $PAR
-  $ITEM Which of the summary statistics does the outlier impact the most? \{ $mc->menu() \}
+  $ITEM Which of the summary statistics does the outlier impact the most? 
+    \{ $mc->menu() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mean_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($med_1->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($mean_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp);

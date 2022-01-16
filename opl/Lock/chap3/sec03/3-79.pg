@@ -31,12 +31,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 rserve_eval('
@@ -75,7 +82,9 @@ $upper1 = Real(sprintf("%.".$round."f", $phat + $moe));
 @clevels = (80, 90, 95, 98, 99);
 $random2 = random(0, 4, 1);
 do {$random3 = random(0, 4, 1); } until ($random3 != $random2);
-do {$random4 = random(0, 4, 1); } until (($random4 != $random2) && ($random4 != $random3));
+do {$random4 = random(0, 4, 1); } until (
+  ($random4 != $random2) && ($random4 != $random3)
+);
 
 $p2l = (100 - $clevels[$random2]) / 200;
 $p2u = 1 - $p2l;
@@ -100,20 +109,25 @@ $lower4 = Real(sprintf("%.".$round."f", $lower4));
 $upper4 = Real(sprintf("%.".$round."f", $upper4));
 
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 The phrase ${LQ}You dirty rat${RQ} does rats a disservice. In a recent study,
-(${BITALIC}Science${EITALIC}, 2011), rats shoed compassion that surprised scientists.
-In a study with $N rats, $n of the rats freed another trapped rat in their cage,
-even when chocolate served as a distraction and even when the rats would have
-to then share the chocolate with their freed companion. (Rats, it turns out,
-love chocolate.) Rats did not open the cage when it was empty or when there was
-a stuffed animal inside, only when a fellow rat was trapped.
+(${BITALIC}Science${EITALIC}, 2011), rats shoed compassion that surprised 
+scientists. In a study with $N rats, $n of the rats freed another trapped rat in
+their cage, even when chocolate served as a distraction and even when the rats
+would have to then share the chocolate with their freed companion. (Rats, it 
+turns out, love chocolate.) Rats did not open the cage when it was empty or when
+there was a stuffed animal inside, only when a fellow rat was trapped.
 $PAR
-Using this sample, $N bootstrap samples were generated, and for each bootstrap sample the
-average was recorded to create the bootstrap distribution. The standard deviation of
-the bootstrap distribution is \{ $bootsd \}, and the table below gives selected
-percentiles from the bootstrap distribution.
+Using this sample, $N bootstrap samples were generated, and for each bootstrap 
+sample the average was recorded to create the bootstrap distribution. The
+standard deviation of the bootstrap distribution is \{ $bootsd \}, and the table
+below gives selected percentiles from the bootstrap distribution.
 $PAR
 $BCENTER
 \{ DataTable(
@@ -126,30 +140,36 @@ $BCENTER
 ); \}
 $ECENTER
 $PAR
-Use the information about the bootstrap distribution to find the following confidence
-intervals. Give your answers to 3 decimal places.
+Use the information about the bootstrap distribution to find the following 
+confidence intervals. Give your answers to 3 decimal places.
 \{ BeginList( "OL", type=>"a") \}
-    $ITEM Using the $BITALIC standard error$EITALIC method, what is a 95$PERCENT confidence interval
-    for the proportion of rats that freed another rat? (\{ ans_rule(10)\}, \{ ans_rule(10) \})
-    $anssep
-    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random2]\}$PERCENT
-    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-    $anssep
-    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random3]\}$PERCENT
-    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-    $anssep
-    $ITEM Using the $BITALIC percentile$EITALIC method, what is a \{$clevels[$random4]\}$PERCENT
-    confidence interval for the average monthly sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $ITEM Using the $BITALIC standard error$EITALIC method, what is a 
+    95$PERCENT confidence interval for the proportion of rats that freed 
+    another rat? (\{ ans_rule(10)\}, \{ ans_rule(10) \})
+  $anssep
+  $ITEM Using the $BITALIC percentile$EITALIC method, what is a 
+    \{$clevels[$random2]\}$PERCENT confidence interval for the average monthly 
+    sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $anssep
+  $ITEM Using the $BITALIC percentile$EITALIC method, what is a 
+    \{$clevels[$random3]\}$PERCENT confidence interval for the average monthly 
+    sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+  $anssep
+  $ITEM Using the $BITALIC percentile$EITALIC method, what is a 
+    \{$clevels[$random4]\}$PERCENT confidence interval for the average monthly 
+    sales? (\{ ans_rule(10) \}, \{ ans_rule(10) \})
 \{ EndList("OL") \}
-
-
 END_TEXT
-ANS( $lower1 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $upper1 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $lower2 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $upper2 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $lower3 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $upper3 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $lower4 -> with(tolerance=>0.01, tolType=>"Absolute") -> cmp);
-ANS( $upper4 -> with(tolerance=>0.001, tolType=>"Absolute") -> cmp);
+
+###########################
+## Answer Section
+###########################
+ANS($lower1->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($upper1->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($lower2->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($upper2->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($lower3->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($upper3->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($lower4->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
+ANS($upper4->with(tolerance=>0.01, tolType=>"Absolute")->cmp);
 ENDDOCUMENT();

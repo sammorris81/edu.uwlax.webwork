@@ -23,22 +23,28 @@ loadMacros("uwlLoadWWMacros.pl",
 );
 
 TEXT(beginproblem());
-$refreshCachedImages = 0;
+$refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @options = ( # choices
   ' Quantitative',
   ' Categorical'
@@ -113,12 +119,12 @@ $multiple_choice_3 = RadioButtons(
  labels => ['a', 'b']
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 For the following situations, identify if the variable of interest would be 
 quantitative or categorical.

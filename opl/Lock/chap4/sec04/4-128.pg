@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = 8;
@@ -95,18 +102,21 @@ $pvalue = Real($pvalue);
 $nextreme = $pvalue * $N;
 
 $rejinterp = "We have statistically significant evidence to suggest that the ".
-             "average arsenic levels in this supplier's chicken is higher than ".
-             "80 ppb.";
-
-$f2rinterp = "We do not have statistically significant evidence to suggest that ".
-             "the average arsenic levels in this supplier's chicken is higher ".
+             "average arsenic levels in this supplier's chicken is higher ".
              "than 80 ppb.";
+
+$f2rinterp = "We do not have statistically significant evidence to suggest ".
+             "that the average arsenic levels in this supplier's chicken is ".
+             "higher than 80 ppb.";
 
 $accinterp = "We have statistically significant evidence that the avearge ".
              "arsenic levels in this supplier's chicken is 80 ppb.";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
-@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)");
+@interps = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
 
@@ -154,19 +164,26 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-Arsenic-based addivites are mixed in the diet of about 70$PERCENT of the 9 billion
-broiler chickens produced annually in the US. A restaurant chain has decided to cancel
-contracts with chick suppliers if the average amount of arsenic in their chicken is
-higher than 80 ppb (parts per billion). They have randomly selected $n1 chickens from
-one of the suppliers and the arsenic measurements are given below:
+Arsenic-based addivites are mixed in the diet of about 70$PERCENT of the 9 
+billion broiler chickens produced annually in the US. A restaurant chain has 
+decided to cancel contracts with chick suppliers if the average amount of 
+arsenic in their chicken is higher than 80 ppb (parts per billion). They have 
+randomly selected $n1 chickens from one of the suppliers and the arsenic 
+measurements are given below:
 $PAR
 $BCENTER
   \{ join(", ", @x1) \}
 $ECENTER
 $PAR
-Conduct a hypothesis test to see if this restaurant should cancel its contract with the supplier.
+Conduct a hypothesis test to see if this restaurant should cancel its contract 
+with the supplier.
 $PAR
 The histogram of randomization distribution is given below.
 In $nextreme randomizations (out of $N) the randomization distribution resulted
@@ -179,30 +196,33 @@ $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
-  $ITEM What is the statistic from this sample? Give your answer to two decimal places.\{ ans_rule(10) \}
+  $ITEM What is the statistic from this sample? Give your answer to two decimal 
+    places. \{ ans_rule(10) \}
   $PAR
   $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \}
   $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \}
+  $ITEM Select the appropriate interpretation for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \}
   $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM If an error had been made on this test, what kind of error would it have 
+    been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.1, tolType=>"Absolute")->cmp());

@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $random = random(0, 1, 1);
 if ($random == 0) {
   $n = random(355, 370, 1);
@@ -81,12 +87,12 @@ $answer_1 = Real($cat->{probs}[0]);
 $answer_2 = Real($cat->{probs}[1]);
 $answer_3 = Real($cat->{probs}[2]);
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 In a recent survey, students were asked $text. The results are given in the 
 following table:

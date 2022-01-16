@@ -26,16 +26,24 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
-$showPartialCorrectAnswers = 1;
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = Real(2000);
@@ -54,7 +62,12 @@ $rel_never = Real($never / $n);
 $once_plus = Real($rel_once_a_week + $rel_every_day);
 $rare_min  = Real($rel_rarely + $rel_never);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 ${BBOLD}Notes Example:${EBOLD} ${BITALIC}Talking about sports${EITALIC} $BR
 A survey in November 2012 asked a random sample of 2,000 US adults ${LQ}How
@@ -74,7 +87,7 @@ $BCENTER
   ],
   caption => 'Survey results',
   align => 'l c c'
-);\}
+); \}
 $ECENTER
 $PAR
 For each of the following questions, give your answer to 4 decimal places.
@@ -82,10 +95,13 @@ For each of the following questions, give your answer to 4 decimal places.
   $ITEM Fill in the relative frequency column for this table.
   $ITEM What proportion rarely or never talk about sports? \{ans_rule(10)\}
   $ITEM What percent of people in the sample talk about sports about once a week
-  or more? \{ans_rule(10)\}
+    or more? \{ans_rule(10)\}
 \{ EndList( "OL" ) \}
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($rel_every_day->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($rel_once_a_week->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($rel_occasionally->with(tolerance=>0.001, tolType=>"Absolute")->cmp);

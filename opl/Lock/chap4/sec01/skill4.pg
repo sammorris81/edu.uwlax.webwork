@@ -40,12 +40,10 @@ if($displayMode eq "TeX"){
   $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
-
-
-###########################
-## Initialization
-###########################
 
 @one_params = (
   "\( p \)",
@@ -152,10 +150,29 @@ $mc3 = PopUp(
   $correct3
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
+BEGIN_TEXT
+$PAR
+For the following questions, state whether the sets of hypotheses given are valid
+hypotheses.
+
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM $null1 $tab vs $tab $alt1 $tab \{ $mc1->menu() \}
+  $ITEM $null2 $tab vs $tab $alt2 $tab \{ $mc2->menu() \}
+  $ITEM $null3 $tab vs $tab $alt3 $tab \{ $mc3->menu() \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
+
 BEGIN_HINT
 $BBOLD Rules for writing down the hypotheses:$EBOLD $BR
 To check for whether or not hypotheses are valid, you want to check for a couple
@@ -177,26 +194,8 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-For the following questions, state whether the sets of hypotheses given are valid
-hypotheses.
-
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM $null1 $tab vs $tab $alt1 $tab \{ $mc1->menu() \}
-  $ITEM $null2 $tab vs $tab $alt2 $tab \{ $mc2->menu() \}
-  $ITEM $null3 $tab vs $tab $alt3 $tab \{ $mc3->menu() \}
-\{ EndList( "OL") \}
-
-END_TEXT
 ANS( $mc1->cmp() );
 ANS( $mc2->cmp() );
 ANS( $mc3->cmp() );
-
-
-###########################
-## Answer Section
-###########################
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

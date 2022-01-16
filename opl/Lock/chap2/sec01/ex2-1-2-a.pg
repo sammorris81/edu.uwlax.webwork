@@ -25,16 +25,24 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
-$showPartialCorrectAnswers = 1;
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = Real(169);
@@ -55,13 +63,19 @@ $p_rel = CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>1);
 $p_rel = Real($p_rel / $n);
 $p_female = CategoricalUWL::margintotal(data=>$cat1, level=>1, index=>2);
 $p_female = Real($p_female / $n);
-$p_male_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>2, index=>2);
+$p_male_rel = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>2, index=>2
+);
 $p_male_rel = Real($p_male_rel);
-$p_female_rel = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>2);
+$p_female_rel = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>1, index=>2
+);
 $p_female_rel = Real($p_female_rel);
 
 $p_diff = Real($p_female_rel - $p_male_rel);
-$p_rel_female = CategoricalUWL::marginalprop(data=>$cat1, row=>1, col=>1, index=>1);
+$p_rel_female = CategoricalUWL::marginalprop(
+  data=>$cat1, row=>1, col=>1, index=>1
+);
 $p_rel_female = Real($p_rel_female);
 
 $female_and_rel = CategoricalUWL::jointprop(data=>$cat1, row=>1, col=>1);
@@ -70,9 +84,15 @@ $female_and_rel = Real($female_and_rel);
 $single = CategoricalUWL::margintotal(data=>$cat1, level=>3, index=>1);
 $p_single_round = sprintf("%.4f", $single / $n);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
-${BBOLD}Notes Example:${EBOLD} ${BITALIC}Relationship status and Gender${EITALIC} $BR
+${BBOLD}Notes Example:${EBOLD} ${BITALIC}Relationship status and 
+Gender${EITALIC} $BR
 $n college students were asked about relationship status and gender. The results
 are summarized in the following table:
 $PAR
@@ -87,15 +107,20 @@ For a marginal proportion, we calculate the proportion of the people in the
 sample that are included in the group. For example, if we wanted to know what
 proportion of the people in the sample were single, we would take
 \[
-\displaystyle \frac{\text{Total single}}{\text{Total total}} = \frac{$single}{$n} =
-$p_single_round
+  \displaystyle \frac{\text{Total single}}{\text{Total total}} = 
+  \frac{$single}{$n} = $p_single_round
 \]
 \{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
-  $ITEM What proportion of students in this sample are in a relationship? \{ans_rule(10)\}
-  $ITEM What proportion of students in this sample are in a female? \{ans_rule(10)\}
+  $ITEM What proportion of students in this sample are in a relationship? 
+  \{ans_rule(10)\}
+  $ITEM What proportion of students in this sample are in a female? 
+  \{ans_rule(10)\}
 \{ EndList( "OL" ) \}
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($p_rel->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($p_female->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ENDDOCUMENT();

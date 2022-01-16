@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = 100;
@@ -106,10 +113,13 @@ $pvalue = QuantitativeUWL::random_pvalue(
 $pvalue = Real($pvalue);
 $nextreme = $pvalue / 2 * $N;
 
-$compare = $statistic > $nullval ? "as large or larger than" : "as small or smaller than";
+$compare = $statistic > $nullval ? 
+  "as large or larger than" : 
+  "as small or smaller than";
 
-$rejinterp = "We have statistically significant evicence that the students who ".
-             "smile have a different average leniency score than those who do not.";
+$rejinterp = "We have statistically significant evicence that the students ".
+             "who smile have a different average leniency score than those ".
+             "who do not.";
 
 $f2rinterp = "We do not have statistically significant evidence that the ".
              "students who smile have a different average leniency score than ".
@@ -119,7 +129,11 @@ $accinterp = "We have statistically significant evidence that the average ".
              "leniency score is the same for the students who smile and the ".
              "students who do not.";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)"
+);
 @interps     = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
@@ -168,17 +182,22 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-Can a simple smile have an effect on punishment assigned following an infraction?
-LeFrance and Hecht conducted a study examining the effect of a smile on the leniency
-of discplinary action for wrongdoers. Participants in the experiment took on the
-role of members of a college disciplinary panel judging students accused of cheating.
-For each suspect, along with a description of the offense, a picture was provided
-with either a smile or a neutral facial expression. A leniency score was calculated
-based on the displinary decisions made by the participants. The results from the study
-showed an average leniency score for smiles of $mean1 and an average leniency for
-no smiles of $mean2.
+Can a simple smile have an effect on punishment assigned following an 
+infraction? LeFrance and Hecht conducted a study examining the effect of a smile
+on the leniency of discplinary action for wrongdoers. Participants in the 
+experiment took on the role of members of a college disciplinary panel judging 
+students accused of cheating. For each suspect, along with a description of the 
+offense, a picture was provided with either a smile or a neutral facial 
+expression. A leniency score was calculated based on the displinary decisions 
+made by the participants. The results from the study showed an average leniency 
+score for smiles of $mean1 and an average leniency for no smiles of $mean2.
 $PAR
 Conduct a hypothesis test to see if smiling has an impact on leniency score.
 $PAR
@@ -193,31 +212,34 @@ $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
-  $ITEM What is the statistic from this sample (use smiles - nonsmiles)? Give your answer
-  to one decimal place. \{ ans_rule(10) \}
+  $ITEM What is the statistic from this sample (use smiles - nonsmiles)? Give 
+    your answer to one decimal place. \{ ans_rule(10) \}
   $PAR
-  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the p-value? Give your answer to four decimal places. 
+    \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \}
   $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \}
+  $ITEM Select the appropriate interpretation for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \}
   $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM If an error had been made on this test, what kind of error would it 
+    have been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

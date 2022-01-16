@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @options = (
@@ -147,11 +154,6 @@ if ($random1 == 1) {
   $right2 = "Sample C";
 }
 
-
-###########################
-## Initialization
-###########################
-
 $mc1 = PopUp(
  [@options],
  $right1,
@@ -163,38 +165,38 @@ $mc2 = PopUp(
 );
 
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, a situation is described for a statistical test and
 some hypothetical sample results are given. In each case, select the sample that
 gives the most signficant evidence for the claim.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM Testing to see if there is evidence that the population mean for mathematics
-  placement exam scores is $comparison1 25. $BR
-  $BCENTER
-   \{ image( insertGraph($dota), width=>300, height=>300, tex_size=>300) \}
-   \{ image( insertGraph($dotb), width=>300, height=>300, tex_size=>300) \}
-   \{ image( insertGraph($dotc), width=>300, height=>300, tex_size=>300) \}
-  $ECENTER
-  \{ $mc1->menu() \}
+  $ITEM Testing to see if there is evidence that the population mean for 
+    mathematics placement exam scores is $comparison1 25. $BR
+    $BCENTER
+      \{ image( insertGraph($dota), width=>300, height=>300, tex_size=>300) \}
+      \{ image( insertGraph($dotb), width=>300, height=>300, tex_size=>300) \}
+      \{ image( insertGraph($dotc), width=>300, height=>300, tex_size=>300) \}
+    $ECENTER
+    \{ $mc1->menu() \}
   $PAR
   $ITEM Testing to see if there is evidence that the proportion of US citizens
-  who can name the capital city of Canada is $comparison2 0.75 $PAR
-  $tab Sample A: $successes2a out of $n2 $BR
-  $tab Sample B: $successes2b out of $n2 $BR
-  $tab Sample C: $successes2c out of $n2 $PAR
-  \{ $mc2->menu() \}
+    who can name the capital city of Canada is $comparison2 0.75 $PAR
+    $tab Sample A: $successes2a out of $n2 $BR
+    $tab Sample B: $successes2b out of $n2 $BR
+    $tab Sample C: $successes2c out of $n2 $PAR
+    \{ $mc2->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mc1->cmp());
 ANS($mc2->cmp());
 

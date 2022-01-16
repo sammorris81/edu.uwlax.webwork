@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = 1000;
@@ -83,34 +90,12 @@ $pval3 = QuantitativeUWL::random_pvalue(
 $pval3 = Real($pval3);
 $count3 = $pval3 * $n;
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Calculating a p-value:$EBOLD $BR
-To find the p-value from a randomization distribution for a one-sided alternative
-hypothesis, we need to determine what proportion of the randomization distribution
-is as extreme of more extreme in the direction of the alternative hypothesis.
-Take a look at Example 4.13 in your textbook. In this example, we want to find the
-p-value for the hypotheses:
-\[
-H_0: p = 0.5\\
-H_a: p < 0.5
-\]
-and the sample statistic from this sample was \(\widehat{p} = 0.64\).
-To find the p-value for this hypothesis test, we need to determine what proportion
-of the randomization distribution is greater than or equal to 0.64. In Figure 4.7,
-we can see that out of the 10,000 simulated samples in the randomization distribution,
-1,145 were greater than 0.64. So the p-value for example 4.13 is
-\[
-\text{p-value} = \frac{1145}{10000} = 0.1145.
-\]
-END_HINT
-
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $BCENTER
   \{ image($hist, width=>300, height=>300, tex_size=>450) \}
@@ -118,8 +103,8 @@ $ECENTER
 $PAR
 The histogram above shows a randomization distribution based on $n simulated
 samples for testing \(H_0\): \(\mu = $mean\) vs \(H_a\): \(\mu > $mean\).
-Use the distribution to determine the p-value for the following observed sample mean.
-Give your answers to 4 decimal places.
+Use the distribution to determine the p-value for the following observed sample 
+mean. Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM In $count1 randomizations, the randomization distribution resulted in
   sample averages as large as or larger than $ts1. What is the p-value for
@@ -132,10 +117,37 @@ Give your answers to 4 decimal places.
   \(\overline{x} = $ts3\)? \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+
+BEGIN_HINT
+$BBOLD Calculating a p-value:$EBOLD $BR
+To find the p-value from a randomization distribution for a one-sided 
+alternative hypothesis, we need to determine what proportion of the 
+randomization distribution is as extreme of more extreme in the direction of the
+alternative hypothesis. Take a look at Example 4.13 in your textbook. In this 
+example, we want to find the p-value for the hypotheses:
+\[
+  H_0: p = 0.5\\
+  H_a: p < 0.5
+\]
+and the sample statistic from this sample was \(\widehat{p} = 0.64\).
+To find the p-value for this hypothesis test, we need to determine what 
+proportion of the randomization distribution is greater than or equal to 0.64. 
+In Figure 4.7, we can see that out of the 10,000 simulated samples in the 
+randomization distribution, 1,145 were greater than 0.64. So the p-value for 
+example 4.13 is
+\[
+  \text{p-value} = \frac{1145}{10000} = 0.1145.
+\]
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($pval1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pval2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($pval3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

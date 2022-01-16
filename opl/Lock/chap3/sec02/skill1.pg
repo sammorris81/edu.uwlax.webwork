@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $parama = "\( \mu \)";
@@ -57,10 +64,6 @@ $paramd = "\( p_1 - p_2 \)";
 $statd = "\( \widehat{p}_1 - \widehat{p}_2 \)";
 $centerd = random(0.05, 0.14, 0.01);
 $moed = random(0.04, 0.08, 0.01);
-
-###########################
-## Initialization
-###########################
 
 $random = random(1, 4, 1);
 
@@ -107,13 +110,12 @@ $upper1 = Real($center1 + $moe1);
 $lower2 = Real($center2 - $moe2);
 $upper2 = Real($center2 + $moe2);
 
-
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, construct an interval estimate for the given parameter
 using the given sample statistic and margin of error. Give your answer to 4 decimal places.
@@ -122,10 +124,10 @@ using the given sample statistic and margin of error. Give your answer to 4 deci
   $ITEM For $param2, using $stat2 = $center2 with margin of error $moe2. ( \{ ans_rule(10) \}, \{ ans_rule(10) \})
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

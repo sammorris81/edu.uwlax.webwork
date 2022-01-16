@@ -27,12 +27,22 @@ $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
-  $anssep = "";
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
-  $anssep = $BR;
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-$showPartialCorrectAnswers = 1;
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n1 = Real(5);
@@ -64,6 +74,11 @@ $med_2 = Real($med_2);
 $med_3 = Real($med_3);
 $med_4 = Real($med_4);
 
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
 
 BEGIN_TEXT
 ${BBOLD}Finding the median:${EBOLD}$BR
@@ -71,10 +86,10 @@ In statistics, we represent the center of a dataset often with one of two
 measures. One of these is the median. To find the median, we first sort the
 dataset. The median of a data set is
 \{BeginList("UL")\}
-$ITEM the middle entry of the list if there are an ${BITALIC}odd${EITALIC}
-number of observations
-$ITEM the average of the middle two values if there are an ${BITALIC}even${EITALIC}
-number of observations.
+  $ITEM the middle entry of the list if there are an ${BITALIC}odd${EITALIC}
+    number of observations
+  $ITEM the average of the middle two values if there are an 
+    ${BITALIC}even${EITALIC} number of observations.
 \{EndList("UL")\}
 Consider the dataset:
 $PAR
@@ -105,13 +120,11 @@ $PAR
   $PAR
   $ITEM \{join(", ", @x_4)\} \{ ans_rule(10) \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
 ###########################
 ## Answer Section
 ###########################
-
 ANS($med_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($med_4->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 

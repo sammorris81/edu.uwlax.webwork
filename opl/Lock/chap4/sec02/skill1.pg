@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $pval1a = random(0.0001, 0.2, 0.0001);
@@ -64,7 +71,10 @@ $correct2 = ($pval2a < $pval2b) ? $pval2a : $pval2b;
 $correct3 = ($pval3a < $pval3b) ? $pval3a : $pval3b;
 $correct4 = ($pval4a < $pval4b) ? $pval4a : $pval4b;
 
-@options1 = ("p-value = ".sprintf("%.4f", $pval1a), "p-value = ".sprintf("%.4f", $pval1b));
+@options1 = (
+  "p-value = ".sprintf("%.4f", $pval1a), 
+  "p-value = ".sprintf("%.4f", $pval1b)
+);
 $mc1 = RadioButtons(
   [@options1],
   "p-value = ".sprintf("%.4f", $correct1),
@@ -72,7 +82,10 @@ $mc1 = RadioButtons(
   separator => $tab,
 );
 
-@options2 = ("p-value = ".sprintf("%.4f", $pval2a), "p-value = ".sprintf("%.4f", $pval2b));
+@options2 = (
+  "p-value = ".sprintf("%.4f", $pval2a), 
+  "p-value = ".sprintf("%.4f", $pval2b)
+);
 $mc2 = RadioButtons(
   [@options2],
   "p-value = ".sprintf("%.4f", $correct2),
@@ -80,7 +93,10 @@ $mc2 = RadioButtons(
   separator => $tab,
 );
 
-@options3 = ("p-value = ".sprintf("%.4f", $pval3a), "p-value = ".sprintf("%.4f", $pval3b));
+@options3 = (
+  "p-value = ".sprintf("%.4f", $pval3a), 
+  "p-value = ".sprintf("%.4f", $pval3b)
+);
 $mc3 = RadioButtons(
   [@options3],
   "p-value = ".sprintf("%.4f", $correct3),
@@ -88,7 +104,10 @@ $mc3 = RadioButtons(
   separator => $tab,
 );
 
-@options4 = ("p-value = ".sprintf("%.4f", $pval4a), "p-value = ".sprintf("%.4f", $pval4b));
+@options4 = (
+  "p-value = ".sprintf("%.4f", $pval4a), 
+  "p-value = ".sprintf("%.4f", $pval4b)
+);
 $mc4 = RadioButtons(
   [@options4],
   "p-value = ".sprintf("%.4f", $correct4),
@@ -96,19 +115,12 @@ $mc4 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Determining strength of evidence against \(H_0\):$EBOLD $BR
-Take a look at the box titled ${BITALIC}The P-value${EITALIC} on p. 236 in your textbook
-to help determine which p-value gives the strongest evidence against \(H_0\)
-END_HINT
-
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 For the following questions, two p-values are given. Select the p-value which provides
@@ -120,10 +132,21 @@ the strongest evidence against \(H_0\).
   $ITEM \{ $mc4->buttons() \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+
+BEGIN_HINT
+$BBOLD Determining strength of evidence against \(H_0\):$EBOLD $BR
+Take a look at the box titled ${BITALIC}The P-value${EITALIC} on p. 236 in your textbook
+to help determine which p-value gives the strongest evidence against \(H_0\)
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mc1->cmp());
 ANS($mc2->cmp());
 ANS($mc3->cmp());

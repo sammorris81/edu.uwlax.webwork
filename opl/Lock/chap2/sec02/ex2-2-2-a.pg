@@ -27,12 +27,22 @@ $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
-  $anssep = "";
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
-  $anssep = $BR;
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-$showPartialCorrectAnswers = 1;
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 rserve_eval('x1 <- sample(1:30, 6)
@@ -56,6 +66,11 @@ $mean_2 = Real($mean_2);
 $mean_3 = Real($mean_3);
 $mean_4 = Real($mean_4);
 
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
 
 BEGIN_TEXT
 ${BBOLD}Finding an average:${EBOLD}$BR
@@ -82,13 +97,11 @@ $PAR
   $PAR
   $ITEM \{join(", ", @x_4)\} \{ ans_rule(10) \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mean_2->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($mean_3->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($mean_4->with(tolerance=>0.001, tolType=>"Absolute")->cmp);

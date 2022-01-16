@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $exercise_a = 'To estimate the proportion of Americans who support changing '.
               'the drinking age from 21 to 18, a random sample of 100 college '.
               'students are asked the question "Would you support a measure '.
@@ -150,12 +156,12 @@ $tp2 = PopUp(
   $true_population_2,
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 In the following exercises, a biased sampling situation is described. In each 
 case identify a) the sample, b) the desired population of interest, and c) the 

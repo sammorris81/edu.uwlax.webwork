@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $count1 = random(12, 14, 1);
@@ -94,17 +101,21 @@ $rejinterp = "We have statistically significant evidence to suggest that the " .
              "relief is higher than the proportion of patients on the placebo ".
              "who experience pain relief.";
 
-$f2rinterp = "We do not have statistically significant evidence to suggest that " .
-             "the proportion of patients receiving cannabis who experience pain ".
-             "relief is higher than the proportion of patients on the placebo ".
-             "who experience pain relief.";
+$f2rinterp = "We do not have statistically significant evidence to suggest ".
+             "that the proportion of patients receiving cannabis who ".
+             "experience pain relief is higher than the proportion of ".
+             "patients on the placebo who experience pain relief.";
 
 $accinterp = "We have statistically significant evidence that there is no ".
-             "difference in the proportion of patients receiving cannabis versus ".
-             "the placebo who experience pain relief.";
+             "difference in the proportion of patients receiving cannabis ".
+             "versus the placebo who experience pain relief.";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
-@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)"
+);
+@interps = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
 
@@ -152,57 +163,65 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 In 1980, the active ingredient in marijuana was shown to outperform a placebo in
-reducing nausea in chemotherapy. Many studies are now underway to see if the drug
-has additional medicinal uses. In one controlled, randomized trail, $ntotal patients
-with HIV were randomly assigned to two groups, with one group getting cannabis
-(marijuana) and the other getting a placebo. All of the patients had severe neuropathic
-pain, and the response variable is whether or not pain was reduced by 30$PERCENT or
-more (a standard benchmark in pain measurement). The results from this study suggest that
-$count1 of the $n1 patients assigned to marijuana showed improvement and $count2 of
-the $n2 patients assigned to the placebo showed improvement.
+reducing nausea in chemotherapy. Many studies are now underway to see if the 
+drug has additional medicinal uses. In one controlled, randomized trail, $ntotal
+patients with HIV were randomly assigned to two groups, with one group getting 
+cannabis (marijuana) and the other getting a placebo. All of the patients had 
+severe neuropathic pain, and the response variable is whether or not pain was 
+reduced by 30$PERCENT or more (a standard benchmark in pain measurement). The 
+results from this study suggest that $count1 of the $n1 patients assigned to 
+marijuana showed improvement and $count2 of the $n2 patients assigned to the 
+placebo showed improvement.
 $PAR
-Conduct a hypothesis test to see if marijuana is more effective than a placebo in
-relieving pain.
+Conduct a hypothesis test to see if marijuana is more effective than a placebo 
+in relieving pain.
 $PAR
-The histogram of randomization distribution is given below.
-In $nextreme randomizations (out of $N) the randomization distribution resulted
-in values as large or larger than the statistic for this data.
+The histogram of randomization distribution is given below. In $nextreme 
+randomizations (out of $N) the randomization distribution resulted in values as 
+large or larger than the statistic for this data.
 $PAR
 $BCENTER
-\{ image($histrandom, width=>300,height=>300,tex_size=>500 )
-\}
+\{ image($histrandom, width=>300,height=>300,tex_size=>500 ) \}
 $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the statistic from this sample (canabis - placebo)? Give your
-  answer to four decimal places. \{ ans_rule(10) \}
+    answer to four decimal places. \{ ans_rule(10) \}
   $PAR
-  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the p-value? Give your answer to four decimal places. 
+    \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \}
   $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \}
+  $ITEM Select the appropriate interpretation for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \}
   $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM If an error had been made on this test, what kind of error would it have
+    been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

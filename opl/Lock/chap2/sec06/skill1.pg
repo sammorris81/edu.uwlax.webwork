@@ -30,17 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $b0a = random(24, 26, 0.01);
 $b1a = random(2.5, 3, 0.01);
 $xa = random(10, 15, 1);
@@ -65,12 +69,12 @@ $resc = sprintf("%.1f", usefulstatUWL::rnorm(0, 5));
 $obsc = sprintf("%.0f", $yhatc + $resc);
 $resc = Real($obsc - $yhatc);
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 1;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 $PAR
 In each of the following questions, two variables are defined, a regression 
@@ -113,6 +117,7 @@ END_TEXT
 ## Hint for display
 ###########################
 $showHint = 3;
+
 BEGIN_HINT
 At the beginning of section 2.6, the textbook introduces a dataset that has data
 about the bills and tips from a bistro in New York. Two of the variables in the

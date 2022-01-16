@@ -30,18 +30,20 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
-# $histran = random(1, 4, 1);
+Context("Numeric");
 
 @means = (85, 300);
 @mean_ses = (20, 5); 
@@ -173,6 +175,7 @@ $question_prop_c = PopUp(
 ###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 Histograms A and B represent two different sampling distributions. Several 
 possible values are given for a sample statistic. In each case, rank the sample 
@@ -209,6 +212,7 @@ END_TEXT
 ## Hint for display
 ###########################
 $showHint = 3;
+
 BEGIN_HINT
 ${BBOLD}Using a histogram to determine how likely a statistic is:${EBOLD}$BR
 If you want to determine how likely a statistic is by looking at a histogram

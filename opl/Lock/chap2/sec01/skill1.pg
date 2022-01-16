@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $n1_a = random(165, 175, 1);
 $n2_a = random(190, 210, 1);
 $random_a = random(0, 1, 1);
@@ -114,20 +120,21 @@ $exercise_d = "The math SAT score is $sat_compare than the verbal SAT score ".
 
 ($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-The following exercises provide information about data in a survey given to students.
-Find the sample proportion \( \widehat{p} \) requested. Give your answer to 4 decimal places.
+The following exercises provide information about data in a survey given to 
+students. Find the sample proportion \( \widehat{p} \) requested. Give your 
+answer to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM $exercises[$random_1] $BR
-  \{ ans_rule(10) \}
+    \{ ans_rule(10) \}
   $ITEM $exercises[$random_2] $BR
-  \{ ans_rule(10) \}
+    \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
 

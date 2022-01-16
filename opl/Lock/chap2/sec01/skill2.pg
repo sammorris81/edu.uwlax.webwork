@@ -29,16 +29,21 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
 
 @options = (
   'Sample proportion',
@@ -46,7 +51,7 @@ Context("Numeric");
 );
 
 $exercise_a = "In the 2010 US Census, we see that 37,342,870 people (or ".
-              "12.4$PERCENT) of all residents, are foreign-born.";
+              '12.4'.$PERCENT.') of all residents, are foreign-born."';
 $correct_a = $options[1];
 
 $exercise_b = 'A recent headline states that "73'.$PERCENT.' say Woman '.
@@ -56,14 +61,14 @@ $exercise_b = 'A recent headline states that "73'.$PERCENT.' say Woman '.
 $correct_b = $options[0];
 
 $exercise_c = "A survey conducted of 1502 randomly selected US adults found ".
-              "that 62.0$PERCENT of them believed the government does not ".
+              'that 62.0'.$PERCENT.' of them believed the government does not '.
               "provide enough support for soldiers returning from Iraq or ".
               "Afghanistan.";
 $correct_c = $options[0];
 
 $exercise_d = "Of all 2,220,087 members of the high school class of 2019 who ".
-              "took the SAT, 554,665 (or 25$PERCENT) reported their race as ".
-              "Hispanic/Latino.";
+              "took the SAT, 554,665 (or 25".$PERCENT.") reported their race ".
+              "as Hispanic/Latino.";
 $correct_d = $options[1];
 
 $exercise_e = 'A recent headline states that "45'.$PERCENT.' Think Children '.
@@ -73,8 +78,8 @@ $exercise_e = 'A recent headline states that "45'.$PERCENT.' Think Children '.
 $correct_e = $options[0];
 
 $exercise_f = "A survey conducted of 1060 randomly selected US teens aged ".
-              "13 to 17 found that 605 (or 57%PERCENT) of them say they have ".
-              "made a new friend online.";
+              "13 to 17 found that 605 (or 57".$PERCENT.") of them say they ".
+              "have made a new friend online.";
 $correct_f = $options[0];
 
 # Arrays for the question options to make it easy to randomize
@@ -109,12 +114,12 @@ $multiple_choice_2 = PopUp(
   $correct_ans[$random_2],
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 In each of the following questions, identify if the proportion given is a sample
 proportion or a population proportion.

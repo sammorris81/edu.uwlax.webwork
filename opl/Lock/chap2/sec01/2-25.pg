@@ -29,11 +29,20 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = random(660, 700, 1);
@@ -72,16 +81,22 @@ $succ_giv_nonsmoker = CategoricalUWL::marginalprop(
 );
 $propdiff = Real($succ_giv_nonsmoker - $succ_giv_smoker);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-Studies have concluded that smoking while pregnant can have negative consequences,
-but could smoking also negatively affect the ability to become pregnant? A study
-collected data on $n women who had gone off birth control with the intention of
-becoming pregnant (Baird, D. and Wilcox A., "Cigarette Smoking Associated with
-Delayed Conception,"$BITALIC Journal of the American Medical Association$EITALIC,
-June 2011; 305(23): 2379 - 2484). Smokers were defined as those who smoked at least
-one cigarette a day prior to pregnancy. We are interested in the pregnancy rate
-during the first cycle off birth control. The results are summarized in the following table:
+Studies have concluded that smoking while pregnant can have negative 
+consequences, but could smoking also negatively affect the ability to become 
+pregnant? A study collected data on $n women who had gone off birth control with
+the intention of becoming pregnant (Baird, D. and Wilcox A., "Cigarette Smoking
+Associated with Delayed Conception,"$BITALIC Journal of the American Medical 
+Association$EITALIC, June 2011; 305(23): 2379 - 2484). Smokers were defined as 
+those who smoked at least one cigarette a day prior to pregnancy. We are 
+interested in the pregnancy rate during the first cycle off birth control. The 
+results are summarized in the following table:
 $PAR
 \{ CategoricalUWL::freqtable(data=>$cat1) \}
 $PAR
@@ -91,17 +106,14 @@ For each of the following questions, give your answer to 4 decimal places.
   cycle \( \left( \widehat{p} \right) \)? \{ ans_rule(10) \}
   $PAR
   $ITEM What is the difference in proportion of success between non-smokers and
-  smokers \( \left( \widehat{p}_{ns} - \widehat{p}_{s} \right) \) ? \{ ans_rule(10) \}
+  smokers \( \left( \widehat{p}_{ns} - \widehat{p}_{s} \right) \) ? 
+  \{ ans_rule(10) \}
 \{ EndList( "OL" ) \}
 END_TEXT
 
-##############################################################
-#
-#  Answers
-#
-#
-
-
+###########################
+## Answer Section
+###########################
 ANS($propsuccess->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($propdiff->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 

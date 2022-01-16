@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 $quant = new DataGenUWL(
   datatype => 'single_quant',
   n => random(5, 9, 2),
@@ -52,14 +58,15 @@ $quant = new DataGenUWL(
 $mean = Real(usefulstatUWL::mean(@x));
 $med = Real(usefulstatUWL::med(@x));
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-For the following dataset, give the mean and median. Give your answer to 4 decimal places.
+For the following dataset, give the mean and median. Give your answer to 4 
+decimal places.
 $PAR
 \{ join(", ", @{$quant->{x}}) \}
 $PAR

@@ -30,14 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
-# Show which answers are correct and which ones are incorrect
-$showPartialCorrectAnswers = 1;
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $N = 1000;
@@ -113,65 +118,71 @@ $idhist = PopUp(
 
 $interpret = new_checkbox_multiple_choice();
 $interpret -> qa (
-  "Select $BITALIC each $EITALIC correct interpretation of the confidence interval ".
-  "in the prompt",
+  "Select $BITALIC each $EITALIC correct interpretation of the confidence ".
+  "interval in the prompt",
   "If the sampling were repeated many times, you would expect that 95$PERCENT ".
-  "of the resulting confidence intervals to contain the average pulse rate of all ".
-  "students at her college.",
-  "She is 95$PERCENT confident that the average pulse rate for all students at her ".
-  "college is between $lower and $upper.",
+  "of the resulting confidence intervals to contain the average pulse rate of ".
+  "all students at her college.",
+  "She is 95$PERCENT confident that the average pulse rate for all students ".
+  "at her college is between $lower and $upper.",
 );
 $interpret -> extra(
-  "95$PERCENT of all students at her college have a pulse rate ". sprintf("%.2f", $lower) ." to ".
+  "95$PERCENT of all students at her college have a pulse rate ". 
+  sprintf("%.2f", $lower) ." to ".
   sprintf("%.2f", $upper) . ", and the rest have higher or lower pulse rates.",
-  "If the sampling were repeated many times, you would expect 95$PERCENT of the ".
-  "resulting samples to have a sample average that falls in the interval from ".
-  "$lower to $upper.",
-  "She is 95$PERCENT confident that the average pulse rate of students in the sample ".
-  "is between $lower and $upper.",
-  "She is 95$PERCENT confident that the average pulse rate for all US college " .
+  "If the sampling were repeated many times, you would expect 95$PERCENT of ".
+  "the resulting samples to have a sample average that falls in the interval ".
+  "from $lower to $upper.",
+  "She is 95$PERCENT confident that the average pulse rate of students in the ".
+  "sample is between $lower and $upper.",
+  "She is 95$PERCENT confident that the average pulse rate for all US college ".
   "students is between $lower and $upper.",
-  "95$PERCENT of the time, all students at her college will have a pulse rate between ".
-  "$lower and $upper.",
+  "95$PERCENT of the time, all students at her college will have a pulse rate ".
+  "between $lower and $upper.",
 );
 $interpret -> makeLast("None of the above");
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-Context()->texStrings;
-BEGIN_TEXT
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
 $BBOLD Confidence interval for averages: $EBOLD
 $BR
-Suppose that a student is working on a statistics project using data on pulse rates
-collected from a random sample of $n students from her college. From her sample, she
-finds the 95$PERCENT confidence interval is ($lower, $upper).
+Suppose that a student is working on a statistics project using data on pulse 
+rates collected from a random sample of $n students from her college. From her 
+sample, she finds the 95$PERCENT confidence interval is ($lower, $upper).
 Give your answers to 2 decimal places.
 \{ BeginList( "OL", type=>"a") \}
-  $ITEM What is the average pulse rate for this sample of students? \{ ans_rule(10) \}
+  $ITEM What is the average pulse rate for this sample of students? 
+    \{ ans_rule(10) \}
   $ITEM What is the standard error for this statistic? \{ ans_rule(10) \}
-  $ITEM Which of the two following histograms most accurately represents the sampling
-  distribution for this average? \{ $idhist->menu() \}
+  $ITEM Which of the two following histograms most accurately represents the 
+    sampling distribution for this average? \{ $idhist->menu() \}
   \{
-  BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
-  AlignedRow([
-      image( $disp1, width=>$width, height=>$height, tex_size=>"400" ),
-      image( $disp2, width=>$width, height=>$height, tex_size=>"400" )
+    BeginTable(border=>1, tex_border=>"1pt", spacing=>0, padding=>4, center=>1).
+    AlignedRow(
+      [
+        image($disp1, width=>$width, height=>$height, tex_size=>"400"),
+        image($disp2, width=>$width, height=>$height, tex_size=>"400")
       ],
       align=>"LEFT", valign=>"TOP", separation=>0
-      ).
-  EndTable()
+    ).
+    EndTable()
   \}
   $anssep
-  $ITEM \{ $interpret -> print_q() \}
-  \{ $interpret -> print_a() \}
+  $ITEM \{ $interpret -> print_q() \} \{ $interpret -> print_a() \}
 \{ EndList( "OL" ) \}
 END_TEXT
 
-ANS( $mean -> with(tolerance=>0.1, tolType=>"Absolute")->cmp );
-ANS( $se -> with(tolerance=>0.1, tolType=>"Absolute")->cmp );
-ANS( $idhist -> cmp() );
-ANS( checkbox_cmp( $interpret->correct_ans() ) );
+###########################
+## Answer Section
+###########################
+ANS($mean->with(tolerance=>0.1, tolType=>"Absolute")->cmp);
+ANS($se->with(tolerance=>0.1, tolType=>"Absolute")->cmp);
+ANS($idhist->cmp());
+ANS(checkbox_cmp($interpret->correct_ans()));
 
 ENDDOCUMENT();

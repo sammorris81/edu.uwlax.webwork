@@ -27,12 +27,22 @@ $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
 
 if($displayMode eq "TeX"){
-  $anssep = "";
+  $anssep = "\( \\ \noindent \)";
+  $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
-  $anssep = $BR;
+  $extrasep = $PAR;
+  $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-$showPartialCorrectAnswers = 0;
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = random(6, 8, 2);
@@ -63,32 +73,35 @@ $mc = PopUp(
     "Mean"
 );
 
-
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
 
 BEGIN_TEXT
-The number of grams of fiber eaten in one day for a sample of \{ $n + 1 \} people
-are $PAR
+The number of grams of fiber eaten in one day for a sample of \{ $n + 1 \} 
+people are $PAR
 $BCENTER
 \{ join(", ", @x) \}
 $ECENTER
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM Find the mean and the median for these data. Give your answers to 4 decimal
-  places. $BR
-  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+  $ITEM Find the mean and the median for these data. Give your answers to 4 
+    decimal places. $BR
+    Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
   $PAR
   $ITEM The value of $outlier appears to be an obvious outlier. Compute the mean
-  and median for the $n numbers with the outlier excluded. $BR
-  Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
+    and median for the $n numbers with the outlier excluded. $BR
+    Mean: \{ ans_rule(10) \} Median: \{ ans_rule(10) \}
   $PAR
-  $ITEM Which of the summary statistics does the outlier impact the most? \{ $mc->menu() \}
+  $ITEM Which of the summary statistics does the outlier impact the most? 
+    \{ $mc->menu() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mean_out->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($med_out->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($mean_noout->with(tolerance=>0.001, tolType=>"Absolute")->cmp);

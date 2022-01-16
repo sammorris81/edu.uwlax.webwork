@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $count1 = random(350, 400, 1);
@@ -88,7 +95,9 @@ $pvalue = QuantitativeUWL::random_pvalue(
   alternative => $type,
 );
 
-$compare = $statistic > $nullval ? "as large or larger than" : "as small or smaller than";
+$compare = $statistic > $nullval ? 
+  "as large or larger than" : 
+  "as small or smaller than";
 
 $rejinterp = "We have statistically significant evidence that the proportion ".
              "of males who view divorce as ${LQ}morally acceptable${RQ} is ".
@@ -102,7 +111,10 @@ $accinterp = "We have statistically significant evidence that there is no ".
              "difference in the proportion of males versus females who view ".
              "divorce as ${LQ}morally acceptible${RQ}";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)");
 @interps     = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
@@ -154,51 +166,59 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-Do women and men have different views on divorce? A May 2010 Gallup poll of US citizens
-over the age of 18 asked participants if they view divorce as "morally acceptable."
-$count1 out of $n1 of the men and $count2 out of $n2 of the women in the sample
-responded yes. Does this indicate a significant difference between men and women
-in how they view divorce?
+Do women and men have different views on divorce? A May 2010 Gallup poll of US 
+citizens over the age of 18 asked participants if they view divorce as 
+"morally acceptable." $count1 out of $n1 of the men and $count2 out of $n2 of 
+the women in the sample responded yes. Does this indicate a significant 
+difference between men and women in how they view divorce?
 $PAR
-Use the information about the randomization distribution below to answer the following
-questions about the hypothesis test we could use to test this question.
+Use the information about the randomization distribution below to answer the 
+following questions about the hypothesis test we could use to test this 
+question.
 $PAR
-The histogram of randomization distribution is given below.
-In $nextreme randomizations (out of $N) the randomization distribution resulted
-in values $compare the statistic for this data.
+The histogram of randomization distribution is given below. In $nextreme 
+randomizations (out of $N) the randomization distribution resulted in values 
+$compare the statistic for this data.
 $PAR
 $BCENTER
-\{ image( $histrandom , width=>300,height=>300,tex_size=>500 )
-\}
+\{ image( $histrandom , width=>300,height=>300,tex_size=>500 ) \}
 $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the statistic from this sample (use males - females)? Give your
-  answer to four decimal places. \{ ans_rule(10) \}
+    answer to four decimal places. \{ ans_rule(10) \}
   $PAR
-  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the p-value? Give your answer to four decimal places.
+    \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \} $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \} $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it 
+    have been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

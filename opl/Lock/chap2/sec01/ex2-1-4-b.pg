@@ -26,16 +26,24 @@ loadMacros("uwlLoadWWMacros.pl",
 TEXT(beginproblem());
 $refreshCachedImages=0;
 $submission = $inputs_ref->{previewAnswers};
-$showPartialCorrectAnswers = 1;
 
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = Real(2000);
@@ -62,7 +70,12 @@ $once_min = Real($rel_once_a_week_round + $rel_occasionally_round +
 $once_plus = Real($rel_once_a_week + $rel_every_day);
 $rare_min  = Real($rel_rarely + $rel_never);
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 ${BBOLD}Notes Example:${EBOLD} ${BITALIC}Talking about sports${EITALIC} $BR
 A survey in November 2012 asked a random sample of 2,000 US adults ${LQ}How
@@ -82,15 +95,15 @@ $BCENTER
   ],
   caption => 'Survey results',
   align => 'l c c'
-);\}
+); \}
 $ECENTER
 $PAR
 For each of the following questions, give your answer to 4 decimal places.
 $PAR
 To find the proportion of people that are accounted for by more than one group,
-add up all the people in each of the groups and divide by the total. For example,
-the percent of people in the sample who talk about sports about once a week or
-less is given by
+add up all the people in each of the groups and divide by the total. For 
+example, the percent of people in the sample who talk about sports about once a
+week or less is given by
 \[
   \displaystyle \frac{$once_a_week + $occasionally + $rarely + $never}{$n} =
   $once_min
@@ -98,10 +111,13 @@ less is given by
 \{ BeginList( "OL", type=>"a", itemsep=>1 ) \}
   $ITEM What proportion rarely or never talk about sports? \{ans_rule(10)\}
   $ITEM What percent of people in the sample talk about sports about once a week
-  or more? \{ans_rule(10)\}
+    or more? \{ans_rule(10)\}
 \{ EndList( "OL" ) \}
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($rare_min->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 ANS($once_plus->with(tolerance=>0.001, tolType=>"Absolute")->cmp);
 

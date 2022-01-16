@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = 8;
@@ -79,16 +86,22 @@ $pvalue = QuantitativeUWL::random_pvalue(
   alternative => $type,
 );
 
-$rejinterp = "We have statistically significant evidence that the proportion of ".
-             "times Paul was correct is higher than if he was just guessing.";
+$rejinterp = "We have statistically significant evidence that the proportion ".
+             "of times Paul was correct is higher than if he was just ".
+             "guessing.";
 $f2rinterp = "We do not have statistically significant evidence that the ".
              "proportion of times Paul was correct is higher than if he was ".
              "just guessing.";
-$accinterp = "We have statistically significant evidence that the proportion of ".
-             "times Paul was correct is the same as if he was just guessing.";
+$accinterp = "We have statistically significant evidence that the proportion ".
+             "of times Paul was correct is the same as if he was just ".
+             "guessing.";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
-@interps     = ($rejinterp, $f2rinterp, $accinterp);
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)"
+);
+@interps = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
 
@@ -139,50 +152,54 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
-BEGIN_TEXT
-
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
 
 In the 2010 World Cup, Paul the Octopus (in a German aquarium) became famous for
-being correct in all eight of the predictions it made, including predicting Spain
-over Germany in a semifinal match. Before each game, two containers of food (mussels)
-were lowered into the octopus's tank. The containers were identical, except for
-country flags of the opposing teams, one on each container. Whichever container Paul
-opened was deemed his predicted winner. Does Paul have psychic powers? In other words,
-is an 8-for-8 record significantly better than just guessing?
+being correct in all eight of the predictions it made, including predicting 
+Spain over Germany in a semifinal match. Before each game, two containers of 
+food (mussels) were lowered into the tank. The containers were identical, except 
+for country flags of the opposing teams, one on each container. Whichever 
+container Paul opened was deemed his predicted winner. Does Paul have psychic 
+powers? In other words, is an 8-for-8 record significantly  better than just guessing?
 $PAR
-Use the information about the randomization distribution below to answer the following
-questions about the hypothesis test we could use to test this question.
+Use the information about the randomization distribution below to answer the 
+following questions about the hypothesis test we could use to test this 
+question.
 $PAR
-The histogram of randomization distribution is given below.
-In $nextreme randomizations (out of $N) the randomization distribution resulted
-in values as large or larger than the statistic for this data.
+The histogram of randomization distribution is given below. In $nextreme 
+randomizations (out of $N) the randomization distribution resulted in values as 
+large or larger than the statistic for this data.
 $PAR
 $BCENTER
-\{ image($histrandom, width=>300,height=>300,tex_size=>500 )
-\}
+\{ image($histrandom, width=>300,height=>300,tex_size=>500) \}
 $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
-  $ITEM What is the statistic from this sample? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the statistic from this sample? Give your answer to four decimal 
+    places. \{ ans_rule(10) \}
   $PAR
-  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the p-value? Give your answer to four decimal places. 
+    \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \} $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \} $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \} $PAR
+  $ITEM Select the appropriate interpretation for this hypothesis test (use
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \} $PAR
+  $ITEM If an error had been made on this test, what kind of error would it have 
+    been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
 
 END_TEXT

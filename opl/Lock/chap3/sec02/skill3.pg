@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @params = ( # choices
@@ -44,7 +51,6 @@ Context("Numeric");
   " iii. \( p_1 - p_2 \)",
   " iv. \( \mu_1 - \mu_2 \)",
 );
-
 
 $parama = " ii. \( \mu \)";
 $stata = "\( \overline{x} \)";
@@ -70,9 +76,6 @@ $centerd = random(0.05, 0.14, 0.01);
 $moed = random(0.02, 0.14, 0.02);
 $sed = $moed / 2;
 
-###########################
-## Initialization
-###########################
 $random = random(1, 4, 1);
 
 if ($random == 1) {
@@ -142,12 +145,12 @@ $mc2 = RadioButtons(
   separator => $tab,
 );
 
+###########################
+## Question for display
+###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 For the following questions, information about a sample is given. Assuming the
 sampling distribution is symmetric and bell-shaped, use the information to give
@@ -170,17 +173,15 @@ a 95$PERCENT confidence interval, and indicate the parameter being estimated.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($lower1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc2->cmp());
-
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

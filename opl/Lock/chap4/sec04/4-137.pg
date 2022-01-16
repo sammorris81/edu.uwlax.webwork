@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $obama = random(500, 530, 1);
@@ -85,17 +92,21 @@ $pvalue = QuantitativeUWL::random_pvalue(
 $pvalue = Real($pvalue);
 $nextreme = $pvalue * $N;
 
-$rejinterp = "We have statistically significant evidence to suggest that Obama ".
-             "has the majority of the popular vote.";
-
-$f2rinterp = "We do not have statistically significant evidence to suggest that ".
+$rejinterp = "We have statistically significant evidence to suggest that ".
              "Obama has the majority of the popular vote.";
 
-$accinterp = "We have statistically significant evidence to suggest that Obama ".
-             "does not have the majority of the popular vote.";
+$f2rinterp = "We do not have statistically significant evidence to suggest ".
+             "that Obama has the majority of the popular vote.";
 
-@dec_options = (" Reject \(H_0\)", " Fail to reject \(H_0\)", " Accept \(H_0\)");
-@interps     = ($rejinterp, $f2rinterp, $accinterp);
+$accinterp = "We have statistically significant evidence to suggest that ".
+             "Obama does not have the majority of the popular vote.";
+
+@dec_options = (
+  " Reject \(H_0\)", 
+  " Fail to reject \(H_0\)", 
+  " Accept \(H_0\)"
+);
+@interps = ($rejinterp, $f2rinterp, $accinterp);
 @order = NchooseK(3, 3);
 @interps = @interps[@order];
 
@@ -143,18 +154,25 @@ $errortype = RadioButtons(
   separator => $tab,
 );
 
-Context()->texStrings;
+###########################
+## Question for display
+###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
-In October before the 2008 US presidential election, $BITALIC ABC News $EITALIC and the
-$BITALIC Washington Post $EITALIC jointly conducted a poll of a random national sample
-and asked people who they intend to vote for in the 2008 presidential election. Of the
-$n sampled people who answered either Barack Obama or John McCain, $count1 people
-indicated that they would vote for Obama while \{ $n - $count1 \} people indicated
-that they would vote for McCain. While we now know the outcome of the election, at the
-time of the poll many people were very curious as to whether this significantly predicts
-a winner for the election.
+In October before the 2008 US presidential election, $BITALIC ABC News $EITALIC 
+and the $BITALIC Washington Post $EITALIC jointly conducted a poll of a random
+national sample and asked people who they intend to vote for in the 2008 
+presidential election. Of the $n sampled people who answered either Barack Obama
+or John McCain, $count1 people indicated that they would vote for Obama while 
+\{ $n - $count1 \} people indicated that they would vote for McCain. While we 
+now know the outcome of the election, at the time of the poll many people were 
+very curious as to whether this significantly predicts a winner for the 
+election.
 $PAR
-Conduct a hypothesis test to see if Obama has the support of the majority of the popular vote.
+Conduct a hypothesis test to see if Obama has the support of the majority of the 
+popular vote.
 $PAR
 The histogram of randomization distribution is given below.
 In $nextreme randomizations (out of $N) the randomization distribution resulted
@@ -167,31 +185,34 @@ $ECENTER
 $PAR
 \{ BeginList( "OL", type=>"a") \}
   $ITEM What is the correct null hypothesis for this test? $BR
-  \{ $nullhyp -> buttons( separator => "" ) \}
+    \{ $nullhyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the correct alternative hypothesis for this test? $BR
-  \{ $althyp -> buttons( separator => "" ) \}
+    \{ $althyp -> buttons( separator => "" ) \}
   $PAR
   $ITEM What is the statistic from this sample? Give your answer to four decimal
-  places. \{ ans_rule(10) \}
+    places. \{ ans_rule(10) \}
   $PAR
-  $ITEM What is the p-value? Give your answer to four decimal places. \{ ans_rule(10) \}
+  $ITEM What is the p-value? Give your answer to four decimal places. 
+    \{ ans_rule(10) \}
   $PAR
-  $ITEM Select the appropriate decision for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcdec -> buttons() \}
+  $ITEM Select the appropriate decision for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcdec -> buttons() \}
   $PAR
-  $ITEM Select the appropriate interpretation for this hypothesis test
-  (use \(\alpha = 0.05\)). $BR
-  \{ $mcinterp -> buttons() \}
+  $ITEM Select the appropriate interpretation for this hypothesis test (use 
+    \(\alpha = 0.05\)). $BR
+    \{ $mcinterp -> buttons() \}
   $PAR
-  $ITEM If an error had been made on this test, what kind of error would it have been?
-  $BR
-  \{ $errortype -> buttons() \}
+  $ITEM If an error had been made on this test, what kind of error would it have 
+    been? $BR
+    \{ $errortype -> buttons() \}
 \{ EndList( "OL" ) \}
-
 END_TEXT
 
+###########################
+## Answer Section
+###########################
 ANS($nullhyp->cmp());
 ANS($althyp->cmp());
 ANS($statistic->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

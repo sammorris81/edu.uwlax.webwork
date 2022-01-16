@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $random = random(1, 2, 1);
@@ -86,21 +93,17 @@ $mc3 = PopUp(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-In estimating the mean score on a fitness exam, we use an original sample of size
-\( n = 30 \) and a bootstrap distribution containing 5000 bootstrap samples to
-obtain a 95$PERCENT confidence interval of 67 to 73. If all else stays the same, which of
-the following confidence intervals (A, B, or C) is the most likely result after
-the change:
+In estimating the mean score on a fitness exam, we use an original sample of 
+size \( n = 30 \) and a bootstrap distribution containing 5000 bootstrap samples
+to obtain a 95$PERCENT confidence interval of 67 to 73. If all else stays the 
+same, which of the following confidence intervals (A, B, or C) is the most 
+likely result after the change:
 $PAR
 $BCENTER
   A. 66 to 74 $tab $tab B. 67 to 73 $tab $tab C. 67.5 to 72.5
@@ -111,13 +114,12 @@ $ECENTER
   $ITEM $text3 \{ $mc3->menu() \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mc1->cmp());
 ANS($mc2->cmp());
 ANS($mc3->cmp());
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

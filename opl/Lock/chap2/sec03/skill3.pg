@@ -29,16 +29,22 @@ $submission = $inputs_ref->{previewAnswers};
 if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
+  $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
+  $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @skew_descriptions = (
   "?", 
   "Left-skewed", 
@@ -98,12 +104,12 @@ $skew_description_2 = PopUp(
   $correct_skew_2,
 );
 
-Context()->normalStrings;
-$showPartialCorrectAnswers = 0;
-
 ###########################
 ## Question for display
 ###########################
+Context()->normalStrings;
+$showPartialCorrectAnswers = 0;
+
 BEGIN_TEXT
 For these questions, indicate whether the five-number summary corresponds most
 likely to a distribution that is skewed to the left, approximately symmetric, or
@@ -121,6 +127,7 @@ END_TEXT
 ## Hint for display
 ###########################
 $showHint = 3;
+
 BEGIN_HINT
 ${BBOLD}Determining the shape of a distribution from a five-number 
 summary${EBOLD} $BR

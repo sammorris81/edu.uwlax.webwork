@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n = random(1000, 4000, 500);
@@ -51,20 +58,16 @@ $chopn3 = Real((1 - $conf3 / 100) / 2);
 $chopn4 = Real((1 - $conf4 / 100) / 2);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 To create a confidence interval from a bootstrap distribution using percentiles,
-we keep the middle values and chop off a certain proportion from each tail. Indicate
-what proportion of values must be chopped off from each tail for each confidence level
-given. Give your answers to 3 decimal places.
+we keep the middle values and chop off a certain proportion from each tail. 
+Indicate what proportion of values must be chopped off from each tail for each
+confidence level given. Give your answers to 3 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM $conf1$PERCENT confidence: \{ ans_rule(10) \}
   $ITEM $conf2$PERCENT confidence: \{ ans_rule(10) \}
@@ -72,10 +75,10 @@ given. Give your answers to 3 decimal places.
   $ITEM $conf4$PERCENT confidence: \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($chopn1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($chopn2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($chopn3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
