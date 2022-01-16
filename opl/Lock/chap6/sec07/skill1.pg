@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $p1a = random(0.05, 0.35, 0.02);
@@ -65,19 +72,31 @@ $se3 = Real(sqrt($p3a * (1 - $p3a) / $n3a + $p3b * (1 - $p3b) / $n3b));
   ' ii. No',
 );
 
-if (($n1a * $p1a >= 10) && ($n1a * (1 - $p1a) >= 10) && ($n1b * $p1b >= 10) && ($n1b * (1 - $p1b) >= 10)) {
+if (
+  ($n1a * $p1a >= 10) && 
+  ($n1a * (1 - $p1a) >= 10) && 
+  ($n1b * $p1b >= 10) && 
+  ($n1b * (1 - $p1b) >= 10)) {
   $correct1 = ' i. Yes';
 } else {
   $correct1 = ' ii. No';
 }
 
-if (($n2a * $p2a >= 10) && ($n2a * (1 - $p2a) >= 10) && ($n2b * $p2b >= 10) && ($n2b * (1 - $p2b) >= 10)) {
+if (
+  ($n2a * $p2a >= 10) && 
+  ($n2a * (1 - $p2a) >= 10) && 
+  ($n2b * $p2b >= 10) && 
+  ($n2b * (1 - $p2b) >= 10)) {
   $correct2 = ' i. Yes';
 } else {
   $correct2 = ' ii. No';
 }
 
-if (($n3a * $p3a >= 10) && ($n3a * (1 - $p3a) >= 10) && ($n3b * $p3b >= 10) && ($n3b * (1 - $p3b) >= 10)) {
+if (
+  ($n3a * $p3a >= 10) && 
+  ($n3a * (1 - $p3a) >= 10) && 
+  ($n3b * $p3b >= 10) && 
+  ($n3b * (1 - $p3b) >= 10)) {
   $correct3 = ' i. Yes';
 } else {
   $correct3 = ' ii. No';
@@ -108,20 +127,15 @@ $mc3 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 In the following questions, random samples of the given size are drawn from the
-populations with the given proportions. For each question, a) find the mean and standard
-error of the distribution of differences in sample proportions
+populations with the given proportions. For each question, a) find the mean and 
+standard error of the distribution of differences in sample proportions
 \(\widehat{p}_a - \widehat{p}_b\),
 b) indicate if the sample sizes is large enough for the Central Limit Theorem to
 apply. Give your answers to 4 decimal places.
@@ -130,39 +144,40 @@ apply. Give your answers to 4 decimal places.
   of size $n1b from population B with proportion $p1b.
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
-    \{ $mc1->buttons() \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to 
+      apply? $BR 
+      \{ $mc1->buttons() \}
   \{ EndList( "OL" ) \}
   $PAR
   $ITEM Samples of size $n2a from population A with proportion $p2a and samples
   of size $n2b from population B with proportion $p2b.
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
-    \{ $mc2->buttons() \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to 
+      apply? $BR
+      \{ $mc2->buttons() \}
   \{ EndList( "OL" ) \}
   $PAR
   $ITEM Samples of size $n3a from population A with proportion $p3a and samples
   of size $n3b from population B with proportion $p3b.
   \{ BeginList( "OL", type=>"a") \}
     $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Are the sample sizes large enough for the Central Limit Theory to apply? $BR
-    \{ $mc3->buttons() \}
+    $ITEM Are the sample sizes large enough for the Central Limit Theory to 
+      apply? $BR
+      \{ $mc3->buttons() \}
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
-
 ANS($m2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc2->cmp());
-
 ANS($m3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc3->cmp());

@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 # ontime arrivals (6.24)
@@ -83,19 +90,14 @@ $prob2mid = Real(($prob2high + $prob2low) / 2);
 $prob2tol = Real(max(abs($prob2high - $prob2low) / 2, 0.001));
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-Use sampling distribution for sample proportions to answer the following questions.
-Give your answers to 4 decimal places.
+Use sampling distribution for sample proportions to answer the following 
+questions. Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Suppose that \{$p1 * 100\}$PERCENT of all flights for a particular
   airline arrive on time (defined as within 15 minutes of the scheduled
@@ -110,10 +112,10 @@ Give your answers to 4 decimal places.
   \{ ans_rule(10) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($prob1mid->with(tolerance=>$prob1tol, tolType=>"Absolute")->cmp());
 ANS($prob2mid->with(tolerance=>$prob2tol, tolType=>"Absolute")->cmp());
 

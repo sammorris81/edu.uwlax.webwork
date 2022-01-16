@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $p1 = Real(random(0.05, 0.35, 0.02));
@@ -111,83 +118,88 @@ $tollower3 = max(abs($lower3 - $lower3l), abs($lower3 - $lower3u)) + 0.0001;
 $tolupper3 = max(abs($upper3 - $upper3l), abs($upper3 - $upper3u)) + 0.0001;
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, use the normal distribution to find a confidence 
+interval for a proportion \( p \) given the relevant sample results. Give the 
+best point estimate for \(p\), the margin of error, and the confidence interval. 
+Assume the results come from a random sample. Give your answers to 4 decimal 
+places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(p\) using the sample 
+    results
+    \(\widehat{p} = $p1\) and \(n=$n1\).
+    Use \(z^* = $zstars[$random1]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(p\) using the sample 
+    results \(\widehat{p} = $p2\) and \(n=$n2\).
+    Use \(z^* = $zstars[$random2]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(p\) using the sample 
+    results
+    \(\widehat{p} = $p3\) and \(n=$n3\). Use \(z^* = $zstars[$random3]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
+
 BEGIN_HINT
 $BBOLD Confidence interval for a single proportion using the CLT:$EBOLD $BR
 For all confidence intervals, we start with a ${BITALIC}point estimate${EITALIC}
-for the parameter, and then we add and subtract the ${BITALIC}margin of error${EITALIC}
-to find the confidence interval.
+for the parameter, and then we add and subtract the ${BITALIC}margin of 
+error${EITALIC} to find the confidence interval.
 For a single proportion,
 \{ BeginList( "UL") \}
   $ITEM The ${BITALIC}point estimate${EITALIC} for the parameter is the sample
   proportion: \(\widehat{p}\).
   $ITEM The ${BITALIC}margin or error${EITALIC} is
-  \[z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}.\]
-  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the point
-  estimate and margin of error in the formula
-\[\widehat{p} \pm z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}.\]
+    \[
+      z^* \sqrt{\displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}}.
+    \]
+  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the 
+    point estimate and margin of error in the formula
+    \[
+      \widehat{p} \pm z^* \sqrt{
+        \displaystyle\frac{\widehat{p}\left(1 - \widehat{p}\right)}{n}
+      }.
+    \]
 \{ EndList("UL") \}
 END_HINT
 
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, use the normal distribution to find a confidence interval
-for a proportion \( p \) given the relevant sample results. Give the best point
-estimate for \(p\), the margin of error, and the confidence interval. Assume the
-results come from a random sample.
-Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM A $confidences[$random1]$PERCENT interval for \(p\) using the sample results
-  \(\widehat{p} = $p1\) and \(n=$n1\).
-  Use \(z^* = $zstars[$random1]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM A $confidences[$random2]$PERCENT interval for \(p\) using the sample results
-  \(\widehat{p} = $p2\) and \(n=$n2\).
-  Use \(z^* = $zstars[$random2]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM A $confidences[$random3]$PERCENT interval for \(p\) using the sample results
-  \(\widehat{p} = $p3\) and \(n=$n3\). Use \(z^* = $zstars[$random3]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($p1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($me1->with(tolerance=>$tolme1, tolType=>"Absolute")->cmp());
 ANS($lower1->with(tolerance=>$tollower1, tolType=>"Absolute")->cmp());
 ANS($upper1->with(tolerance=>$tolupper1, tolType=>"Absolute")->cmp());
-
 ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($me2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-
 ANS($p3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($me3->with(tolerance=>$tolme3, tolType=>"Absolute")->cmp());
 ANS($lower3->with(tolerance=>$tollower3, tolType=>"Absolute")->cmp());

@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $m1a = Real(random(5, 20, 0.2));
@@ -106,12 +113,55 @@ $lower3 = Real($m3 - $me3);
 $upper3 = Real($m3 + $me3);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, use the t-distribution to find a confidence interval
+for a difference in means \( \mu_1 - \mu_2 \) given the relevant sample results.
+Give the best point estimate for \(\mu_1 - \mu_2\), the margin of error, and the
+confidence interval. Assume the results come from random samples from 
+populations that are approximately normally distributed. Give your answers to 2 
+decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM A $confidences[$random1]$PERCENT interval for \(\mu_1 - \mu_2\) using 
+    the sample results \(\overline{x}_1 = $m1a\), \(s_1 = $sd1a\), 
+    \(n_1=$n1a\) and \(\overline{x}_2 = $m1b\), \(s_2 = $sd1b\), \(n_2=$n1b\).
+    Use \(t^* = $tstar1\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random2]$PERCENT interval for \(\mu_1 - \mu_2\) using 
+    the sample results \(\overline{x}_1 = $m2a\), \(s_1 = $sd2a\), \(n_1=$n2a\) 
+    and \(\overline{x}_2 = $m2b\), \(s_2 = $sd2b\), \(n_2=$n2b\).
+    Use \(t^* = $tstar2\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM A $confidences[$random3]$PERCENT interval for \(\mu_1 - \mu_2\) using 
+    the sample results \(\overline{x}_1 = $m3a\), \(s_1 = $sd3a\), \(n_1=$n3a\) 
+    and \(\overline{x}_2 = $m3b\), \(s_2 = $sd3b\), \(n_2=$n3b\).
+    Use \(t^* = $tstar3\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Confidence interval for a difference in means using the CLT:$EBOLD $BR
@@ -128,56 +178,11 @@ For a difference in means,
   point estimate and margin of error in the formula
   \[\left(\overline{x}_1 - \overline{x}_2\right) \pm t^* \displaystyle \sqrt{ \frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}.\]
 \{ EndList("UL") \}
-
 END_HINT
 
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, use the t-distribution to find a confidence interval
-for a difference in means \( \mu_1 - \mu_2 \) given the relevant sample results.
-Give the best point estimate for \(\mu_1 - \mu_2\), the margin of error, and the
-confidence interval. Assume the results come from random samples from a populations
-that are approximately normally distributed.
-Give your answers to 2 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM A $confidences[$random1]$PERCENT interval for \(\mu_1 - \mu_2\) using the
-  sample results \(\overline{x}_1 = $m1a\), \(s_1 = $sd1a\), \(n_1=$n1a\) and
-  \(\overline{x}_2 = $m1b\), \(s_2 = $sd1b\), \(n_2=$n1b\).
-  Use \(t^* = $tstar1\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM A $confidences[$random2]$PERCENT interval for \(\mu_1 - \mu_2\) using the
-  sample results \(\overline{x}_1 = $m2a\), \(s_1 = $sd2a\), \(n_1=$n2a\) and
-  \(\overline{x}_2 = $m2b\), \(s_2 = $sd2b\), \(n_2=$n2b\).
-  Use \(t^* = $tstar2\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM A $confidences[$random3]$PERCENT interval for \(\mu_1 - \mu_2\) using the
-  sample results \(\overline{x}_1 = $m3a\), \(s_1 = $sd3a\), \(n_1=$n3a\) and
-  \(\overline{x}_2 = $m3b\), \(s_2 = $sd3b\), \(n_2=$n3b\).
-  Use \(t^* = $tstar3\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($m1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($me1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($lower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());

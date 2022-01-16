@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $n1 = random(5, 10, 1);
@@ -64,22 +71,45 @@ $a3 = ($t3 < 0) ? Real(1 - $a3) : Real($a3);
 $a4 = ($t4 < 0) ? Real(1 - $a4) : Real($a4);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+Use the ${BITALIC}t${EITALIC}-distribution to answer the following questions. 
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side1 $t1 if the 
+    sample has size \(n = $n1\). \{ ans_rule(10) \}
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side2 $t2 if the 
+    sample has size \(n = $n2\). \{ ans_rule(10) \}
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side3 $t3 if the 
+    sample has size \(n = $n3\). \{ ans_rule(10) \}
+  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side4 $t4 if the 
+    sample has size \(n = $n4\). \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = -1;
 BEGIN_HINT
 $BBOLD Accessing the ${BITALIC}t${EITALIC}-distribution:$EBOLD $BR
 You can use
-\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#t", "StatKey", "target='_new'")\}
-to find areas under the curve for regions of the ${BITALIC}t${EITALIC}-distribution.
-${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
-because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
-${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
-go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
+\{htmlLink(
+  "http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#t", 
+  "StatKey", 
+  "target='_new'"
+)\}
+to find areas under the curve for regions of the 
+${BITALIC}t${EITALIC}-distribution. ${BBOLD}Note:${EBOLD} If you click on the 
+link and it does not open, it is probably because you are using a pop-up 
+blocker. Try pressing ${BTT}ctrl${ETT} (win) or ${BTT}command${ETT} (mac) while
+clicking on the link. If that still does not work go to 
+${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
 ${BTT}t${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
 $PAR
 When you first go to the StatKey ${BITALIC}t${EITALIC}-distribution, you will
@@ -90,24 +120,6 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-Use the ${BITALIC}t${EITALIC}-distribution to answer the following questions. Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side1 $t1 if the sample has
-  size \(n = $n1\). \{ ans_rule(10) \}
-  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side2 $t2 if the sample has
-  size \(n = $n2\). \{ ans_rule(10) \}
-  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side3 $t3 if the sample has
-  size \(n = $n3\). \{ ans_rule(10) \}
-  $ITEM Find the area in a ${BITALIC}t${EITALIC}-distribution $side4 $t4 if the sample has
-  size \(n = $n4\). \{ ans_rule(10) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($a1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($a2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($a3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,13 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
+
 @inequality = (
   "<",
   ">",
@@ -211,15 +219,11 @@ $mc2dec = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 In the following questions, select the appropriate alternative hypothesis,
 find the relevant sample proportions in each group, find the pooled proportion,
@@ -229,52 +233,51 @@ You may assume that any necessary conditions hold for the hypothesis test.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM The following table gives survival data for two treatments in a clinical
-  trial. Test whether patients getting Treatment A are more likely to survive than
-  patients getting Treatment B.
+    trial. Test whether patients getting Treatment A are more likely to survive 
+    than patients getting Treatment B.
   $BR
   \{ $table1 \}
   $BR
   \{ BeginList( "OL", type=>"a") \}
     $ITEM What is the appropriate null hypothesis? $BR
-    \{ $mc1null->buttons() \}
+      \{ $mc1null->buttons() \}
     $ITEM What is the appropriate alternative hypothesis? $BR
-    \{ $mc1alt->buttons() \}
+      \{ $mc1alt->buttons() \}
     $ITEM Sample proportions: \(\widehat{p}_A = \) \{ ans_rule(10) \},
-    \(\widehat{p}_B = \) \{ ans_rule(10) \}
+      \(\widehat{p}_B = \) \{ ans_rule(10) \}
     $ITEM Pooled proportion: \(\widehat{p} = \) \{ ans_rule(10) \}
     $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\).$BR
+    $ITEM The p-value for this test is $pval1. What is the appropriate 
+      conclusion? Use \(\alpha = 0.05\).$BR
     \{ $mc1dec->buttons() \}
   \{ EndList( "OL" ) \}
   $PAR
   $ITEM The following table gives flight arrival numbers from a random sample of
-  flights for two airlines. Test whether there is a difference between the two
-  airlines in percent of flights that arrive $status.
+    flights for two airlines. Test whether there is a difference between the two
+    airlines in percent of flights that arrive $status.
   $BR
   \{ $table2 \}
   $BR
   \{ BeginList( "OL", type=>"a") \}
     $ITEM What is the appropriate null hypothesis? $BR
-    \{ $mc2null->buttons() \}
+      \{ $mc2null->buttons() \}
     $ITEM What is the appropriate alternative hypothesis? $BR
-    \{ $mc2alt->buttons() \}
+      \{ $mc2alt->buttons() \}
     $ITEM Sample proportions: \(\widehat{p}_A = \) \{ ans_rule(10) \},
-    \(\widehat{p}_B = \) \{ ans_rule(10) \}
+      \(\widehat{p}_B = \) \{ ans_rule(10) \}
     $ITEM Pooled proportion: \(\widehat{p} = \) \{ ans_rule(10) \}
     $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\).$BR
-    \{ $mc2dec->buttons() \}
+    $ITEM The p-value for this test is $pval2. What is the appropriate 
+      conclusion? Use \(\alpha = 0.05\).$BR
+      \{ $mc2dec->buttons() \}
   \{ EndList( "OL" ) \}
   $PAR
-
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($mc1null->cmp());
 ANS($mc1alt->cmp());
 ANS($p1a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
@@ -290,6 +293,5 @@ ANS($p2b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($z2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc2dec->cmp());
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

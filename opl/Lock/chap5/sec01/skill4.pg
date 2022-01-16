@@ -30,13 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
+
 $area1 = random(0.1, 0.3, 0.05);
 do {$area2 = random(0.2, 0.8, 0.05);} until ($area1 != $area2);
 $area3 = random(0.4, 0.6, 0.05);
@@ -77,31 +85,33 @@ $x6l = Real($z6l * $s6 + $m6);
 $x6u = Real($z6u * $s6 + $m6);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 In the following questions, use the given density to find the specified \(x\) values.
 Give your answers to 3 decimal places.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM What \(x\) has $area1 to the left of it in a N($m1, $s1) distribution? \(x = \) \{ ans_rule(10) \}
-  $ITEM What \(x\) has $area2 to the left of it in a N($m2, $s2) distribution? \(x = \) \{ ans_rule(10) \}
-  $ITEM What \(x\) has $area3 to the right of it in a N($m3, $s3) distribution? \(x = \) \{ ans_rule(10) \}
-  $ITEM What \(x\) has $area4 to the right of it in a N($m4, $s4) distribution? \(x = \) \{ ans_rule(10) \}
-  $ITEM What symmetric interval covers $area5 in a N($m5, $s5) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
-  $ITEM What symmetric interval covers $area6 in a N($m6, $s6) distribution? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What \(x\) has $area1 to the left of it in a N($m1, $s1) 
+    distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area2 to the left of it in a N($m2, $s2) 
+    distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area3 to the right of it in a N($m3, $s3) 
+    distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What \(x\) has $area4 to the right of it in a N($m4, $s4) 
+    distribution? \(x = \) \{ ans_rule(10) \}
+  $ITEM What symmetric interval covers $area5 in a N($m5, $s5) distribution? 
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area6 in a N($m6, $s6) distribution? 
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($x1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($x2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($x3->with(tolerance=>0.01, tolType=>"Absolute")->cmp());

@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @inequality = (
@@ -135,13 +142,42 @@ $mc2 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, find the test statistic and give the appropriate
+conclusion for the hypothesis test. Assume the results come from random samples, 
+and if the sample sizes are small, assume the underlying distributions are 
+relatively normal. Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random1] 0\) using
+  the sample results \( \overline{x}_d=$m1 \), \(s_d = $sd1\), with \(n_d=$n1\).
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+    $ITEM The p-value for this test is $pval1. What is the appropriate 
+      conclusion? Use \(\alpha=0.05\). $BR
+      \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random2] 0\) using
+    the sample results \( \overline{x}_d=$m2 \), \(s_d = $sd2\), with 
+    \(n_d=$n2\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+      Use \(\alpha=0.05\). $BR
+      \{ $mc1->buttons() \}
+    \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Hypothesis test for an average of differences using the CLT:$EBOLD $BR
@@ -154,41 +190,10 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, find the test statistic and give the appropriate
-conclusion for the hypothesis test.
-Assume the results come from random samples, and if the sample sizes are small, assume
-the underlying distributions are relatively normal.
-Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random1] 0\) using
-  the sample results \( \overline{x}_d=$m1 \), \(s_d = $sd1\), with \(n_d=$n1\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
-    Use \(\alpha=0.05\). $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Test \(H_0: \mu_d = 0\) vs \(H_a: \mu_d $inequality[$random2] 0\) using
-  the sample results \( \overline{x}_d=$m2 \), \(s_d = $sd2\), with \(n_d=$n2\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
-    Use \(\alpha=0.05\). $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
 
 ANS($t1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 ANS($t2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc2->cmp());
-
 
 ENDDOCUMENT();  #This MUST be the final line of the file.

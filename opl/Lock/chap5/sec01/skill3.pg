@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,13 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
+
 $z1a = non_zero_random(-3, 3, 0.01);
 do {$z1b = non_zero_random(-3, 3, 0.01);} until ($z1b != $z1a);
 $z1cl = non_zero_random(-3, 1, 0.01);
@@ -92,28 +100,55 @@ $p2a = Real(1 - uprob($z2a));
 $p2b = Real(uprob($z2b));
 $p2c = Real(uprob($z2cl) - uprob($z2cu));
 
-
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, find the specified areas for the given density.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM The area below \(x = $x1a\) in a N($m1a, $s1a) distribution. 
+    \{ ans_rule(10) \}
+  $ITEM The area below \(x = $x2a\) in a N($m2a, $s2a) distribution. 
+    \{ ans_rule(10) \}
+  $ITEM The area above \(x = $x1b\) in a N($m1b, $s1b) distribution. 
+    \{ ans_rule(10) \}
+  $ITEM The area above \(x = $x2b\) in a N($m2b, $s2b) distribution. 
+    \{ ans_rule(10) \}
+  $ITEM The area between \(x = $x1cl\) and \(x = $x1cu\) in a N($m1c, $s1c)
+    distribution. \{ ans_rule(10) \}
+  $ITEM The area between \(x = $x2cl\) and \(x = $x2cu\) in a N($m2c, $s2c)
+    distribution. \{ ans_rule(10) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = -1;
+
 BEGIN_HINT
 $BBOLD Accessing the normal distribution:$EBOLD $BR
 You can use
-\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", "StatKey", "target='_new'")\}
-to find \(z\) corresponding to regions of the normal distribution of a certain area.
-${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
-because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
-${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
-go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
-${BTT}Normal${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+\{htmlLink(
+  "http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", 
+  "StatKey", 
+  "target='_new'"
+)\}
+to find \(z\) corresponding to regions of the normal distribution of a certain 
+area. ${BBOLD}Note:${EBOLD} If you click on the link and it does not open, it is 
+probably because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} 
+(win) or ${BTT}command${ETT} (mac) while clicking on the link. If that still 
+does not work go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on 
+the link for ${BTT}Normal${ETT} in the row for ${BTT}Theoretical 
+Distributions${ETT}
 $PAR
-$BBOLD Changing the mean and standard deviation of a Normal Distribution:$EBOLD $BR
+$BBOLD Changing the mean and standard deviation of a Normal 
+Distribution:$EBOLD $BR
 Click on the button for ${BTT}Edit Parameters${ETT}, and change the mean and
 standard deviation to the desired values, and then click on the button for
 ${BTT}Ok${ETT}. For example, in the image below, we specify ${BTT}Mean: 20${ETT}
@@ -126,25 +161,6 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, find the specified areas for the given density.
-Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM The area below \(x = $x1a\) in a N($m1a, $s1a) distribution. \{ ans_rule(10) \}
-  $ITEM The area below \(x = $x2a\) in a N($m2a, $s2a) distribution. \{ ans_rule(10) \}
-  $ITEM The area above \(x = $x1b\) in a N($m1b, $s1b) distribution. \{ ans_rule(10) \}
-  $ITEM The area above \(x = $x2b\) in a N($m2b, $s2b) distribution. \{ ans_rule(10) \}
-  $ITEM The area between \(x = $x1cl\) and \(x = $x1cu\) in a N($m1c, $s1c)
-  distribution. \{ ans_rule(10) \}
-  $ITEM The area between \(x = $x2cl\) and \(x = $x2cu\) in a N($m2c, $s2c)
-  distribution. \{ ans_rule(10) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($p1a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($p2a->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($p1b->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

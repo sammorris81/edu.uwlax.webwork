@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $m1 = Real(non_zero_random(-20, 20, 0.2));
@@ -71,34 +78,11 @@ $lower2 = Real($m2 - $me2);
 $upper2 = Real($m2 + $me2);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Confidence interval for a difference in means using the CLT:$EBOLD $BR
-For all confidence intervals, we start with a ${BITALIC}point estimate${EITALIC}
-for the parameter, and then we add and subtract the ${BITALIC}margin of error${EITALIC}
-to find the confidence interval.
-For a difference in means,
-\{ BeginList( "UL") \}
-  $ITEM The ${BITALIC}point estimate${EITALIC} for the parameter is the average
-  of the sample differences: \(\overline{x}_d\).
-  $ITEM The ${BITALIC}margin or error${EITALIC} is
-  \[t^* \displaystyle \frac{s_d}{\displaystyle\sqrt{n_d}}.\]
-  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the
-  point estimate and margin of error in the formula
-  \[\overline{x}_d \pm t^* \displaystyle \frac{s_d}{\displaystyle \sqrt{n_d}}.\]
-\{ EndList("UL") \}
-END_HINT
-
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
 $PAR
 In the following questions, use the t-distribution to find a confidence interval
@@ -106,8 +90,9 @@ for the difference in means \( \mu_d \) given the relevant sample results
 from paired data. Give the best point estimate for \(\mu_d\), the margin
 of error, and the confidence interval. Assume the results come from random
 samples from populations that are approximately normally distributed, and that
-differences are computed using \(\overline{x}_d = \overline{x}_1 - \overline{x}_2\).
-Give your answers to 2 decimal places.
+differences are computed using 
+\(\overline{x}_d = \overline{x}_1 - \overline{x}_2\). Give your answers to 2 
+decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM A $confidences[$random1]$PERCENT interval for \(\mu_d\) using the sample
   results \(\overline{x}_d = $m1\), \(s_d = $sd1\), and \(n_d=$n1\).
@@ -128,10 +113,35 @@ Give your answers to 2 decimal places.
   \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Confidence interval for a difference in means using the CLT:$EBOLD $BR
+For all confidence intervals, we start with a ${BITALIC}point estimate${EITALIC}
+for the parameter, and then we add and subtract the 
+${BITALIC}margin of error${EITALIC} to find the confidence interval.
+For a difference in means,
+\{ BeginList( "UL") \}
+  $ITEM The ${BITALIC}point estimate${EITALIC} for the parameter is the average
+  of the sample differences: \(\overline{x}_d\).
+  $ITEM The ${BITALIC}margin or error${EITALIC} is
+    \[
+      t^* \displaystyle \frac{s_d}{\displaystyle\sqrt{n_d}}.
+    \]
+  $ITEM To find the ${BITALIC}confidence interval${EITALIC}, we use both the
+    point estimate and margin of error in the formula
+    \[
+      \overline{x}_d \pm t^* \displaystyle \frac{s_d}{\displaystyle \sqrt{n_d}}.
+    \]
+\{ EndList("UL") \}
+END_HINT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($m1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($me1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());
 ANS($lower1->with(tolerance=>0.1, tolType=>"Absolute")->cmp());

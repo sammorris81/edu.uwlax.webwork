@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $m1a = Real(random(15, 30, 1));
@@ -115,12 +122,52 @@ $mc3 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
-$showPartialCorrectAnswers = 1;
+$showPartialCorrectAnswers = 0;
 
+BEGIN_TEXT
+$PAR
+In the following questions, random samples of the given size are drawn from
+populations with the given means and standard deviations. For each question, a) 
+find the mean and standard error of the distribution of differences in sample 
+means (\(\overline{x}_1 - \overline{x}_2\)), b) indicate if the sample size is 
+large enough for the Central Limit Theorem to apply. Give your answers to 4 
+decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Samples of size $n1a from Population 1 with mean $m1a and standard 
+    deviation $sd1a and samples of size $n1b from Population 2 with mean $m1b 
+    and standard deviation $sd1b.
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+      $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+      \{ $mc1->buttons() \}
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n2a from Population 1 with mean $m2a and standard 
+    deviation $sd2a and samples of size $n2b from Population 2 with mean $m2b 
+    and standard deviation $sd2b.
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+      $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+      \{ $mc2->buttons() \}
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n3a from Population 1 with mean $m3a and standard 
+    deviation $sd3a and samples of size $n3b from Population 2 with mean $m3b 
+    and standard deviation $sd3b.
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+      $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
+      \{ $mc3->buttons() \}
+    \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Sampling distribution for differences in sample means:$EBOLD $BR
@@ -132,46 +179,6 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, random samples of the given size are drawn from
-populations with the given means and standard deviations. For each question, a) find
-the mean and standard error of the distribution of differences in sample means
-(\(\overline{x}_1 - \overline{x}_2\)), b) indicate if the sample size is large enough
-for the Central Limit Theorem to apply. Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Samples of size $n1a from Population 1 with mean $m1a and standard deviation
-  $sd1a and samples of size $n1b from Population 2 with mean $m1b and standard deviation
-  $sd1b.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Samples of size $n2a from Population 1 with mean $m2a and standard deviation
-  $sd2a and samples of size $n2b from Population 2 with mean $m2b and standard deviation
-  $sd2b.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc2->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Samples of size $n3a from Population 1 with mean $m3a and standard deviation
-  $sd3a and samples of size $n3b from Population 2 with mean $m3b and standard deviation
-  $sd3b.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc3->buttons() \}
-  \{ EndList( "OL" ) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());

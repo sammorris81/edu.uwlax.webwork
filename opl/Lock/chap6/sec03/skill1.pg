@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,17 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
-
-Context("Numeric");
 
 ###########################
 ## Question setup
 ###########################
+Context("Numeric");
+
 @inequality = (
   "<",
   ">",
@@ -234,6 +238,7 @@ $mc4 = RadioButtons(
 ###########################
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
+
 BEGIN_TEXT
 $PAR
 In the following questions, find the test statistic and give the appropriate
@@ -241,41 +246,41 @@ conclusion for the hypothesis test.
 You may assume that any necessary conditions hold for the hypothesis test.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
-  $ITEM Test \(H_0: p = $nullp1\) vs \(H_a: p $inequality[$random1] $nullp1\) using
-  the sample results \( \widehat{p}=$p1 \) with \(n=$n1\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\).$BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
+  $ITEM Test \(H_0: p = $nullp1\) vs \(H_a: p $inequality[$random1] $nullp1\) 
+    using the sample results \( \widehat{p}=$p1 \) with \(n=$n1\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
+      Use \(\alpha = 0.05\).$BR
+      \{ $mc1->buttons() \}
+    \{ EndList( "OL" ) \}
   $PAR
-  $ITEM Test \(H_0: p = $nullp2\) vs \(H_a: p $inequality[$random2] $nullp2\) using
-  the sample results \( \widehat{p}=$p2 \) with \(n=$n2\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\).$BR
-    \{ $mc2->buttons() \}
-  \{ EndList( "OL" ) \}
+  $ITEM Test \(H_0: p = $nullp2\) vs \(H_a: p $inequality[$random2] $nullp2\) 
+    using the sample results \( \widehat{p}=$p2 \) with \(n=$n2\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+      Use \(\alpha = 0.05\).$BR
+      \{ $mc2->buttons() \}
+    \{ EndList( "OL" ) \}
   $PAR
-  $ITEM Test \(H_0: p = $nullp3\) vs \(H_a: p $inequality[$random3] $nullp3\) using
-  the sample results \( \widehat{p}=$p3 \) with \(n=$n3\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval3. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\). $BR
-    \{ $mc3->buttons() \}
-  \{ EndList( "OL" ) \}
+  $ITEM Test \(H_0: p = $nullp3\) vs \(H_a: p $inequality[$random3] $nullp3\) 
+    using the sample results \( \widehat{p}=$p3 \) with \(n=$n3\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval3. What is the appropriate conclusion?
+      Use \(\alpha = 0.05\). $BR
+      \{ $mc3->buttons() \}
+    \{ EndList( "OL" ) \}
   $PAR
-  $ITEM Test \(H_0: p = $nullp4\) vs \(H_a: p $inequality[$random4] $nullp4\) using
-  the sample results \( \widehat{p}=$p4 \) with \(n=$n4\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval4. What is the appropriate conclusion?
-    Use \(\alpha = 0.05\). $BR
-    \{ $mc4->buttons() \}
-  \{ EndList( "OL" ) \}
+  $ITEM Test \(H_0: p = $nullp4\) vs \(H_a: p $inequality[$random4] $nullp4\) 
+    using the sample results \( \widehat{p}=$p4 \) with \(n=$n4\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(z = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval4. What is the appropriate conclusion?
+      Use \(\alpha = 0.05\). $BR
+      \{ $mc4->buttons() \}
+    \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
 

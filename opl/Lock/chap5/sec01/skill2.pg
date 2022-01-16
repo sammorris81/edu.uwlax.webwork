@@ -30,13 +30,21 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
+
 $area1 = random(0.1, 0.3, 0.05);
 do {$area2 = random(0.2, 0.8, 0.05);} until ($area1 != $area2);
 $area3 = random(0.4, 0.6, 0.05);
@@ -54,23 +62,45 @@ $z6u = Real(sprintf("%.3f", udistr((1 - $area6)/2)));
 $z6l = Real(-$z6u);
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, use the N(0, 1) density to find the specified \(z\) 
+values. Give your answers to 3 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM What \(z\) has $area1 to the left of it? \(z = \) \{ ans_rule(10) \}
+  $ITEM What \(z\) has $area2 to the left of it? \(z = \) \{ ans_rule(10) \}
+  $ITEM What \(z\) has $area3 to the right of it? \(z = \) \{ ans_rule(10) \}
+  $ITEM What \(z\) has $area4 to the right of it? \(z = \) \{ ans_rule(10) \}
+  $ITEM What symmetric interval covers $area5? 
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+  $ITEM What symmetric interval covers $area6? 
+    (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = -1;
 BEGIN_HINT
 $BBOLD Accessing the normal distribution:$EBOLD $BR
 You can use
-\{htmlLink("http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", "StatKey", "target='_new'")\}
-to find \(z\) corresponding to regions of the normal distribution of a certain area.
-${BBOLD}Note:${EBOLD} If you click on the link and it doesn't open, it's probably
-because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} (win) or
-${BTT}command${ETT} (mac) while clicking on the link. If that still doesn't work
-go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on the link for
-${BTT}Normal${ETT} in the row for ${BTT}Theoretical Distributions${ETT}
+\{htmlLink(
+  "http://www.lock5stat.com/statkey/theoretical_distribution/theoretical_distribution.html#normal", 
+  "StatKey", 
+  "target='_new'")\}
+to find \(z\) corresponding to regions of the normal distribution of a certain 
+area. ${BBOLD}Note:${EBOLD} If you click on the link and it does not open, it is 
+probably because you are using a pop-up blocker. Try pressing ${BTT}ctrl${ETT} 
+(win) or ${BTT}command${ETT} (mac) while clicking on the link. If that still 
+does not work go to ${BTT}http://www.lock5stat.com/statkey${ETT} and click on 
+the link for ${BTT}Normal${ETT} in the row for ${BTT}Theoretical 
+Distributions${ETT}
 $PAR
 $BBOLD Finding the \(z\) value with a certain area below it:$EBOLD $BR
 To find a \(z\) value with a specified area below it, you need to click on the
@@ -109,23 +139,6 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, use the N(0, 1) density to find the specified \(z\) values.
-Give your answers to 3 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM What \(z\) has $area1 to the left of it? \(z = \) \{ ans_rule(10) \}
-  $ITEM What \(z\) has $area2 to the left of it? \(z = \) \{ ans_rule(10) \}
-  $ITEM What \(z\) has $area3 to the right of it? \(z = \) \{ ans_rule(10) \}
-  $ITEM What \(z\) has $area4 to the right of it? \(z = \) \{ ans_rule(10) \}
-  $ITEM What symmetric interval covers $area5? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
-  $ITEM What symmetric interval covers $area6? (\{ ans_rule(10) \}, \{ ans_rule(10) \} )
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($z1->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($z2->with(tolerance=>0.01, tolType=>"Absolute")->cmp());
 ANS($z3->with(tolerance=>0.01, tolType=>"Absolute")->cmp());

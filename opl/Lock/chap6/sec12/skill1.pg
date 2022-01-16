@@ -17,8 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -31,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 @inequality = (
@@ -144,12 +150,46 @@ $mc2 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, find the test statistic and give the appropriate
+conclusion for the hypothesis test.
+Assume the results come from random samples, and if the sample sizes are small, 
+assume the underlying distributiona are relatively normal.
+Give your answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Test \(H_0: \mu_1 = \mu_2\) vs 
+    \(H_a: \mu_1 $inequality[$random1] \mu_2\) using the sample results 
+    \( \overline{x}_1=$m1a \), \(s_1 = $sd1a\), with \(n_1=$n1a\) and
+    \( \overline{x}_2=$m1b \), \(s_2 = $sd1b\), with \(n_2=$n1b\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
+      Use \(\alpha=0.05\). $BR
+      \{ $mc1->buttons() \}
+    \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Test \(H_0: \mu_1 = \mu_2\) vs 
+    \(H_a: \mu_1 $inequality[$random2] \mu_2\) using the sample results 
+    \( \overline{x}_1=$m2a \), \(s_1 = $sd2a\), with \(n_1=$n2a\) and
+    \( \overline{x}_2=$m2b \), \(s_2 = $sd2b\), with \(n_2=$n2b\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
+      $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
+      Use \(\alpha=0.05\). $BR
+      \{ $mc1->buttons() \}
+    \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Hypothesis test for a single mean using the CLT:$EBOLD $BR
@@ -162,40 +202,6 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, find the test statistic and give the appropriate
-conclusion for the hypothesis test.
-Assume the results come from random samples, and if the sample sizes are small, assume
-the underlying distributiona are relatively normal.
-Give your answers to 4 decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Test \(H_0: \mu_1 = \mu_2\) vs \(H_a: \mu_1 $inequality[$random1] \mu_2\) using
-  the sample results \( \overline{x}_1=$m1a \), \(s_1 = $sd1a\), with \(n_1=$n1a\) and
-  \( \overline{x}_2=$m1b \), \(s_2 = $sd1b\), with \(n_2=$n1b\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval1. What is the appropriate conclusion?
-    Use \(\alpha=0.05\). $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Test \(H_0: \mu_1 = \mu_2\) vs \(H_a: \mu_1 $inequality[$random2] \mu_2\) using
-  the sample results \( \overline{x}_1=$m2a \), \(s_1 = $sd2a\), with \(n_1=$n2a\) and
-  \( \overline{x}_2=$m2b \), \(s_2 = $sd2b\), with \(n_2=$n2b\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Test statistic: \(t = \) \{ ans_rule(10) \}
-    $ITEM The p-value for this test is $pval2. What is the appropriate conclusion?
-    Use \(\alpha=0.05\). $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($t1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
 ANS($t2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());

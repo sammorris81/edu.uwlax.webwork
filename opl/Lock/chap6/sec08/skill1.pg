@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $p1a = Real(random(0.05, 0.35, 0.02));
@@ -138,65 +145,61 @@ $tollower3 = max(abs($lower3 - $lower3l), abs($lower3 - $lower3u)) + 0.0001;
 $tolupper3 = max(abs($upper3 - $upper3l), abs($upper3 - $upper3u)) + 0.0001;
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 0;
 
-###########################
-## Answer Section
-###########################
 BEGIN_TEXT
-In the following questions, use the normal distribution to find a confidence interval
-for a difference in proportions \( p_1 - p_2 \) given the relevant sample results.
-Give the best point estimate for \(p_1 - p_2\), the margin of error, and the confidence
-interval. Assume the results come from random samples.
+In the following questions, use the normal distribution to find a confidence 
+interval for a difference in proportions \( p_1 - p_2 \) given the relevant 
+sample results. Give the best point estimate for \(p_1 - p_2\), the margin of 
+error, and the confidence interval. Assume the results come from random samples.
 Give your answers to 4 decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM A $confidences[$random1]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\hat{p}_1 = $p1a\) with \(n_1=$n1a\) and \(\hat{p}_2 = $p1b\) with \(n_2=$n1b\).
-  Use \(z^* = $zstars[$random1]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
+    \(\hat{p}_1 = $p1a\) with \(n_1=$n1a\) and \(\hat{p}_2 = $p1b\) with 
+    \(n_2=$n1b\).
+    Use \(z^* = $zstars[$random1]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
   $PAR
   $ITEM A $confidences[$random2]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\hat{p}_1 = $p2a\) with \(n_1=$n2a\) and \(\hat{p}_2 = $p2b\) with \(n_2=$n2b\).
-  Use \(z^* = $zstars[$random2]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
+    \(\hat{p}_1 = $p2a\) with \(n_1=$n2a\) and 
+    \(\hat{p}_2 = $p2b\) with \(n_2=$n2b\).
+    Use \(z^* = $zstars[$random2]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
   $PAR
   $ITEM A $confidences[$random3]$PERCENT interval for \(p_1 - p_2\) given that
-  \(\hat{p}_1 = $p3a\) with \(n_1=$n3a\) and \(\hat{p}_2 = $p3b\) with \(n_2=$n3b\).
-  Use \(z^* = $zstars[$random3]\).
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Point estimate: \{ ans_rule(10) \}
-    $ITEM Margin of error: \{ ans_rule(10) \}
-    $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
-  \{ EndList( "OL" ) \}
+    \(\hat{p}_1 = $p3a\) with \(n_1=$n3a\) and 
+    \(\hat{p}_2 = $p3b\) with \(n_2=$n3b\).
+    Use \(z^* = $zstars[$random3]\).
+    \{ BeginList( "OL", type=>"a") \}
+      $ITEM Point estimate: \{ ans_rule(10) \}
+      $ITEM Margin of error: \{ ans_rule(10) \}
+      $ITEM Confidence interval: (\{ ans_rule(10) \}, \{ ans_rule(10) \})
+    \{ EndList( "OL" ) \}
 \{ EndList( "OL") \}
 END_TEXT
+
 ###########################
 ## Answer Section
 ###########################
-
 ANS($p1->with(tolerance=>$tolp1, tolType=>"Absolute")->cmp());
 ANS($me1->with(tolerance=>$tolme1, tolType=>"Absolute")->cmp());
 ANS($lower1->with(tolerance=>$tollower1, tolType=>"Absolute")->cmp());
 ANS($upper1->with(tolerance=>$tolupper1, tolType=>"Absolute")->cmp());
-
 ANS($p2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($me2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($lower2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($upper2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
-
 ANS($p3->with(tolerance=>$tolp3, tolType=>"Absolute")->cmp());
 ANS($me3->with(tolerance=>$tolme3, tolType=>"Absolute")->cmp());
 ANS($lower3->with(tolerance=>$tollower3, tolType=>"Absolute")->cmp());

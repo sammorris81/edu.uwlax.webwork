@@ -17,7 +17,7 @@
 ## Author('Sam Morris')
 ## Institution('University of Wisconsin-La Crosse')
 
-DOCUMENT();		#This MUST be the first (non-commented) line of the file.
+DOCUMENT();   #This MUST be the first (non-commented) line of the file.
 loadMacros("uwlLoadWWMacros.pl",
            "uwlLoadMacros.pl",
 );
@@ -30,12 +30,19 @@ if($displayMode eq "TeX"){
   $anssep = "\( \\ \noindent \)";
   $extrasep = "\( \noindent \)";
   $tab = "\( \qquad \)";
+  $BBQ = '';
+  $EBQ = '';
 } else {
   $extrasep = $PAR;
   $anssep = $PAR;
   $tab = '&nbsp; &nbsp; &nbsp;';
+  $BBQ = '<blockquote>';
+  $EBQ = '</blockquote>';
 }
 
+###########################
+## Question setup
+###########################
 Context("Numeric");
 
 $p1 = random(0.05, 0.35, 0.02);
@@ -102,14 +109,50 @@ $mc3 = RadioButtons(
 );
 
 ###########################
-## Initialization
+## Question for display
 ###########################
-
-
 Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
+BEGIN_TEXT
+$PAR
+In the following questions, random samples of the given size are drawn from a
+population with the given proportion. For each question, a) find the mean and 
+standard error of the distribution of sample proportions, b) indicate if the 
+sample size is large enough for the Central Limit Theorem to apply. Give your 
+answers to 4 decimal places.
+\{ BeginList( "OL", type=>"1") \}
+  $ITEM Samples of size $n1 from a population with proportion $p1.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to 
+      apply? $BR
+      \{ $mc1->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n2 from a population with proportion $p2.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to 
+      apply? $BR
+      \{ $mc2->buttons() \}
+  \{ EndList( "OL" ) \}
+  $PAR
+  $ITEM Samples of size $n3 from a population with proportion $p3.
+  \{ BeginList( "OL", type=>"a") \}
+    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
+    $ITEM Is the sample size large enough for the Central Limit Theory to 
+      apply? $BR
+      \{ $mc3->buttons() \}
+  \{ EndList( "OL" ) \}
+\{ EndList( "OL") \}
+END_TEXT
+
+###########################
+## Hint for display
+###########################
 $showHint = 3;
+
 BEGIN_HINT
 $BBOLD Sampling distribution for sample proportions:$EBOLD $BR
 If you are having trouble with these questions, take a look at the
@@ -120,48 +163,12 @@ END_HINT
 ###########################
 ## Answer Section
 ###########################
-BEGIN_TEXT
-$PAR
-In the following questions, random samples of the given size are drawn from a
-population with the given proportion. For each question, a) find the mean and standard
-error of the distribution of sample proportions, b) indicate if the sample size
-is large enough for the Central Limit Theorem to apply. Give your answers to 4
-decimal places.
-\{ BeginList( "OL", type=>"1") \}
-  $ITEM Samples of size $n1 from a population with proportion $p1.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc1->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Samples of size $n2 from a population with proportion $p2.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc2->buttons() \}
-  \{ EndList( "OL" ) \}
-  $PAR
-  $ITEM Samples of size $n3 from a population with proportion $p3.
-  \{ BeginList( "OL", type=>"a") \}
-    $ITEM Mean: \{ ans_rule(10) \} Std. Error: \{ ans_rule(10) \}
-    $ITEM Is the sample size large enough for the Central Limit Theory to apply? $BR
-    \{ $mc3->buttons() \}
-  \{ EndList( "OL" ) \}
-\{ EndList( "OL") \}
-END_TEXT
-###########################
-## Answer Section
-###########################
-
 ANS($m1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se1->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc1->cmp());
-
 ANS($m2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se2->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc2->cmp());
-
 ANS($m3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($se3->with(tolerance=>0.001, tolType=>"Absolute")->cmp());
 ANS($mc3->cmp());
