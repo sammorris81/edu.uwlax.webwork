@@ -109,7 +109,7 @@ END_TEXT
 $showHint = 3;
 BEGIN_HINT
 $BBOLD Basic rules of probability $EBOLD $BR
-For help with this question, take a look at p. 698 in your textbook for a list
+For help with this question, take a look at p. 720 in your textbook for a list
 of basic rules that you can use to find the requested probabilities using the
 given information.
 $PAR

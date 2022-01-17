@@ -213,7 +213,7 @@ END_TEXT
 ###########################
 $showHint = 3;
 BEGIN_HINT
-For help to fill out the ANOVA table, take a look at p. 499 in your book.
+For help to fill out the ANOVA table, take a look at p. 569 in your book.
 END_HINT
 
 ###########################

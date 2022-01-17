@@ -156,8 +156,8 @@ $showHint = 3;
 BEGIN_HINT
 $BBOLD Sampling distribution for sample proportions:$EBOLD $BR
 If you are having trouble with these questions, take a look at the
-${BITALIC}Central Limit Theorem for Sample Proportions${EITALIC}
-box on p. 355 of your book.
+${BITALIC}Distribution of a Sample Proportion${EITALIC}
+box on p. 426 of your book.
 END_HINT
 
 ###########################

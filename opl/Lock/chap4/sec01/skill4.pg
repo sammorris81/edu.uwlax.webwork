@@ -87,8 +87,10 @@ if ($randomparm1 == 0 || $randomparm1 == 2) {
 } else {
   $nullval1 = random(10, 30, 1);
 }
-$null1 = "$disp_null : ". $one_params[$randomparm1] . $comparisons[$randomnull1] . $nullval1;
-$alt1 = "$disp_alt : ". $one_params[$randomparm1] . $comparisons[$randomalt1]. $nullval1;
+$null1 = "$disp_null : ". $one_params[$randomparm1] . 
+  $comparisons[$randomnull1] . $nullval1;
+$alt1 = "$disp_alt : ". $one_params[$randomparm1] . 
+  $comparisons[$randomalt1]. $nullval1;
 if ($randomparm1 <= 1 && $randomnull1 == 0) {
   $correct1 = "Valid";
 } else {
@@ -115,8 +117,10 @@ if ($randomparm2 == 0 || $randomparm2 == 2) {
 } else {
   $nullval2 = random(10, 30, 1);
 }
-$null2 = "$disp_null : ". $one_params[$randomparm2] . $comparisons[$randomnull2] . $nullval2;
-$alt2 = "$disp_alt : ". $one_params[$randomparm2] . $comparisons[$randomalt2]. $nullval2;
+$null2 = "$disp_null : ". $one_params[$randomparm2] . 
+  $comparisons[$randomnull2] . $nullval2;
+$alt2 = "$disp_alt : ". $one_params[$randomparm2] . 
+  $comparisons[$randomalt2]. $nullval2;
 if ($randomparm2 <= 1 && $randomnull2 == 0) {
   $correct2 = "Valid";
 } else {
@@ -138,8 +142,10 @@ if ($randomnull1 != 0 || $randomnull2 != 0) {
   $randomnull3 = random(1, 3, 1);
 }
 do { $randomalt3 = random(0, 3, 1); } until ($randomalt3 != $randomnull3);
-$null3 = "$disp_null : ". $two_params_1[$randomparm3] . $comparisons[$randomnull3] . $two_params_2[$randomparm3];
-$alt3 = "$disp_alt : ". $two_params_1[$randomparm3] . $comparisons[$randomalt3]. $two_params_2[$randomparm3];
+$null3 = "$disp_null : ". $two_params_1[$randomparm3] . 
+  $comparisons[$randomnull3] . $two_params_2[$randomparm3];
+$alt3 = "$disp_alt : ". $two_params_1[$randomparm3] . 
+  $comparisons[$randomalt3]. $two_params_2[$randomparm3];
 if ($randomparm3 <= 1 && $randomnull3 == 0) {
   $correct3 = "Valid";
 } else {
@@ -158,8 +164,8 @@ $showPartialCorrectAnswers = 0;
 
 BEGIN_TEXT
 $PAR
-For the following questions, state whether the sets of hypotheses given are valid
-hypotheses.
+For the following questions, state whether the sets of hypotheses given are 
+valid hypotheses.
 
 \{ BeginList( "OL", type=>"1") \}
   $ITEM $null1 $tab vs $tab $alt1 $tab \{ $mc1->menu() \}
@@ -178,13 +184,13 @@ $BBOLD Rules for writing down the hypotheses:$EBOLD $BR
 To check for whether or not hypotheses are valid, you want to check for a couple
 of characteristics.
 \{BeginList("OL", type=>"1")\}
-  $ITEM As outlined on p. 222 in your textbook, all hypotheses are written in
+  $ITEM As outlined on p. 284 in your textbook, all hypotheses are written in
   terms of population parameters and not in terms of sample statistics. This is
-  because when we conduct hypothesis tests in statistics, we use data from a sample
-  to decide between two competing hypotheses for the parameter. This means that
-  you should not see notation like \(\widehat{p}\) or \(\overline{x}\)
-  in a hypothesis.
-  $ITEM From p. 224 in your textbook: ${LQ}Notice that, in general, the null
+  because when we conduct hypothesis tests in statistics, we use data from a 
+  sample to decide between two competing hypotheses for the parameter. This
+  means that you should not see notation like \(\widehat{p}\) or 
+  \(\overline{x}\) in a hypothesis.
+  $ITEM From p. 222 in your textbook: ${LQ}Notice that, in general, the null
   hypothesis is a statement of equality, while the alternative hypothesis contains
   a range of values, using notation indicating greater than (\(>\)),
   not equal to(\(\neq\)), or less than (\(<\)).${RQ}

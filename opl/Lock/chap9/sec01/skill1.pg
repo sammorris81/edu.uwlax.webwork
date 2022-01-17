@@ -208,7 +208,7 @@ END_TEXT
 ###########################
 $showHint = 3;
 BEGIN_HINT
-Take a look at example 9.2 on p.527 in your textbook.
+Take a look at example 9.2 on p.601 in your textbook.
 $PAR
 $BBOLD Estimating slope and intercept: $EBOLD $BR
 In the inkjet printer example, the estimate for the intercept is
@@ -220,7 +220,7 @@ $BBOLD Finding the confidence interval: $EBOLD $BR
 In the inkjet printer example, the standard error for the slope is 19.49. This
 is given in the $BITALIC Std. Error$EITALIC column of the output in the row that
 corresponds to the slope (PPM). You use this standard error with the formula 
-given on p. 527 to find the confidence interval.
+given on p. 601 to find the confidence interval.
 $PAR
 $BBOLD Hypothesis test decision: $EBOLD $BR
 To test for a linear association between \(x\) and \(y\), we need to test the

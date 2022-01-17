@@ -227,8 +227,8 @@ A significant one-way ANOVA hypothesis test suggests that at least one of the
 \(k\) population means \((\mu_1, \mu_2, \ldots, \mu_k)\) is different from the 
 others.
 
-As stated in your book on p. 513, one of the conditions for the ANOVA is that 
-the standard deviation is the same in all groups. So we estimate the
+As stated in your book, one of the conditions for the ANOVA is that the standard
+deviation is the same in all groups. So we estimate the 
 \{BITALIC()\}pooled standard deviation\{EITALIC()\} with \(\sqrt{\text{MSE}}\).
 END_HINT
 

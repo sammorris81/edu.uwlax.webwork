@@ -183,7 +183,7 @@ BEGIN_HINT
 $BBOLD Hypothesis test for an average of differences using the CLT:$EBOLD $BR
 If you are having trouble with these questions, take a look at the
 ${BITALIC}Inference for a Difference in Means with Paired Data${EITALIC} box on
-p. 430 of your book. The decision to reject or fail to reject is the same as
+p. 492 of your book. The decision to reject or fail to reject is the same as
 before. We look to see how the p-value compares to \(\alpha\).
 END_HINT
 

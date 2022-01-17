@@ -139,24 +139,6 @@ $coltot3 = CategoricalUWL::margintotal(
 $expect3 = Real($rowtot3 * $coltot3 / $cat3->{n});
 $df3 = Real(($cat3->{nrows} - 1) * ($cat3->{ncols} - 1));
 
-$showHint = 3;
-BEGIN_HINT
-$BBOLD Finding the expected count:$EBOLD $BR
-To find the expected count for a table cell for a chi-square test for association,
-use the following formula (p. 480)
-$PAR
-$BCENTER
-\(
-  \text{Expected count} = \displaystyle \frac{\text{Row total} \cdot \text{Col total}}{\text{Sample size}}
-\)
-$ECENTER
-$PAR
-$BBOLD Finding the degrees of freedom:$EBOLD $BR
-To find the degrees of freedom for the chi-square distribution, take \((r - 1) (c - 1)\)
-where \(r\) is the number of rows (excluding the \{BITALIC()\}Total\{EITALIC()\} row)
-and \(c\) is the number of columns (excluding the \{BITALIC()\}Total\{EITALIC()\} column).
-END_HINT
-
 ###########################
 ## Question for display
 ###########################
@@ -199,6 +181,28 @@ answers to 2 decimal places.
     \{ EndList("OL") \}
 \{ EndList( "OL") \}
 END_TEXT
+
+###########################
+## Hint for display
+###########################
+$showHint = 3;
+BEGIN_HINT
+$BBOLD Finding the expected count:$EBOLD $BR
+To find the expected count for a table cell for a chi-square test for association,
+use the following formula (p. 549)
+$PAR
+$BCENTER
+\(
+  \text{Expected count} = \displaystyle \frac{\text{Row total} 
+    \cdot \text{Col total}}{\text{Sample size}}
+\)
+$ECENTER
+$PAR
+$BBOLD Finding the degrees of freedom:$EBOLD $BR
+To find the degrees of freedom for the chi-square distribution, take \((r - 1) (c - 1)\)
+where \(r\) is the number of rows (excluding the \{BITALIC()\}Total\{EITALIC()\} row)
+and \(c\) is the number of columns (excluding the \{BITALIC()\}Total\{EITALIC()\} column).
+END_HINT
 
 ###########################
 ## Answer Section

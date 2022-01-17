@@ -60,7 +60,7 @@ of 6-year-old girls. A 90$PERCENT confidence interval will be constructed to
 estimate the population mean height. A smaller random sample, with n = 50, will
 also be taken from the same population of 6-year-old girls, and a 99$PERCENT
 confidence interval will be constructed to estimate the population mean height.
-Which confidence interval has a better chance of capturing the population's mean height?
+Which confidence interval has a better chance of capturing the population's mean height?$BR
 \{$mc->buttons()\}
 
 END_TEXT

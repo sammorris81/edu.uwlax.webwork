@@ -171,7 +171,7 @@ END_TEXT
 ###########################
 $showHint = 3;
 BEGIN_HINT
-The formulas for the confidence intervals and predictions are given on p. 553
+The formulas for the confidence intervals and predictions are given on p. 628
 of the text book.
 END_HINT
 

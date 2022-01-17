@@ -123,8 +123,8 @@ $showPartialCorrectAnswers = 0;
 
 BEGIN_TEXT
 $PAR
-For the following questions, two p-values are given. Select the p-value which provides
-the strongest evidence against \(H_0\).
+For the following questions, two p-values are given. Select the p-value which 
+provides the strongest evidence against \(H_0\).
 \{ BeginList( "OL", type=>"1") \}
   $ITEM \{ $mc1->buttons() \}
   $ITEM \{ $mc2->buttons() \}
@@ -140,8 +140,9 @@ $showHint = 3;
 
 BEGIN_HINT
 $BBOLD Determining strength of evidence against \(H_0\):$EBOLD $BR
-Take a look at the box titled ${BITALIC}The P-value${EITALIC} on p. 236 in your textbook
-to help determine which p-value gives the strongest evidence against \(H_0\)
+Take a look at the box titled ${BITALIC}The P-value${EITALIC} on p. 275 in your 
+textbook to help determine which p-value gives the strongest evidence against 
+\(H_0\)
 END_HINT
 
 ###########################
