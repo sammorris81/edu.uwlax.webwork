@@ -50,7 +50,7 @@ if ($ineq == 1) {
 
 
 our @ineqs = ("=", "$disp_lt", "$disp_gt", "$disp_ne");
-my $correct_ineq = $ineqs[$ineq];
+my $correct_ineq = $hyp_ineqs[$ineq];
 
 our $mcineq = RadioButtons(
   [@ineqs],
@@ -88,12 +88,8 @@ our $f2rinterp = "We do not have statistically significant evidence that " .
                  $question . ".";
 our $accinterp = "We have statistically significant evidence that the " .
                  $param1_desc . " is the same as the " . $param2_desc . ".";
-our $f2ainterp = "We do not have statistically significant evidence that the " .
-                 $param1_desc . " is the same as the " . $param2_desc . ".";
 
-our @interps = ($rejinterp, $accinterp, $f2rinterp, $f2ainterp);
-our @order = NchooseK(4, 4);
-our @interps = @interps[@order];
+our @interps = ($rejinterp, $f2rinterp, $accinterp);
 
 our @dec_options = (
   " Reject " . $disp_null,
@@ -101,15 +97,67 @@ our @dec_options = (
   " Accept " . $disp_null,
 );
 
+our @interps = ($rejinterp, $accinterp, $f2rinterp);
+
+my $order_a = random(0, 2, 1); my $order_b; my $order_c;
+if ($order_a == 0) {
+  $order_b = random(1, 2, 1);
+  if ($order_b == 1) {
+    $order_c = 2;
+  } else {
+    $order_c = 1;
+  }
+} elsif ($order_a == 1) {
+  $order_b = random(0, 2, 2);
+  if ($order_b == 0) {
+    $order_c = 2;
+  } else {
+    $order_c = 0;
+  }
+} else {
+  $order_b = random(0, 1, 1);
+  if ($order_b == 0) {
+    $order_c = 1;
+  } else {
+    $order_c = 2;
+  }
+}
+
+my @order = ($order_a, $order_b, $order_c);
+my @order = NchooseK(3, 3);
+our @interp_options;
+my $interp_idx = 0; our $this_interp; our $this_order;
+foreach $interp (@interps) {
+  $this_order = $order[$interp_idx];
+  $this_interp = " $interps[$this_order]";
+  if ($pvalans < $alpha && $order[$interp_idx] == 0) {
+    $correct_interp = $this_interp;
+  } elsif ($pvalans >= $alpha && $order[$interp_idx] == 2) {
+    $correct_interp = $this_interp;
+  }
+  push(@interp_options, $this_interp);
+  $interp_idx++;
+# TEXT(EV3(<<'END_TEXT'));
+# $this_interp $PAR
+# $this_order $PAR
+# END_TEXT
+}
+
 if ($pvalans < $alpha) {
   $correct_dec = " Reject " . $disp_null;
-  $correct_interp = $rejinterp;
   $correct_err = " Type I error";
 } else {
   $correct_dec = " Fail to reject " . $disp_null;
-  $correct_interp = $f2rinterp;
   $correct_err = " Type II error";
 }
+
+# TEXT(EV3(<<'END_TEXT'));
+# $BBOLD pvalue: $EBOLD $pvalans
+# $BBOLD alpha: $EBOLD $alpha $PAR
+# $BBOLD Correct Decision: $EBOLD $correct_dec $PAR
+# $BBOLD Correct Interpretation $EBOLD $correct_interp $PAR
+# $BBOLD Correct Error $EBOLD $correct_err $PAR
+# END_TEXT
 
 our $mcdec = RadioButtons(
     [@dec_options],
@@ -120,10 +168,10 @@ our $mcdec = RadioButtons(
 );
 
 our $mcinterp = RadioButtons(
-  [@interps],
+  [@interp_options],
   $correct_interp,
-  order => [@interps],
-  labels => [@possible_labels[0..(scalar(@interps) - 1)]],
+  order => [@interp_options],
+  labels => [@possible_labels[0..(scalar(@interp_options) - 1)]],
 );
 
 our @error_options = (" Type I error", " Type II error");

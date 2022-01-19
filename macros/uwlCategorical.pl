@@ -1,15 +1,15 @@
 # categorical_UWL.pl
 
 # only load in the macros that don't already exist
-if (!defined(&_parserRadioButtons_init)) {
+if (!exists(&_parserRadioButtons_init)) {
   loadMacros("parserRadioButtons.pl");
 }
 
-if (!defined(&_unionTables_init)) {
+if (!exists(&_unionTables_init)) {
   loadMacros("unionTables.pl");
 }
 
-if (!defined(&_uwlUsefulStats_init)) {
+if (!exists(&_uwlUsefulStats_init)) {
   loadMacros("uwlUsefulStats.pl");
 }
 

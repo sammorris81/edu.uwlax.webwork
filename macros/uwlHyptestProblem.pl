@@ -5,23 +5,23 @@
 # define any custom subroutines you want and then use them in
 # problems by including the file in loadMacros() calls.
 
-if (!defined(&rserve_start)) {
+if (!exists(&rserve_start)) {
   loadMacros("RserveClient.pl");
 }
 
-if (!defined(&_parserRadioButtons_init)) {
+if (!exists(&_parserRadioButtons_init)) {
   loadMacros("parserRadioButtons.pl");
 }
 
-if (!defined(&_unionTables_init)) {
+if (!exists(&_unionTables_init)) {
   loadMacros("unionTables.pl");
 }
 
-if (!defined(&_uwlUsefulStats_init)) {
+if (!exists(&_uwlUsefulStats_init)) {
   loadMacros("uwlUsefulStats.pl");
 }
 
-if (!defined(&_uwlQuantitative_init)) {
+if (!exists(&_uwlQuantitative_init)) {
   loadMacros("uwlQuantitative.pl");
 }
 
@@ -424,7 +424,8 @@ sub grader {
   $status->{raw}   = $result->{score};
   $status->{score} = $result->{score}*$weight;
   $status->{new_ans_rule_count} = $main::ans_rule_count;
-  if (defined(%main::images_created)) {
+  # if (defined(%main::images_created)) {
+  if (%main::images_created) {
     $status->{imageName} = (keys %main::images_created)[0];
     $status->{new_images_created} = $main::images_created{$status->{imageName}};
   }

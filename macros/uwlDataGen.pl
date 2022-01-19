@@ -1,22 +1,22 @@
 # datagen_UWL.pl
 
-if (!defined(&rserve_start)) {
+if (!exists(&rserve_start)) {
   loadMacros("RserveClient.pl");
 }
 
-if (!defined(&_parserRadioButtons_init)) {
+if (!exists(&_parserRadioButtons_init)) {
   loadMacros("parserRadioButtons.pl");
 }
 
-if (!defined(&_unionTables_init)) {
+if (!exists(&_unionTables_init)) {
   loadMacros("unionTables.pl");
 }
 
-if (!defined(&_uwlUsefulStats_init)) {
+if (!exists(&_uwlUsefulStats_init)) {
   loadMacros("uwlUsefulStats.pl");
 }
 
-if (!defined(&_uwlQuantitative_init)) {
+if (!exists(&_uwlQuantitative_init)) {
   loadMacros("uwlQuantitative.pl");
 }
 
