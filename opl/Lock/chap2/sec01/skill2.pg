@@ -78,7 +78,7 @@ $exercise_e = 'A recent headline states that "45'.$PERCENT.' Think Children '.
 $correct_e = $options[0];
 
 $exercise_f = "A survey conducted of 1060 randomly selected US teens aged ".
-              "13 to 17 found that 605 (or 57".$PERCENT.") of them say they ".
+              '13 to 17 found that 605 (or 57'.$PERCENT.') of them say they '.
               "have made a new friend online.";
 $correct_f = $options[0];
 
