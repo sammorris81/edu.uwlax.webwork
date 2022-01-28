@@ -100,7 +100,7 @@ $correct_notation_d = $notation[3];
 );
 
 # Now select the exercise at random
-($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+($random_1, $random_2) = NchooseK($#exercises, 2);
 
 $variable_q_1 = RadioButtons(
   [@variable_type],

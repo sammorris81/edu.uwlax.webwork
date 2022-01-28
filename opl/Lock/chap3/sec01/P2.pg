@@ -48,7 +48,7 @@ Context("Numeric");
 $N = 500;
 
 @ns = (40, 80, 120);
-($random_1, $random_2, $random_3) = NchooseK(($#ns + 1), 3);
+($random_1, $random_2, $random_3) = NchooseK($#ns, 3);
 
 # Generate the data
 $n_1 = $ns[$random_1];

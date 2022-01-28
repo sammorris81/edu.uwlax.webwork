@@ -95,7 +95,7 @@ $correct_f = $options[1];
 );
 
 # Now select the exercise at random
-($random_1, $random_2, $random_3) = NchooseK(($#exercises + 1), 3);
+($random_1, $random_2, $random_3) = NchooseK($#exercises, 3);
 
 # Generate the questions
 $multiple_choice_1 = RadioButtons(

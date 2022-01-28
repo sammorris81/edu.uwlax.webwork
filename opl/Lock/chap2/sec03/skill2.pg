@@ -49,7 +49,7 @@ Context("Numeric");
 @sds = (1, 3, 5);
 
 # Now select the order at random
-($random_1, $random_2, $random_3) = NchooseK(($#options + 1), ($#options + 1));
+($random_1, $random_2, $random_3) = NchooseK($#options, $#options);
 
 # The data sets are always ordered in A, B, C order no matter the SD.
 $quant_1 = new DataGenUWL(

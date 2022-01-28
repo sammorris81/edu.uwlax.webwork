@@ -114,7 +114,7 @@ $response_var_d = 'Body mass';
 );
 
 # Now select the exercise at random
-($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+($random_1, $random_2) = NchooseK($#exercises, 2);
 
 # Generate the questions
 $explanatory_1 = PopUp(

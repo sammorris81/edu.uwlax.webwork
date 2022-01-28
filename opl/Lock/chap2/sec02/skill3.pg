@@ -84,7 +84,7 @@ $correct_d = $options[2];
 );
 
 # Now select the exercise at random
-($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
+($random_1, $random_2) = NchooseK($#exercises, 2);
 
 $m1 = PopUp(
   [@options],
