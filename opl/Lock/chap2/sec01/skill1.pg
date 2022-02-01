@@ -118,7 +118,7 @@ $exercise_d = "The math SAT score is $sat_compare than the verbal SAT score ".
   $answer_d
 );
 
-($random_1, $random_2) = NchooseK($#exercises, 2);
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
 ###########################
 ## Question for display

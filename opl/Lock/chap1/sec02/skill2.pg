@@ -105,7 +105,7 @@ $true_population_d = 'All female high school basketball players';
 );
 
 # Now select the exercise at random
-($random_1, $random_2) = NchooseK($#exercises, 2);
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
 $text_1 = $exercises[$random_1];
 $sample_1 = $samples[$random_1];

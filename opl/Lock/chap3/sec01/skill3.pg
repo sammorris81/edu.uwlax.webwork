@@ -108,8 +108,8 @@ $hist_b = rserve_finish_plot($hist);
   $likely[3]
 );
 
-($rand_mean_1, $rand_mean_2, $rand_mean_3) = NchooseK($#multipliers, 3);
-($rand_prop_1, $rand_prop_2, $rand_prop_3) = NchooseK($#multipliers, 3);
+($rand_mean_1, $rand_mean_2, $rand_mean_3) = NchooseK(($#multipliers + 1), 3);
+($rand_prop_1, $rand_prop_2, $rand_prop_3) = NchooseK(($#multipliers + 1), 3);
 
 $multiplier_mean_1 = $multipliers[$rand_mean_1];
 $multiplier_mean_2 = $multipliers[$rand_mean_2];

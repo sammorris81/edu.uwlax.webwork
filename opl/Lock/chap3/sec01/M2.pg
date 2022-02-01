@@ -49,7 +49,7 @@ $N = 500;
 $sd = 120.5;
 
 @ns = (50, 100, 1000);
-($random_1, $random_2, $random_3) = NchooseK($#ns, 3);
+($random_1, $random_2, $random_3) = NchooseK(($#ns + 1), 3);
 
 # Generate the data
 $n_1 = $ns[$random_1];
@@ -172,6 +172,8 @@ AlignedRow(
 EndTable()
 \}
 END_TEXT
+
+
 
 ###########################
 ## Answer Section

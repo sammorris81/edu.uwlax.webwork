@@ -102,7 +102,7 @@ $correct_f = $options[0];
 );
 
 # Now select the exercise at random
-($random_1, $random_2) = NchooseK($#exercises, 2);
+($random_1, $random_2) = NchooseK(($#exercises + 1), 2);
 
 $multiple_choice_1 = PopUp(
   ['?', @options],
