@@ -782,11 +782,11 @@ sub histogram { # binrule => "sturges", summaries => "F", round=>3
                         paste("\n \n",
                             "# samples =", length(xvec), "\r
                             mean =", round(mean(xvec), ' . $round . '), "\r
-                            st. dev =", round(sd(xvec), '  . $round . ')
+                            std. error =", round(sd(xvec), '  . $round . ')
                         ),
                         adj = 1)');
       # main::rserve_eval('legend = c(paste("mean = ", round(mean(xvec), ' . $round . ')),
-      #              paste("st. dev. = ", round(sd(xvec), ' . $round . ')),
+      #              paste("st. error. = ", round(sd(xvec), ' . $round . ')),
       #              paste("# samples = ", length(xvec))
       #              ),
       #   xjust=1, yjust = 1, xpd = TRUE
