@@ -177,7 +177,7 @@ END_TEXT
 
 ANS($nullval->with(tolerance=>0, tolType=>"Absolute")->cmp);
 ANS( $alt->cmp() );
-ANS($ts->with(tolerance=>.001, tolType=>"Absolute")->cmp);
+ANS($ts->with(tolerance=>.01, tolType=>"Absolute")->cmp);
 ANS( $pvalans->with(tolerance=>.001, tolType=>"Absolute")->cmp);
 ANS($mcdec->cmp());
 ANS($mcinterp->cmp());
