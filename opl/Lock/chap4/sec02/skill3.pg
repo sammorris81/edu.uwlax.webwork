@@ -86,7 +86,7 @@ $pval2 = Real($pval2);
 $count2 = $pval2 * $n / 2;
 
 if ($random1 < 0) {
-  $compare1 = "as smaller or smaller than";
+  $compare1 = "as small or smaller than";
   $compare2 = "as large or larger than";
 } else {
   $compare1 = "as large or larger than";
