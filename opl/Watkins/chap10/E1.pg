@@ -173,7 +173,7 @@ $anssep
 \{ EndList( "OL" ) \}
 END_TEXT
 
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 ANS($lower1->with(tolerance=>.1, tolType=>"absolute")->cmp);
 ANS($upper1->with(tolerance=>.1, tolType=>"absolute")->cmp);

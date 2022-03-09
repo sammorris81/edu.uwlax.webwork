@@ -212,7 +212,7 @@ Unless otherwise stated, give your answers to three decimal places.
 \{ BeginList( "OL", type=>"1") \}
   $ITEM Construct a \{$s * 100\}$PERCENT confidence interval for the difference in
   mean enzyme concentration between short and long days. Give your answers to
-  three decimal places. $BR
+  three decimal places. Use \(t^* = \{sprintf("%.3f", $tstar)\} \). $BR
   ( \{ ans_rule(10) \} , \{ ans_rule(10) \} )
   $PAR
   $ITEM Conduct a hypothesis test to determine whether the average enzyme
@@ -229,8 +229,9 @@ Unless otherwise stated, give your answers to three decimal places.
     $PAR
     $ITEM The test statistic for this test is  \(t = \) \{ ans_rule(10) \}.
     $PAR
-    $ITEM The p-value for this test is \{ ans_rule(10) \}. (If p-value \(< 0.001\),
-    enter 0)
+    $ITEM The p-value for this test is \{ ans_rule(10) \}. Use 
+    \(df = \{sprintf("%.3f", $df)\}\). (If p-value \(< 0.001\),
+    enter 0).
     $PAR
     $ITEM Select the appropriate decision for this hypothesis test (use \( \alpha = $alpha \)). $BR
     \{ $mcdec -> buttons() \} $PAR
