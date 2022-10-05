@@ -58,13 +58,23 @@ $mean1bigpos = 28;
 $sd1 = 1;
 $n1 = 40;
 
-$quant1a = new DataGenUWL(
-  datatype => 'single_quant',
-  n => $n1,
-  mean => $mean1bigneg,
-  sd => $sd1,
-  name => "Sample A"
-);
+# In the plots below, we set the xmin = 20 and xmax = 32. For some seeds, the
+# min is below the plot min which causes WebWorK to have trouble rendering the
+# plots. This is a hack to ensure the $quant1a and $quant1c fall within the
+# correct range.
+$plot_xmin = 20;
+$plot_xmax = 32;
+
+do {
+  $quant1a = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n1,
+    mean => $mean1bigneg,
+    sd => $sd1,
+    name => "Sample A"
+  );
+} until (min(@{$quant1a->{x}}) >= $plot_xmin);
+
 
 $quant1b = new DataGenUWL(
   datatype => 'single_quant',
@@ -74,30 +84,32 @@ $quant1b = new DataGenUWL(
   name => "Sample B"
 );
 
-$quant1c = new DataGenUWL(
-  datatype => 'single_quant',
-  n => $n1,
-  mean => $mean1bigpos,
-  sd => $sd1,
-  name => "Sample C"
-);
+do {
+  $quant1c = new DataGenUWL(
+    datatype => 'single_quant',
+    n => $n1,
+    mean => $mean1bigpos,
+    sd => $sd1,
+    name => "Sample C"
+  );
+} until (max(@{$quant1c->{x}}) <= $plot_xmax);
 
 $dota = StatGraphicsUWL::dotplot(
   data => $quant1a,
-  xmin => 20,
-  xmax => 32,
+  xmin => $plot_xmin,
+  xmax => $plot_xmax,
 );
 
 $dotb = StatGraphicsUWL::dotplot(
   data => $quant1b,
-  xmin => 20,
-  xmax => 32,
+  xmin => $plot_xmin,
+  xmax => $plot_xmax,
 );
 
 $dotc = StatGraphicsUWL::dotplot(
   data => $quant1c,
-  xmin => 20,
-  xmax => 32,
+  xmin => $plot_xmin,
+  xmax => $plot_xmax,
 );
 
 $prop2t = 0.75;
